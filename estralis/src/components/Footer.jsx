@@ -45,7 +45,7 @@ export default function Footer() {
           
           <div className="space-y-2 opacity-50">
             <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-teal-100">
-              Gopalan College of Engineering
+              Gopalan College of Engineering and Management
             </p>
             <p className="text-[9px] font-medium tracking-[0.2em] text-teal-100/60 max-w-[200px]">
               WHITEFIELD, BENGALURU, KARNATAKA 560048, INDIA
@@ -72,6 +72,9 @@ export default function Footer() {
           <div>
             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40 mb-6">Contact_Freq</h4>
             <div className="space-y-4">
+              <div className="text-[12px] font-black tracking-[0.2em] uppercase text-teal-300 mb-2">
+                Bharath
+              </div>
               <a href="mailto:bharatha9483@gmail.com" className="block group">
                 <span className="text-[9px] text-teal-400/40 block mb-1">Inbound_Mail</span>
                 <span className="text-[11px] text-white font-bold tracking-tight group-hover:text-teal-400 transition-colors italic">bharatha9483@gmail.com</span>
@@ -88,7 +91,7 @@ export default function Footer() {
         <div className="md:col-span-3 flex flex-col items-start md:items-end gap-6 text-left md:text-right">
           <div className="text-[10px] font-bold tracking-[0.1em] text-white/50 leading-relaxed md:mt-11">
             © 2026 ESTRALIS.<br />
-            OFFICIAL FEST WEBSITE OF GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT.<br />
+            OFFICIAL FEST WEBSITE OF ESTRALIS.<br />
             ALL RIGHTS RESERVED.
           </div>
         </div>
