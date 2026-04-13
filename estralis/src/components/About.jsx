@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import SectionBackground from "./SectionBackground"
 
 export default function About() {
   return (
@@ -8,52 +9,70 @@ export default function About() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.9, ease: "easeOut" }}
-      className="relative py-24 px-6"
+      className="relative py-24 md:py-32 px-6 overflow-hidden group"
     >
-      {/* Background glows */}
-      <div className="absolute inset-0 pointer-events-none">
+      
+      <SectionBackground 
+        src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80" 
+        alt="Tech Hub" 
+      />
 
-        {/* Minimal hardware-accelerated ambient glows */}
-        <div className="absolute w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(255,255,255,0.03)_0%,transparent_70%)] rounded-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 translate-z-0" />
-      </div>
+      {/* Gritty Noise Background */}
+      <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-teal-900/10 via-transparent to-transparent z-10" />
 
-      <div className="relative max-w-4xl mx-auto">
+      <div className="relative max-w-6xl mx-auto flex flex-col md:flex-row gap-12 lg:gap-24 items-center md:items-start">
 
-        {/* Title */}
+        {/* Title Side */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="w-full md:w-1/3 flex flex-col text-center md:text-left relative md:sticky md:top-32 z-0"
         >
-          <p className="apple-eyebrow mb-3">✨ The Fest</p>
-          <h2 className="apple-heading text-5xl md:text-7xl">
-            About <span style={{'WebkitTextFillColor': 'transparent', background: 'linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #818cf8 100%)', WebkitBackgroundClip: 'text'}}>ESTRALIS</span>
+          <span className="astral-eyebrow text-teal-500 mb-4 block">INITIATING DECRYPT...</span>
+          <h2 className="astral-heading text-5xl lg:text-6xl mb-2 text-white uppercase tracking-tighter">
+            ABOUT
+          </h2>
+          <h2 className="saarang-banner-text text-6xl lg:text-[4rem] text-teal-400 leading-[0.8]">
+            ESTRALIS
           </h2>
         </motion.div>
 
-        {/* Glass Card */}
+        {/* Content Side */}
         <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.9 }}
-          whileHover={{ y: -6, scale: 1.01 }}
-          className="apple-glass p-8 md:p-14 text-center group"
+          transition={{ duration: 0.9, delay: 0.2 }}
+          className="w-full md:w-2/3"
         >
-          <p className="text-gray-300 text-lg md:text-xl font-medium leading-relaxed tracking-wide group-hover:text-white transition-colors duration-500">
-            This fest marks a grand revival of our college’s cultural spirit after an eight-year hiatus. It is envisioned as a vibrant celebration that brings together talent, creativity, and innovation through a diverse array of competitive and engaging events.
+          <div className="saarang-block border-l-4 border-l-teal-500 p-8 md:p-12 hover:border-l-white transition-colors duration-500 relative group bg-black/40 backdrop-blur-sm">
 
-The fest provides an inspiring platform for students to showcase their abilities, collaborate with peers, and celebrate excellence, fostering a sense of unity and cultural enthusiasm across the campus.
-          </p>
+            {/* Corner Decorative Elements */}
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-teal-500/30 group-hover:border-teal-500/80 transition-colors"></div>
+            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-teal-500/30 group-hover:border-teal-500/80 transition-colors"></div>
+
+            <p className="text-teal-100/70 text-sm md:text-base font-mono leading-relaxed tracking-wide mb-8">
+              <span className="text-teal-400 font-bold tracking-widest">&gt; LOG ENTRY_ 01: </span><br />
+              This fest marks a grand revival of our college’s cultural spirit after an eight-year hiatus. It is envisioned as a vibrant celebration that brings together talent, creativity, and innovation through a diverse array of competitive and engaging events.
+            </p>
+
+            <p className="text-teal-100/70 text-sm md:text-base font-mono leading-relaxed tracking-wide">
+              <span className="text-teal-400 font-bold tracking-widest">&gt; LOG ENTRY_ 02: </span><br />
+              The fest provides an inspiring platform for students to showcase their abilities, collaborate with peers, and celebrate excellence, fostering a sense of unity and cultural enthusiasm across the campus.
+            </p>
+
+            <div className="mt-12 pt-6 border-t border-teal-500/20 flex justify-between items-center">
+              <span className="text-[10px] font-black tracking-[0.3em] uppercase text-teal-500/50 block">
+                End_Of_Transmission
+              </span>
+              <div className="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></div>
+            </div>
+          </div>
         </motion.div>
 
       </div>
-      {/* Subtle Bottom Right Watermark */}
-      {/* <div className="absolute bottom-2 right-4 opacity-80 pointer-events-none select-none">
-        <span className="text-[10px] font-black tracking-[0.3em] bg-clip-text text-transparent bg-gradient-to-r from-gray-500 to-gray-400">GRAFIK</span>
-      </div> */}
     </motion.section>
   )
 }

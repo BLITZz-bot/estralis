@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { eventsDay1, eventsDay2 } from './Schedule';
+import { supabase } from '../supabaseClient';
 
 export default function AdminDashboard({ isOpen, onClose }) {
     const [password, setPassword] = useState("");
@@ -467,21 +468,49 @@ export default function AdminDashboard({ isOpen, onClose }) {
         }
     }, [isOpen]);
 
-    // Auto-refresh timer
+    // Real-time Subscription
+    useEffect(() => {
+        if (isAuthenticated && isOpen && supabase) {
+            const channel = supabase
+                .channel('registrations_db_changes')
+                .on(
+                    'postgres_changes',
+                    { event: '*', schema: 'public', table: 'registrations' },
+                    (payload) => {
+                        console.log('Real-time update received:', payload);
+                        if (payload.eventType === 'INSERT') {
+                            setRegistrations(prev => [payload.new, ...prev]);
+                            addToast(`New Registration: ${payload.new.full_name}`, "info");
+                        } else if (payload.eventType === 'UPDATE') {
+                            setRegistrations(prev => prev.map(r => r.id === payload.new.id ? payload.new : r));
+                        } else if (payload.eventType === 'DELETE') {
+                            setRegistrations(prev => prev.filter(r => r.id !== payload.old.id));
+                        }
+                    }
+                )
+                .subscribe();
+
+            return () => {
+                supabase.removeChannel(channel);
+            };
+        }
+    }, [isAuthenticated, isOpen]);
+
+    // Auto-refresh timer (Reduced frequency since we have real-time)
     useEffect(() => {
         let timer;
         if (isAuthenticated && isOpen) {
             timer = setInterval(() => {
                 setCountdown((prev) => {
                     if (prev <= 1) {
-                        fetchRegistrations(); // It uses the `password` state seamlessly now
-                        return 30;
+                        fetchRegistrations(); 
+                        return 60; // Refresh every 60s as backup to real-time
                     }
                     return prev - 1;
                 });
             }, 1000);
         } else {
-            setCountdown(30);
+            setCountdown(60);
         }
         return () => clearInterval(timer);
     }, [isAuthenticated, isOpen, password]);
@@ -491,7 +520,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         if (filterEvent === "All") {
             setFilteredData(registrations);
         } else {
-            setFilteredData(registrations.filter(r => r.eventTitle === filterEvent));
+            setFilteredData(registrations.filter(r => r.event_title === filterEvent));
         }
     }, [filterEvent, registrations]);
 
@@ -521,16 +550,14 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 { header: 'Pass Type', key: 'passType', width: 20 },
                 { header: 'Amount Paid', key: 'amountPaid', width: 20 },
                 { header: 'Team Name', key: 'teamName', width: 25 },
-                { header: 'Booking ID', key: 'id', width: 15 },
+                { header: 'Booking ID', key: 'id', width: 35 },
                 { header: 'Registration Time', key: 'timestamp', width: 25 },
                 { header: 'Full Name', key: 'fullName', width: 25 },
                 { header: 'Email', key: 'email', width: 30 },
                 { header: 'Phone', key: 'phone', width: 15 },
                 { header: 'College', key: 'college', width: 30 },
-                { header: 'UTR (Transaction ID)', key: 'transactionId', width: 25 },
-                { header: 'Date of Payment', key: 'paymentDate', width: 20 },
+                { header: 'Payment ID', key: 'paymentId', width: 30 },
                 { header: 'Team Members details', key: 'teamMembers', width: 60 },
-                { header: 'Screenshot Proof', key: 'screenshot', width: 40 },
             ];
 
             // Style headers
@@ -545,37 +572,38 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
             // Add data
             grouped[eventTitle].forEach(reg => {
-                const row = worksheet.addRow({
-                    passType: reg.passType || "Standard Pass",
-                    amountPaid: reg.amountPaid || "N/A",
-                    teamName: reg.teamName || "N/A",
+                // 1. ADD LEADER ROW
+                worksheet.addRow({
+                    passType: reg.pass_type || "Standard Pass",
+                    amountPaid: reg.amount_paid || "N/A",
+                    teamName: reg.team_name || "N/A",
                     id: reg.id,
                     timestamp: new Date(reg.timestamp).toLocaleString('en-IN'),
-                    fullName: reg.fullName,
+                    fullName: `[LEADER] ${reg.full_name}`,
                     email: reg.email,
                     phone: reg.phone,
                     college: reg.college,
-                    transactionId: reg.transactionId || "N/A",
-                    paymentDate: reg.paymentDate || "N/A",
-                    teamMembers: (reg.teamMembers && Array.isArray(reg.teamMembers) && reg.teamMembers.length > 0)
-                        ? `Member 1 (Leader): ${reg.fullName}\nEmail: ${reg.email}\nPhone: ${reg.phone}\n\n` +
-                        reg.teamMembers.map((m, idx) => `Member ${idx + 2}: ${m.fullName}\nEmail: ${m.email}\nPhone: ${m.phone}`).join("\n\n")
-                        : "N/A",
-                    screenshot: reg.screenshotPath || "N/A"
+                    paymentId: reg.razorpay_payment_id || "N/A",
+                    teamMembers: (reg.team_members?.length > 0) ? `${reg.team_members.length} Teammates` : "Individual"
                 });
 
-                // Add formatting for better readability
-                row.getCell('teamMembers').alignment = { wrapText: true, vertical: 'top' };
-                row.getCell('college').alignment = { wrapText: true, vertical: 'top' };
-
-                // Style link cell
-                if (reg.screenshotPath) {
-                    const linkCell = row.getCell('screenshot');
-                    linkCell.value = {
-                        text: 'Link to Screenshot',
-                        hyperlink: reg.screenshotPath
-                    };
-                    linkCell.font = { color: { argb: '2563EB' }, underline: true };
+                // 2. ADD TEAMMATE ROWS (If any)
+                if (reg.team_members && Array.isArray(reg.team_members)) {
+                    reg.team_members.forEach((m, idx) => {
+                        worksheet.addRow({
+                            passType: reg.pass_type || "Standard Pass",
+                            amountPaid: "---", // Already covered in leader row
+                            teamName: reg.team_name || "N/A",
+                            id: reg.id,
+                            timestamp: "---", // ONLY ON LEADER ROW AS REQUESTED
+                            fullName: `[MEMBER ${idx + 2}] ${m.fullName}`,
+                            email: m.email,
+                            phone: m.phone,
+                            college: m.college || reg.college, // Default to leader college if empty
+                            paymentId: "---",
+                            teamMembers: "---"
+                        });
+                    });
                 }
             });
 
@@ -590,48 +618,54 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
 
 
-    const uniqueEvents = ["All", ...new Set(registrations.map(r => r.eventTitle))];
+    const uniqueEvents = ["All", ...new Set(registrations.map(r => r.event_title))];
 
     if (!isOpen) return null;
 
     return (
         <AnimatePresence>
-            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0a0f18] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-[#0a0f18] to-[#0a0f18]">
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#020617] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-teal-900/20 via-[#020617] to-[#020617]">
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     className="absolute inset-0 pointer-events-none"
-                />
+                >
+                    <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-teal-500/5 blur-[120px] rounded-full" />
+                    <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-cyan-500/5 blur-[100px] rounded-full" />
+                </motion.div>
 
                 {!isAuthenticated ? (
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        className="relative w-full max-w-md bg-[#1a1c2e] border border-white/10 rounded-3xl p-8 shadow-2xl"
+                        className="relative w-full max-w-md astral-glass border-teal-500/20 p-10 shadow-[0_0_50px_rgba(0,0,0,0.6)]"
                     >
                         <button
                             onClick={onClose}
-                            className="absolute top-4 right-4 p-2 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white transition"
+                            className="absolute top-6 right-6 p-2 bg-white/5 border border-white/10 rounded-xl text-teal-400 hover:text-white transition"
                         >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
-                        <h2 className="text-2xl font-bold text-white mb-6 text-center underline decoration-purple-500 underline-offset-8">Admin Access</h2>
-                        <form onSubmit={handleLogin} className="space-y-4">
+                        <div className="text-center mb-8">
+                            <h2 className="astral-heading text-2xl mb-2">Command Access</h2>
+                            <p className="text-[10px] text-teal-400/50 tracking-[0.3em] uppercase">Authorized Personnel Only</p>
+                        </div>
+                        <form onSubmit={handleLogin} className="space-y-6">
                             <div>
-                                <label className="text-gray-400 text-sm block mb-2">Password</label>
+                                <label className="text-teal-400/60 text-[10px] font-black uppercase tracking-widest block mb-2">Entry Key</label>
                                 <input
                                     type="password"
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition"
+                                    className="w-full bg-black/40 border border-teal-500/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-teal-500/50 transition-all font-mono"
                                     placeholder="••••••••"
                                 />
                             </div>
-                            {loginError && <p className="text-red-400 text-sm text-center">{loginError}</p>}
-                            <button type="submit" className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 rounded-xl hover:shadow-[0_0_20px_rgba(147,51,234,0.3)] transition">
-                                Enter Dashboard
+                            {loginError && <p className="text-red-400 text-[10px] font-black uppercase tracking-widest text-center">{loginError}</p>}
+                            <button type="submit" className="w-full bg-gradient-to-r from-teal-600 to-cyan-700 text-white font-black tracking-widest uppercase py-4 rounded-xl hover:shadow-[0_0_25px_rgba(45,212,191,0.3)] transition-all">
+                                Initialize Link
                             </button>
                         </form>
                     </motion.div>
@@ -639,18 +673,20 @@ export default function AdminDashboard({ isOpen, onClose }) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="relative w-full h-full max-w-[100vw] max-h-screen bg-[#0f111a] p-4 sm:p-6 md:p-12 overflow-hidden flex flex-col"
+                        className="relative w-full h-full max-w-[100vw] max-h-screen bg-[#020617] p-4 sm:p-6 md:p-10 overflow-hidden flex flex-col"
                     >
+                        {/* ASTRAL GRID OVERLAY */}
+                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
                         {/* HEADER */}
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-8">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 relative z-10">
                             <div className="text-center md:text-left">
-                                <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Admin Console</h2>
-                                <p className="text-gray-400 text-xs md:text-sm">Live Registration Details</p>
+                                <h2 className="astral-heading text-2xl md:text-4xl">Admin Console</h2>
+                                <p className="text-teal-400/50 text-[10px] font-black uppercase tracking-[0.3em]">Fleet Management System</p>
                             </div>
-                            <div className="flex items-center justify-center md:justify-end gap-2 sm:gap-3">
-                                <button onClick={() => { fetchRegistrations(); setCountdown(30); }} className="px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-white text-[10px] sm:text-sm hover:bg-white/10 transition flex items-center gap-1.5 min-w-0">
-                                    <svg className={`w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                    <span className="truncate">Refresh ({countdown}s)</span>
+                            <div className="flex items-center justify-center md:justify-end gap-3">
+                                <button onClick={() => { fetchRegistrations(); setCountdown(30); }} className="px-5 py-3 astral-glass rounded-xl text-teal-300 text-[10px] font-black tracking-widest uppercase hover:border-teal-400/50 transition-all flex items-center gap-2">
+                                    <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                    SYNC ({countdown}S)
                                 </button>
                                 <button onClick={downloadExcel} className="px-3 py-2 bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 rounded-xl text-[10px] sm:text-sm hover:bg-emerald-600/30 transition flex items-center gap-1.5 font-semibold min-w-0">
                                     <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -672,145 +708,151 @@ export default function AdminDashboard({ isOpen, onClose }) {
                             </div>
                         </div>
 
-                        {/* TABS - Optimized for Mobile Scrolling */}
-                        <div className="relative mb-6">
-                            <div className="flex border-b border-white/10 gap-4 sm:gap-6 overflow-x-auto whitespace-nowrap hide-scrollbar pr-10">
-                                <button
-                                    onClick={() => setActiveTab("registrations")}
-                                    className={`text-xs sm:text-sm font-bold pb-3 px-1 sm:px-2 transition-colors flex-shrink-0 ${activeTab === "registrations" ? "text-purple-400 border-b-2 border-purple-500 font-extrabold" : "text-gray-500 hover:text-gray-300"}`}
-                                >
-                                    Registrations Data
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab("controls")}
-                                    className={`text-xs sm:text-sm font-bold pb-3 px-1 sm:px-2 transition-colors flex-shrink-0 ${activeTab === "controls" ? "text-purple-400 border-b-2 border-purple-500 font-extrabold" : "text-gray-500 hover:text-gray-300"}`}
-                                >
-                                    Event Settings
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab("manage")}
-                                    className={`text-xs sm:text-sm font-bold pb-3 px-1 sm:px-2 transition-colors flex-shrink-0 ${activeTab === "manage" ? "text-red-400 border-b-2 border-red-500 font-extrabold" : "text-gray-500 hover:text-gray-300"}`}
-                                >
-                                    Manage Data
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab("emails")}
-                                    className={`text-xs sm:text-sm font-bold pb-3 px-1 sm:px-2 transition-colors flex-shrink-0 ${activeTab === "emails" ? "text-amber-400 border-b-2 border-amber-500 font-extrabold" : "text-gray-500 hover:text-gray-300"}`}
-                                >
-                                    Bulk Resend
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab("themeReveal")}
-                                    className={`text-xs sm:text-sm font-bold pb-3 px-1 sm:px-2 transition-colors flex-shrink-0 ${activeTab === "themeReveal" ? "text-blue-400 border-b-2 border-blue-500 font-extrabold" : "text-gray-500 hover:text-gray-300"}`}
-                                >
-                                    🎬 Theme Reveal
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab("eventMailer")}
-                                    className={`text-xs sm:text-sm font-bold pb-3 px-1 sm:px-2 transition-colors flex-shrink-0 ${activeTab === "eventMailer" ? "text-emerald-400 border-b-2 border-emerald-500 font-extrabold" : "text-gray-500 hover:text-gray-300"}`}
-                                >
-                                    📬 Event Mailer
-                                </button>
+                        {/* TABS - Astral Theme */}
+                        <div className="relative mb-8 z-10">
+                            <div className="flex border-b border-teal-500/10 gap-8 overflow-x-auto whitespace-nowrap hide-scrollbar pr-10">
+                                {[
+                                    { id: "registrations", label: "Fleet Data", color: "text-teal-400", border: "border-teal-500" },
+                                    { id: "controls", label: "Sector Status", color: "text-cyan-400", border: "border-cyan-500" },
+                                    { id: "manage", label: "Data Purge", color: "text-rose-400", border: "border-rose-500" },
+                                    { id: "emails", label: "Signal Broadcast", color: "text-amber-400", border: "border-amber-500" },
+                                    { id: "themeReveal", label: "Theme Launch", color: "text-blue-400", border: "border-blue-500" },
+                                    { id: "eventMailer", label: "Mail Hub", color: "text-emerald-400", border: "border-emerald-500" }
+                                ].map((tab) => (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => setActiveTab(tab.id)}
+                                        className={`text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] pb-4 px-2 transition-all flex-shrink-0 ${activeTab === tab.id ? `${tab.color} border-b-2 ${tab.border} opacity-100 shadow-[0_10px_20px_-10px_rgba(45,212,191,0.3)]` : "text-teal-400/40 hover:text-teal-400/70"}`}
+                                    >
+                                        {tab.label}
+                                    </button>
+                                ))}
                             </div>
-                            <div className="absolute right-0 top-0 bottom-1 w-10 bg-gradient-to-l from-[#0f111a] to-transparent pointer-events-none md:hidden" />
+                            <div className="absolute right-0 top-0 bottom-1 w-10 bg-gradient-to-l from-[#020617] to-transparent pointer-events-none md:hidden" />
                         </div>
 
                         {activeTab === "registrations" ? (
                             <>
-                                {/* FILTERS */}
-                                <div className="mb-6 flex items-center gap-4">
-                                    <span className="text-gray-400 text-sm font-medium">Filter by Event:</span>
-                                    <select
-                                        value={filterEvent}
-                                        onChange={(e) => setFilterEvent(e.target.value)}
-                                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-sm focus:outline-none focus:border-purple-500 transition cursor-pointer"
-                                    >
-                                        {uniqueEvents.map(ev => <option key={ev} value={ev} className="bg-[#1a1c2e]">{ev}</option>)}
-                                    </select>
-                                    <span className="ml-auto text-purple-400 font-bold">{filteredData.length} records found</span>
+                                {/* SUMMARY METRICS OVERVIEW */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 relative z-10">
+                                    <div className="astral-glass p-5 border-teal-500/10 flex flex-col justify-center">
+                                        <p className="text-teal-400/40 text-[9px] font-black uppercase tracking-[0.2em] mb-1">Total Passengers</p>
+                                        <h4 className="text-2xl font-black text-white font-mono">{registrations.length}</h4>
+                                        <div className="w-10 h-0.5 bg-teal-500 mt-2 rounded-full" />
+                                    </div>
+                                    <div className="astral-glass p-5 border-cyan-500/10 flex flex-col justify-center">
+                                        <p className="text-cyan-400/40 text-[9px] font-black uppercase tracking-[0.2em] mb-1">Revenue Estimate</p>
+                                        <h4 className="text-2xl font-black text-white font-mono">₹{registrations.reduce((acc, reg) => acc + (parseFloat(reg.amount_paid?.toString().replace(/[^\d.]/g, '') || 0)), 0).toLocaleString('en-IN')}</h4>
+                                        <div className="w-10 h-0.5 bg-cyan-500 mt-2 rounded-full" />
+                                    </div>
+                                    <div className="astral-glass p-5 border-blue-500/10 flex flex-col justify-center">
+                                        <p className="text-blue-400/40 text-[9px] font-black uppercase tracking-[0.2em] mb-1">Active Events</p>
+                                        <h4 className="text-2xl font-black text-white font-mono">{new Set(registrations.map(r => r.event_title)).size}</h4>
+                                        <div className="w-10 h-0.5 bg-blue-500 mt-2 rounded-full" />
+                                    </div>
+                                    <div className="astral-glass p-5 border-pink-500/10 flex flex-col justify-center bg-pink-500/5">
+                                        <p className="text-pink-400/40 text-[9px] font-black uppercase tracking-[0.2em] mb-1">Real-time status</p>
+                                        <h4 className="text-2xl font-black text-white flex items-center gap-3">
+                                            ACTIVE
+                                            <span className="flex h-3 w-3 relative">
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                            </span>
+                                        </h4>
+                                        <div className="w-10 h-0.5 bg-pink-500 mt-2 rounded-full" />
+                                    </div>
                                 </div>
 
-                                {/* TABLE */}
-                                <div className="flex-1 overflow-auto rounded-2xl border border-white/10 bg-black/20">
+                                {/* FILTERS */}
+                                <div className="mb-6 flex flex-col sm:flex-row sm:items-center gap-4 relative z-10 px-1">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-teal-400/60 text-[10px] font-black uppercase tracking-widest">Sector Filter:</span>
+                                        <select
+                                            value={filterEvent}
+                                            onChange={(e) => setFilterEvent(e.target.value)}
+                                            className="bg-black/40 border border-teal-500/10 rounded-xl px-5 py-2.5 text-white text-xs focus:outline-none focus:border-teal-500/50 transition cursor-pointer font-bold"
+                                        >
+                                            {uniqueEvents.map(ev => <option key={ev} value={ev} className="bg-[#0f111a]">{ev}</option>)}
+                                        </select>
+                                    </div>
+                                    <span className="sm:ml-auto text-[10px] font-black text-cyan-400 tracking-widest uppercase bg-cyan-500/5 border border-cyan-500/20 px-4 py-2.5 rounded-xl">
+                                        SIGNAL STRENGTH: {filteredData.length} RECORDS FOUND
+                                    </span>
+                                </div>
+
+                                {/* TABLE HUB */}
+                                <div className="flex-1 overflow-auto astral-glass border-teal-500/10 bg-black/40 relative z-10 custom-scrollbar-thin">
                                     {fetchError ? (
-                                        <div className="p-20 text-center">
-                                            <p className="text-red-400">{fetchError}</p>
-                                            <button onClick={() => fetchRegistrations()} className="mt-4 text-purple-400 underline uppercase text-xs font-bold tracking-widest">Retry Connection</button>
+                                        <div className="p-32 text-center">
+                                            <p className="text-red-400 font-black uppercase tracking-widest text-xs mb-4">{fetchError}</p>
+                                            <button onClick={() => fetchRegistrations()} className="px-6 py-3 bg-teal-500/10 border border-teal-500/30 text-teal-400 text-[10px] font-black tracking-widest uppercase rounded-xl hover:bg-teal-500/20 transition-all">Reconnect Signal</button>
                                         </div>
                                     ) : (
-                                        <table className="w-full text-left border-collapse min-w-[1000px]">
-                                            <thead className="sticky top-0 bg-[#1a1c2e] z-10">
-                                                <tr>
-                                                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-white/10">Student</th>
-                                                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-white/10">Contact Info</th>
-                                                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-white/10">Event Details</th>
-                                                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-white/10">Team</th>
-                                                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-white/10">Payment Date</th>
-                                                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-white/10">Pass Type</th>
-                                                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-white/10">Amount</th>
-                                                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-white/10">UTR No</th>
-                                                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-white/10">Actions</th>
+                                        <table className="w-full text-left border-collapse min-w-[1200px]">
+                                            <thead className="sticky top-0 bg-[#020617] z-20">
+                                                <tr className="border-b border-teal-500/20">
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Member Detail</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Comms Link</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Mission Segment</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Squad Matrix</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Access Tier</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Credit Flow</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Order Hash</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest">Status</th>
                                                 </tr>
                                             </thead>
-                                            <tbody className="divide-y divide-white/10">
+                                            <tbody className="divide-y divide-teal-500/5">
                                                 {filteredData.length > 0 ? filteredData.map((reg) => (
-                                                    <tr key={reg.id} className="hover:bg-white/5 transition">
-                                                        <td className="px-6 py-5">
-                                                            <div className="font-bold text-white">{reg.fullName}</div>
-                                                            <div className="text-xs text-purple-400 mt-1">{reg.college}</div>
+                                                    <tr key={reg.id} className="hover:bg-teal-500/5 transition-all group border-b border-teal-500/5">
+                                                        <td className="px-6 py-6 border-r border-teal-500/10">
+                                                            <div className="font-black text-white uppercase tracking-wider text-[11px] group-hover:text-teal-400 transition-colors">{reg.full_name}</div>
+                                                            <div className="text-[9px] font-black text-teal-500/70 mt-1 uppercase tracking-[0.2em]">{reg.college}</div>
                                                         </td>
-                                                        <td className="px-6 py-5">
-                                                            <a href={`mailto:${reg.email}`} title="Click to email student" className="text-sm text-blue-400 hover:underline block mb-1 flex items-center gap-2">
-                                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                                        <td className="px-6 py-6 border-r border-teal-500/10">
+                                                            <a href={`mailto:${reg.email}`} className="text-[11px] font-black text-cyan-400 hover:text-cyan-300 transition-all block mb-1">
                                                                 {reg.email}
                                                             </a>
-                                                            <div className="text-sm text-gray-400">{reg.phone}</div>
+                                                            <div className="text-[10px] text-teal-400/40 font-mono tracking-tighter">{reg.phone}</div>
                                                         </td>
-                                                        <td className="px-6 py-5">
-                                                            <div className="text-sm font-semibold text-white">{reg.eventTitle}</div>
-                                                            <div className="text-[10px] text-gray-500 mt-1 uppercase tracking-tighter">Reg: {new Date(reg.timestamp).toLocaleString()}</div>
+                                                        <td className="px-6 py-6 border-r border-teal-500/10">
+                                                            <div className="text-[11px] font-black text-white uppercase tracking-widest">{reg.event_title}</div>
+                                                            <div className="text-[9px] text-teal-400/40 mt-1 uppercase font-black tracking-tighter">{new Date(reg.timestamp).toLocaleString('en-IN')}</div>
                                                         </td>
-                                                        <td className="px-6 py-5">
-                                                            {reg.teamMembers?.length > 0 ? (
-                                                                <div className="flex flex-wrap gap-1 max-w-[150px]">
-                                                                    {reg.teamMembers.map((m, idx) => (
-                                                                        <span key={idx} className="text-[9px] bg-purple-500/10 px-2 py-0.5 rounded-md text-purple-300 border border-purple-500/20 whitespace-nowrap">
-                                                                            {m.fullName}
-                                                                        </span>
+                                                        <td className="px-6 py-6 border-r border-teal-500/10">
+                                                            {reg.team_name && <div className="text-[9px] font-black text-cyan-500 mb-3 uppercase tracking-widest border-b border-cyan-500/20 pb-2">Squad: {reg.team_name}</div>}
+                                                            {reg.team_members?.length > 0 ? (
+                                                                <div className="space-y-4">
+                                                                    {reg.team_members.map((m, idx) => (
+                                                                        <div key={idx} className="bg-teal-500/5 rounded-xl p-3 border border-teal-500/10 group-hover:border-teal-400/20 transition-all">
+                                                                            <div className="text-[10px] font-black text-white uppercase tracking-widest">{m.fullName}</div>
+                                                                            <div className="text-[9px] text-teal-400/40 truncate mt-1">{m.email}</div>
+                                                                            <div className="text-[10px] text-cyan-400/70 font-mono mt-1">{m.phone}</div>
+                                                                        </div>
                                                                     ))}
                                                                 </div>
-                                                            ) : <span className="text-gray-600 text-[10px]">Individual</span>}
+                                                            ) : <span className="text-teal-500/40 text-[9px] font-black uppercase tracking-widest bg-teal-500/5 px-4 py-2 rounded-lg border border-teal-500/10">SOLO PILOT</span>}
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-purple-300 font-bold">
-                                                            {reg.paymentDate || "N/A"}
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.passType === 'Combo Pass' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : 'bg-blue-500/10 text-blue-300'}`}>
-                                                                {reg.passType || "Standard"}
+                                                        <td className="px-6 py-6 whitespace-nowrap border-r border-teal-500/10">
+                                                            <span className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] ${reg.pass_type === 'Combo Pass' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'}`}>
+                                                                {reg.pass_type || "Basic"}
                                                             </span>
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-mono">
-                                                            {reg.amountPaid || "N/A"}
+                                                        <td className="px-6 py-6 whitespace-nowrap text-[11px] text-white font-black font-mono border-r border-teal-500/10 italic">
+                                                            {reg.amount_paid || "0.00"}
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-mono">
-                                                            {reg.transactionId}
+                                                        <td className="px-6 py-6 whitespace-nowrap text-[10px] text-teal-400/40 font-black font-mono border-r border-teal-500/10">
+                                                            {reg.razorpay_payment_id || "VERIFYING_HASH"}
                                                         </td>
-                                                        <td className="px-6 py-5 flex items-center gap-4">
-                                                            {reg.screenshotPath ? (
-                                                                <a
-                                                                    href={reg.screenshotPath}
-                                                                    target="_blank"
-                                                                    rel="noreferrer"
-                                                                    className="text-[10px] text-emerald-400 hover:text-emerald-300 font-bold underline"
-                                                                >
-                                                                    SCREENSHOT
-                                                                </a>
-                                                            ) : <span className="text-gray-600 text-[10px] italic">NONE</span>}
+                                                        <td className="px-6 py-6 text-center">
+                                                            <div className="flex items-center justify-center gap-2">
+                                                                <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.5)] animate-pulse"></div>
+                                                                <span className="text-[8px] font-black text-emerald-400 uppercase tracking-widest">LIVE</span>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 )) : (
                                                     <tr>
-                                                        <td colSpan="9" className="px-6 py-20 text-center text-gray-500 italic">No registrations found for this selection.</td>
+                                                        <td colSpan="8" className="px-6 py-20 text-center text-gray-500 italic">No registrations found for this selection.</td>
                                                     </tr>
                                                 )}
                                             </tbody>
@@ -884,10 +926,10 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                             {registrations.map((reg) => (
                                                 <div key={reg.id} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center justify-between">
                                                     <div className="overflow-hidden">
-                                                        <div className="text-white font-bold text-sm truncate">{reg.fullName}</div>
-                                                        <div className="text-gray-500 text-[10px] truncate">{reg.eventTitle}</div>
+                                                        <div className="text-white font-bold text-sm truncate">{reg.full_name}</div>
+                                                        <div className="text-gray-500 text-[10px] truncate">{reg.event_title}</div>
                                                     </div>
-                                                    <button onClick={() => { setDeleteTargetId(reg.id); setDeleteTargetName(reg.fullName); setIsClearModalOpen(true); }} className="px-4 py-2 bg-red-500/10 text-red-500 rounded-xl text-[10px] font-bold hover:bg-red-500 hover:text-white transition">DELETE</button>
+                                                    <button onClick={() => { setDeleteTargetId(reg.id); setDeleteTargetName(reg.full_name); setIsClearModalOpen(true); }} className="px-4 py-2 bg-red-500/10 text-red-500 rounded-xl text-[10px] font-bold hover:bg-red-500 hover:text-white transition">DELETE</button>
                                                 </div>
                                             ))}
                                         </div>
@@ -956,7 +998,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                         {registrations.map((reg) => (
                                                             <div key={reg.id} className="bg-white/5 border border-white/5 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-center justify-between hover:bg-white/[0.08] transition-colors group gap-2 overflow-hidden">
                                                                 <div className="min-w-0 flex-1">
-                                                                    <div className="text-white font-bold text-xs sm:text-sm truncate">{reg.fullName}</div>
+                                                                    <div className="text-white font-bold text-xs sm:text-sm truncate">{reg.full_name}</div>
                                                                     <div className="flex flex-col gap-0.5 mt-0.5 sm:mt-1">
                                                                         <div className="text-gray-500 text-[9px] sm:text-[10px] truncate flex items-center gap-1">
                                                                             <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
@@ -1219,28 +1261,28 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                         {filteredData.length > 0 ? (
                                                             <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-2 sm:gap-3 p-2 sm:p-3">
                                                                 {filteredData.map((reg) => (
-                                                                    <div key={reg.id || reg._id} className="bg-white/5 border border-white/5 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-center justify-between hover:bg-white/[0.08] transition-colors group gap-2 overflow-hidden">
+                                                                    <div key={reg.id} className="bg-white/5 border border-white/5 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-center justify-between hover:bg-white/[0.08] transition-colors group gap-2 overflow-hidden">
                                                                         <div className="min-w-0 flex-1">
-                                                                            <div className="text-white font-bold text-xs sm:text-sm truncate">{reg.fullName}</div>
+                                                                            <div className="text-white font-bold text-xs sm:text-sm truncate">{reg.full_name}</div>
                                                                             <div className="flex flex-col gap-0.5 mt-0.5">
                                                                                 <div className="text-gray-500 text-[9px] sm:text-[10px] truncate flex items-center gap-1">
                                                                                     <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                                                                     <span className="truncate">{reg.email}</span>
                                                                                 </div>
-                                                                                <div className="text-gray-500 text-[9px] sm:text-[10px] truncate">{reg.eventTitle}</div>
+                                                                                <div className="text-gray-500 text-[9px] sm:text-[10px] truncate">{reg.event_title}</div>
                                                                             </div>
                                                                         </div>
                                                                         <button
-                                                                            onClick={() => sendEventMail('individual', reg.id || reg._id)}
-                                                                            disabled={individualMailerSending[reg.id || reg._id]}
-                                                                            className={`px-3 py-2 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[9px] sm:text-[10px] font-bold transition flex items-center gap-1 whitespace-nowrap flex-shrink-0 ${individualMailerSending[reg.id || reg._id] ? 'bg-gray-700 text-gray-500' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500 hover:text-white'}`}
+                                                                            onClick={() => sendEventMail('individual', reg.id)}
+                                                                            disabled={individualMailerSending[reg.id]}
+                                                                            className={`px-3 py-2 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[9px] sm:text-[10px] font-bold transition flex items-center gap-1 whitespace-nowrap flex-shrink-0 ${individualMailerSending[reg.id] ? 'bg-gray-700 text-gray-500' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500 hover:text-white'}`}
                                                                         >
-                                                                            {individualMailerSending[reg.id || reg._id] ? (
+                                                                            {individualMailerSending[reg.id] ? (
                                                                                 <svg className="w-3 h-3 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                                                                             ) : (
                                                                                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                                                             )}
-                                                                            {individualMailerSending[reg.id || reg._id] ? '...' : 'SEND'}
+                                                                            {individualMailerSending[reg.id] ? '...' : 'SEND'}
                                                                         </button>
                                                                     </div>
                                                                 ))}

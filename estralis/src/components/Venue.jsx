@@ -1,9 +1,16 @@
 import { motion } from "framer-motion"
+import SectionBackground from "./SectionBackground"
 
 export default function Venue() {
   return (
-    <section id="venue" className="min-h-screen px-6 py-20">
-      <div className="text-center mb-12">
+    <section id="venue" className="relative min-h-screen px-6 py-20 overflow-hidden group">
+      
+      <SectionBackground 
+        src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80" 
+        alt="Venue Architecture" 
+      />
+
+      <div className="relative z-10 text-center mb-12">
         <p className="apple-eyebrow mb-3">🌍 Location</p>
         <h2 className="apple-heading text-5xl md:text-7xl">Venue</h2>
       </div>

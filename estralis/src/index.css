@@ -1,204 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Michroma&family=Space+Grotesk:wght@300..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 
+/* 🪐 ASTRAL-SAARANG HYBRID SYSTEM 🪐 */
+
 :root {
-  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-astral: "Michroma", sans-serif;
+  --font-tech: "Space Grotesk", sans-serif;
+  --font-saarang: "Playfair Display", serif;
+  --color-space: #020617;
+  --color-teal: #2dd4bf;
+  --color-aqua: #0891b2;
+  --color-starlight: #f8fafc;
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-tech);
+  background-color: var(--color-space) !important;
+  color: var(--color-starlight);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* 🍏 APPLE GLASS UTILITY - Optimized for 60fps */
-.apple-glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  /* Hardware acceleration to prevent lag */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  will-change: transform, opacity;
-}
-
-.apple-glass-panel {
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+/* 💠 ASTRAL GLASS - Celestial Panels */
+.astral-glass {
+  background: rgba(8, 145, 178, 0.03); /* Aqua base */
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(45, 212, 191, 0.1); /* Teal border */
   border-radius: 1.5rem;
-  transform: translateZ(0); 
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  transform: translateZ(0);
 }
 
-/* 🍏 APPLE PREMIUM HEADING - SF Pro inspired */
-.apple-heading {
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 1.05;
+.astral-glass-bright {
+  background: rgba(45, 212, 191, 0.05);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  border-radius: 2rem;
+}
+
+/* ✨ STELLAR HEADING - Futuristic Wide Look */
+.astral-heading {
+  font-family: var(--font-astral);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
   background: linear-gradient(
-    135deg,
-    #fff 0%,
-    rgba(255,255,255,0.9) 30%,
-    #d8b4fe 55%,
-    #f472b6 75%,
-    #818cf8 100%
+    to bottom,
+    #fff,
+    #99f6e4 40%,
+    #2dd4bf 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.25));
+  filter: drop-shadow(0 0 20px rgba(45, 212, 191, 0.3));
 }
 
-/* Eyebrow label above headings */
-.apple-eyebrow {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.25em;
+.astral-eyebrow {
+  font-family: var(--font-astral);
+  font-size: 0.6rem;
+  letter-spacing: 0.5em;
   text-transform: uppercase;
-  color: rgba(168, 85, 247, 0.8);
+  color: var(--color-teal);
+  opacity: 0.8;
+  border-left: 3px solid var(--color-teal);
+  padding-left: 1rem;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+/* 🖼️ SAARANG PATTERNS - Bold & Artistic */
+.saarang-serif {
+  font-family: var(--font-saarang);
 }
 
-/* Prevent horizontal scroll on mobile */
-html,
-body,
-#root {
-  overflow-x: hidden;
-  background-color: #000 !important;
-  background-attachment: fixed;
+.saarang-block {
+  border-left: 4px solid var(--color-teal);
+  background: rgba(45, 212, 191, 0.03);
+  padding: 1rem;
 }
 
-/* Force autofill background to stay dark */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px rgb(15, 23, 42) inset !important;
-  -webkit-text-fill-color: white !important;
-  transition: background-color 5000s ease-in-out 0s;
+.saarang-banner-text {
+  font-family: var(--font-astral);
+  font-weight: 900;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
 }
 
-/* Floating background animation */
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-40px);
-  }
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.03;
+  z-index: 9999;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
 }
 
-/* Gradient text movement */
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+/* ⚡ NEON WIREFRAME */
+.neon-wire {
+  border: 1px solid var(--color-teal);
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.2), inset 0 0 10px rgba(45, 212, 191, 0.2);
 }
 
-/* Optional shimmer (future use) */
-@keyframes shine {
-  0% {
-    background-position: 0% 50%;
-  }
+/* 🌌 CELESTIAL GLOW UTILITIES */
+.glow-teal { filter: drop-shadow(0 0 8px rgba(45, 212, 191, 0.5)); }
+.glow-aqua { filter: drop-shadow(0 0 12px rgba(8, 145, 178, 0.6)); }
 
-  100% {
-    background-position: 200% 50%;
-  }
+/* Transitions */
+a, button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Cyber scanline animation */
-@keyframes scan {
-  0% {
-    transform: translateY(-100%);
-  }
-
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-/* Utility classes for animations */
-.animate-float {
-  animation: float 18s ease-in-out infinite;
-}
-
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradientShift 8s ease infinite;
-}
-
-/* Section snap scrolling */
-body {
-  scroll-snap-type: y proximity;
-}
-
-section {
-  scroll-snap-align: start;
-}
-
-a {
-  transition: all 0.25s ease;
-}
-
-a:hover {
-  text-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
-}
-
-/* 🎨 PREMIUM CUSTOM SCROLLBAR */
-/* For Chrome, Safari, and Edge */
+/* 🎨 PREMIUM CUSTOM SCROLLBAR (Astral Teal) */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.9);
-  border-radius: 10px;
+  background: #020617;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #ec4899, #9333ea);
+  background: linear-gradient(to bottom, #0891b2, #2dd4bf);
   border-radius: 10px;
-  border: 2px solid rgba(15, 23, 42, 0.9);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #f472b6, #a855f7);
-}
-
-/* For Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #9333ea rgba(15, 23, 42, 0.9);
-}
-
-/* Utility for hiding scrollbar while permitting scroll */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
+  background: #2dd4bf;
 }

@@ -22,17 +22,15 @@ import CornerLogos from "./components/Cornerlogos"
 import MyRegistrations from "./components/MyRegistrations"
 import AdminDashboard from "./components/AdminDashboard"
 import FixedWatermark from "./components/FixedWatermark"
-import WelcomeAnimation from "./components/WelcomeAnimation"
 import PrizePool from "./components/PrizePool"
 import ThemeRevealModal from "./components/ThemeRevealModal"
+import SectionBackground from "./components/SectionBackground"
 import { useState, useEffect } from "react"
 
 export default function App() {
   const [isRegistrationsOpen, setIsRegistrationsOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
-  const [isWelcomeDone, setIsWelcomeDone] = useState(() => {
-    return sessionStorage.getItem('hasSeenWelcome') === 'true';
-  });
+
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [isThemeRevealOpen, setIsThemeRevealOpen] = useState(false);
 
@@ -62,42 +60,40 @@ export default function App() {
 
   return (
     <>
-      <WelcomeAnimation onComplete={() => setIsWelcomeDone(true)} />
+      <div className="noise-overlay" />
 
-      <div className={`min-h-screen overflow-x-hidden bg-black text-white transition-opacity duration-1000 ${isWelcomeDone ? 'opacity-100' : 'opacity-0'}`}>
+      <div className="min-h-screen overflow-x-hidden bg-[#020617] text-white">
         {/* ================= GLOBAL BACKGROUNDS ================= */}
-        {/* Deep space base — very dark navy, not pure black */}
-        <div className="fixed inset-0 pointer-events-none -z-20" style={{ background: "linear-gradient(160deg, #05050f 0%, #08061a 40%, #060410 100%)" }} />
+        {/* Deep space base */}
+        <div className="fixed inset-0 pointer-events-none -z-20" style={{ background: "linear-gradient(160deg, #020617 0%, #050a1f 40%, #010412 100%)" }} />
 
         {/* Stars */}
         <StarBackground />
 
-        {/* Warm amber upper-left bleed — like a distant star */}
-        <div className="fixed top-0 left-0 w-[700px] h-[700px] pointer-events-none -z-10 translate-z-0"
-          style={{ background: "radial-gradient(ellipse at top left, rgba(251,191,36,0.04) 0%, transparent 65%)" }} />
-
-        {/* Cool violet upper-right bleed */}
+        {/* Teal upper-left bleed */}
+        <div className="fixed top-0 left-0 w-[800px] h-[800px] pointer-events-none -z-10 translate-z-0"
+          style={{ background: "radial-gradient(ellipse at top left, rgba(45,212,191,0.05) 0%, transparent 65%)" }} />
+ 
+        {/* Cool Aqua upper-right bleed */}
         <div className="fixed top-0 right-0 w-[600px] h-[600px] pointer-events-none -z-10 translate-z-0"
-          style={{ background: "radial-gradient(ellipse at top right, rgba(139,92,246,0.06) 0%, transparent 65%)" }} />
+          style={{ background: "radial-gradient(ellipse at top right, rgba(8,145,178,0.06) 0%, transparent 65%)" }} />
 
-        {/* Deep pink center mid-page glow */}
+        {/* Astral center mid-page glow */}
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] pointer-events-none -z-10 translate-z-0"
-          style={{ background: "radial-gradient(ellipse, rgba(236,72,153,0.025) 0%, transparent 70%)" }} />
-
+          style={{ background: "radial-gradient(ellipse, rgba(45,212,191,0.03) 0%, transparent 70%)" }} />
+ 
         {/* Teal bottom-right */}
         <div className="fixed bottom-0 right-0 w-[500px] h-[500px] pointer-events-none -z-10 translate-z-0"
-          style={{ background: "radial-gradient(ellipse at bottom right, rgba(20,184,166,0.04) 0%, transparent 65%)" }} />
+          style={{ background: "radial-gradient(ellipse at bottom right, rgba(8,145,178,0.04) 0%, transparent 65%)" }} />
 
-        {/* Parallax lights */}
+        {/* Parallax Astral lights */}
         <motion.div
-           style={{ y: ySlow }}
+           style={{ y: ySlow, background: "radial-gradient(circle, rgba(45,212,191,0.04) 0%, transparent 70%)" }}
            className="fixed top-1/4 left-[10%] w-[500px] h-[500px] rounded-full pointer-events-none -z-10 translate-z-0"
-           style={{ background: "radial-gradient(circle, rgba(168,85,247,0.03) 0%, transparent 70%)" }}
         />
         <motion.div
-           style={{ y: yFast }}
+           style={{ y: yFast, background: "radial-gradient(circle, rgba(8,145,178,0.03) 0%, transparent 65%)" }}
            className="fixed top-1/3 right-[10%] w-[400px] h-[400px] rounded-full pointer-events-none -z-10 translate-z-0"
-           style={{ background: "radial-gradient(circle, rgba(251,191,36,0.025) 0%, transparent 65%)" }}
         />
 
         <CursorGlow />
@@ -118,7 +114,6 @@ export default function App() {
         <ThemeRevealModal isOpen={isThemeRevealOpen} onClose={() => setIsThemeRevealOpen(false)} />
 
         <CornerLogos
-          isWelcomeDone={isWelcomeDone}
           hide={isRegistrationsOpen || isAdminOpen || isScheduleModalOpen}
         />
         <FixedWatermark />
@@ -136,31 +131,39 @@ export default function App() {
         </section>
 
 
-        {/* ================= HERO ================= */}
+        {/* ================= HERO (Branding) ================= */}
         <Section id="home">
-          <section
-            className="relative min-h-screen flex items-center justify-center px-6 text-center overflow-hidden"
-          >
-
+          <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
             <FestivalHero />
+            
+          </section>
+        </Section>
+
+        {/* ================= COUNTDOWN (Next Page) ================= */}
+        <Section id="countdown">
+          <section className="relative min-h-screen flex flex-col items-center justify-center py-20 px-6 overflow-hidden group">
+            
+            <SectionBackground 
+              src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80" 
+              alt="Tech Earth Background" 
+              activeOpacity="opacity-70 md:opacity-50"
+            />
 
             <motion.div
-              style={{ y: yTitle }}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
               transition={{ duration: 1 }}
-              className="relative z-20 flex flex-col items-center mt-28 md:mt-66 will-change-transform"
+              className="w-full flex flex-col items-center"
             >
-              <div className="mt-6 flex flex-col items-center">
-                <CountdownSciFi />
-              </div>
-
-              <div className="mt-12">
-                <a
+              <CountdownSciFi />
+              
+              <div className="mt-16">
+                 <a
                   href="#events"
-                  className="px-8 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 font-semibold shadow-lg shadow-purple-700/40 hover:shadow-purple-500/80 hover:scale-105 transition"
+                  className="px-12 py-5 rounded-2xl bg-teal-500 text-black font-black tracking-[0.3em] uppercase shadow-[0_0_30px_rgba(45,212,191,0.4)] hover:shadow-[0_0_50px_rgba(45,212,191,0.7)] hover:bg-white hover:scale-105 transition-all duration-300 transform active:scale-95 flex items-center justify-center"
                 >
-                  EXPLORE EVENTS
+                  Explore_Archive
                 </a>
               </div>
             </motion.div>

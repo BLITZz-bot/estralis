@@ -8,11 +8,11 @@ export default function HeroContent() {
         <h1 className="text-5xl md:text-7xl font-extrabold mb-6 
         bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400
         bg-clip-text text-transparent">
-          ALGO-RHYTHM 3.0
+          ESTRALIS
         </h1>
 
         <p className="text-xl md:text-3xl text-purple-200 mb-2">
-          APRIL 10 and 11
+          MAY 12 & 13
         </p>
 
         <p className="text-xl md:text-2xl text-purple-200 mb-4">

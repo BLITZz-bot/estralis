@@ -2,18 +2,50 @@ import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-mo
 import { useRef, useState, useEffect } from "react"
 // import StarBackground from "./StarBackground"
 import RegistrationForm from "./RegistrationForm"
+import SectionBackground from "./SectionBackground"
+
+const IconPhone = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+  </svg>
+)
+
+const IconUsers = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+)
+
+const IconClock = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+)
+
+const IconMapPin = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+  </svg>
+)
+
+const IconTrophy = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+  </svg>
+)
 
 
 export const eventsDay1 = [
   {
     time: "10:30 AM",
-    title: "ESCAPE ROOM",
-    location: "Lab 3 & 4, 4th Floor,GCEM Campus",
+    title: "CLASSICAL GROUP",
+    location: "Amphitheatre",
     description: "This is a web-based technical escape room competition conducted in a controlled lab environment. Teams will solve a series of logical, programming, and cybersecurity-based challenges across four progressive levels. Each level contains multiple puzzles that must be solved to obtain a key and unlock the next stage.",
-    category: "Tech",
-    prize: "₹7,500",
-    minTeamSize: 1,
-    maxTeamSize: 3,
+    category: "Cultural",
+    prize: "₹30,000",
+    minTeamSize: 2,
+    maxTeamSize: 15,
     rules: ["1. Participants must be currently enrolled students of their respective institutions.",
       "2. Each team must consist of 1 to 3 members. Individual participation is allowed.",
       "3. All participants must carry a valid college ID card for verification.",
@@ -39,11 +71,11 @@ export const eventsDay1 = [
   },
   {
     time: "10:30 AM",
-    title: "CHESS",
-    location: "Seminar Hall, 1st Floor,GCEM Campus",
+    title: "REELS MAKING",
+    location: "1st Floor",
     description: "The tournament will follow standard FIDE chess rules, starting with 3 Swiss rounds where players earn points for wins and draws to determine rankings.",
     category: "Fun",
-    prize: "₹8,000",
+    prize: "₹6,000",
     minTeamSize: 1,
     maxTeamSize: 1,
     rules: ["*GAME RULES ARE SAME AS FIDE TOURNAMENTS*",
@@ -79,8 +111,8 @@ export const eventsDay1 = [
     fee: "₹250"
   },
   {
-    time: "10:30 AM",
-    title: "HIGHLIGHT REEL",
+    time: "11:00 AM",
+    title: "TREASURE HUNT",
     location: "410 Room, 4th Floor,GCEM Campus",
     description: "This event will require the participants to take photos and/or videos of the event happening on the day They are then required to compile these photos and/or videos into a single edited video of a span of max 2 mins. These videos will be evaluated by the jury and the winners will be announced.The participants will need to cover the event on both the days.",
     category: "Fun",
@@ -106,11 +138,31 @@ export const eventsDay1 = [
     fee: "₹300",
   },
   {
-    time: "11:30 AM",
-    title: "CAMPUS CARNAGE",
+    time: "11:00 AM",
+    title: "FACE PAINTING",
+    location: "Main Quadrangle",
+    description: "Transform faces into living art in this creative challenge! Bring your imagination and vibrant colors to the ultimate face painting showdown.",
+    category: "Fun",
+    prize: "₹3,000",
+    minTeamSize: 2,
+    maxTeamSize: 2,
+    rules: [
+      "1. Participants must participate in pairs (one artist, one model).",
+      "2. Only skin-safe, non-toxic paints are allowed.",
+      "3. Time limit is strictly 1 hour.",
+      "4. Judging will be based on creativity, execution, and theme adherence.",
+      "5. Reference images are allowed but stencils are prohibited."
+    ],
+    coordinators: ["TBD"],
+    registerLink: "#",
+    fee: "₹200",
+  },
+  {
+    time: "11:00 AM",
+    title: "FITNESS CHALLENGE",
     location: "Room 405,406 & 407, 4th Floor, GCEM Campus",
     description: "The BGMI Tournament is a competitive esports event where teams battle in custom lobby matches to showcase their strategy, coordination, and combat skills.",
-    category: "Fun",
+    category: "Sports",
     prize: "₹12,000",
     minTeamSize: 4,
     maxTeamSize: 4,
@@ -172,11 +224,11 @@ export const eventsDay1 = [
     fee: "₹600",
   },
   {
-    time: "12:30 PM",
-    title: "CANVISTA",
+    time: "11:00 AM",
+    title: "FACE PAINTING",
     location: "LAB 5, Ground Floor, GCEM Campus",
     description: "This is a Poster Designing event. It will consist of two rounds.The theme will be provided to the participants at the start of the event, and the poster must be made digitally within the set time limit using any software they wish to use.",
-    category: "Fun",
+    category: "Art",
     prize: "₹6,000",
     minTeamSize: 1,
     maxTeamSize: 1,
@@ -199,11 +251,11 @@ export const eventsDay1 = [
     fee: "₹200",
   },
   {
-    time: "01:30 PM",
-    title: "CODE SPRINT",
+    time: "11:30 PM",
+    title: "BEAT BOXING",
     location: "LAB 3, 4th Floor,GCEM Campus",
     description: "Test your coding and problem-solving skills in this competitive programming event conducted on HackerRank. Participants will compete through elimination rounds to solve challenging problems and prove their programming expertise.",
-    category: "Tech",
+    category: "Fun",
     prize: "₹7,500",
     minTeamSize: 1,
     maxTeamSize: 2,
@@ -240,11 +292,48 @@ export const eventsDay1 = [
     fee: "₹350",
   },
   {
-    time: "01:30 PM",
-    title: "VINTARA",
-    location: "GIS Auditorium",
-    description: "The VINTARA is an exciting FASHION SHOW event where teams showcase their creativity, style, and confidence on the ramp. Participants will perform based on a specific theme within a 3–4 minute time limit. The event highlights coordination, originality, and stage presence while maintaining decency and discipline. It promises a vibrant and entertaining experience for both participants and the audience.",
-    category: "Fun",
+    time: "12:00 PM",
+    title: "WESTERN SOLO",
+    location: "Amphitheatre",
+    description: "This is a solo singing competition where participants will perform a song in English, Hindi, or any other language. The song must be in the Western style, and participants will be judged on their vocal quality, stage presence, and overall performance.",
+    category: "Cultural",
+    prize: "₹12,000",
+    minTeamSize: 5,
+    maxTeamSize: 8,
+    rules: ["1.	Each team must have 4-8 members.",
+      "2.	Performance time limit: 3–4 minutes (strict).",
+      "3.	Vulgarity or inappropriate content is strictly prohibited.",
+      "4.	Teams must arrive and report to the coordinator at the venue 1 hour before event start time.",
+      "5.	Judges decision will be final and binding.",
+      "6.	Costumes must be decent and modest.",
+      "7.	Excessive skin exposure is strictly prohibited.",
+      "8.	Transparent or inappropriate outfits will lead to disqualification.",
+      "9. No political, religiously sensitive, or controversial representations.",
+      "10. No fire, water, smoke, powder, sharp objects, or hazardous props.",
+      "11. Organizing committee reserves the right to disqualify any participant violating decorum.",
+      "12. Please check the schedule for overlapping events before registering for multiple events.",
+      "13. If you have registered for overlapping events, management is not responsible,any such situations no refund will be initiated.",
+      "14. The participants from Gopalan Group of Institutions should contact the respective event coordinators before registering",
+      ".",
+      "'MUSIC RULES'",
+      "1.Submit via Google Drive/email 48 hours prior.",
+      "2.File name format:  CollegeName_TeamName.mp3",
+      "3.No obscene lyrics.",
+      "4.No explicit content.",
+      "5.Only one track allowed per entry.",
+      "6.Backup pen drive mandatory.",
+      "",],
+    coordinators: ["Shreeka K - 8861619612", "Vishaka - 8431217851", "Yeshwanth - 8884359993"],
+    registerLink: "#",
+    fee: "₹800",
+    theme: "OPEN THEME"
+  },
+  {
+    time: "12:00 PM",
+    title: "BGMI",
+    location: "1st Floor, GCEM Campus",
+    description: "This is a solo singing competition where participants will perform a song in English, Hindi, or any other language. The song must be in the Western style, and participants will be judged on their vocal quality, stage presence, and overall performance.",
+    category: "Gaming",
     prize: "₹12,000",
     minTeamSize: 5,
     maxTeamSize: 8,
@@ -280,11 +369,11 @@ export const eventsDay1 = [
 
 export const eventsDay2 = [
   {
-    time: "09:00 AM",
-    title: "TRIPLE THREAT CHALLENGE",
-    location: "Seminar Hall, 4th floor, GCEM Campus",
+    time: "09:30 AM",
+    title: "WESTERN GROUP",
+    location: "Main stage, GCEM Campus",
     description: "TRIPLE THREAT CHALLENGE is a team-based challenge event conducted. Each team consists of four members and will compete across three exciting rounds that test teamwork, coordination, communication, and speed.",
-    category: "Fun",
+    category: "Cultural",
     prize: "₹6,000",
     minTeamSize: 4,
     maxTeamSize: 4,
@@ -305,9 +394,9 @@ export const eventsDay2 = [
     fee: "₹500"
   },
   {
-    time: "09:30 AM",
-    title: "THE WORD SYNDICATE",
-    location: "105, 1st Floor, GCEM Campus",
+    time: "11:00 AM",
+    title: "BATTLE OF BANDS",
+    location: "Main stage, GCEM Campus",
     description: "This is an interactive and strategic word-based competition where teams participate in a simulated auction to bid for letters, words, or language-based challenges using fake currency. Teams must use their bidding strategy, vocabulary knowledge, and quick thinking to build valid words, solve linguistic puzzles, and earn points. The event encourages creativity, language skills, and decision-making while maintaining a competitive and engaging environment.",
     category: "Fun",
     prize: "₹3,500",
@@ -336,11 +425,11 @@ export const eventsDay2 = [
     fee: "₹200"
   },
   {
-    time: "09:30 AM",
-    title: "TECH DEBATE COMPETITION",
-    location: "Room 107 & 108, 1st Floor, GCEM Campus",
+    time: "01:00 PM",
+    title: "FASHION WALK",
+    location: "Main stage, GCEM Campus",
     description: "A knockout-style technical debate competition focusing on emerging technologies like AI, Cybersecurity, Blockchain, Quantum Computing & Digital Ethics.",
-    category: "Tech",
+    category: "Art",
     prize: "₹6,000",
     minTeamSize: 2,
     maxTeamSize: 3,
@@ -364,12 +453,12 @@ export const eventsDay2 = [
   },
 
   {
-    time: "10:30 AM",
-    title: "IGNITE THE BEAT",
-    location: "GIS Auditorium",
+    time: "06:00 PM",
+    title: "ARTIST PERFORMANCE AND DJ NIGHT",
+    location: "Main stage, GCEM Campus",
     description: "Step into the spotlight and let your passion ignite the stage, where every move tells a story and every rhythm captivates the soul. Witness an electrifying showcase of talent, energy, and grace, as dancers compete to turn dreams into motion.",
     category: "Fun",
-    prize: "₹12,000",
+    prize: "₹300",
     minTeamSize: 2,
     maxTeamSize: 15,
     rules: ["*Duration: 6-8 minutes per team for their performance*",
@@ -415,80 +504,7 @@ export const eventsDay2 = [
     registerLink: "#",
     fee: "₹700",
   },
-  {
-    time: "10:30 AM",
-    title: "SHOT CUT",
-    location: "Room 410, 4th Floor, GCEM Campus",
-    description: "Shot-Cut is a 9:16 / 16:9 reel advertising challenge where teams get 48 hours to turn a common theme into a powerful brand story. It’s not just about making a video — it’s about thinking creatively, understanding marketing strategy, and delivering strong visuals with convincing storytelling, all under pressure. Every second matters, and the final reel must be sharp, engaging, and impactful, with a duration of 60 seconds or less.",
-    category: "Fun",
-    prize: "₹7,500",
-    minTeamSize: 2,
-    maxTeamSize: 3,
-    comboPass: "₹450 (SHOT CUT + HIGHLIGHT REEL)",
-    rules: ["1. Participants must be currently enrolled in their college.",
-      "2.  Participants must bring a valid college ID card.",
-      "3. Team Size: Each team must consist 3 members.",
-      "4. Theme Announcement: The common theme will be revealed on (09/04/2026 Morning).",
-      "5. Teams will have time from the moment the theme is revealed until the official submission deadline to plan, shoot, and edit their advertisement.",
-      "6. Work Mode: The advertisement must be shot and edited from Home/College. Participants must bring the fully edited final video on the event day.",
-      "7. Video Format: The reel must be in 9:16 (vertical) or 16:9 (horizontal) format.",
-      "8. Duration: The video must be 60 seconds or less.",
-      "9. Originality: The ad must be completely original. Plagiarism or use of copyrighted material without permission will result in disqualification.(Eg:Clipping videos from youtube)",
-      "10. Equipment & Software: Participants may use any camera device and any editing software.",
-      "11. Presentation Round: Teams must present their advertisement in front of the judges, explaining their concept, strategy, and execution.",
-      "12. Submission Deadline will be before the event starts on (11/04/2026-Saturday)",
-      "13. Judging Criteria:",
-      "Hook & First 3 Seconds Impact",
-      "Ad Concept & Originality",
-      "Brand/Product Integration",
-      "Message Clarity & Communication",
-      "Editing, Pacing & Video Optimization",
-      "Marketing Effectiveness & Call-to-Action",
-      "Presentation",
-      ".",
-      "14. Judges Decision: The judges decision will be final.",
-      "15. Please check the schedule for overlapping events before registering multiple events",
-      "16. If you have registered for overlapping events, MANAGEMENT is not responsible, no refund will be initiated.The participants from Gopalan Group of Institutions should contact the respective event coordinators before registering",
-      "17. Report to the coordinators 30 minutes before the event starts",
-      "18.Participants of other events will get a complimentary audience pass for VINTARA (Fashion Show).",
-    ],
-    coordinators: ["Abhishek Mannatharaj - 7483076739", "Veeresh Viraktamath – 9380022929"],
-    registerLink: "#",
-    fee: "₹300",
-  },
-  {
-    time: "12:30 PM",
-    title: "BATTLE OF PROMPTS",
-    location: "Lab 5, Ground Floor, GCEM Campus",
-    description: "Battle of Prompts: Participants must generate images using text-to-image prompts only, within the allowed attempts during the competition time. The final submission must include the generated image and exact prompt used, without external editing or pre-prepared prompts.",
-    category: "Tech",
-    prize: "₹4,500",
-    minTeamSize: 1,
-    maxTeamSize: 1,
-    rules: ["1. Participants may use only text-to-image prompting; image-to-image, reference image, or control features are strictly prohibited.",
-      "2. Each participant is allowed a maximum of 5–10 prompt generations per round.",
-      "3. Participants must submit both the final generated image and the exact prompt used.",
-      "4. Editing the generated image using external software (Photoshop, Canva, etc.) is not allowed.",
-      "5. Participants must not use pre-saved prompts or templates prepared before the competition.",
-      "6. Any AI-generated image must be produced during the competition time window.",
-      "7. Participants must not share prompts, generated images, or strategies with others during the event.",
-      "8. The reference image will be visible only for the duration specified by the organizers",
-      "9. Participants may refine prompts iteratively but must select only one final submission.",
-      "10. Organizers may request prompt history or generation logs for verification if required.",
-      "11. The generated image must closely match the composition, objects, lighting, and style of the reference image.",
-      "12. Participants must use only the approved AI tools announced by the organizers.",
-      "13. In case of a tie, the participant with the highest similarity score and fewer attempts will be ranked higher.",
-      "14. Any attempt to bypass tool restrictions or manipulate the judging process will result in disqualification.",
-      "15. All participants must respect the competition environment and follow instructions given by the event coordinators.",
-      "16. Please check the schedule for overlapping events before registering multiple events",
-      "17. If you have registered for overlapping events, management is not responsible, no refund will be initiated.The participants from Gopalan Group of Institutions should contact the respective event coordinators before registering",
-      "18. Report to the coordinators 30 minutes before the event starts",
-      "19.Participants of other events will get a complimentary audience pass for VINTARA (Fashion Show).",
-    ],
-    coordinators: ["P Mohan - 9606629280", "Brunda - 8197283013"],
-    registerLink: "#",
-    fee: "₹200",
-  },
+
 ]
 
 function getCategoryStyles(category) {
@@ -510,128 +526,84 @@ const cardVariants = {
   show: { opacity: 1, y: 0 },
 }
 
-function EventCard({ title, description, category, onClick }) {
-  /* CATEGORY STYLE MAPS */
-  const cardBorders = {
-    Fun:     "border-cyan-500/40  hover:border-cyan-400/70  hover:shadow-[0_0_24px_rgba(6,182,212,0.25)]",
-    Workshop: "border-emerald-500/40 hover:border-emerald-400/70 hover:shadow-[0_0_24px_rgba(16,185,129,0.25)]",
-    Tech:      "border-red-500/40   hover:border-red-400/70   hover:shadow-[0_0_24px_rgba(239,68,68,0.25)]",
-    Fest:     "border-purple-500/40 hover:border-purple-400/70 hover:shadow-[0_0_24px_rgba(168,85,247,0.25)]",
-    Hardware: "border-teal-500/40  hover:border-teal-400/70  hover:shadow-[0_0_24px_rgba(20,184,166,0.25)]",
-    "AI/ML":  "border-indigo-500/40 hover:border-indigo-400/70 hover:shadow-[0_0_24px_rgba(99,102,241,0.25)]",
-    Gaming:   "border-fuchsia-500/40 hover:border-fuchsia-400/70 hover:shadow-[0_0_24px_rgba(217,70,239,0.25)]",
-  }
-  const cardBg = {
-    Fun:     "from-cyan-900/30 via-blue-900/20 to-transparent",
-    Workshop: "from-emerald-900/30 via-green-900/20 to-transparent",
-    Tech:      "from-red-900/30 via-rose-900/20 to-transparent",
-    Fest:     "from-purple-900/30 via-violet-900/20 to-transparent",
-    Hardware: "from-teal-900/30 via-cyan-900/20 to-transparent",
-    "AI/ML":  "from-indigo-900/30 via-blue-900/20 to-transparent",
-    Gaming:   "from-fuchsia-900/30 via-purple-900/20 to-transparent",
-  }
-  const tagColors = {
-    Fun:     "text-cyan-300 border-cyan-400/50 bg-cyan-500/15",
-    Workshop: "text-emerald-300 border-emerald-400/50 bg-emerald-500/15",
-    Tech:      "text-red-300 border-red-400/50 bg-red-500/15",
-    Fest:     "text-purple-300 border-purple-400/50 bg-purple-500/15",
-    Hardware: "text-teal-300 border-teal-400/50 bg-teal-500/15",
-    "AI/ML":  "text-indigo-300 border-indigo-400/50 bg-indigo-500/15",
-    Gaming:   "text-fuchsia-300 border-fuchsia-400/50 bg-fuchsia-500/15",
-  }
-  const arrowColors = {
-    Fun:     "text-cyan-400",
-    Workshop: "text-emerald-400",
-    Tech:      "text-red-400",
-    Fest:     "text-purple-400",
-    Hardware: "text-teal-400",
-    "AI/ML":  "text-indigo-400",
-    Gaming:   "text-fuchsia-400",
-  }
-
-  const border = cardBorders[category] || cardBorders.Tech
-  const bg = cardBg[category] || cardBg.Tech
-  const tag = tagColors[category] || tagColors.Tech
-  const arrow = arrowColors[category] || arrowColors.Tech
+function EventCard({ title, fee, category, onClick, isOpen, t }) {
+  const theme = t || { text: "text-teal-400", hoverText: "group-hover:text-teal-400", bg: "bg-teal-500", hoverBg: "hover:bg-teal-500/10", borderL: "border-l-teal-500", bgSoft: "bg-teal-500/10" };
 
   return (
-    <div
+    <motion.div
+      variants={cardVariants}
       onClick={onClick}
-      className={`relative group cursor-pointer rounded-2xl border bg-gradient-to-br ${bg} p-6 h-full flex flex-col justify-between transition-all duration-300 backdrop-blur-md ${border}`}
+      className={`relative group cursor-pointer astral-glass border-l-4 p-8 h-full flex flex-col justify-between transition-all duration-500 ${theme.borderL} ${theme.hoverBg} hover:border-l-white`}
     >
-      {/* Category tag */}
-      <div>
-        <span className={`inline-block text-[10px] px-3 py-1 rounded-full border mb-4 w-fit uppercase tracking-widest font-bold ${tag}`}>
-          {category}
-        </span>
-
-        {/* Title */}
-        <h3 className="text-xl font-bold mb-2 text-white group-hover:text-white/90 transition-colors">
-          {title}
-        </h3>
-
-        {/* Description */}
-        <p className="text-gray-400 text-sm line-clamp-2">
-          {description}
-        </p>
+      {/* Blocky Price Tag (Saarang Style) */}
+      <div className={`absolute top-0 right-0 text-black px-4 py-1.5 font-black text-xs tracking-widest uppercase ${theme.bg}`}>
+        {fee || "FREE"}
       </div>
 
-      {/* View Details */}
-      <div className={`mt-5 flex items-center gap-1 text-xs font-semibold ${arrow} opacity-0 group-hover:opacity-100 transition-opacity`}>
-        View Details
-        <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+      <div>
+        <div className="flex items-center gap-2 mb-6">
+          <div className={`w-2 h-2 rounded-full ${isOpen ? 'bg-emerald-400' : 'bg-red-500'} animate-pulse`} />
+          <span className="text-[10px] font-black tracking-[0.3em] uppercase text-white/40">
+            {isOpen ? 'Incoming Signal' : 'Transmission Offline'}
+          </span>
+        </div>
+
+        <h3 className={`text-2xl font-black text-white mb-4 leading-tight transition-colors uppercase tracking-tight ${theme.hoverText}`}>
+          {title}
+        </h3>
+      </div>
+
+      <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/5">
+        <span className={`text-[10px] font-bold tracking-[0.2em] uppercase ${theme.text}`}>
+          Access Protocol {" >>>"}
+        </span>
+        <svg className={`w-5 h-5 transition-transform group-hover:translate-x-2 ${theme.text}`} fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5-5 5M6 7l5 5-5 5" />
+        </svg>
+      </div>
+    </motion.div>
+  )
+}
+
+function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bgImage, themeObj }) {
+  const t = themeObj || { text: "text-teal-400", hoverText: "group-hover:text-teal-400", borderB: "border-b-teal-500/10", bg: "bg-teal-500", hoverBg: "hover:bg-teal-500/10", borderL: "border-l-teal-500", bgSoft: "bg-teal-500/10" };
+
+  return (
+    <div className={`relative w-full py-32 border-b ${t.borderB} group overflow-hidden`}>
+      <SectionBackground 
+        src={bgImage} 
+        alt="Zone Background" 
+      />
+
+      <div className="max-w-[1700px] mx-auto px-4 md:px-6 relative z-10 grid grid-cols-[auto_1fr] md:grid-cols-[1fr_3fr] gap-4 md:gap-16 items-start">
+        {/* Massive Category Title (Saarang Style) */}
+        <div className="flex flex-col items-center xl:items-start text-center xl:text-left sticky top-24 pr-4 md:pr-0">
+          <h2 className={`saarang-banner-text text-[12vw] md:text-[8vw] lg:text-[10vw] text-white/50 leading-[0.85] mb-4 ${t.hoverText} transition-colors duration-700 text-center`}>
+            {title.split("").map((char, i) => (
+              <span key={i} className="block">{char}</span>
+            ))}
+          </h2>
+          <div className="saarang-block mt-6 md:mt-8">
+            <p className={`saarang-serif italic text-[10px] md:text-xl lg:text-2xl ${t.text}`}>{subtitle}</p>
+          </div>
+        </div>
+
+        {/* Event Grid */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
+          {events.map((e, i) => (
+            <EventCard
+              key={i}
+              {...e}
+              t={t}
+              isOpen={eventStatuses.find(s => s.title === e.title)?.isOpen ?? true}
+              onClick={() => onEventClick(e)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )
 }
-
-/* ─── CATEGORY GRADIENT MAPS ─── */
-const headerGradients = {
-  Fun: "from-cyan-600/90 via-blue-700/80 to-indigo-800/90",
-  Tech: "from-red-600/90 via-rose-700/80 to-purple-800/90",
-  Workshop: "from-emerald-600/90 via-green-700/80 to-teal-800/90",
-}
-const headerGlows = {
-  Fun: "shadow-cyan-500/30",
-  Tech: "shadow-red-500/30",
-  Workshop: "shadow-emerald-500/30",
-}
-const tabActiveColors = {
-  Fun: "border-cyan-400 text-cyan-300",
-  Tech: "border-red-400 text-red-300",
-  Workshop: "border-emerald-400 text-emerald-300",
-}
-
-const buttonGradients = {
-  Fun: "from-cyan-500 to-blue-600",
-  Tech: "from-red-500 to-purple-600",
-  Workshop: "from-emerald-500 to-teal-600",
-}
-const buttonShadows = {
-  Fun: "shadow-cyan-700/40 hover:shadow-cyan-500/60",
-  Tech: "shadow-purple-700/40 hover:shadow-purple-500/60",
-  Workshop: "shadow-emerald-700/40 hover:shadow-emerald-500/60",
-}
-
-/* ─── SMALL ICON COMPONENTS ─── */
-const IconClock = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-)
-const IconMapPin = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" /><circle cx="12" cy="9" r="2.5" /></svg>
-)
-const IconTrophy = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" /><path d="M4 22h16" /><path d="M10 22V14.6a5 5 0 0 1-3.8-3.8L5 4h14l-1.2 6.8A5 5 0 0 1 14 14.6V22" /></svg>
-)
-const IconTicket = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" /><path d="M13 5v2" /><path d="M13 17v2" /><path d="M13 11v2" /></svg>
-)
-const IconUsers = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-)
-const IconPhone = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
-)
 
 function EventModal({ event, isEventOpen, onClose, onRegister }) {
   const [activeTab, setActiveTab] = useState("about")
@@ -648,19 +620,17 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
     ? `${event.minTeamSize}`
     : `${event.minTeamSize || "?"} – ${event.maxTeamSize || "?"}`
 
-  // Back button handling removed from here to parent
-
   const tabs = [
-    { id: "about", label: "📋 About" },
-    { id: "rules", label: "📜 Rules" },
-    { id: "coordinators", label: "👥 Contact" },
+    { id: "about", label: "ABOUT" },
+    { id: "rules", label: "RULES" },
+    { id: "coordinators", label: "CONTACT" },
   ]
 
   return (
     <>
       {/* Backdrop */}
       <motion.div
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+        className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-[100] p-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -668,207 +638,181 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
       >
         {/* Modal */}
         <motion.div
-          initial={{ y: 60, opacity: 0, scale: 0.96 }}
+          initial={{ y: 60, opacity: 0, scale: 0.98 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
           onClick={(e) => e.stopPropagation()}
-          className={`relative w-full max-w-2xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl ${headerGlows[cat] || headerGlows.Tech} max-h-[90vh] flex flex-col translate-z-0`}
+          className="relative w-full max-w-2xl bg-[#020617] border-4 border-teal-500 shadow-[0_0_50px_rgba(20,184,166,0.3)] flex flex-col max-h-[90vh] overflow-hidden"
         >
-          {/* ═══ GRADIENT HEADER ═══ */}
-          <div className={`relative bg-gradient-to-r ${headerGradients[cat] || headerGradients.Tech} px-8 pt-8 pb-6 overflow-hidden`}>
-            {/* Bubble top-right — large, offset outside */}
-            <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-            {/* Bubble bottom-left — medium, offset outside */}
-            <div className="absolute bottom-0 left-10 w-24 h-24 bg-white/5 rounded-full translate-y-1/2" />
-
+          {/* Header (Saarang Hybrid Style) */}
+          <div className="relative bg-teal-500 p-8">
             <button
               onClick={onClose}
-              className="absolute top-4 right-5 w-9 h-9 flex items-center justify-center rounded-full bg-black/40 text-white/80 hover:text-white hover:bg-black/60 transition text-base z-10 font-bold"
+              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-black text-teal-400 hover:text-white transition-colors font-black text-lg z-20"
             >
               ✕
             </button>
 
-            {/* Category pill */}
-            <motion.span
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
-              className={`inline-block text-[11px] uppercase tracking-widest px-3 py-1 rounded-full border mb-3 font-semibold ${getCategoryStyles(cat)}`}
-            >
-              {cat}
-            </motion.span>
+            <span className="inline-block text-[10px] font-black tracking-[0.4em] uppercase text-black/60 mb-2">
+              Event Terminal // {cat}
+            </span>
 
-            {/* Title */}
-            <motion.h3
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 }}
-              className="text-3xl font-black text-white tracking-tight"
-            >
+            <h3 className="text-4xl md:text-5xl font-black text-black leading-none mb-1 uppercase tracking-tighter">
               {event.title}
-            </motion.h3>
-          </div>
+            </h3>
 
-          {/* ═══ INFO CHIPS BAR ═══ */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-[rgba(10,10,25,0.95)] px-8 py-4 flex flex-wrap gap-3 border-b border-white/5"
-          >
-            {/* Time */}
-            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-300">
-              <IconClock /> {event.time}
-            </span>
-            {/* Location */}
-            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-300">
-              <IconMapPin /> {event.location}
-            </span>
-            {/* Prize */}
-            {event.prize && (
-              <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-400/20 text-amber-300 font-medium">
-                <IconTrophy /> {event.prize}
+            <div className="flex flex-wrap gap-2 mt-4">
+              <span className="text-[10px] font-black bg-black text-teal-400 px-3 py-1 uppercase tracking-[0.2em]">
+                SQUAD_SIZE: {teamText}
               </span>
-            )}
-            {/* Fee */}
-            {event.fee && (
-              <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-400/20 text-blue-300 font-medium">
-                <IconTicket /> {event.fee}
-              </span>
-            )}
-            {/* Team Size */}
-            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-300">
-              <IconUsers /> Team: {teamText}
-            </span>
-            {/* Theme Chip */}
-            {event.theme && (
-              <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-400/20 text-indigo-300 font-medium">
-                ✨ Theme: {event.theme}
-              </span>
-            )}
-            {/* Combo Pass */}
-            {event.comboPass && (
-              <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-purple-500/10 border border-purple-400/20 text-purple-300 font-medium">
-                🎟️ Combo: {event.comboPass}
-              </span>
-            )}
-          </motion.div>
-
-          {/* ═══ TABS ═══ */}
-          <div className="bg-[rgba(10,10,25,0.95)] px-8 pt-4">
-            <div className="flex gap-1 border-b border-white/10">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-2.5 text-sm font-medium transition-all border-b-2 -mb-px ${activeTab === tab.id
-                    ? (tabActiveColors[cat] || tabActiveColors.Tech)
-                    : "border-transparent text-gray-500 hover:text-gray-300"
-                    }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
+              {event.theme && (
+                <span className="text-[10px] font-black bg-black text-teal-400 px-3 py-1 uppercase tracking-[0.2em]">
+                  THEME: {event.theme}
+                </span>
+              )}
             </div>
           </div>
 
-          {/* ═══ TAB CONTENT ═══ */}
-          <div className="bg-[rgba(10,10,25,0.95)] px-8 py-6 overflow-y-auto flex-1">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.25 }}
-            >
-              {activeTab === "about" && (
-                <div>
-                  {event.description && (
-                    <p className="text-gray-300 leading-relaxed text-sm">{event.description}</p>
-                  )}
-                </div>
-              )}
-
-              {activeTab === "rules" && event.rules && (
-                <ul className="space-y-2.5">
-                  {event.rules.map((rule, i) => (
-                    <motion.li
-                      key={i}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.03 }}
-                      className="text-gray-300 text-sm"
-                    >
-                      {rule}
-                    </motion.li>
-                  ))}
-                </ul>
-              )}
-
-              {activeTab === "coordinators" && event.coordinators && (
-                <div className="space-y-3">
-                  {event.coordinators.map((c, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.08 }}
-                      className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3"
-                    >
-                      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold shrink-0">
-                        {c.charAt(0)}
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-white text-sm font-medium">
-                          {c.includes("–") ? c.split("–")[0].trim() : c.split("-")[0].trim()}
-                        </p>
-                        {(c.includes("–") || c.includes("-")) && (
-                          <p className="text-gray-400 text-xs flex items-center gap-1 mt-0.5">
-                            <IconPhone /> {(c.includes("–") ? c.split("–")[1] : c.split("-")[1] || "").trim()}
-                          </p>
-                        )}
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-            </motion.div>
+          {/* Quick Info Strip */}
+          <div className="bg-white/5 border-b border-white/10 px-8 py-4 flex flex-wrap gap-6">
+            <div className="flex flex-col">
+              <span className="text-[9px] font-black text-teal-400/40 uppercase tracking-widest">Temporal_Unit</span>
+              <span className="text-xs font-bold text-white uppercase">{event.time}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[9px] font-black text-teal-400/40 uppercase tracking-widest">Coordinates</span>
+              <span className="text-xs font-bold text-white uppercase italic">{event.location}</span>
+            </div>
+            {event.prize && (
+              <div className="flex flex-col">
+                <span className="text-[9px] font-black text-teal-400/40 uppercase tracking-widest">Bounty_Pool</span>
+                <span className="text-xs font-black text-teal-400 uppercase italic">{event.prize}</span>
+              </div>
+            )}
           </div>
 
-          {/* ═══ FOOTER / REGISTER BUTTON ═══ */}
-          <div className="bg-[rgba(10,10,25,0.95)] px-8 pb-6 pt-2 border-t border-white/5">
+          {/* Tabs */}
+          <div className="flex bg-[#0a0a1a] border-b border-white/5">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-1 py-4 text-[10px] font-black tracking-[0.3em] transition-all duration-300 ${activeTab === tab.id
+                    ? "bg-teal-500 text-black translate-y-[-1px]"
+                    : "text-white/40 hover:text-teal-400 hover:bg-white/5"
+                  }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Content Area */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar bg-[#020617] p-8">
+            <AnimatePresence mode="wait">
+              {activeTab === "about" && (
+                <motion.div
+                  key="about"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  className="space-y-8"
+                >
+                  <div className="saarang-block p-6 border-l-4 border-l-teal-500">
+                    <p className="saarang-serif text-teal-100/80 text-lg leading-relaxed italic">
+                      "{event.description}"
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-white/5 border border-white/10">
+                      <span className="text-[9px] font-black text-teal-400/40 uppercase block mb-1">Squad_Size</span>
+                      <span className="text-xl font-black text-white">{teamText} Units</span>
+                    </div>
+                    <div className="p-4 bg-white/5 border border-white/10">
+                      <span className="text-[9px] font-black text-teal-400/40 uppercase block mb-1">Access_Cost</span>
+                      <span className="text-xl font-black text-teal-400">{event.fee}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === "rules" && (
+                <motion.div
+                  key="rules"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="space-y-4"
+                >
+                  <h4 className="text-[12px] font-black text-teal-400 uppercase tracking-[0.4em] mb-4 flex items-center gap-3">
+                    <div className="w-1 h-3 bg-teal-500"></div> Ruleset.Protocol 101
+                  </h4>
+                  <ul className="space-y-3">
+                    {event.rules.map((rule, idx) => (
+                      <li key={idx} className="flex gap-4 group">
+                        <span className="text-teal-400 font-black text-[10px] bg-teal-500/10 w-6 h-6 flex items-center justify-center border border-teal-500/20">
+                          {idx + 1}
+                        </span>
+                        <p className="text-[13px] text-teal-100/60 leading-relaxed font-bold tracking-tight group-hover:text-teal-100 transition-colors uppercase">
+                          {rule}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+
+              {activeTab === "coordinators" && (
+                <motion.div
+                  key="contact"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="space-y-4"
+                >
+                  <h4 className="text-[12px] font-black text-teal-400 uppercase tracking-[0.4em] mb-4 flex items-center gap-3">
+                    <div className="w-1 h-3 bg-teal-500"></div> Authorized_Personnel
+                  </h4>
+                  <div className="grid gap-3">
+                    {event.coordinators.map((c, i) => (
+                      <div key={i} className="p-4 bg-teal-500/5 border border-teal-500/20 hover:border-teal-500/50 transition-all cursor-crosshair">
+                        <div className="flex items-center gap-3">
+                          <IconPhone />
+                          <p className="text-teal-100 font-black tracking-widest uppercase italic text-sm">{c}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Footer (Action Bar) */}
+          <div className="p-8 bg-[#0a0a1a] border-t border-white/10 flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={onClose}
+              className="flex-1 py-4 text-[11px] font-black tracking-[0.3em] uppercase text-white/40 border border-white/10 hover:bg-white/5 transition-all"
+            >
+              Abort_Protocol
+            </button>
             {isEventOpen ? (
-              activeTab === "rules" ? (
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={onRegister}
-                  className={`w-full text-center px-6 py-3.5 rounded-xl bg-gradient-to-r ${buttonGradients[cat] || buttonGradients.Tech} shadow-lg ${buttonShadows[cat] || buttonShadows.Tech} font-semibold text-white transition`}
-                >
-                  🚀 Register for this Event
-                </motion.button>
-              ) : (
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setActiveTab("rules")}
-                  className="w-full text-center px-6 py-3.5 rounded-xl bg-white/10 border border-white/20 text-gray-200 font-semibold hover:bg-white/20 hover:text-white transition"
-                >
-                  📜 Read Rules to Register
-                </motion.button>
-              )
+              <button
+                onClick={() => onRegister(event)}
+                className="flex-[2] py-4 bg-teal-500 text-black text-[11px] font-black tracking-[0.4em] uppercase hover:bg-white hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all flex items-center justify-center gap-3"
+              >
+                Initiate_Access {" >>>"}
+              </button>
             ) : (
               <button
                 disabled
-                className="w-full text-center px-6 py-3.5 rounded-xl bg-white/5 border border-white/10 text-gray-500 font-bold uppercase tracking-widest cursor-not-allowed"
+                className="flex-[2] py-4 bg-white/5 text-white/20 text-[11px] font-black tracking-[0.4em] cursor-not-allowed uppercase"
               >
-                Registrations Closed
+                Transmission_Offline
               </button>
             )}
           </div>
         </motion.div>
       </motion.div>
-
-      {/* RegistrationForm moved to parent */}
     </>
   )
 }
@@ -980,84 +924,50 @@ export default function Schedule({ onModalToggle }) {
 
   return (
     <>
-      <motion.section
-        id="events"
-        initial={{ opacity: 0, y: 80 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.9, ease: "easeOut" }}
-        className="min-h-screen px-6 py-20"
-      >
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-6 bg-gradient-to-r from-pink-400 via-purple-300 to-blue-400 bg-clip-text text-transparent">
-          OUR EVENTS
-        </h2>
-
-        {/* Search */}
-        <div className="max-w-md mx-auto mb-6">
-          <input
-            type="text"
-            placeholder="Search events..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-purple-400"
-          />
+      <section id="events" className="min-h-screen pt-32">
+        <div className="px-6 mb-20 text-center">
+          <h2 className="astral-heading text-6xl md:text-8xl lg:text-9xl mb-4">Event Zones</h2>
+          <p className="saarang-serif italic text-white/30 text-xl lg:text-2xl">Discover the Interstellar Spectrum</p>
         </div>
 
-        {/* Filters */}
-        {/* <div className="flex justify-center gap-3 mb-12 flex-wrap">
-          {["All", "Tech", "Fun"].map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className={`px-4 py-2 rounded-full text-sm border transition ${filter === cat
-                ? "bg-purple-600 border-purple-400 text-white"
-                : "bg-white/10 border-white/20 text-gray-300 hover:border-purple-400"
-                }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div> */}
+        {/* Zone 1: Cultural */}
+        <CategoryZone
+          title="MOTION"
+          subtitle="Dance, Fashion & Flow"
+          events={[...eventsDay1, ...eventsDay2].filter(e => e.category === "Cultural")}
+          onEventClick={setSelectedEvent}
+          eventStatuses={eventStatuses}
+          bgImage="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80"
+          themeObj={{ text: "text-cyan-400", hoverText: "group-hover:text-cyan-400", borderB: "border-b-cyan-500/10", bg: "bg-cyan-500", hoverBg: "hover:bg-cyan-500/10", borderL: "border-l-cyan-500", bgSoft: "bg-cyan-500/10" }}
+        />
 
-        <div className="max-w-5xl mx-auto space-y-16">
-          {/* Day 1 */}
-          <div>
-            <h3 className="text-2xl font-semibold mb-6 text-purple-300">
-              April 10
-            </h3>
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              className="grid md:grid-cols-3 gap-8"
+        {/* Zone 2: Fun/Interactive */}
+        <CategoryZone
+          title="VIBE"
+          subtitle="Fun, Games & Interactive Signals"
+          events={[...eventsDay1, ...eventsDay2].filter(e => e.category === "Fun")}
+          onEventClick={setSelectedEvent}
+          eventStatuses={eventStatuses}
+          bgImage="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80"
+          themeObj={{ text: "text-fuchsia-400", hoverText: "group-hover:text-fuchsia-400", borderB: "border-b-fuchsia-500/10", bg: "bg-fuchsia-500", hoverBg: "hover:bg-fuchsia-500/10", borderL: "border-l-fuchsia-500", bgSoft: "bg-fuchsia-500/10" }}
+        />
 
-            >
-              {applyFilter(eventsDay1).map((e, i) => (
-                <EventCard key={i} {...e} onClick={() => setSelectedEvent(e)} />
-              ))}
-            </motion.div>
-          </div>
+        {/* Zone 3: Gaming/Tech */}
+        <CategoryZone 
+          title="LOGIC"
+          subtitle="Gaming, Sports & Tech"    
+          events={[...eventsDay1, ...eventsDay2].filter(e => ["Gaming", "Tech", "Sports"].includes(e.category))}
+          onEventClick={setSelectedEvent}
+          eventStatuses={eventStatuses}
+          bgImage="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80"
+          themeObj={{ text: "text-blue-400", hoverText: "group-hover:text-blue-400", borderB: "border-b-blue-500/10", bg: "bg-blue-500", hoverBg: "hover:bg-blue-500/10", borderL: "border-l-blue-500", bgSoft: "bg-blue-500/10" }}
+        />
 
-          {/* Day 2 */}
-          <div>
-            <h3 className="text-2xl font-semibold mb-6 text-blue-300">
-              April 11
-            </h3>
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              className="grid md:grid-cols-3 gap-6"
-            >
-              {applyFilter(eventsDay2).map((e, i) => (
-                <EventCard key={i} {...e} onClick={() => setSelectedEvent(e)} />
-              ))}
-            </motion.div>
-          </div>
+        <div className="py-20 text-center astral-glass mx-6 mt-20 border-teal-500/20">
+          <p className="astral-eyebrow text-teal-400">Archive Transmission End</p>
+          <h3 className="saarang-serif text-3xl mt-4 italic text-white/40">More signals to be decoded soon.</h3>
         </div>
-      </motion.section>
+      </section>
 
       <AnimatePresence>
         {showRegistration && selectedEvent ? (

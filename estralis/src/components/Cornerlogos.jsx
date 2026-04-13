@@ -32,7 +32,7 @@ export default function CornerLogos() {
         transition={{ duration: 0.4 }}
         whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 1.1 }}   // mobile tap feedback
-        className="w-12 h-12 md:w-20 md:h-20 object-contain
+        className="w-14 h-14 md:w-20 md:h-20 object-contain
                    drop-shadow-[0_0_12px_rgba(0,200,255,0.7)]
                    transition-transform duration-150 ease-out"
       />

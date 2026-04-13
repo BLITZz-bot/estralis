@@ -89,7 +89,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
 
     const handleDownloadReceipt = (registration) => {
         // Find the full event details to rebuild the receipt
-        const event = allEvents.find(e => e.title === registration.eventTitle);
+        const event = allEvents.find(e => e.title === registration.event_title);
 
         if (!event) {
             alert("Could not find event details for this registration.");
@@ -97,7 +97,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
         }
 
         try {
-            const safeName = registration.fullName ? registration.fullName.replace(/\s+/g, '_') : 'Attendee';
+            const safeName = registration.full_name ? registration.full_name.replace(/\s+/g, '_') : 'Attendee';
             const doc = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',
@@ -206,7 +206,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.setFont("helvetica", "normal");
             doc.setFontSize(12);
             doc.setTextColor(255, 255, 255);
-            const ticketId = registration.transactionId || `ALG-${Math.floor(Math.random() * 1000000)}`;
+            const ticketId = registration.razorpay_payment_id || `ALG-${Math.floor(Math.random() * 1000000)}`;
             doc.text(ticketId, 20, 88);
 
             // Status Badge (Green Pill)
@@ -249,18 +249,18 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.text("PARTICIPANTS DETAILS", 20, currentY);
             currentY += 10;
 
-            if (registration.teamName) {
+            if (registration.team_name) {
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(12);
                 doc.setTextColor(...colors.border);
-                doc.text(`TEAM: ${registration.teamName.toUpperCase()}`, 20, currentY);
+                doc.text(`TEAM: ${registration.team_name.toUpperCase()}`, 20, currentY);
                 currentY += 8;
             }
 
             doc.setFont("helvetica", "bold");
             doc.setFontSize(18);
             doc.setTextColor(255, 255, 255);
-            doc.text(registration.fullName.toUpperCase(), 20, currentY);
+            doc.text(registration.full_name.toUpperCase(), 20, currentY);
             currentY += 10;
 
             doc.setFont("helvetica", "normal");
@@ -276,15 +276,15 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.setFont("helvetica", "bold");
             doc.setFontSize(10);
             doc.setTextColor(...(colors.label || [253, 164, 175]));
-            doc.text(registration.passType === 'Combo Pass' ? "COMBO PASS FEE" : "STANDARD FEE", 20, 230);
+            doc.text(registration.pass_type === 'Combo Pass' ? "COMBO PASS FEE" : "STANDARD FEE", 20, 230);
             doc.setFontSize(14);
             doc.setTextColor(255, 255, 255);
-            let feeText = registration.amountPaid ? registration.amountPaid.toString().replace(/₹/g, "Rs. ") : "Free";
+            let feeText = registration.amount_paid ? registration.amount_paid.toString().replace(/₹/g, "Rs. ") : "Free";
             doc.text(feeText, 20, 238);
 
 
             // PAGE 2 (TEAM MEMBERS)
-            const teamMembers = registration.teamMembers || [];
+            const teamMembers = registration.team_members || [];
             if (teamMembers.length > 0) {
                 doc.addPage([180, 260], 'portrait');
                 drawTicketBase(doc);
@@ -293,7 +293,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(16);
                 doc.setTextColor(...colors.border);
-                doc.text(registration.teamName ? `TEAM: ${registration.teamName.toUpperCase()}` : "TEAM MEMBERS", 90, teamY, { align: "center" });
+                doc.text(registration.team_name ? `TEAM: ${registration.team_name.toUpperCase()}` : "TEAM MEMBERS", 90, teamY, { align: "center" });
                 teamY += 15;
 
                 doc.setFont("helvetica", "normal");
@@ -401,8 +401,8 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                                         className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition"
                                     >
                                         <div>
-                                            <h4 className="font-bold text-xl text-white mb-1">{reg.eventTitle}</h4>
-                                            <p className="text-sm font-semibold text-purple-400 mb-1">{reg.fullName.toUpperCase()} <span className="text-gray-500 font-normal">| {reg.passType || "Standard Pass"}</span></p>
+                                            <h4 className="font-bold text-xl text-white mb-1">{reg.event_title}</h4>
+                                            <p className="text-sm font-semibold text-purple-400 mb-1">{reg.full_name.toUpperCase()} <span className="text-gray-500 font-normal">| {reg.pass_type || "Standard Pass"}</span></p>
                                             <p className="text-sm text-gray-400">Registered on: {new Date(reg.timestamp).toLocaleDateString()}</p>
                                             <p className="text-sm text-gray-400 mt-1">
                                                 Status: <span className="text-emerald-400 font-medium">Successful</span>

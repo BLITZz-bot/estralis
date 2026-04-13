@@ -11,7 +11,7 @@ export default function HeroVideo() {
         muted
         playsInline
         preload="auto"
-        poster="/enry.jpeg"
+        // poster="/enry.png"
         className="
           hidden md:block
           absolute inset-0
@@ -43,7 +43,7 @@ export default function HeroVideo() {
         }}
         transition={{
           opacity: { duration: 1.5, ease: "easeOut" },
-          filter: { duration: 1.5, ease: "easeOut" },
+          filter: { duration: 0.5, ease: "easeOut" },
         }}
         className="hidden md:block absolute top-8 right-8 z-20"
       >

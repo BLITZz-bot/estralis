@@ -98,40 +98,20 @@ export default function CountdownSciFi() {
   let iconColor = ""; // For the blinking status dot
 
   if (t.finished) {
-    message = "THE WAIT IS OVER — LET'S GO!";
-    ringColor = "border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.3)] bg-yellow-900/20";
-    textColor = "text-yellow-300 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]";
-    iconColor = "bg-yellow-400 animate-ping shadow-[0_0_10px_rgba(250,204,21,1)]";
-  } else if (t.d === 1) {
-    message = "LAST CHANCE — register now or miss out!";
-    ringColor = "border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.2)] bg-red-950/30";
-    textColor = "text-red-400 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]";
-    iconColor = "bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,1)]";
-  } else if (t.d === 0 && !t.finished) {
-    message = "Last few spots left — closing anytime.";
-    ringColor = "border-red-600 shadow-[0_0_25px_rgba(239,68,68,0.4)] bg-red-950/40";
-    textColor = "text-red-500 font-black drop-shadow-[0_0_12px_rgba(239,68,68,1)]";
-    iconColor = "bg-red-600 animate-pulse shadow-[0_0_15px_rgba(239,68,68,1)]";
-  } else if (t.d === 2) {
-    message = "Final spots left — registrations closing soon!";
-    ringColor = "border-orange-500 border-x-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.1)] bg-orange-950/20";
-    textColor = "text-orange-400";
-    iconColor = "bg-orange-500 animate-pulse";
-  } else if (t.d === 3) {
-    message = "Almost full — secure your spot before it's gone!";
-    ringColor = "border-amber-500/50 border-x-amber-500/80 bg-amber-950/20";
-    textColor = "text-amber-400";
-    iconColor = "bg-amber-500/80";
-  } else if (t.d === 4) {
-    message = "Spots are filling fast — secure yours now!";
-    ringColor = "border-yellow-500/30 border-x-yellow-500/60 bg-yellow-950/10";
-    textColor = "text-yellow-400";
-    iconColor = "bg-yellow-500/80";
-  } else if (t.d === 5) {
-    message = "Only 5 days left — registrations are filling fast!";
-    ringColor = "border-purple-500/30 border-x-purple-500/60 bg-purple-950/10";
-    textColor = "text-purple-300";
-    iconColor = "bg-purple-400";
+    message = "THE MISSION HAS COMMENCED — ENJOY!";
+    ringColor = "border-teal-400 bg-teal-900/20";
+    textColor = "text-teal-300 drop-shadow-[0_0_8px_rgba(45,212,191,0.8)]";
+    iconColor = "bg-teal-400 animate-ping shadow-[0_0_10px_rgba(45,212,191,1)]";
+  } else if (t.d <= 2) {
+    message = "FINAL ORBITAL SLOT — CLOSING SOON!";
+    ringColor = "border-cyan-500 bg-cyan-950/30";
+    textColor = "text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]";
+    iconColor = "bg-cyan-500 animate-pulse shadow-[0_0_10px_rgba(34,211,238,1)]";
+  } else {
+    message = "Secure your transmission — entries open!";
+    ringColor = "saarang-block border-teal-500/50 bg-teal-950/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)]";
+    textColor = "text-teal-400 font-black";
+    iconColor = "bg-teal-400 animate-pulse transition-all duration-1000";
   }
 
 
@@ -139,19 +119,18 @@ export default function CountdownSciFi() {
   const StaticBox = ({ v, l }) => (
     <div className="flex flex-col items-center">
       <div
-        className="w-[72px] h-[82px] sm:w-[88px] sm:h-[96px] md:w-[106px] md:h-[116px]
-          rounded-2xl
-          bg-[rgba(20,20,35,0.85)]
-          backdrop-blur-md
-          border border-white/[0.06]
-          shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.5)]
-          flex flex-col items-center justify-center"
+        className="w-[72px] h-[82px] sm:w-[88px] sm:h-[96px] md:w-[110px] md:h-[120px]
+          bg-slate-900/40
+          backdrop-blur-xl
+          border-l-4 border-l-teal-500 border-r border-y border-white/5
+          shadow-[0_20px_50px_rgba(0,0,0,0.5)]
+          flex flex-col items-center justify-center group transition-all hover:bg-teal-500/10"
       >
-        <span className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-none">
+        <span className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter text-white leading-none font-astral group-hover:text-teal-400 transition-colors">
           {String(v).padStart(2, "0")}
         </span>
       </div>
-      <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-[0.2em] text-white/40 mt-2">{l}</span>
+      <span className="text-[9px] uppercase font-black tracking-[0.4em] text-teal-400/40 mt-3">{l}</span>
     </div>
   )
 
@@ -161,10 +140,10 @@ export default function CountdownSciFi() {
       <div
         className="w-[72px] h-[82px] sm:w-[88px] sm:h-[96px] md:w-[106px] md:h-[116px]
           rounded-2xl
-          bg-[rgba(20,20,35,0.85)]
-          backdrop-blur-md
-          border border-white/[0.06]
-          shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.5)]
+          bg-black/40
+          backdrop-blur-xl
+          border border-cyan-500/30
+          shadow-[0_0_30px_rgba(34,211,238,0.1)]
           flex flex-col items-center justify-center overflow-hidden"
       >
         <AnimatePresence mode="popLayout">
@@ -174,39 +153,35 @@ export default function CountdownSciFi() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 20, opacity: 0 }}
             transition={{ type: "spring", stiffness: 320, damping: 24 }}
-            className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-none"
+            className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-cyan-400 leading-none font-mono"
           >
             {String(v).padStart(2, "0")}
           </motion.span>
         </AnimatePresence>
       </div>
-      <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-[0.2em] text-white/40 mt-2">{l}</span>
+      <span className="text-[8px] sm:text-[10px] uppercase font-black tracking-[0.3em] text-cyan-400/30 mt-3">{l}</span>
     </div>
   )
 
-  const titleGlow = t.finished
-    ? "bg-gradient-to-b from-yellow-100 via-yellow-300 to-yellow-600 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]"
-    : "bg-gradient-to-b from-white via-blue-200 to-blue-400";
-  const subtitle1 = t.finished
-    ? "text-yellow-400/90 drop-shadow-[0_0_5px_rgba(250,204,21,0.5)]"
-    : "text-blue-300/80";
-  const subtitle2 = t.finished ? "text-yellow-600/90" : "text-gray-400";
+  const subtitle1 = "text-teal-400/80 uppercase tracking-[0.4em] font-black text-xs";
+  const subtitle2 = "text-white/40 uppercase tracking-[0.2em] font-bold text-[10px] mt-2 mb-10";
 
   return (
-    <div className="flex flex-col items-center gap-6 relative w-full">
-      {/* Dynamic Titles */}
-      <div className="flex flex-col items-center z-20">
-        <p className={`tracking-[0.55em] text-sm md:text-base mb-2 transition-all duration-1000 ${subtitle1}`}>
-          CULTURAL FEST 2026
-        </p>
+    <div className="flex flex-col items-center gap-6 relative w-full justify-center">
+      
 
-        <p className={`tracking-widest text-xs md:text-sm mb-2 mt-3 transition-colors duration-1000 ${subtitle2}`}>
-          GOPALAN COLLEGE OF ENGINEERING & MANAGEMENT
-        </p>
-        <h1 className={`text-5xl md:text-7xl font-extrabold bg-clip-text text-transparent tracking-wide transition-all duration-1000 pb-2 ${titleGlow}`}>
-          ESTRALIS
-        </h1>
-      </div>
+      {/* Decorative Block (Saarang Style) */}
+      <motion.div
+        initial={{ opacity: 0, rotate: -90, x: -50 }}
+        animate={{ opacity: 1, rotate: 0, x: 0 }}
+        transition={{ duration: 1, delay: 1 }}
+        className="hidden md:block absolute left-4 sm:left-10 lg:left-20 top-1/2 -translate-y-1/2 saarang-block border-teal-500 z-20"
+      >
+        <span className="astral-eyebrow text-[10px] tracking-[0.3em] uppercase">Transmission Est. 2026</span>
+      </motion.div>
+
+      {/* Dynamic Titles */}
+      {/* Dynamic Titles Removed to avoid duplication with FestivalHero */}
       <canvas
         ref={canvasRef}
         className={`absolute pointer-events-none z-0 w-[150vw] h-[150vh] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${t.finished ? 'block' : 'hidden'}`}
