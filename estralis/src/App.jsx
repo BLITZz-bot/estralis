@@ -7,13 +7,13 @@ import Venue from "./components/Venue"
 import Footer from "./components/Footer"
 import ParticlesBg from "./components/ParticlesBg"
 import About from "./components/About"
-import Clubs from "./components/Clubs"
+// import Clubs from "./components/Clubs"
 import ScrollProgress from "./components/ScrollProgress"
 import CursorGlow from "./components/CursorGlow"
 import Section from "./components/Section"
 import FestivalHero from "./components/FestivalHero"
 import HeroVideo from "./components/HeroVideo"
-import GalleryPreview from "./components/GalleryPreview"
+// import GalleryPreview from "./components/GalleryPreview"
 import CountdownSciFi from "./components/CountdownSciFi"
 import StarBackground from "./components/StarBackground"
 import Timeline from "./components/Timeline"
@@ -64,36 +64,41 @@ export default function App() {
     <>
       <WelcomeAnimation onComplete={() => setIsWelcomeDone(true)} />
 
-      <div className={`min-h-screen overflow-x-hidden bg-gradient-to-br from-purple-900 via-black to-blue-900 text-white transition-opacity duration-1000 ${isWelcomeDone ? 'opacity-100' : 'opacity-0'}`}>
-
-        {/* ⭐ STAR BACKGROUND — place here */}
-        <StarBackground />
+      <div className={`min-h-screen overflow-x-hidden bg-black text-white transition-opacity duration-1000 ${isWelcomeDone ? 'opacity-100' : 'opacity-0'}`}>
         {/* ================= GLOBAL BACKGROUNDS ================= */}
+        {/* Deep space base — very dark navy, not pure black */}
+        <div className="fixed inset-0 pointer-events-none -z-20" style={{ background: "linear-gradient(160deg, #05050f 0%, #08061a 40%, #060410 100%)" }} />
 
-        <ParticlesBg />
+        {/* Stars */}
+        <StarBackground />
 
-        {/* <ScanLine /> */}
+        {/* Warm amber upper-left bleed — like a distant star */}
+        <div className="fixed top-0 left-0 w-[700px] h-[700px] pointer-events-none -z-10 translate-z-0"
+          style={{ background: "radial-gradient(ellipse at top left, rgba(251,191,36,0.04) 0%, transparent 65%)" }} />
 
-        {/* Vignette - Hardware accelerated */}
-        <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_center,transparent_60%,black_95%)] opacity-40 transform-gpu will-change-transform" />
+        {/* Cool violet upper-right bleed */}
+        <div className="fixed top-0 right-0 w-[600px] h-[600px] pointer-events-none -z-10 translate-z-0"
+          style={{ background: "radial-gradient(ellipse at top right, rgba(139,92,246,0.06) 0%, transparent 65%)" }} />
 
-        {/* Parallax glow center - Replaced blur-3xl with highly performant radial gradient */}
+        {/* Deep pink center mid-page glow */}
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] pointer-events-none -z-10 translate-z-0"
+          style={{ background: "radial-gradient(ellipse, rgba(236,72,153,0.025) 0%, transparent 70%)" }} />
+
+        {/* Teal bottom-right */}
+        <div className="fixed bottom-0 right-0 w-[500px] h-[500px] pointer-events-none -z-10 translate-z-0"
+          style={{ background: "radial-gradient(ellipse at bottom right, rgba(20,184,166,0.04) 0%, transparent 65%)" }} />
+
+        {/* Parallax lights */}
         <motion.div
-          style={{ y: ySlow }}
-          className="fixed w-[300px] h-[300px] md:w-[700px] md:h-[700px] bg-[radial-gradient(circle,rgba(147,51,234,0.15)_0%,transparent_70%)] rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none -z-10 will-change-transform"
+           style={{ y: ySlow }}
+           className="fixed top-1/4 left-[10%] w-[500px] h-[500px] rounded-full pointer-events-none -z-10 translate-z-0"
+           style={{ background: "radial-gradient(circle, rgba(168,85,247,0.03) 0%, transparent 70%)" }}
         />
-
-        {/* Parallax glow top-left - Replaced blur-3xl with performant radial gradient */}
         <motion.div
-          style={{ y: yFast }}
-          className="fixed w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-[radial-gradient(circle,rgba(37,99,235,0.15)_0%,transparent_70%)] rounded-full top-[10%] left-[10%] pointer-events-none -z-10 will-change-transform"
+           style={{ y: yFast }}
+           className="fixed top-1/3 right-[10%] w-[400px] h-[400px] rounded-full pointer-events-none -z-10 translate-z-0"
+           style={{ background: "radial-gradient(circle, rgba(251,191,36,0.025) 0%, transparent 65%)" }}
         />
-
-        {/* Floating blobs - Removed blur-3xl and localized heavy transitions to GPU */}
-        <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden transform-gpu">
-          <div className="absolute w-40 h-40 md:w-96 md:h-96 bg-[radial-gradient(circle,rgba(236,72,153,0.15)_0%,transparent_70%)] rounded-full top-[12%] left-[75%] animate-[float_18s_ease-in-out_infinite] will-change-transform" />
-          <div className="absolute w-60 h-60 md:w-[500px] md:h-[500px] bg-[radial-gradient(circle,rgba(168,85,247,0.15)_0%,transparent_70%)] rounded-full bottom-[8%] left-[8%] animate-[float_22s_ease-in-out_infinite] will-change-transform" />
-        </div>
 
         <CursorGlow />
 
@@ -169,7 +174,7 @@ export default function App() {
           <About />
         </Section>
 
-        <GalleryPreview />
+        {/* <GalleryPreview /> */}
 
         {/* ================= EVENTS ================= */}
         <Section id="events">
@@ -186,9 +191,9 @@ export default function App() {
 
 
         {/* ================= CLUBS ================= */}
-        <Section id="clubs">
+        {/* <Section id="clubs">
           <Clubs />
-        </Section>
+        </Section> */}
 
         {/* ================= FOOTER ================= */}
         <Footer />

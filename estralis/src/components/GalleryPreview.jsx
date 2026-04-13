@@ -13,19 +13,19 @@ export default function GalleryPreview() {
         {/* ⭐ STARS BACKGROUND - Handled globally in App.jsx */}
 
         {/* Title */}
-        <motion.h2
+        {/* Title */}
+        <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-bold mb-12
-          bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400
-          bg-clip-text text-transparent"
+          className="mb-12"
         >
-          Gallery
-        </motion.h2>
+          <p className="apple-eyebrow mb-3">🎞️ Memories</p>
+          <h2 className="apple-heading text-5xl md:text-7xl">Gallery</h2>
+        </motion.div>
 
         {/* YouTube Video Section */}
-        <div className="mb-12 rounded-2xl overflow-hidden shadow-lg shadow-purple-500/20 border border-white/10 w-full max-w-4xl mx-auto aspect-video relative group">
+        <div className="mb-12 rounded-[2rem] overflow-hidden apple-glass-panel p-2 w-full max-w-4xl mx-auto aspect-video relative group">
           <iframe
             width="100%"
             height="100%"
@@ -34,11 +34,8 @@ export default function GalleryPreview() {
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
-            className="w-full h-full"
+            className="w-full h-full rounded-[1.5rem]"
           ></iframe>
-          {/* <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-sm text-pink-400 text-xs px-3 py-1 rounded-full border border-pink-500/30 opacity-80 group-hover:opacity-100 transition">
-            Replace "dQw4w9WgXcQ" in code with your Video ID
-          </div> */}
         </div>
 
         {/* Preview images */}
@@ -52,9 +49,7 @@ export default function GalleryPreview() {
         <div className="mt-12">
           <button
             onClick={() => setOpen(true)}
-            className="px-10 py-4 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600
-            font-semibold text-lg shadow-lg shadow-purple-700/40
-            hover:shadow-purple-500/80 hover:scale-105 transition"
+            className="px-10 py-4 font-bold tracking-widest text-sm uppercase rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg shadow-purple-700/40 hover:shadow-purple-500/80 hover:scale-105 transition-all"
           >
             View Gallery
           </button>

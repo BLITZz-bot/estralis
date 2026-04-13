@@ -103,7 +103,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        if (password === "algorhythm@admin2026") {
+        if (password === "estralis@admin2026") {
             setIsAuthenticated(true);
             setLoginError("");
             fetchRegistrations(password); // Automatically load data instantly on successful login
@@ -345,7 +345,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
     };
 
     const resendAllConfirmations = async () => {
-        if (resendPassword !== "algorhythm@admin2026") {
+        if (resendPassword !== "estralis@admin2026") {
             setResendError("Incorrect password");
             return;
         }
@@ -379,7 +379,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
     };
 
     const handleClearRegistrations = async () => {
-        if (clearPassword !== "algorhythm@admin2026") {
+        if (clearPassword !== "estralis@admin2026") {
             setClearError("Incorrect password");
             return;
         }
@@ -1449,7 +1449,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     </button>
                                     <button
                                         onClick={() => {
-                                            if (mailerConfirmPassword === "algorhythm@admin2026") {
+                                            if (mailerConfirmPassword === "estralis@admin2026") {
                                                 setIsMailerConfirmOpen(false);
                                                 sendEventMail('all');
                                             } else {

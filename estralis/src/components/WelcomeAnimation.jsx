@@ -71,7 +71,7 @@ const WelcomeAnimation = ({ onComplete }) => {
                             className="text-4xl md:text-7xl font-black tracking-tighter"
                         >
                             <span className="bg-gradient-to-r from-blue-400 via-white to-purple-400 bg-clip-text text-transparent">
-                                ALGO-RHYTHM 3.0
+                                ESTRALIS
                             </span>
                         </motion.h1>
                     </div>
@@ -84,13 +84,13 @@ const WelcomeAnimation = ({ onComplete }) => {
                         className="flex flex-col items-center gap-2"
                     >
                         <p className="text-blue-300/60 uppercase tracking-[0.3em] font-medium text-[10px] md:text-xs">
-                            DEPARTMENT OF CSE & CSE(AI&ML)
+                            GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT
                         </p>
 
                         <div className="h-[1px] w-24 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent my-1" />
 
                         <p className="text-white/40 text-[14px] md:text-[11px] font-light max-w-[250px] md:max-w-md uppercase tracking-wider leading-relaxed">
-                            GRAFIK : CREATE TO INSPIRE <br />
+                            CREATE TO INSPIRE <br />
                             ENTERING...
                         </p>
                     </motion.div>

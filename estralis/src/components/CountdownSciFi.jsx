@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import confetti from "canvas-confetti"
 
 export default function CountdownSciFi() {
-  const target = new Date("2026-04-10T09:00:00")
+  const target = new Date("2026-05-12T09:00:00")
   const canvasRef = useRef(null);
 
   const calc = () => {
@@ -134,45 +134,55 @@ export default function CountdownSciFi() {
     iconColor = "bg-purple-400";
   }
 
-  const Box = ({ v, l, highlight }) => {
-    const baseStyle = highlight
-      ? "border-pink-500/60 text-pink-400 shadow-[0_0_20px_rgba(236,72,153,0.4)]"
-      : "border-blue-400/40 text-blue-200";
 
-    // User requested all boxes to be static red only when 3 days left.
-    // Above 3 days, the SECS box returns to its original pink color (via highlight prop).
-    let shouldFlash = false;
-    if (!t.finished && t.d <= 3) {
-      shouldFlash = true; // All boxes red only in the final 3 days
-    }
-
-    const finishedStyle = "border-yellow-400 bg-yellow-900/30 text-yellow-300 shadow-[0_0_35px_rgba(250,204,21,0.6)] animate-pulse";
-
-    const styleToUse = t.finished
-      ? finishedStyle
-      : shouldFlash
-        ? "border-red-500 bg-red-900/10 text-red-500 shadow-[0_0_25px_rgba(239,68,68,0.7)]"
-        : baseStyle;
-
-    return (
+  // Static box - no flip animation (for DAYS, HOURS, MINS)
+  const StaticBox = ({ v, l }) => (
+    <div className="flex flex-col items-center">
       <div
-        className={`
-          w-16 h-20 sm:w-20 sm:h-24 md:w-24 md:h-28
-          rounded-xl border
-          backdrop-blur-xl transition-all duration-300
-          flex flex-col items-center justify-center
-          ${styleToUse}
-        `}
+        className="w-[72px] h-[82px] sm:w-[88px] sm:h-[96px] md:w-[106px] md:h-[116px]
+          rounded-2xl
+          bg-[rgba(20,20,35,0.85)]
+          backdrop-blur-md
+          border border-white/[0.06]
+          shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.5)]
+          flex flex-col items-center justify-center"
       >
-        <span className={`text-2xl sm:text-3xl md:text-4xl font-mono font-bold ${shouldFlash ? 'scale-110' : ''} transition-transform duration-200`}>
+        <span className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-none">
           {String(v).padStart(2, "0")}
         </span>
-        <span className="text-[9px] sm:text-[10px] tracking-widest opacity-70 mt-1">
-          {l}
-        </span>
       </div>
-    )
-  }
+      <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-[0.2em] text-white/40 mt-2">{l}</span>
+    </div>
+  )
+
+  // Animated box - flip animation (SECS only)
+  const AnimatedBox = ({ v, l }) => (
+    <div className="flex flex-col items-center">
+      <div
+        className="w-[72px] h-[82px] sm:w-[88px] sm:h-[96px] md:w-[106px] md:h-[116px]
+          rounded-2xl
+          bg-[rgba(20,20,35,0.85)]
+          backdrop-blur-md
+          border border-white/[0.06]
+          shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.5)]
+          flex flex-col items-center justify-center overflow-hidden"
+      >
+        <AnimatePresence mode="popLayout">
+          <motion.span
+            key={v}
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 20, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 320, damping: 24 }}
+            className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-none"
+          >
+            {String(v).padStart(2, "0")}
+          </motion.span>
+        </AnimatePresence>
+      </div>
+      <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-[0.2em] text-white/40 mt-2">{l}</span>
+    </div>
+  )
 
   const titleGlow = t.finished
     ? "bg-gradient-to-b from-yellow-100 via-yellow-300 to-yellow-600 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]"
@@ -187,14 +197,14 @@ export default function CountdownSciFi() {
       {/* Dynamic Titles */}
       <div className="flex flex-col items-center z-20">
         <p className={`tracking-[0.55em] text-sm md:text-base mb-2 transition-all duration-1000 ${subtitle1}`}>
-          TECHNO - CULTURAL FEST 2026
+          CULTURAL FEST 2026
         </p>
 
         <p className={`tracking-widest text-xs md:text-sm mb-2 mt-3 transition-colors duration-1000 ${subtitle2}`}>
-          DEPARTMENT OF CSE & CSE(AI&ML)
+          GOPALAN COLLEGE OF ENGINEERING & MANAGEMENT
         </p>
         <h1 className={`text-5xl md:text-7xl font-extrabold bg-clip-text text-transparent tracking-wide transition-all duration-1000 pb-2 ${titleGlow}`}>
-          ALGO-RHYTHM 3.0
+          ESTRALIS
         </h1>
       </div>
       <canvas
@@ -202,11 +212,14 @@ export default function CountdownSciFi() {
         className={`absolute pointer-events-none z-0 w-[150vw] h-[150vh] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${t.finished ? 'block' : 'hidden'}`}
       />
 
-      <div className="flex gap-2 sm:gap-4 justify-center relative z-10 min-h-[5rem]">
-        <Box v={t.d} l="DAYS" highlight={t.finished} />
-        <Box v={t.h} l="HOURS" highlight={t.finished} />
-        <Box v={t.m} l="MINS" highlight={t.finished} />
-        <Box v={t.s} l="SECS" highlight={!t.finished} />
+      <div className="flex items-center gap-2 sm:gap-3 justify-center relative z-10 min-h-[5rem]">
+        <StaticBox v={t.d} l="DAYS" />
+        <span className="text-white/30 text-3xl md:text-4xl font-black mb-5 select-none">:</span>
+        <StaticBox v={t.h} l="HOURS" />
+        <span className="text-white/30 text-3xl md:text-4xl font-black mb-5 select-none">:</span>
+        <StaticBox v={t.m} l="MINS" />
+        <span className="text-white/30 text-3xl md:text-4xl font-black mb-5 select-none">:</span>
+        <AnimatedBox v={t.s} l="SECS" />
       </div>
 
       <AnimatePresence mode="wait">
@@ -227,24 +240,17 @@ export default function CountdownSciFi() {
               ${ringColor}
             `}
           >
-            {/* Animated scanning light overlay */}
             <motion.div
               animate={{ x: ["-100%", "250%"] }}
               transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none"
+              className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none"
             />
-
             {/* HUD Status Dot */}
             <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full flex-shrink-0 ${iconColor}`} />
-
             {/* Message Text */}
-            <span className={`text-[10px] sm:text-[12px] md:text-sm font-black tracking-[0.2em] md:tracking-[0.3em] uppercase ${textColor}`}>
+            <span className={`text-[10px] sm:text-[12px] md:text-xs font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase ${textColor}`}>
               {message}
             </span>
-
-            {/* Decorative Cyber Frame elements */}
-            <div className="absolute top-0 left-4 w-6 h-[1px] bg-white/20" />
-            <div className="absolute bottom-0 right-4 w-6 h-[1px] bg-white/20" />
           </motion.div>
         )}
       </AnimatePresence>

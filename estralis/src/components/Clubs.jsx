@@ -28,17 +28,18 @@ export default function Clubs() {
     return (
         <section id="clubs" className="py-28 px-6 relative">
 
-            {/* Glow */}
+            {/* Apple ambient glow */}
             <div className="absolute inset-0 flex justify-center pointer-events-none">
-                <div className="w-[500px] h-[400px] bg-[radial-gradient(circle,rgba(147,51,234,0.15)_0%,transparent_70%)] rounded-full will-change-transform"></div>
+                <div className="w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(255,255,255,0.03)_0%,transparent_70%)] rounded-full translate-z-0"></div>
             </div>
 
             <div className="relative max-w-5xl mx-auto text-center z-10">
-                <h2 className="text-4xl md:text-5xl font-bold mb-12 bg-gradient-to-r from-blue-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
-                    Our Clubs
-                </h2>
-                <p className="text-gray-400 mb-12 max-w-2xl mx-auto">
-                    Algo-Rhythm is proudly brought to you in association with our talented student communities.
+                <div className="mb-12">
+                    <p className="apple-eyebrow mb-3">🏛️ Communities</p>
+                    <h2 className="apple-heading text-5xl md:text-7xl">Our Clubs</h2>
+                </div>
+                <p className="text-white/60 mb-12 max-w-2xl mx-auto font-medium">
+                    ESTRALIS is proudly brought to you in association with our talented student communities.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center justify-items-center">
@@ -48,9 +49,9 @@ export default function Clubs() {
                             href={c.url}
                             onClick={(e) => { if (c.url === "#") e.preventDefault() }}
                             whileHover={{ scale: 1.05, y: -5 }}
-                            className="group block bg-[#1a1c2e]/50 border border-white/10 rounded-2xl p-8 hover:border-purple-500/50 hover:bg-white/5 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all w-full max-w-[280px]"
+                            className="group block apple-glass-panel p-8 hover:bg-white/5 hover:border-white/20 transition-all duration-300 w-full max-w-[280px]"
                         >
-                            <h3 className="text-xl font-bold text-white mb-6 group-hover:text-purple-300 transition">{c.name}</h3>
+                            <h3 className="text-xl font-bold text-white mb-6 group-hover:text-white transition tracking-wide">{c.name}</h3>
 
                             <div className="w-32 h-32 mx-auto rounded-xl flex items-center justify-center overflow-hidden relative">
                                 <img

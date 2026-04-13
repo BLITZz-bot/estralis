@@ -496,7 +496,7 @@ function getCategoryStyles(category) {
     case "Tech":
       return "bg-blue-500/20 border-blue-400/30 text-blue-200"
     case "Fun":
-      return "bg-pink-500/20 border-pink-400/30 text-pink-200"
+      return "bg-red-500/20 border-red-400/30 text-red-200"
     case "Workshop":
       return "bg-green-500/20 border-green-400/30 text-green-200"
     default:
@@ -511,146 +511,105 @@ const cardVariants = {
 }
 
 function EventCard({ title, description, category, onClick }) {
-  const cardRef = useRef(null)
-
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-
-  const rotateX = useTransform(y, [-70, 70], [16, -16])
-  const rotateY = useTransform(x, [-70, 70], [-16, 16])
-
-  const handleMouseMove = (e) => {
-    const rect = cardRef.current.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-    x.set(e.clientX - centerX)
-    y.set(e.clientY - centerY)
+  /* CATEGORY STYLE MAPS */
+  const cardBorders = {
+    Fun:     "border-cyan-500/40  hover:border-cyan-400/70  hover:shadow-[0_0_24px_rgba(6,182,212,0.25)]",
+    Workshop: "border-emerald-500/40 hover:border-emerald-400/70 hover:shadow-[0_0_24px_rgba(16,185,129,0.25)]",
+    Tech:      "border-red-500/40   hover:border-red-400/70   hover:shadow-[0_0_24px_rgba(239,68,68,0.25)]",
+    Fest:     "border-purple-500/40 hover:border-purple-400/70 hover:shadow-[0_0_24px_rgba(168,85,247,0.25)]",
+    Hardware: "border-teal-500/40  hover:border-teal-400/70  hover:shadow-[0_0_24px_rgba(20,184,166,0.25)]",
+    "AI/ML":  "border-indigo-500/40 hover:border-indigo-400/70 hover:shadow-[0_0_24px_rgba(99,102,241,0.25)]",
+    Gaming:   "border-fuchsia-500/40 hover:border-fuchsia-400/70 hover:shadow-[0_0_24px_rgba(217,70,239,0.25)]",
+  }
+  const cardBg = {
+    Fun:     "from-cyan-900/30 via-blue-900/20 to-transparent",
+    Workshop: "from-emerald-900/30 via-green-900/20 to-transparent",
+    Tech:      "from-red-900/30 via-rose-900/20 to-transparent",
+    Fest:     "from-purple-900/30 via-violet-900/20 to-transparent",
+    Hardware: "from-teal-900/30 via-cyan-900/20 to-transparent",
+    "AI/ML":  "from-indigo-900/30 via-blue-900/20 to-transparent",
+    Gaming:   "from-fuchsia-900/30 via-purple-900/20 to-transparent",
+  }
+  const tagColors = {
+    Fun:     "text-cyan-300 border-cyan-400/50 bg-cyan-500/15",
+    Workshop: "text-emerald-300 border-emerald-400/50 bg-emerald-500/15",
+    Tech:      "text-red-300 border-red-400/50 bg-red-500/15",
+    Fest:     "text-purple-300 border-purple-400/50 bg-purple-500/15",
+    Hardware: "text-teal-300 border-teal-400/50 bg-teal-500/15",
+    "AI/ML":  "text-indigo-300 border-indigo-400/50 bg-indigo-500/15",
+    Gaming:   "text-fuchsia-300 border-fuchsia-400/50 bg-fuchsia-500/15",
+  }
+  const arrowColors = {
+    Fun:     "text-cyan-400",
+    Workshop: "text-emerald-400",
+    Tech:      "text-red-400",
+    Fest:     "text-purple-400",
+    Hardware: "text-teal-400",
+    "AI/ML":  "text-indigo-400",
+    Gaming:   "text-fuchsia-400",
   }
 
-  const handleMouseLeave = () => {
-    x.set(0)
-    y.set(0)
-  }
-
-  /* CATEGORY COLORS */
-  const categoryColors = {
-    Tech: "bg-cyan-500/15 text-cyan-300 border-cyan-400/30",
-    Workshop: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30",
-    Fun: "bg-pink-500/15 text-pink-300 border-pink-400/30",
-    Fest: "bg-purple-500/15 text-purple-300 border-purple-400/30",
-    Hardware: "bg-teal-500/15 text-teal-300 border-teal-400/30",
-    "AI/ML": "bg-indigo-500/15 text-indigo-300 border-indigo-400/30",
-    Gaming: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-400/30",
-  }
-
-  /* OUTER GLOW */
-  const glowColors = {
-    Tech: "from-cyan-500/40 via-blue-500/30 to-indigo-500/40",
-    Workshop: "from-emerald-500/40 via-green-500/30 to-teal-500/40",
-    Fun: "from-pink-500/40 via-rose-500/30 to-fuchsia-500/40",
-    Fest: "from-purple-500/40 via-violet-500/30 to-indigo-500/40",
-    Hardware: "from-teal-500/40 via-cyan-500/30 to-blue-500/40",
-    "AI/ML": "from-indigo-500/40 via-blue-500/30 to-violet-500/40",
-    Gaming: "from-fuchsia-500/40 via-pink-500/30 to-purple-500/40",
-  }
-
-  /* INNER NEXERA TINT */
-  const innerColors = {
-    Tech: "from-cyan-500/10 via-blue-500/10 to-indigo-500/10",
-    Workshop: "from-emerald-500/10 via-green-500/10 to-teal-500/10",
-    Fun: "from-pink-500/10 via-rose-500/10 to-fuchsia-500/10",
-    Fest: "from-purple-500/10 via-violet-500/10 to-indigo-500/10",
-    Hardware: "from-teal-500/10 via-cyan-500/10 to-blue-500/10",
-    "AI/ML": "from-indigo-500/10 via-blue-500/10 to-violet-500/10",
-    Gaming: "from-fuchsia-500/10 via-pink-500/10 to-purple-500/10",
-  }
+  const border = cardBorders[category] || cardBorders.Tech
+  const bg = cardBg[category] || cardBg.Tech
+  const tag = tagColors[category] || tagColors.Tech
+  const arrow = arrowColors[category] || arrowColors.Tech
 
   return (
-    <motion.div
-      ref={cardRef}
+    <div
       onClick={onClick}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ rotateX, rotateY }}
-      whileHover={{ scale: 1.04 }}
-      transition={{ type: "spring", stiffness: 200, damping: 15 }}
-      className="relative group cursor-pointer perspective"
+      className={`relative group cursor-pointer rounded-2xl border bg-gradient-to-br ${bg} p-6 h-full flex flex-col justify-between transition-all duration-300 backdrop-blur-md ${border}`}
     >
-      {/* Glow (Replaced blur-2xl with simple radial gradient background for scroll performance) */}
-      <div
-        className={`absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.4),transparent)] opacity-50 group-hover:opacity-80 transition duration-500 will-change-transform transform-gpu`}
-      />
-
-      {/* Card body */}
-      <div
-        className={`relative rounded-2xl p-6 h-full flex flex-col justify-between
-        bg-[linear-gradient(135deg,rgba(15,23,42,0.88),rgba(10,15,30,0.92))]
-        bg-gradient-to-br ${innerColors[category] || innerColors.Tech}
-        backdrop-blur-xl border border-white/10
-        shadow-[0_10px_40px_rgba(0,0,0,0.4)]
-        group-hover:border-white/20 transition`}
-      >
-        {/* Category */}
-        <span
-          className={`inline-block text-xs px-3 py-1 rounded-full border mb-4 w-fit ${categoryColors[category] || categoryColors.Tech
-            }`}
-        >
+      {/* Category tag */}
+      <div>
+        <span className={`inline-block text-[10px] px-3 py-1 rounded-full border mb-4 w-fit uppercase tracking-widest font-bold ${tag}`}>
           {category}
         </span>
 
         {/* Title */}
-        <h3 className="text-xl font-semibold mb-2 text-white">
+        <h3 className="text-xl font-bold mb-2 text-white group-hover:text-white/90 transition-colors">
           {title}
         </h3>
 
         {/* Description */}
-        <p className="text-gray-400 text-sm mb-6">
+        <p className="text-gray-400 text-sm line-clamp-2">
           {description}
         </p>
-
-        {/* Footer */}
-        <div className="flex items-center justify-between text-sm text-gray-400 mt-auto">
-          <span className="group-hover:text-cyan-300 transition">
-            View Details
-          </span>
-          <span className="transform group-hover:translate-x-1 transition">
-            →
-          </span>
-        </div>
       </div>
-    </motion.div>
+
+      {/* View Details */}
+      <div className={`mt-5 flex items-center gap-1 text-xs font-semibold ${arrow} opacity-0 group-hover:opacity-100 transition-opacity`}>
+        View Details
+        <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+      </div>
+    </div>
   )
 }
 
-
-
-
-
 /* ─── CATEGORY GRADIENT MAPS ─── */
 const headerGradients = {
-  Tech: "from-cyan-600/90 via-blue-700/80 to-indigo-800/90",
-  Fun: "from-pink-600/90 via-fuchsia-700/80 to-purple-800/90",
+  Fun: "from-cyan-600/90 via-blue-700/80 to-indigo-800/90",
+  Tech: "from-red-600/90 via-rose-700/80 to-purple-800/90",
   Workshop: "from-emerald-600/90 via-green-700/80 to-teal-800/90",
 }
 const headerGlows = {
-  Tech: "shadow-cyan-500/30",
-  Fun: "shadow-pink-500/30",
+  Fun: "shadow-cyan-500/30",
+  Tech: "shadow-red-500/30",
   Workshop: "shadow-emerald-500/30",
 }
 const tabActiveColors = {
-  Tech: "border-cyan-400 text-cyan-300",
-  Fun: "border-pink-400 text-pink-300",
+  Fun: "border-cyan-400 text-cyan-300",
+  Tech: "border-red-400 text-red-300",
   Workshop: "border-emerald-400 text-emerald-300",
 }
 
 const buttonGradients = {
-  Tech: "from-cyan-500 to-blue-600",
-  Fun: "from-pink-500 to-purple-600",
+  Fun: "from-cyan-500 to-blue-600",
+  Tech: "from-red-500 to-purple-600",
   Workshop: "from-emerald-500 to-teal-600",
 }
 const buttonShadows = {
-  Tech: "shadow-cyan-700/40 hover:shadow-cyan-500/60",
-  Fun: "shadow-purple-700/40 hover:shadow-purple-500/60",
+  Fun: "shadow-cyan-700/40 hover:shadow-cyan-500/60",
+  Tech: "shadow-purple-700/40 hover:shadow-purple-500/60",
   Workshop: "shadow-emerald-700/40 hover:shadow-emerald-500/60",
 }
 
@@ -713,17 +672,18 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
           animate={{ y: 0, opacity: 1, scale: 1 }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
           onClick={(e) => e.stopPropagation()}
-          className={`relative w-full max-w-2xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl ${headerGlows[cat] || headerGlows.Tech} max-h-[90vh] flex flex-col`}
+          className={`relative w-full max-w-2xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl ${headerGlows[cat] || headerGlows.Tech} max-h-[90vh] flex flex-col translate-z-0`}
         >
           {/* ═══ GRADIENT HEADER ═══ */}
-          <div className={`relative bg-gradient-to-r ${headerGradients[cat] || headerGradients.Tech} px-8 pt-8 pb-6`}>
-            {/* Decorative circles */}
+          <div className={`relative bg-gradient-to-r ${headerGradients[cat] || headerGradients.Tech} px-8 pt-8 pb-6 overflow-hidden`}>
+            {/* Bubble top-right — large, offset outside */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+            {/* Bubble bottom-left — medium, offset outside */}
             <div className="absolute bottom-0 left-10 w-24 h-24 bg-white/5 rounded-full translate-y-1/2" />
 
             <button
               onClick={onClose}
-              className="absolute top-4 right-5 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 text-white/70 hover:text-white hover:bg-black/50 transition text-lg"
+              className="absolute top-4 right-5 w-9 h-9 flex items-center justify-center rounded-full bg-black/40 text-white/80 hover:text-white hover:bg-black/60 transition text-base z-10 font-bold"
             >
               ✕
             </button>
@@ -743,7 +703,7 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
-              className="text-3xl font-extrabold text-white tracking-tight drop-shadow-lg"
+              className="text-3xl font-black text-white tracking-tight"
             >
               {event.title}
             </motion.h3>
@@ -1044,7 +1004,7 @@ export default function Schedule({ onModalToggle }) {
         </div>
 
         {/* Filters */}
-        <div className="flex justify-center gap-3 mb-12 flex-wrap">
+        {/* <div className="flex justify-center gap-3 mb-12 flex-wrap">
           {["All", "Tech", "Fun"].map((cat) => (
             <button
               key={cat}
@@ -1057,7 +1017,7 @@ export default function Schedule({ onModalToggle }) {
               {cat}
             </button>
           ))}
-        </div>
+        </div> */}
 
         <div className="max-w-5xl mx-auto space-y-16">
           {/* Day 1 */}

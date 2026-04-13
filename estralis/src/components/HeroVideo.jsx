@@ -36,7 +36,7 @@ export default function HeroVideo() {
           opacity: 1,
           filter: 'blur(0px)',
           // --- CHANGE DESKTOP LOGO POSITION HERE ---
-          x: -1200,
+          x: -1270,
           y: -16,
           z: 0,
           // ------------------------------------------

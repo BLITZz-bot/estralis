@@ -16,7 +16,7 @@ export default function CornerLogos() {
 
       {/* Logo 1 */}
       <motion.img
-        src="/logo1.png"
+        src="/algo.png"
         alt="Logo 1"
         initial={{ opacity: 0, y: -15, scale: 0.9 }}
         animate={{
@@ -38,7 +38,7 @@ export default function CornerLogos() {
       />
 
       {/* Logo 2 */}
-      <motion.img
+      {/* <motion.img
         src="/logo2.png"
         alt="Logo 2"
         initial={{ opacity: 0, y: -15, scale: 0.9 }}
@@ -58,7 +58,7 @@ export default function CornerLogos() {
         className="w-12 h-12 md:w-20 md:h-20 object-contain
                    drop-shadow-[0_0_12px_rgba(255,0,200,0.7)]
                    transition-transform duration-150 ease-out"
-      />
+      /> */}
     </div>
   )
 }

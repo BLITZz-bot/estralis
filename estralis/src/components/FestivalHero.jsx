@@ -4,34 +4,24 @@ export default function FestivalHero() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none flex flex-col items-center justify-center">
 
-      {/* ===== ALGO ===== */}
+      {/* ===== ESTRALIS ===== */}
       <motion.h1
-        initial={{ y: -120, opacity: 0 }}
-        animate={{ y: 0, opacity: 0.5 }}
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.6, ease: "easeOut" }}
-        className="text-[26vw] md:text-[15vw] font-extrabold leading-none text-white/10 whitespace-nowrap select-none"
+        className="text-[20vw] md:text-[16vw] font-black leading-none text-white/10 whitespace-nowrap select-none tracking-tighter"
       >
-        ALGO-
+        ESTRALIS
       </motion.h1>
 
-      {/* ===== RHYTHM ===== */}
+      {/* ===== 2026 ===== */}
       <motion.h1
-        initial={{ y: 120, opacity: 0 }}
-        animate={{ y: 0, opacity: 0.5 }}
-        transition={{ duration: 1.6, ease: "easeOut", delay: 0.05 }}
-        className="-mt-[4vw] md:-mt-[2vw] text-[26vw] md:text-[18vw] font-extrabold leading-none text-white/10 whitespace-nowrap select-none"
-      >
-        RHYTHM
-      </motion.h1>
-
-      {/* ===== 3.0 ===== */}
-      <motion.h1
-        initial={{ y: 140, opacity: 0 }}
-        animate={{ y: 0, opacity: 0.5 }}
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.6, ease: "easeOut", delay: 0.1 }}
-        className="-mt-[6vw] md:-mt-[3vw] text-[22vw] md:text-[14vw] font-extrabold leading-none text-white/10 whitespace-nowrap select-none"
+        className="-mt-[2vw] md:-mt-[4vw] text-[20vw] md:text-[16vw] font-black leading-none text-white/10 whitespace-nowrap select-none tracking-tighter"
       >
-        3.0
+        2026
       </motion.h1>
 
     </div>

@@ -3,9 +3,10 @@ import { motion } from "framer-motion"
 export default function Venue() {
   return (
     <section id="venue" className="min-h-screen px-6 py-20">
-      <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">
-        Venue
-      </h2>
+      <div className="text-center mb-12">
+        <p className="apple-eyebrow mb-3">🌍 Location</p>
+        <h2 className="apple-heading text-5xl md:text-7xl">Venue</h2>
+      </div>
 
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-stretch">
 
@@ -15,32 +16,28 @@ export default function Venue() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-120px" }}
           transition={{ duration: 0.55, ease: "easeOut" }}
-          className="rounded-2xl p-8 h-full
-          bg-[linear-gradient(135deg,rgba(15,23,42,0.9),rgba(10,15,30,0.9))]
-          border border-white/10 shadow-lg"
+          className="apple-glass-panel p-10 md:p-14 h-full flex flex-col justify-center"
         >
-          <h3 className="text-2xl font-semibold mb-4 text-purple-300">
+          <h3 className="text-2xl font-black mb-4 text-white tracking-tight">
             GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT
           </h3>
 
-          <p className="text-gray-300">
+          <p className="text-white/80 font-medium">
             Behind SAP Labs, Seetharam Palya, Basavanagar, Hoodi
           </p>
-          <p className="text-gray-300 mb-4">
+          <p className="text-white/80 font-medium mb-6">
             Bengaluru - 560048
           </p>
 
-          <p className="text-gray-400 text-sm">
-            Join us at GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT to celebrate ALGO-RHYTHM 3.0 togather.
+          <p className="text-white/60 text-sm leading-relaxed">
+            Join us at GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT to celebrate ESTRALIS together.
           </p>
 
           <a
             href="https://maps.google.com/?q=Gopalan+College+of+Engineering+and+Management"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-6 px-6 py-3 rounded-xl
-            bg-gradient-to-r from-purple-500 to-blue-500 font-semibold
-            hover:scale-105 transition"
+            className="inline-block mt-8 px-8 py-4 rounded-full bg-white text-black font-bold uppercase tracking-widest text-xs hover:scale-105 hover:bg-gray-200 transition-all w-fit"
           >
             Open in Google Maps
           </a>
@@ -52,8 +49,9 @@ export default function Venue() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-120px" }}
           transition={{ duration: 0.55, ease: "easeOut" }}
-          className="w-full h-full min-h-[350px] rounded-2xl overflow-hidden border border-white/10 relative group z-10"
+          className="w-full h-full min-h-[350px] apple-glass-panel overflow-hidden relative group z-10 p-2"
         >
+          <div className="w-full h-full rounded-2xl overflow-hidden relative">
           {/* Floating Expand Button (Always visible on mobile, hover on desktop) */}
           <a
             href="https://maps.google.com/?q=Gopalan+College+of+Engineering+and+Management"
@@ -75,6 +73,7 @@ export default function Venue() {
             className="w-full h-full border-0"
             loading="lazy"
           />
+          </div>
         </motion.div>
       </div>
     </section>
