@@ -42,7 +42,7 @@ export const eventsDay1 = [
     title: "CLASSICAL GROUP",
     location: "Amphitheatre",
     description: "This is a web-based technical escape room competition conducted in a controlled lab environment. Teams will solve a series of logical, programming, and cybersecurity-based challenges across four progressive levels. Each level contains multiple puzzles that must be solved to obtain a key and unlock the next stage.",
-    category: "Cultural",
+    category: "Dance",
     prize: "₹30,000",
     minTeamSize: 2,
     maxTeamSize: 15,
@@ -296,7 +296,7 @@ export const eventsDay1 = [
     title: "WESTERN SOLO",
     location: "Amphitheatre",
     description: "This is a solo singing competition where participants will perform a song in English, Hindi, or any other language. The song must be in the Western style, and participants will be judged on their vocal quality, stage presence, and overall performance.",
-    category: "Cultural",
+    category: "Dance",
     prize: "₹12,000",
     minTeamSize: 5,
     maxTeamSize: 8,
@@ -373,7 +373,7 @@ export const eventsDay2 = [
     title: "WESTERN GROUP",
     location: "Main stage, GCEM Campus",
     description: "TRIPLE THREAT CHALLENGE is a team-based challenge event conducted. Each team consists of four members and will compete across three exciting rounds that test teamwork, coordination, communication, and speed.",
-    category: "Cultural",
+    category: "Dance",
     prize: "₹6,000",
     minTeamSize: 4,
     maxTeamSize: 4,
@@ -429,7 +429,7 @@ export const eventsDay2 = [
     title: "FASHION WALK",
     location: "Main stage, GCEM Campus",
     description: "A knockout-style technical debate competition focusing on emerging technologies like AI, Cybersecurity, Blockchain, Quantum Computing & Digital Ethics.",
-    category: "Cultural",
+    category: "Fashion",
     prize: "₹6,000",
     minTeamSize: 2,
     maxTeamSize: 3,
@@ -599,7 +599,7 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
         </div>
 
         {/* Event Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 mt-12 xl:mt-0">
           {events.map((e, i) => (
             <EventCard
               key={i}
@@ -944,7 +944,7 @@ export default function Schedule({ onModalToggle }) {
         <CategoryZone
           title="MOTION"
           subtitle="Dance, Fashion & Flow"
-          events={[...eventsDay1, ...eventsDay2].filter(e => e.category === "Cultural")}
+          events={[...eventsDay1, ...eventsDay2].filter(e => ["Cultural", "Dance", "Fashion"].includes(e.category))}
           onEventClick={setSelectedEvent}
           eventStatuses={eventStatuses}
           bgImage="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80"
