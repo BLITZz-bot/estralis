@@ -10,7 +10,7 @@ export default function FixedWatermark() {
         className="flex items-center gap-4 px-4 pr-1"
       >
         <span className="text-[9px] font-black tracking-[0.6em] uppercase text-white/30">
-          GRAFIK
+          BHARATH
         </span>
       </motion.div>
     </div>
