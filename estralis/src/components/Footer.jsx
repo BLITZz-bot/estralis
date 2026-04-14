@@ -31,7 +31,7 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10">
-        
+
         {/* Identity Block */}
         <div className="md:col-span-4 space-y-6">
           <div>
@@ -42,7 +42,7 @@ export default function Footer() {
               The Great Interstellar Revival
             </p>
           </div>
-          
+
           <div className="space-y-2 opacity-50">
             <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-teal-100">
               Gopalan College of Engineering and Management
@@ -65,14 +65,14 @@ export default function Footer() {
                 <svg className="w-4 h-4 text-teal-400 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M8 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
               </a>
               <a href="https://www.facebook.com/Gopalancolleges" target="_blank" rel="noopener noreferrer" className="p-3 border border-teal-500/20 hover:border-teal-400/50 hover:bg-teal-400/5 transition-all group">
-                <svg className="w-4 h-4 text-teal-400 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-9.96 4.46-9.96 9.96 0 4.96 3.63 9.08 8.4 9.82v-6.94h-2.53v-2.88h2.53v-2.2c0-2.51 1.5-3.88 3.77-3.88 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.86h2.78l-.44 2.88h-2.34v6.94c4.78-.74 8.4-4.86 8.4-9.82 0-5.5-4.46-9.96-9.96-9.96z"/></svg>
+                <svg className="w-4 h-4 text-teal-400 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-9.96 4.46-9.96 9.96 0 4.96 3.63 9.08 8.4 9.82v-6.94h-2.53v-2.88h2.53v-2.2c0-2.51 1.5-3.88 3.77-3.88 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.86h2.78l-.44 2.88h-2.34v6.94c4.78-.74 8.4-4.86 8.4-9.82 0-5.5-4.46-9.96-9.96-9.96z" /></svg>
               </a>
             </div>
           </div>
           <div>
             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40 mb-6">Contact_Freq</h4>
             <div className="space-y-4">
-              <div className="text-[12px] font-black tracking-[0.2em] uppercase text-teal-300 mb-2 cursor-pointer">
+              <div className="text-[12px] font-black tracking-[0.2em] uppercase text-teal-300 mb-2">
                 Bharath
               </div>
               <a href="mailto:bharatha9483@gmail.com" className="block group">
@@ -105,7 +105,7 @@ export default function Footer() {
         <div className="relative" ref={popupRef}>
           <button
             onClick={() => setShowLinks(!showLinks)}
-            className="saarang-serif text-2xl text-teal-400/60 hover:text-teal-400 hover:glow-teal transition-all italic tracking-tight"
+            className="saarang-serif text-2xl text-teal-400/60 hover:text-teal-400 hover:glow-teal transition-all italic tracking-tight cursor-pointer"
           >
             Bharath
           </button>
