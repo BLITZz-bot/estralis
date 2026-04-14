@@ -577,7 +577,7 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
 
       <div className="max-w-[1700px] mx-auto px-4 md:px-6 relative z-10 flex flex-col xl:grid xl:grid-cols-[1fr_3fr] gap-4 md:gap-16 items-start">
         {/* Massive Category Title (Saarang Style) */}
-        <div className="flex flex-col xl:flex-col items-center xl:items-start text-center xl:text-left sticky top-24 pr-2 md:pr-0 w-full xl:w-auto mb-10 xl:mb-0">
+        <div className="flex flex-row xl:flex-col items-center xl:items-start text-center xl:text-left sticky top-24 pr-2 md:pr-0 w-full xl:w-auto mb-10 xl:mb-0 flex-wrap gap-4">
           <motion.h2 
             initial={{ opacity: 0.3, filter: "brightness(0.5) blur(2px)" }}
             whileInView={{ 
@@ -587,13 +587,13 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
             }}
             viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
-            className={`saarang-banner-text text-[12vw] xl:text-[10vw] text-white/50 leading-[0.85] mb-4 ${t.hoverText} transition-colors duration-700 text-center flex flex-row xl:flex-col gap-2 justify-center xl:justify-start`}
+            className={`saarang-banner-text text-[10vw] xl:text-[10vw] text-white/50 leading-[0.85] mb-4 xl:mb-4 ${t.hoverText} transition-colors duration-700 text-center flex flex-row xl:flex-col gap-1.5 justify-center xl:justify-start`}
           >
             {title.split("").map((char, i) => (
               <span key={i} className="xl:block">{char}</span>
             ))}
           </motion.h2>
-          <div className="saarang-block mt-2 xl:mt-8 ml-0 xl:ml-0 flex-1">
+          <div className="saarang-block mt-0 xl:mt-8 ml-0 xl:ml-0">
             <p className={`saarang-serif italic text-[10px] md:text-xl lg:text-2xl ${t.text}`}>{subtitle}</p>
           </div>
         </div>
