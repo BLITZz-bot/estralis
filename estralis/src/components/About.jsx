@@ -31,10 +31,10 @@ export default function About() {
           className="w-full md:w-1/3 flex flex-col text-center md:text-left relative md:sticky md:top-32 z-0"
         >
           <span className="astral-eyebrow text-teal-500 mb-4 block">INITIATING DECRYPT...</span>
-          <h2 className="astral-heading text-5xl lg:text-6xl mb-2 text-white uppercase tracking-tighter">
+          <h2 className="astral-heading text-4xl sm:text-5xl lg:text-6xl mb-2 text-white uppercase tracking-tighter">
             ABOUT
           </h2>
-          <h2 className="saarang-banner-text text-6xl lg:text-[4rem] text-teal-400 leading-[0.8]">
+          <h2 className="saarang-banner-text text-5xl sm:text-6xl lg:text-[4rem] text-teal-400 leading-[0.8]">
             ESTRALIS
           </h2>
         </motion.div>

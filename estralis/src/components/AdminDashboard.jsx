@@ -673,7 +673,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="relative w-full h-full max-w-[100vw] max-h-screen bg-[#020617] p-4 sm:p-6 md:p-10 overflow-hidden flex flex-col"
+                        className="relative w-full h-full max-w-[100vw] max-h-screen bg-[#020617] p-4 sm:p-6 md:p-10 overflow-y-auto md:overflow-hidden flex flex-col"
                     >
                         {/* ASTRAL GRID OVERLAY */}
                         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />

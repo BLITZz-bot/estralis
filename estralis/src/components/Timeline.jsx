@@ -39,7 +39,7 @@ export default function Timeline() {
         {/* Block Header */}
         <div className="flex flex-col mb-16 md:mb-24 text-center md:text-left">
          <span className="astral-eyebrow text-teal-500 mb-2 block">SEQUENCE LOG</span>
-         <h2 className="saarang-banner-text text-6xl md:text-[6rem] lg:text-[8rem] text-teal-400 leading-[0.85] tracking-tighter">
+         <h2 className="saarang-banner-text text-5xl sm:text-6xl md:text-[6rem] lg:text-[8rem] text-teal-400 leading-[0.85] tracking-tighter">
             TIMELINE
          </h2>
       </div>
