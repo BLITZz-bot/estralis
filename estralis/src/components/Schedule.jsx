@@ -429,7 +429,7 @@ export const eventsDay2 = [
     title: "FASHION WALK",
     location: "Main stage, GCEM Campus",
     description: "A knockout-style technical debate competition focusing on emerging technologies like AI, Cybersecurity, Blockchain, Quantum Computing & Digital Ethics.",
-    category: "Art",
+    category: "Cultural",
     prize: "₹6,000",
     minTeamSize: 2,
     maxTeamSize: 3,
@@ -954,7 +954,7 @@ export default function Schedule({ onModalToggle }) {
         {/* Zone 2: Fun/Interactive */}
         <CategoryZone
           title="VIBE"
-          subtitle="Fun, Games & Interactive Signals"
+          subtitle="Fun & Interactive Signals"
           events={[...eventsDay1, ...eventsDay2].filter(e => e.category === "Fun")}
           onEventClick={setSelectedEvent}
           eventStatuses={eventStatuses}
