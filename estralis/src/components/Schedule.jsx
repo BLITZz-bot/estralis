@@ -548,11 +548,9 @@ function EventCard({ title, fee, category, onClick, isOpen, t }) {
           </span>
         </div>
 
-        <div className="min-h-[3.5rem] sm:min-h-[4rem] flex flex-col justify-center">
-          <h3 className={`text-xl sm:text-2xl font-black text-white leading-tight transition-colors uppercase tracking-tight break-words overflow-hidden ${theme.hoverText}`}>
-            {title}
-          </h3>
-        </div>
+        <h3 className={`text-xl sm:text-2xl font-black text-white mb-4 leading-tight transition-colors uppercase tracking-tight break-words overflow-hidden ${theme.hoverText}`}>
+          {title}
+        </h3>
       </div>
 
       <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/5">
@@ -579,7 +577,7 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
 
       <div className="max-w-[1700px] mx-auto px-4 md:px-6 relative z-10 flex flex-col xl:grid xl:grid-cols-[1fr_3fr] gap-4 md:gap-16 items-start">
         {/* Massive Category Title (Saarang Style) */}
-        <div className="flex flex-row xl:flex-col items-center xl:items-start text-center xl:text-left sticky top-24 pr-2 md:pr-0 w-full xl:w-auto mb-10 xl:mb-0">
+        <div className="flex flex-col xl:flex-col items-center xl:items-start text-center xl:text-left sticky top-24 pr-2 md:pr-0 w-full xl:w-auto mb-10 xl:mb-0">
           <motion.h2 
             initial={{ opacity: 0.3, filter: "brightness(0.5) blur(2px)" }}
             whileInView={{ 
@@ -589,14 +587,14 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
             }}
             viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
-            className={`saarang-banner-text text-[15vw] xl:text-[10vw] text-white/50 leading-[0.85] mb-4 ${t.hoverText} transition-colors duration-700 text-center flex flex-row xl:flex-col gap-2`}
+            className={`saarang-banner-text text-[12vw] xl:text-[10vw] text-white/50 leading-[0.85] mb-4 ${t.hoverText} transition-colors duration-700 text-center flex flex-row xl:flex-col gap-2 justify-center xl:justify-start`}
           >
             {title.split("").map((char, i) => (
               <span key={i} className="xl:block">{char}</span>
             ))}
           </motion.h2>
-          <div className="saarang-block mt-0 xl:mt-8 ml-4 xl:ml-0 flex-1 max-w-[150px] sm:max-w-none">
-            <p className={`saarang-serif italic text-[8px] sm:text-[10px] md:text-xl lg:text-2xl ${t.text} leading-tight`}>{subtitle}</p>
+          <div className="saarang-block mt-2 xl:mt-8 ml-0 xl:ml-0 flex-1">
+            <p className={`saarang-serif italic text-[10px] md:text-xl lg:text-2xl ${t.text}`}>{subtitle}</p>
           </div>
         </div>
 
