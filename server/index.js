@@ -19,10 +19,23 @@ const PORT = process.env.PORT || 5000;
 // Supabase Configuration
 const supabaseUrl = (process.env.SUPABASE_URL || '').trim();
 const supabaseServiceRole = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
-// Only initialize if we have a valid-looking URL to prevent crash
+
+if (!supabaseUrl || !supabaseUrl.startsWith('http')) {
+    console.error("❌ CRITICAL: SUPABASE_URL is missing or invalid in .env");
+}
+if (!supabaseServiceRole) {
+    console.error("❌ CRITICAL: SUPABASE_SERVICE_ROLE_KEY is missing in .env");
+}
+
 const supabase = (supabaseUrl && supabaseUrl.startsWith('http')) 
     ? createClient(supabaseUrl, supabaseServiceRole)
     : null;
+
+if (supabase) {
+    console.log("✅ Supabase Client: Initialized successfully with URL:", supabaseUrl);
+} else {
+    console.error("❌ Supabase Client: FAILED TO INITIALIZE. Check your environment variables.");
+}
 
 // Razorpay Configuration
 const razorpayKeyId = (process.env.RAZORPAY_KEY_ID || '').trim();
