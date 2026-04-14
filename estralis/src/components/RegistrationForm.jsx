@@ -20,7 +20,7 @@ export default function RegistrationForm({ event, onClose }) {
     })
 
     const cat = event?.category || "Tech"
-    
+
     const comboPassDetails = event?.comboPass || event?.ComboPass;
     const standardFeeString = event?.fee || event?.fees || (event?.prize === "Participation" ? "Free" : "₹150");
 
@@ -70,7 +70,7 @@ export default function RegistrationForm({ event, onClose }) {
         setIsSubmitting(true);
 
         const amount = (passType === 'combo' && comboPassDetails) ? comboPassDetails : standardFeeString;
-        
+
         try {
             const orderRes = await fetch(`${import.meta.env.VITE_API_URL}/api/create-order`, {
                 method: 'POST',
@@ -85,7 +85,7 @@ export default function RegistrationForm({ event, onClose }) {
                 currency: order.currency,
                 name: "ESTRALIS 2026",
                 description: `Registration for ${event.title}`,
-                image: "/logo.png", 
+                image: "/logo.png",
                 order_id: order.id,
                 handler: async (response) => {
                     try {
@@ -104,7 +104,7 @@ export default function RegistrationForm({ event, onClose }) {
                                 }
                             })
                         });
-                        
+
                         const result = await verifyRes.json();
                         if (result.success) {
                             setStep(3);
@@ -159,224 +159,227 @@ export default function RegistrationForm({ event, onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-[#020617] flex flex-col overflow-y-auto w-full min-h-screen custom-scrollbar"
+            className="fixed inset-0 z-[100] bg-[#020617]/90 backdrop-blur-3xl flex flex-col overflow-y-auto w-full min-h-screen custom-scrollbar"
         >
             {/* Header */}
-            <div className="relative p-8 flex items-center justify-between border-b border-teal-500/20 bg-black/40 backdrop-blur-xl z-20">
-                <div>
-                   <span className="text-[10px] font-black tracking-[0.4em] text-teal-500 uppercase block mb-1">Sector_Access_Protocol</span>
-                   <h2 className="text-3xl font-black text-white uppercase tracking-tighter">
-                       {event.title} <span className="text-teal-500">_Registry</span>
+            <div className="sticky top-0 p-6 md:p-8 flex items-center justify-between border-b border-teal-500/20 bg-[#020617]/50 backdrop-blur-2xl z-20">
+                <div className="flex flex-col">
+                   <div className="flex items-center gap-2 mb-1">
+                       <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse" />
+                       <span className="text-[9px] font-black tracking-[0.4em] text-teal-500/80 uppercase font-astral">ESTRALIS_2026 // SECURE_REGISTRY</span>
+                   </div>
+                   <h2 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter astral-heading">
+                       {event.title}
                    </h2>
                 </div>
                 <button
                     onClick={onClose}
-                    className="w-12 h-12 flex items-center justify-center bg-teal-500 text-black hover:bg-white transition-all font-black text-xl"
+                    className="group relative w-10 h-10 md:w-14 md:h-14 flex items-center justify-center bg-teal-500 text-black hover:bg-white transition-all font-black text-xl overflow-hidden rounded-xl shadow-[0_0_30px_rgba(45,212,191,0.2)]"
                 >
-                    ✕
+                    <span className="relative z-10 transition-transform group-hover:rotate-90">✕</span>
+                    <motion.div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 </button>
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 flex flex-col items-center justify-start p-8 md:p-16">
-                {step === 1 && (
-                    <motion.form
-                        key="step1"
-                        initial={{ y: 30, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        onSubmit={(e) => { e.preventDefault(); setStep(2); }}
-                        className="w-full max-w-4xl space-y-12"
-                    >
-                        {/* Step Indicator */}
-                        <div className="flex gap-4">
-                           <div className="flex-1 h-1 bg-teal-500 shadow-[0_0_15px_rgba(20,184,166,0.5)]"></div>
-                           <div className="flex-1 h-1 bg-white/10"></div>
-                           <div className="flex-1 h-1 bg-white/10"></div>
-                        </div>
-
-                        {/* Basic Info */}
-                        <div className="saarang-block bg-black p-8 md:p-12 space-y-12 border-4 border-white/5 hover:border-teal-500/30 transition-all">
-                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                <div className="space-y-4">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-teal-400">Lead_Operator (Name)</label>
-                                    <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-transparent border-b-2 border-white/10 py-4 text-white focus:outline-none focus:border-teal-500 transition-colors uppercase font-bold text-xl" placeholder="Full Name" />
-                                </div>
-                                <div className="space-y-4">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-teal-400">Signal_Freq (Email)</label>
-                                    <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full bg-transparent border-b-2 border-white/10 py-4 text-white focus:outline-none focus:border-teal-500 transition-colors uppercase font-bold text-xl" placeholder="Email Address" />
-                                </div>
-                                <div className="space-y-4">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-teal-400">Comm_Link (Phone)</label>
-                                    <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-transparent border-b-2 border-white/10 py-4 text-white focus:outline-none focus:border-teal-500 transition-colors uppercase font-bold text-xl" placeholder="Phone Number" />
-                                </div>
-                                <div className="space-y-4">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-teal-400">Origin_Node (College)</label>
-                                    <input required type="text" name="college" value={formData.college} onChange={handleChange} className="w-full bg-transparent border-b-2 border-white/10 py-4 text-white focus:outline-none focus:border-teal-500 transition-colors uppercase font-bold text-xl" placeholder="College Name" />
-                                </div>
+            <div className="flex-1 flex flex-col items-center justify-start p-4 md:p-12 relative z-10">
+                <AnimatePresence mode="wait">
+                    {step === 1 && (
+                        <motion.form
+                            key="step1"
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -20, opacity: 0 }}
+                            onSubmit={(e) => { e.preventDefault(); setStep(2); }}
+                            className="w-full max-w-4xl space-y-8"
+                        >
+                            {/* Step Indicator */}
+                            <div className="flex gap-3 justify-center">
+                               {[1,2,3].map(i => (
+                                   <div key={i} className={`h-1 rounded-full transition-all duration-700 ${i <= step ? 'w-12 bg-teal-500 shadow-[0_0_15px_rgba(45,212,191,0.5)]' : 'w-4 bg-white/10'}`} />
+                               ))}
                             </div>
-                        </div>
 
-                        {/* Team Section */}
-                        {isTeamEvent && (
-                             <div className="saarang-block bg-black p-8 md:p-12 space-y-12 border-4 border-white/5">
-                                <div className="flex items-center justify-between">
-                                    <h3 className="text-[10px] font-black tracking-[0.4em] text-teal-500 uppercase flex items-center gap-4">
-                                        <div className="w-6 h-[1px] bg-teal-500"></div> Squad_Encryption
-                                    </h3>
-                                    {teamMembers.length + 1 < maxTeamSize && (
-                                        <button type="button" onClick={addMember} className="px-4 py-2 border border-teal-500 text-teal-400 text-[9px] font-black uppercase tracking-widest hover:bg-teal-500 hover:text-black transition-all">
-                                            + Add_Operative
-                                        </button>
-                                    )}
-                                </div>
-
-                                {maxTeamSize > 1 && (
-                                    <div className="space-y-4">
-                                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-teal-400">Squad_ID (Team Name)</label>
-                                        <input required type="text" name="teamName" value={formData.teamName} onChange={handleChange} className="w-full bg-transparent border-b-2 border-white/10 py-4 text-white focus:outline-none focus:border-teal-500 transition-colors uppercase font-bold text-xl" placeholder="Team Name" />
+                            {/* Basic Info */}
+                            <div className="astral-glass p-8 md:p-12 space-y-10">
+                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">FULL NAME</label>
+                                        <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="Your Name" />
                                     </div>
-                                )}
-                                
-                                <div className="space-y-10">
-                                    {teamMembers.map((member, index) => (
-                                        <div key={index} className="p-8 border border-white/10 bg-white/[0.02] relative group">
-                                             <div className="flex justify-between items-center mb-8">
-                                                <h4 className="text-[9px] font-black uppercase tracking-[0.5em] text-teal-400/60">Operative_{index + 2}</h4>
-                                                <button type="button" onClick={() => removeMember(index)} className="text-red-500/40 hover:text-red-500 text-[9px] font-black uppercase tracking-widest">
-                                                    [ Remove ]
-                                                </button>
-                                             </div>
-                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                                <div className="space-y-2">
-                                                    <label className="text-[8px] font-black text-white/30 uppercase tracking-widest">Identify</label>
-                                                    <input required type="text" value={member.fullName} onChange={(e) => {
-                                                        const newMembers = [...teamMembers];
-                                                        newMembers[index].fullName = e.target.value;
-                                                        setTeamMembers(newMembers);
-                                                    }} className="w-full bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-teal-500 text-sm font-bold uppercase tracking-widest" placeholder="NAME" />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label className="text-[8px] font-black text-white/30 uppercase tracking-widest">Signal</label>
-                                                    <input required type="email" value={member.email} onChange={(e) => {
-                                                        const newMembers = [...teamMembers];
-                                                        newMembers[index].email = e.target.value;
-                                                        setTeamMembers(newMembers);
-                                                    }} className="w-full bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-teal-500 text-sm font-bold uppercase tracking-widest" placeholder="EMAIL" />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label className="text-[8px] font-black text-white/30 uppercase tracking-widest">Comm_Link</label>
-                                                    <input required type="tel" value={member.phone} onChange={(e) => {
-                                                        const newMembers = [...teamMembers];
-                                                        newMembers[index].phone = e.target.value;
-                                                        setTeamMembers(newMembers);
-                                                    }} className="w-full bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-teal-500 text-sm font-bold uppercase tracking-widest" placeholder="PHONE" />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label className="text-[8px] font-black text-white/30 uppercase tracking-widest">Origin_Node</label>
-                                                    <input required type="text" value={member.college} onChange={(e) => {
-                                                        const newMembers = [...teamMembers];
-                                                        newMembers[index].college = e.target.value;
-                                                        setTeamMembers(newMembers);
-                                                    }} className="w-full bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-teal-500 text-sm font-bold uppercase tracking-widest" placeholder="COLLEGE" />
-                                                </div>
-                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
-                             </div>
-                        )}
-
-                        <div className="flex flex-col items-center py-10">
-                             <button type="submit" className="w-full max-w-md py-6 bg-white text-black font-black text-[11px] uppercase tracking-[0.5em] hover:bg-teal-500 hover:shadow-[0_0_40px_rgba(20,184,166,0.4)] transition-all">
-                                CONTINUE_REGISTRY {" >>>"}
-                             </button>
-                        </div>
-                    </motion.form>
-                )}
-
-                {step === 2 && (
-                    <motion.div
-                        key="step2"
-                        initial={{ y: 30, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        className="w-full max-w-2xl space-y-12"
-                    >
-                        {/* Step Indicator */}
-                        <div className="flex gap-4">
-                           <div className="flex-1 h-1 bg-teal-500"></div>
-                           <div className="flex-1 h-1 bg-teal-500 shadow-[0_0_15px_rgba(20,184,166,0.5)]"></div>
-                           <div className="flex-1 h-1 bg-white/10"></div>
-                        </div>
-
-                        <div className="saarang-block bg-black p-12 text-center space-y-12 border-4 border-teal-500">
-                             <div>
-                                <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">Secure_Payment</h3>
-                                <p className="text-teal-400/40 text-[10px] font-black uppercase tracking-[0.4em]">Razorpay // Total_Encryption</p>
-                             </div>
-
-                             <div className="space-y-4 text-left border-y border-white/10 py-8">
-                                <div className="flex justify-between items-end">
-                                    <span className="text-[10px] font-black text-white/40 uppercase">Sector</span>
-                                    <span className="text-lg font-black text-white uppercase italic">{event.title}</span>
-                                </div>
-                                <div className="flex justify-between items-end">
-                                    <span className="text-[10px] font-black text-white/40 uppercase">Lead_Operator</span>
-                                    <span className="text-lg font-black text-white uppercase italic">{formData.fullName}</span>
-                                </div>
-                                <div className="flex justify-between items-end pt-6 border-t border-white/5">
-                                    <span className="text-[11px] font-black text-teal-400 uppercase tracking-widest">Access_Fee</span>
-                                    <span className="text-4xl font-black text-teal-500 italic">{standardFeeString}</span>
-                                </div>
-                             </div>
-
-                             <div className="space-y-6">
-                                <button
-                                    onClick={handleSubmit}
-                                    disabled={isSubmitting}
-                                    className="w-full py-6 bg-teal-500 text-black font-black text-[11px] uppercase tracking-[0.5em] hover:bg-white transition-all flex items-center justify-center gap-4 disabled:opacity-50"
-                                >
-                                    {isSubmitting ? "PROCESSING..." : "AUTHORIZE_AND_SECURE " + ">>>"}
-                                </button>
-                                <button type="button" onClick={() => setStep(1)} className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 hover:text-teal-400 transition-colors">
-                                    ← Modify_Parameters
-                                </button>
-                             </div>
-                        </div>
-                    </motion.div>
-                )}
-
-                {step === 3 && (
-                    <motion.div
-                        key="step3"
-                        initial={{ scale: 0.95, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        className="w-full max-w-2xl text-center space-y-12"
-                    >
-                         <div className="saarang-block bg-black p-16 border-4 border-emerald-500">
-                            <h3 className="text-5xl font-black text-white uppercase tracking-tighter mb-4">ACCESS_GRANTED</h3>
-                            <p className="saarang-serif text-emerald-400 text-2xl italic mb-12">Your sector has been secured.</p>
-                            <div className="space-y-6 text-left border-t border-white/10 pt-10">
-                                <div className="flex justify-between">
-                                    <span className="text-[10px] font-black text-white/40 uppercase">Status</span>
-                                    <span className="text-xs font-black text-emerald-500 uppercase tracking-widest">S E C U R E D</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-[10px] font-black text-white/40 uppercase">Sector</span>
-                                    <span className="text-sm font-black text-white uppercase">{event.title}</span>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">EMAIL ADDRESS</label>
+                                        <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="your@email.com" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">PHONE NUMBER</label>
+                                        <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="+91 XXXXX XXXXX" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">COLLEGE / INSTITUTION</label>
+                                        <input required type="text" name="college" value={formData.college} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="College Name" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                            <button onClick={handleDownloadPDF} disabled={isDownloading} className="px-12 py-6 bg-teal-500 text-black font-black text-[11px] uppercase tracking-[0.3em] hover:bg-white transition-all">
-                                {isDownloading ? "DOWNLOADING..." : "DOWNLOAD_PASS_PDF"}
-                            </button>
-                            <button onClick={onClose} className="px-12 py-6 bg-white/[0.05] text-white/40 border-2 border-white/10 font-black text-[11px] uppercase tracking-[0.3em] hover:bg-white/10 hover:text-white transition-all">
-                                RETURN_TO_ORBIT
-                            </button>
-                        </div>
-                    </motion.div>
-                )}
+                            {/* Team Section */}
+                            {isTeamEvent && (
+                                 <div className="astral-glass p-8 md:p-12 space-y-10">
+                                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                        <h3 className="text-[11px] font-black tracking-widest text-white uppercase font-astral">
+                                            SQUAD DETAILS
+                                        </h3>
+                                        {teamMembers.length + 1 < maxTeamSize && (
+                                            <button type="button" onClick={addMember} className="px-6 py-2 rounded-xl border border-teal-500/30 text-teal-400 text-[10px] font-black uppercase tracking-widest hover:bg-teal-500 hover:text-black transition-all font-astral">
+                                                + ADD MEMBER
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {maxTeamSize > 1 && (
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">TEAM NAME</label>
+                                            <input required type="text" name="teamName" value={formData.teamName} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="Enter Team Name" />
+                                        </div>
+                                    )}
+                                    
+                                    <div className="grid grid-cols-1 gap-6">
+                                        {teamMembers.map((member, index) => {
+                                            const isRequired = (index + 2) <= minTeamSize;
+                                            return (
+                                                <motion.div 
+                                                    key={index}
+                                                    initial={{ opacity: 0, y: 10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="p-6 md:p-8 rounded-2xl border border-white/5 bg-white/[0.03] relative"
+                                                >
+                                                     <div className="flex justify-between items-center mb-6">
+                                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-white/40 font-astral">MEMBER 0{index + 2}</h4>
+                                                        {isRequired ? (
+                                                            <span className="text-teal-500/50 text-[9px] font-black uppercase tracking-widest font-astral px-2 py-1 border border-teal-500/20 rounded-lg">
+                                                                REQUIRED
+                                                            </span>
+                                                        ) : (
+                                                            <button type="button" onClick={() => removeMember(index)} className="text-red-400/50 hover:text-red-400 text-[9px] font-black uppercase tracking-widest transition-colors font-astral">
+                                                                REMOVE
+                                                            </button>
+                                                        )}
+                                                     </div>
+                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                        <input required type="text" value={member.fullName} onChange={(e) => {
+                                                            const newMembers = [...teamMembers];
+                                                            newMembers[index].fullName = e.target.value;
+                                                            setTeamMembers(newMembers);
+                                                        }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="NAME" />
+                                                        <input required type="email" value={member.email} onChange={(e) => {
+                                                            const newMembers = [...teamMembers];
+                                                            newMembers[index].email = e.target.value;
+                                                            setTeamMembers(newMembers);
+                                                        }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="EMAIL" />
+                                                    </div>
+                                                </motion.div>
+                                            );
+                                        })}
+                                    </div>
+                                 </div>
+                            )}
+
+                            <div className="flex justify-center py-6">
+                                 <button type="submit" className="w-full max-w-md py-6 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)] transition-all flex items-center justify-center gap-3 font-astral">
+                                    CONTINUE TO PAYMENT <span className="text-lg">→</span>
+                                 </button>
+                            </div>
+                        </motion.form>
+                    )}
+
+                    {step === 2 && (
+                        <motion.div
+                            key="step2"
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 1.05, opacity: 0 }}
+                            className="w-full max-w-2xl space-y-8"
+                        >
+                            <div className="flex gap-3 justify-center">
+                               {[1,2,3].map(i => (
+                                   <div key={i} className={`h-1 rounded-full transition-all duration-700 ${i <= step ? 'w-12 bg-teal-500 shadow-[0_0_15px_rgba(45,212,191,0.5)]' : 'w-4 bg-white/10'}`} />
+                               ))}
+                            </div>
+
+                            <div className="astral-glass p-8 md:p-12 text-center space-y-10">
+                                 <div className="space-y-2">
+                                    <h3 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter astral-heading">Checkout</h3>
+                                    <p className="text-teal-400/60 text-[10px] font-black uppercase tracking-[0.3em] font-tech">SECURE TRANSACTION VIA RAZORPAY</p>
+                                 </div>
+
+                                 <div className="space-y-4 text-left border-y border-white/10 py-8">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-[10px] font-black text-white/30 uppercase tracking-widest font-astral">SECTOR</span>
+                                        <span className="text-base md:text-lg text-white font-bold">{event.title}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-[10px] font-black text-white/30 uppercase tracking-widest font-astral">LEAD OPERATOR</span>
+                                        <span className="text-base md:text-lg text-white font-bold truncate ml-4">{formData.fullName}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center pt-8 border-t border-white/5 mt-4">
+                                        <span className="text-[12px] font-black text-white uppercase tracking-widest font-astral">TOTAL FEE</span>
+                                        <span className="text-4xl md:text-5xl font-black text-teal-400 italic glow-teal">{standardFeeString}</span>
+                                    </div>
+                                 </div>
+
+                                 <div className="space-y-6">
+                                    <button
+                                        onClick={handleSubmit}
+                                        disabled={isSubmitting}
+                                        className="w-full py-6 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)] transition-all flex items-center justify-center gap-3 disabled:opacity-50 font-astral"
+                                    >
+                                        {isSubmitting ? "PROCESSING..." : "PAY NOW"} <span className="text-lg">→</span>
+                                    </button>
+                                    <button type="button" onClick={() => setStep(1)} className="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors flex items-center justify-center gap-2 font-astral">
+                                        ← GO BACK
+                                    </button>
+                                 </div>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {step === 3 && (
+                        <motion.div
+                            key="step3"
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="w-full max-w-2xl text-center space-y-10"
+                        >
+                             <div className="astral-glass p-8 md:p-16 border-emerald-500/30">
+                                <div className="w-20 h-20 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 text-4xl">
+                                    ✓
+                                </div>
+                                <h3 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-4 astral-heading">Access Granted</h3>
+                                <p className="text-white/60 text-lg md:text-xl font-medium mb-12">Your registration for <span className="text-teal-400">{event.title}</span> is complete.</p>
+                                
+                                <div className="space-y-4 text-left border-t border-white/10 pt-10">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-[10px] font-black text-white/30 uppercase tracking-widest font-astral">STATUS</span>
+                                        <span className="text-emerald-400 font-bold uppercase tracking-widest">CONFIRMED</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-[10px] font-black text-white/30 uppercase tracking-widest font-astral">TIMESTAMP</span>
+                                        <span className="text-white/60 font-mono text-xs">{new Date().toLocaleString()}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                                <button onClick={handleDownloadPDF} disabled={isDownloading} className="flex-1 max-w-sm px-8 py-5 bg-teal-500 text-black font-black text-[12px] uppercase tracking-widest rounded-2xl hover:bg-white hover:shadow-[0_0_30px_rgba(45,212,191,0.2)] transition-all font-astral">
+                                    {isDownloading ? "GENERATING..." : "DOWNLOAD PASS"}
+                                </button>
+                                <button onClick={onClose} className="flex-1 max-w-sm px-8 py-5 bg-white/5 text-white/50 border border-white/10 rounded-2xl font-black text-[12px] uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all font-astral">
+                                    CLOSE
+                                </button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </motion.div>
     );

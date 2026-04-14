@@ -578,10 +578,10 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
       <div className="max-w-[1700px] mx-auto px-4 md:px-6 relative z-10 flex flex-col xl:grid xl:grid-cols-[1fr_3fr] gap-4 md:gap-16 items-start">
         {/* Massive Category Title (Saarang Style) */}
         <div className="flex flex-row xl:flex-col items-center xl:items-start text-center xl:text-left sticky top-24 pr-2 md:pr-0 w-full xl:w-auto mb-10 xl:mb-0 flex-nowrap gap-4 justify-center xl:justify-start">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0.3, filter: "brightness(0.5) blur(2px)" }}
-            whileInView={{ 
-              opacity: 1, 
+            whileInView={{
+              opacity: 1,
               filter: "brightness(1.5) blur(0px)",
               textShadow: ["0 0 0px rgba(45,212,191,0)", "0 0 20px rgba(45,212,191,0.5)", "0 0 0px rgba(45,212,191,0)"]
             }}
@@ -618,7 +618,6 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
 function EventModal({ event, isEventOpen, onClose, onRegister }) {
   const [activeTab, setActiveTab] = useState("about")
 
-  // Reset modal state when event changes (fixes tab persistence bug)
   useEffect(() => {
     setActiveTab("about");
   }, [event]);
@@ -631,195 +630,189 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
     : `${event.minTeamSize || "?"} – ${event.maxTeamSize || "?"}`
 
   const tabs = [
-    { id: "about", label: "ABOUT" },
+    { id: "about", label: "INFO" },
     { id: "rules", label: "RULES" },
     { id: "coordinators", label: "CONTACT" },
   ]
 
   return (
     <>
-      {/* Backdrop */}
       <motion.div
-        className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-[100] p-4"
+        className="fixed inset-0 bg-[#020617]/90 backdrop-blur-2xl flex items-center justify-center z-[100] p-4 sm:p-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
       >
-        {/* Modal */}
         <motion.div
-          initial={{ y: 60, opacity: 0, scale: 0.98 }}
+          initial={{ y: 50, opacity: 0, scale: 0.95 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          transition={{ type: "spring", damping: 25, stiffness: 200 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-2xl bg-[#020617] border-4 border-teal-500 shadow-[0_0_50px_rgba(20,184,166,0.3)] flex flex-col max-h-[90vh] overflow-hidden"
+          className="relative w-full max-w-3xl astral-glass flex flex-col max-h-[90vh] overflow-hidden shadow-2xl"
         >
-          {/* Header (Saarang Hybrid Style) */}
-          <div className="relative bg-teal-500 p-8">
+          {/* Header Section */}
+          <div className="relative p-8 sm:p-12 border-b border-white/5">
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-black text-teal-400 hover:text-white transition-colors font-black text-lg z-20"
+              className="absolute top-6 right-8 text-white/20 hover:text-white transition-colors text-2xl"
             >
               ✕
             </button>
 
-            <span className="inline-block text-[10px] font-black tracking-[0.4em] uppercase text-black/60 mb-2">
-              Event Terminal // {cat}
-            </span>
-
-            <h3 className="text-4xl md:text-5xl font-black text-black leading-none mb-1 uppercase tracking-tighter">
-              {event.title}
-            </h3>
-
-            <div className="flex flex-wrap gap-2 mt-4">
-              <span className="text-[10px] font-black bg-black text-teal-400 px-3 py-1 uppercase tracking-[0.2em]">
-                SQUAD_SIZE: {teamText}
+            <div className="space-y-4">
+              <span className="astral-eyebrow text-teal-500 uppercase">
+                {cat} SECTOR
               </span>
-              {event.theme && (
-                <span className="text-[10px] font-black bg-black text-teal-400 px-3 py-1 uppercase tracking-[0.2em]">
-                  THEME: {event.theme}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Quick Info Strip */}
-          <div className="bg-white/5 border-b border-white/10 px-8 py-4 flex flex-wrap gap-6">
-            <div className="flex flex-col">
-              <span className="text-[9px] font-black text-teal-400/40 uppercase tracking-widest">Temporal_Unit</span>
-              <span className="text-xs font-bold text-white uppercase">{event.time}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[9px] font-black text-teal-400/40 uppercase tracking-widest">Coordinates</span>
-              <span className="text-xs font-bold text-white uppercase italic">{event.location}</span>
-            </div>
-            {event.prize && (
-              <div className="flex flex-col">
-                <span className="text-[9px] font-black text-teal-400/40 uppercase tracking-widest">Bounty_Pool</span>
-                <span className="text-xs font-black text-teal-400 uppercase italic">{event.prize}</span>
+              <h3 className="text-4xl sm:text-6xl font-black text-white leading-[0.9] uppercase tracking-tighter astral-heading">
+                {event.title}
+              </h3>
+              
+              <div className="flex flex-wrap gap-6 pt-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse" />
+                  <span className="text-[10px] font-bold text-white/50 tracking-widest uppercase font-tech">SQUAD SIZE: {teamText}</span>
+                </div>
+                {event.theme && (
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-teal-500/30" />
+                    <span className="text-[10px] font-bold text-white/50 tracking-widest uppercase font-tech">THEME: {event.theme}</span>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
 
-          {/* Tabs */}
-          <div className="flex bg-[#0a0a1a] border-b border-white/5">
+          {/* Navigation Control */}
+          <div className="flex bg-black/20 border-b border-white/5">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 py-4 text-[10px] font-black tracking-[0.3em] transition-all duration-300 ${activeTab === tab.id
-                  ? "bg-teal-500 text-black translate-y-[-1px]"
-                  : "text-white/40 hover:text-teal-400 hover:bg-white/5"
+                className={`flex-1 py-5 text-[10px] font-black tracking-[0.4em] relative transition-all duration-300 font-astral ${activeTab === tab.id ? "text-white" : "text-white/20 hover:text-white/40"
                   }`}
               >
                 {tab.label}
+                {activeTab === tab.id && (
+                  <motion.div
+                    layoutId="activeTabUnderline"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-500 shadow-[0_0_10px_rgba(45,212,191,0.5)]"
+                  />
+                )}
               </button>
             ))}
           </div>
 
-          {/* Content Area */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar bg-[#020617] p-8">
+          {/* Main Content Area */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-8 sm:p-12">
             <AnimatePresence mode="wait">
-              {activeTab === "about" && (
-                <motion.div
-                  key="about"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  className="space-y-8"
-                >
-                  <div className="saarang-block p-6 border-l-4 border-l-teal-500">
-                    <p className="saarang-serif text-teal-100/80 text-lg leading-relaxed italic">
-                      "{event.description}"
-                    </p>
-                  </div>
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="min-h-full"
+              >
+                {activeTab === "about" && (
+                  <div className="space-y-12">
+                     <p className="saarang-serif text-white/80 text-xl leading-relaxed italic border-l-4 border-teal-500/30 pl-8">
+                        "{event.description}"
+                      </p>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-white/5 border border-white/10">
-                      <span className="text-[9px] font-black text-teal-400/40 uppercase block mb-1">Squad_Size</span>
-                      <span className="text-xl font-black text-white">{teamText} Units</span>
-                    </div>
-                    <div className="p-4 bg-white/5 border border-white/10">
-                      <span className="text-[9px] font-black text-teal-400/40 uppercase block mb-1">Access_Cost</span>
-                      <span className="text-xl font-black text-teal-400">{event.fee}</span>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {activeTab === "rules" && (
-                <motion.div
-                  key="rules"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="space-y-4"
-                >
-                  <h4 className="text-[12px] font-black text-teal-400 uppercase tracking-[0.4em] mb-4 flex items-center gap-3">
-                    <div className="w-1 h-3 bg-teal-500"></div> Ruleset.Protocol 101
-                  </h4>
-                  <ul className="space-y-3">
-                    {event.rules.map((rule, idx) => (
-                      <li key={idx} className="flex gap-4 group">
-                        <span className="text-teal-400 font-black text-[10px] bg-teal-500/10 w-6 h-6 flex items-center justify-center border border-teal-500/20">
-                          {idx + 1}
-                        </span>
-                        <p className="text-[13px] text-teal-100/60 leading-relaxed font-bold tracking-tight group-hover:text-teal-100 transition-colors uppercase">
-                          {rule}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              )}
-
-              {activeTab === "coordinators" && (
-                <motion.div
-                  key="contact"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="space-y-4"
-                >
-                  <h4 className="text-[12px] font-black text-teal-400 uppercase tracking-[0.4em] mb-4 flex items-center gap-3">
-                    <div className="w-1 h-3 bg-teal-500"></div> Authorized_Personnel
-                  </h4>
-                  <div className="grid gap-3">
-                    {event.coordinators.map((c, i) => (
-                      <div key={i} className="p-4 bg-teal-500/5 border border-teal-500/20 hover:border-teal-500/50 transition-all cursor-crosshair">
-                        <div className="flex items-center gap-3">
-                          <IconPhone />
-                          <p className="text-teal-100 font-black tracking-widest uppercase italic text-sm">{c}</p>
-                        </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      <div className="p-8 astral-glass-bright flex flex-col items-center text-center group">
+                        <span className="text-[9px] font-black text-teal-400 uppercase tracking-widest mb-3 font-astral">Price</span>
+                        <span className="text-2xl font-black text-white italic font-astral">{event.fee}</span>
                       </div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+                      <div className="p-8 astral-glass-bright flex flex-col items-center text-center group">
+                        <span className="text-[9px] font-black text-teal-400 uppercase tracking-widest mb-3 font-astral">Location</span>
+                        <span className="text-base font-bold text-white uppercase italic font-tech text-center">@{event.location}</span>
+                      </div>
+                      <div className="p-8 astral-glass-bright flex flex-col items-center text-center group">
+                        <span className="text-[9px] font-black text-teal-400 uppercase tracking-widest mb-3 font-astral">Prizes</span>
+                        <span className="text-xl font-black text-teal-400 italic font-astral">{event.prize || "Participation"}</span>
+                      </div>
+                    </div>
 
-          {/* Footer (Action Bar) */}
-          <div className="p-8 bg-[#0a0a1a] border-t border-white/10 flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={onClose}
-              className="flex-1 py-4 text-[11px] font-black tracking-[0.3em] uppercase text-white/40 border border-white/10 hover:bg-white/5 transition-all"
-            >
-              Abort_Protocol
-            </button>
-            {isEventOpen ? (
-              <button
-                onClick={() => onRegister(event)}
-                className="flex-[2] py-4 bg-teal-500 text-black text-[11px] font-black tracking-[0.4em] uppercase hover:bg-white hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all flex items-center justify-center gap-3"
-              >
-                Initiate_Access {" >>>"}
-              </button>
-            ) : (
-              <button
-                disabled
-                className="flex-[2] py-4 bg-white/5 text-white/20 text-[11px] font-black tracking-[0.4em] cursor-not-allowed uppercase"
-              >
-                Transmission_Offline
-              </button>
-            )}
+                    <div className="pt-6 flex justify-center">
+                      <button 
+                        onClick={() => setActiveTab("rules")}
+                        className="px-10 py-5 bg-white/5 border border-white/10 rounded-2xl text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-black transition-all font-astral"
+                      >
+                        READ RULES & PROTOCOL →
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "rules" && (
+                  <div className="space-y-10">
+                    <div className="grid gap-4">
+                      {event.rules.map((rule, idx) => (
+                        <motion.div
+                          key={idx}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.05 }}
+                          className="flex items-start gap-6 p-6 astral-glass-bright border-transparent hover:border-teal-500/20 transition-all group"
+                        >
+                          <span className="text-sm font-black text-teal-500/40 font-astral mt-1">
+                            {(idx + 1).toString().padStart(2, '0')}
+                          </span>
+                          <p className="text-sm text-white/70 leading-relaxed font-medium font-tech">
+                            {rule}
+                          </p>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {isEventOpen && (
+                      <div className="pt-8 flex flex-col items-center gap-4">
+                         <div className="flex items-center gap-3 text-teal-500/50 mb-2">
+                            <div className="w-12 h-[1px] bg-teal-500/30" />
+                            <span className="text-[9px] font-black tracking-widest uppercase font-astral">Protocol Complete</span>
+                            <div className="w-12 h-[1px] bg-teal-500/30" />
+                         </div>
+                         <button
+                            onClick={() => onRegister(event)}
+                            className="w-full max-w-md py-6 bg-teal-500 text-black text-[12px] font-black tracking-[0.4em] uppercase rounded-2xl hover:bg-white transition-all shadow-[0_0_40px_rgba(45,212,191,0.3)] font-astral"
+                          >
+                            PROCEED_TO_REGISTRY
+                          </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {activeTab === "coordinators" && (
+                  <div className="space-y-6">
+                    <div className="grid gap-4">
+                      {event.coordinators.map((c, i) => {
+                        const [name, phone] = c.split(' – ');
+                        return (
+                          <motion.div
+                            key={i}
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="p-6 astral-glass-bright flex items-center justify-between group"
+                          >
+                            <div>
+                              <p className="text-white font-black tracking-widest uppercase text-xl font-astral">{name}</p>
+                              <p className="text-[9px] font-black text-teal-500/50 tracking-widest uppercase font-astral mt-1">Coordinator Access</p>
+                            </div>
+                            <div className="text-right">
+                               <p className="text-teal-400 font-bold font-tech text-lg">{phone}</p>
+                               <span className="text-[8px] font-black text-white/20 uppercase tracking-widest font-tech">Secure Line</span>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </motion.div>
       </motion.div>

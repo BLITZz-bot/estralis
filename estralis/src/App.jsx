@@ -25,6 +25,7 @@ import FixedWatermark from "./components/FixedWatermark"
 import PrizePool from "./components/PrizePool"
 import ThemeRevealModal from "./components/ThemeRevealModal"
 import SectionBackground from "./components/SectionBackground"
+import ProtocolModal from "./components/ProtocolModal"
 import { useState, useEffect } from "react"
 
 export default function App() {
@@ -33,6 +34,8 @@ export default function App() {
 
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [isThemeRevealOpen, setIsThemeRevealOpen] = useState(false);
+  const [isProtocolModalOpen, setIsProtocolModalOpen] = useState(false);
+  const [isProtocolAccepted, setIsProtocolAccepted] = useState(false);
 
 
   /* ===== Scroll Parallax ===== */
@@ -73,7 +76,7 @@ export default function App() {
         {/* Teal upper-left bleed */}
         <div className="fixed top-0 left-0 w-[800px] h-[800px] pointer-events-none -z-10 translate-z-0"
           style={{ background: "radial-gradient(ellipse at top left, rgba(45,212,191,0.05) 0%, transparent 65%)" }} />
- 
+
         {/* Cool Aqua upper-right bleed */}
         <div className="fixed top-0 right-0 w-[600px] h-[600px] pointer-events-none -z-10 translate-z-0"
           style={{ background: "radial-gradient(ellipse at top right, rgba(8,145,178,0.06) 0%, transparent 65%)" }} />
@@ -81,19 +84,19 @@ export default function App() {
         {/* Astral center mid-page glow */}
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] pointer-events-none -z-10 translate-z-0"
           style={{ background: "radial-gradient(ellipse, rgba(45,212,191,0.03) 0%, transparent 70%)" }} />
- 
+
         {/* Teal bottom-right */}
         <div className="fixed bottom-0 right-0 w-[500px] h-[500px] pointer-events-none -z-10 translate-z-0"
           style={{ background: "radial-gradient(ellipse at bottom right, rgba(8,145,178,0.04) 0%, transparent 65%)" }} />
 
         {/* Parallax Astral lights */}
         <motion.div
-           style={{ y: ySlow, background: "radial-gradient(circle, rgba(45,212,191,0.04) 0%, transparent 70%)" }}
-           className="fixed top-1/4 left-[10%] w-[500px] h-[500px] rounded-full pointer-events-none -z-10 translate-z-0"
+          style={{ y: ySlow, background: "radial-gradient(circle, rgba(45,212,191,0.04) 0%, transparent 70%)" }}
+          className="fixed top-1/4 left-[10%] w-[500px] h-[500px] rounded-full pointer-events-none -z-10 translate-z-0"
         />
         <motion.div
-           style={{ y: yFast, background: "radial-gradient(circle, rgba(8,145,178,0.03) 0%, transparent 65%)" }}
-           className="fixed top-1/3 right-[10%] w-[400px] h-[400px] rounded-full pointer-events-none -z-10 translate-z-0"
+          style={{ y: yFast, background: "radial-gradient(circle, rgba(8,145,178,0.03) 0%, transparent 65%)" }}
+          className="fixed top-1/3 right-[10%] w-[400px] h-[400px] rounded-full pointer-events-none -z-10 translate-z-0"
         />
 
         <CursorGlow />
@@ -112,6 +115,14 @@ export default function App() {
         />
         <AdminDashboard isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
         <ThemeRevealModal isOpen={isThemeRevealOpen} onClose={() => setIsThemeRevealOpen(false)} />
+        <ProtocolModal 
+          isOpen={isProtocolModalOpen} 
+          onClose={() => setIsProtocolModalOpen(false)} 
+          onAccept={() => {
+            setIsProtocolAccepted(true);
+            document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
+          }} 
+        />
 
         <CornerLogos
           hide={isRegistrationsOpen || isAdminOpen || isScheduleModalOpen}
@@ -135,17 +146,17 @@ export default function App() {
         <Section id="home">
           <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
             <FestivalHero />
-            
+
           </section>
         </Section>
 
         {/* ================= COUNTDOWN (Next Page) ================= */}
         <Section id="countdown">
           <section className="relative min-h-screen flex flex-col items-center justify-center py-20 px-6 overflow-hidden group">
-            
-            <SectionBackground 
-              src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80" 
-              alt="Tech Earth Background" 
+
+            <SectionBackground
+              src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80"
+              alt="Tech Earth Background"
               activeOpacity="opacity-70 md:opacity-50"
             />
 
@@ -157,9 +168,9 @@ export default function App() {
               className="w-full flex flex-col items-center"
             >
               <CountdownSciFi />
-              
+
               <div className="mt-16">
-                 <a
+                <a
                   href="#events"
                   className="px-12 py-5 rounded-2xl bg-teal-500 text-black font-black tracking-[0.3em] uppercase shadow-[0_0_30px_rgba(45,212,191,0.4)] hover:shadow-[0_0_50px_rgba(45,212,191,0.7)] hover:bg-white hover:scale-105 transition-all duration-300 transform active:scale-95 flex items-center justify-center"
                 >
@@ -174,7 +185,7 @@ export default function App() {
 
         {/* ================= ABOUT ================= */}
         <Section id="about">
-          <About />
+          <About onOpenProtocol={() => setIsProtocolModalOpen(true)} />
         </Section>
 
         {/* <GalleryPreview /> */}

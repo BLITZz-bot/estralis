@@ -13,6 +13,9 @@
   --color-starlight: #f8fafc;
 }
 
+.font-astral { font-family: var(--font-astral); }
+.font-tech { font-family: var(--font-tech); }
+
 body {
   font-family: var(--font-tech);
   background-color: var(--color-space) !important;
