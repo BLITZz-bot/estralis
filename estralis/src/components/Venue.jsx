@@ -11,7 +11,7 @@ export default function Venue() {
       />
 
       <div className="relative z-10 text-center mb-12">
-        <p className="apple-eyebrow mb-3">🌍 Location</p>
+        <p className="apple-eyebrow mb-3"></p>
         <h2 className="apple-heading text-5xl md:text-7xl">Venue</h2>
       </div>
 

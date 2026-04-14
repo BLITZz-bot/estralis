@@ -548,7 +548,7 @@ function EventCard({ title, fee, category, onClick, isOpen, t }) {
           </span>
         </div>
 
-        <h3 className={`text-2xl font-black text-white mb-4 leading-tight transition-colors uppercase tracking-tight ${theme.hoverText}`}>
+        <h3 className={`text-xl sm:text-2xl font-black text-white mb-4 leading-tight transition-colors uppercase tracking-tight break-words overflow-hidden ${theme.hoverText}`}>
           {title}
         </h3>
       </div>
@@ -575,9 +575,9 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
         alt="Zone Background"
       />
 
-      <div className="max-w-[1700px] mx-auto px-4 md:px-6 relative z-10 grid grid-cols-[auto_1fr] md:grid-cols-[1fr_3fr] gap-4 md:gap-16 items-start">
+      <div className="max-w-[1700px] mx-auto px-4 md:px-6 relative z-10 flex flex-col xl:grid xl:grid-cols-[1fr_3fr] gap-4 md:gap-16 items-start">
         {/* Massive Category Title (Saarang Style) */}
-        <div className="flex flex-col items-center xl:items-start text-center xl:text-left sticky top-24 pr-2 md:pr-0">
+        <div className="flex flex-row xl:flex-col items-center xl:items-start text-center xl:text-left sticky top-24 pr-2 md:pr-0 w-full xl:w-auto mb-10 xl:mb-0">
           <motion.h2 
             initial={{ opacity: 0.3, filter: "brightness(0.5) blur(2px)" }}
             whileInView={{ 
@@ -587,13 +587,13 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
             }}
             viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
-            className={`saarang-banner-text text-[10vw] md:text-[8vw] lg:text-[10vw] text-white/50 leading-[0.85] mb-4 ${t.hoverText} transition-colors duration-700 text-center`}
+            className={`saarang-banner-text text-[15vw] xl:text-[10vw] text-white/50 leading-[0.85] mb-4 ${t.hoverText} transition-colors duration-700 text-center flex flex-row xl:flex-col gap-2`}
           >
             {title.split("").map((char, i) => (
-              <span key={i} className="block">{char}</span>
+              <span key={i} className="xl:block">{char}</span>
             ))}
           </motion.h2>
-          <div className="saarang-block mt-4 md:mt-8">
+          <div className="saarang-block mt-0 xl:mt-8 ml-4 xl:ml-0 flex-1">
             <p className={`saarang-serif italic text-[10px] md:text-xl lg:text-2xl ${t.text}`}>{subtitle}</p>
           </div>
         </div>

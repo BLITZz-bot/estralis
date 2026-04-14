@@ -91,7 +91,7 @@ export default function Footer() {
         <div className="md:col-span-3 flex flex-col items-start md:items-end gap-6 text-left md:text-right">
           <div className="text-[10px] font-bold tracking-[0.1em] text-white/50 leading-relaxed md:mt-11">
             © 2026 ESTRALIS.<br />
-            OFFICIAL FEST WEBSITE OF ESTRALIS.<br />
+            OFFICIAL FEST WEBSITE FOR ESTRALIS.<br />
             ALL RIGHTS RESERVED.
           </div>
         </div>
