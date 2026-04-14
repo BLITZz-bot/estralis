@@ -26,15 +26,35 @@ export default function RegistrationForm({ event, onClose }) {
 
     const minTeamSize = event?.minTeamSize || 1;
     const maxTeamSize = event?.maxTeamSize || 1;
-    const isTeamEvent = minTeamSize > 1 || maxTeamSize > 1;
+    const isTeamEvent = maxTeamSize > 1;
 
     useEffect(() => {
+        // Initialize with minimum required team members (excluding leader)
         if (event && minTeamSize > 1) {
-            setTeamMembers(Array.from({ length: minTeamSize - 1 }, () => ({ fullName: "", email: "", phone: "", college: "" })));
+            const initialCount = Math.max(0, minTeamSize - 1);
+            setTeamMembers(Array.from({ length: initialCount }, () => ({ fullName: "", email: "", phone: "", college: "" })));
         } else {
             setTeamMembers([]);
         }
     }, [event, minTeamSize]);
+
+    const addMember = () => {
+        if (teamMembers.length + 1 < maxTeamSize) {
+            setTeamMembers([...teamMembers, { fullName: "", email: "", phone: "", college: "" }]);
+        } else {
+            alert(`Maximum squad size of ${maxTeamSize} reached.`);
+        }
+    };
+
+    const removeMember = (index) => {
+        if (teamMembers.length + 1 > minTeamSize) {
+            const newMembers = [...teamMembers];
+            newMembers.splice(index, 1);
+            setTeamMembers(newMembers);
+        } else {
+            alert(`Minimum squad size of ${minTeamSize} required for this sector.`);
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value, type, files } = e.target;
@@ -178,7 +198,7 @@ export default function RegistrationForm({ event, onClose }) {
                         <div className="saarang-block bg-black p-8 md:p-12 space-y-12 border-4 border-white/5 hover:border-teal-500/30 transition-all">
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-teal-400">Ident_String (Name)</label>
+                                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-teal-400">Lead_Operator (Name)</label>
                                     <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-transparent border-b-2 border-white/10 py-4 text-white focus:outline-none focus:border-teal-500 transition-colors uppercase font-bold text-xl" placeholder="Full Name" />
                                 </div>
                                 <div className="space-y-4">
@@ -199,28 +219,66 @@ export default function RegistrationForm({ event, onClose }) {
                         {/* Team Section */}
                         {isTeamEvent && (
                              <div className="saarang-block bg-black p-8 md:p-12 space-y-12 border-4 border-white/5">
-                                <h3 className="text-[10px] font-black tracking-[0.4em] text-teal-500 uppercase flex items-center gap-4">
-                                    <div className="w-6 h-[1px] bg-teal-500"></div> Squad_Encryption
-                                </h3>
-                                <div className="space-y-4">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-teal-400">Squad_ID (Team Name)</label>
-                                    <input required type="text" name="teamName" value={formData.teamName} onChange={handleChange} className="w-full bg-transparent border-b-2 border-white/10 py-4 text-white focus:outline-none focus:border-teal-500 transition-colors uppercase font-bold text-xl" placeholder="Team Name" />
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-[10px] font-black tracking-[0.4em] text-teal-500 uppercase flex items-center gap-4">
+                                        <div className="w-6 h-[1px] bg-teal-500"></div> Squad_Encryption
+                                    </h3>
+                                    {teamMembers.length + 1 < maxTeamSize && (
+                                        <button type="button" onClick={addMember} className="px-4 py-2 border border-teal-500 text-teal-400 text-[9px] font-black uppercase tracking-widest hover:bg-teal-500 hover:text-black transition-all">
+                                            + Add_Operative
+                                        </button>
+                                    )}
                                 </div>
+
+                                {maxTeamSize > 1 && (
+                                    <div className="space-y-4">
+                                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-teal-400">Squad_ID (Team Name)</label>
+                                        <input required type="text" name="teamName" value={formData.teamName} onChange={handleChange} className="w-full bg-transparent border-b-2 border-white/10 py-4 text-white focus:outline-none focus:border-teal-500 transition-colors uppercase font-bold text-xl" placeholder="Team Name" />
+                                    </div>
+                                )}
+                                
                                 <div className="space-y-10">
                                     {teamMembers.map((member, index) => (
-                                        <div key={index} className="p-8 border border-white/10 bg-white/[0.02]">
-                                             <h4 className="text-[9px] font-black uppercase tracking-[0.5em] text-teal-400/60 mb-8">Operative_{index + 2}</h4>
+                                        <div key={index} className="p-8 border border-white/10 bg-white/[0.02] relative group">
+                                             <div className="flex justify-between items-center mb-8">
+                                                <h4 className="text-[9px] font-black uppercase tracking-[0.5em] text-teal-400/60">Operative_{index + 2}</h4>
+                                                <button type="button" onClick={() => removeMember(index)} className="text-red-500/40 hover:text-red-500 text-[9px] font-black uppercase tracking-widest">
+                                                    [ Remove ]
+                                                </button>
+                                             </div>
                                              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                                <input required type="text" value={member.fullName} onChange={(e) => {
-                                                    const newMembers = [...teamMembers];
-                                                    newMembers[index].fullName = e.target.value;
-                                                    setTeamMembers(newMembers);
-                                                }} className="bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-teal-500 text-sm font-bold uppercase tracking-widest" placeholder="NAME" />
-                                                <input required type="tel" value={member.phone} onChange={(e) => {
-                                                    const newMembers = [...teamMembers];
-                                                    newMembers[index].phone = e.target.value;
-                                                    setTeamMembers(newMembers);
-                                                }} className="bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-teal-500 text-sm font-bold uppercase tracking-widest" placeholder="PHONE" />
+                                                <div className="space-y-2">
+                                                    <label className="text-[8px] font-black text-white/30 uppercase tracking-widest">Identify</label>
+                                                    <input required type="text" value={member.fullName} onChange={(e) => {
+                                                        const newMembers = [...teamMembers];
+                                                        newMembers[index].fullName = e.target.value;
+                                                        setTeamMembers(newMembers);
+                                                    }} className="w-full bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-teal-500 text-sm font-bold uppercase tracking-widest" placeholder="NAME" />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[8px] font-black text-white/30 uppercase tracking-widest">Signal</label>
+                                                    <input required type="email" value={member.email} onChange={(e) => {
+                                                        const newMembers = [...teamMembers];
+                                                        newMembers[index].email = e.target.value;
+                                                        setTeamMembers(newMembers);
+                                                    }} className="w-full bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-teal-500 text-sm font-bold uppercase tracking-widest" placeholder="EMAIL" />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[8px] font-black text-white/30 uppercase tracking-widest">Comm_Link</label>
+                                                    <input required type="tel" value={member.phone} onChange={(e) => {
+                                                        const newMembers = [...teamMembers];
+                                                        newMembers[index].phone = e.target.value;
+                                                        setTeamMembers(newMembers);
+                                                    }} className="w-full bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-teal-500 text-sm font-bold uppercase tracking-widest" placeholder="PHONE" />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[8px] font-black text-white/30 uppercase tracking-widest">Origin_Node</label>
+                                                    <input required type="text" value={member.college} onChange={(e) => {
+                                                        const newMembers = [...teamMembers];
+                                                        newMembers[index].college = e.target.value;
+                                                        setTeamMembers(newMembers);
+                                                    }} className="w-full bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-teal-500 text-sm font-bold uppercase tracking-widest" placeholder="COLLEGE" />
+                                                </div>
                                              </div>
                                         </div>
                                     ))}

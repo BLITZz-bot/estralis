@@ -50,7 +50,7 @@ export default function PrizePool() {
           className="mb-20"
         >
           <span className="astral-eyebrow text-teal-500 mb-6 block">Transmission Est. 404-X</span>
-          <h2 className="astral-heading text-5xl md:text-7xl lg:text-8xl mb-4 uppercase">Prize Cache</h2>
+          <h2 className="astral-heading text-5xl md:text-7xl lg:text-8xl mb-4 uppercase">Prize Pool</h2>
           <div className="saarang-block mx-auto inline-block px-12 py-3 mt-4">
             <p className="saarang-serif italic text-teal-400 text-xl md:text-2xl">The Cumulative Interstellar Pool</p>
           </div>

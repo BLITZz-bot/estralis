@@ -534,7 +534,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
         // Group data by event
         const grouped = registrations.reduce((acc, curr) => {
-            const title = curr.eventTitle || "Uncategorized";
+            const title = curr.event_title || "Uncategorized";
             if (!acc[title]) acc[title] = [];
             acc[title].push(curr);
             return acc;
@@ -572,6 +572,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
             // Add data
             grouped[eventTitle].forEach(reg => {
+                const teamCount = (reg.team_members && Array.isArray(reg.team_members)) ? reg.team_members.length : 0;
+                const totalParticipants = 1 + teamCount;
+
                 // 1. ADD LEADER ROW
                 worksheet.addRow({
                     passType: reg.pass_type || "Standard Pass",
@@ -584,7 +587,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                     phone: reg.phone,
                     college: reg.college,
                     paymentId: reg.razorpay_payment_id || "N/A",
-                    teamMembers: (reg.team_members?.length > 0) ? `${reg.team_members.length} Teammates` : "Individual"
+                    teamMembers: (teamCount > 0) ? `Total: ${totalParticipants} (Lead + ${teamCount})` : "Solo Registration"
                 });
 
                 // 2. ADD TEAMMATE ROWS (If any)
@@ -797,7 +800,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Squad Matrix</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Access Tier</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Credit Flow</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Order Hash</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Payment ID</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest">Status</th>
                                                 </tr>
                                             </thead>
