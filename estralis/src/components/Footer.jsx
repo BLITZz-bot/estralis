@@ -72,7 +72,7 @@ export default function Footer() {
           <div>
             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40 mb-6">Contact_Freq</h4>
             <div className="space-y-4">
-              <div className="text-[12px] font-black tracking-[0.2em] uppercase text-teal-300 mb-2">
+              <div className="text-[12px] font-black tracking-[0.2em] uppercase text-teal-300 mb-2 cursor-pointer">
                 Bharath
               </div>
               <a href="mailto:bharatha9483@gmail.com" className="block group">
@@ -100,7 +100,7 @@ export default function Footer() {
       {/* Developer Reveal */}
       <div className="mt-20 flex flex-col items-center gap-4">
         <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">
-          Crafted_By
+          Designed & Developed_By
         </div>
         <div className="relative" ref={popupRef}>
           <button

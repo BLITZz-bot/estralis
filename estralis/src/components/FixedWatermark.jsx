@@ -9,7 +9,7 @@ export default function FixedWatermark() {
         transition={{ delay: 1, duration: 1 }}
         className="flex items-center gap-4 px-4 pr-1"
       >
-        <span className="text-[9px] font-black tracking-[0.6em] uppercase text-white/30">
+        <span className="text-[9px] font-black tracking-[0.6em] uppercase text-white/30 cursor-pointer pointer-events-auto">
           BHARATH
         </span>
       </motion.div>
