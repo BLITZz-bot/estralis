@@ -570,26 +570,30 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
 
   return (
     <div className={`relative w-full py-32 border-b ${t.borderB} group overflow-hidden`}>
-      <SectionBackground 
-        src={bgImage} 
-        alt="Zone Background" 
+      <SectionBackground
+        src={bgImage}
+        alt="Zone Background"
       />
 
-      <div className="max-w-[1700px] mx-auto px-4 md:px-6 relative z-10 flex flex-col xl:grid xl:grid-cols-[1fr_3fr] gap-4 md:gap-16 items-start">
+      <div className="max-w-[1700px] mx-auto px-4 md:px-6 relative z-10 grid grid-cols-[auto_1fr] md:grid-cols-[1fr_3fr] gap-4 md:gap-16 items-start">
         {/* Massive Category Title (Saarang Style) */}
-        <div className="flex flex-row xl:flex-col items-center xl:items-start text-center xl:text-left sticky top-24 pr-4 md:pr-0 w-full xl:w-auto mb-8 xl:mb-0 overflow-hidden">
+        <div className="flex flex-col items-center xl:items-start text-center xl:text-left sticky top-24 pr-2 md:pr-0">
           <motion.h2 
-            initial={{ opacity: 0.3, filter: "blur(4px)" }}
-            whileInView={{ opacity: 1, filter: "blur(0px)", color: ["rgba(255,255,255,0.3)", "rgba(255,255,255,1)", "rgba(255,255,255,0.5)"], textShadow: ["0 0 0px rgba(255,255,255,0)", "0 0 20px rgba(255,255,255,0.5)", "0 0 0px rgba(255,255,255,0)"] }}
+            initial={{ opacity: 0.3, filter: "brightness(0.5) blur(2px)" }}
+            whileInView={{ 
+              opacity: 1, 
+              filter: "brightness(1.5) blur(0px)",
+              textShadow: ["0 0 0px rgba(45,212,191,0)", "0 0 20px rgba(45,212,191,0.5)", "0 0 0px rgba(45,212,191,0)"]
+            }}
             viewport={{ once: false, margin: "-100px" }}
-            transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
-            className={`saarang-banner-text text-[15vw] md:text-[8vw] lg:text-[10vw] text-white/50 leading-[0.85] mb-4 ${t.hoverText} transition-colors duration-700 text-center flex xl:block gap-2`}
+            transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+            className={`saarang-banner-text text-[10vw] md:text-[8vw] lg:text-[10vw] text-white/50 leading-[0.85] mb-4 ${t.hoverText} transition-colors duration-700 text-center`}
           >
             {title.split("").map((char, i) => (
               <span key={i} className="block">{char}</span>
             ))}
           </motion.h2>
-          <div className="saarang-block mt-0 xl:mt-8 ml-4 xl:ml-0 flex-1">
+          <div className="saarang-block mt-4 md:mt-8">
             <p className={`saarang-serif italic text-[10px] md:text-xl lg:text-2xl ${t.text}`}>{subtitle}</p>
           </div>
         </div>
@@ -704,8 +708,8 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 py-4 text-[10px] font-black tracking-[0.3em] transition-all duration-300 ${activeTab === tab.id
-                    ? "bg-teal-500 text-black translate-y-[-1px]"
-                    : "text-white/40 hover:text-teal-400 hover:bg-white/5"
+                  ? "bg-teal-500 text-black translate-y-[-1px]"
+                  : "text-white/40 hover:text-teal-400 hover:bg-white/5"
                   }`}
               >
                 {tab.label}
@@ -959,9 +963,9 @@ export default function Schedule({ onModalToggle }) {
         />
 
         {/* Zone 3: Gaming/Tech */}
-        <CategoryZone 
+        <CategoryZone
           title="LOGIC"
-          subtitle="Gaming, Sports & Tech"    
+          subtitle="Gaming, Sports & Tech"
           events={[...eventsDay1, ...eventsDay2].filter(e => ["Gaming", "Tech", "Sports"].includes(e.category))}
           onEventClick={setSelectedEvent}
           eventStatuses={eventStatuses}

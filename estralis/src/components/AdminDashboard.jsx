@@ -734,23 +734,23 @@ export default function AdminDashboard({ isOpen, onClose }) {
                         {activeTab === "registrations" ? (
                             <>
                                 {/* SUMMARY METRICS OVERVIEW */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 relative z-10">
-                                    <div className="astral-glass p-5 border-teal-500/10 flex flex-col justify-center">
+                                <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 relative z-10 pb-4 snap-x hide-scrollbar">
+                                    <div className="min-w-[280px] sm:min-w-0 astral-glass p-5 border-teal-500/10 flex flex-col justify-center snap-center">
                                         <p className="text-teal-400/40 text-[9px] font-black uppercase tracking-[0.2em] mb-1">Total Passengers</p>
                                         <h4 className="text-2xl font-black text-white font-mono">{registrations.length}</h4>
                                         <div className="w-10 h-0.5 bg-teal-500 mt-2 rounded-full" />
                                     </div>
-                                    <div className="astral-glass p-5 border-cyan-500/10 flex flex-col justify-center">
+                                    <div className="min-w-[280px] sm:min-w-0 astral-glass p-5 border-cyan-500/10 flex flex-col justify-center snap-center">
                                         <p className="text-cyan-400/40 text-[9px] font-black uppercase tracking-[0.2em] mb-1">Revenue Estimate</p>
                                         <h4 className="text-2xl font-black text-white font-mono">₹{registrations.reduce((acc, reg) => acc + (parseFloat(reg.amount_paid?.toString().replace(/[^\d.]/g, '') || 0)), 0).toLocaleString('en-IN')}</h4>
                                         <div className="w-10 h-0.5 bg-cyan-500 mt-2 rounded-full" />
                                     </div>
-                                    <div className="astral-glass p-5 border-blue-500/10 flex flex-col justify-center">
+                                    <div className="min-w-[280px] sm:min-w-0 astral-glass p-5 border-blue-500/10 flex flex-col justify-center snap-center">
                                         <p className="text-blue-400/40 text-[9px] font-black uppercase tracking-[0.2em] mb-1">Active Events</p>
                                         <h4 className="text-2xl font-black text-white font-mono">{new Set(registrations.map(r => r.event_title)).size}</h4>
                                         <div className="w-10 h-0.5 bg-blue-500 mt-2 rounded-full" />
                                     </div>
-                                    <div className="astral-glass p-5 border-pink-500/10 flex flex-col justify-center bg-pink-500/5">
+                                    <div className="min-w-[280px] sm:min-w-0 astral-glass p-5 border-pink-500/10 flex flex-col justify-center bg-pink-500/5 snap-center">
                                         <p className="text-pink-400/40 text-[9px] font-black uppercase tracking-[0.2em] mb-1">Real-time status</p>
                                         <h4 className="text-2xl font-black text-white flex items-center gap-3">
                                             ACTIVE

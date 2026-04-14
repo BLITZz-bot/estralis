@@ -180,8 +180,23 @@ export default function CountdownSciFi() {
         <span className="astral-eyebrow text-[10px] tracking-[0.3em] uppercase">Transmission Est. 2026</span>
       </motion.div>
 
-      {/* Dynamic Titles */}
-      {/* Dynamic Titles Removed to avoid duplication with FestivalHero */}
+      {/* Section Header */}
+      <div className="text-center mb-10 relative z-10">
+        <motion.span 
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="astral-eyebrow text-teal-500 mb-2 block"
+        >
+          TEMPORAL STATUS
+        </motion.span>
+        <motion.h2 
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+        >
+          COUNTDOWN TO <span className="text-teal-400">LIFT-OFF</span>
+        </motion.h2>
+      </div>
       <canvas
         ref={canvasRef}
         className={`absolute pointer-events-none z-0 w-[150vw] h-[150vh] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${t.finished ? 'block' : 'hidden'}`}
