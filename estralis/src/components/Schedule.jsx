@@ -548,9 +548,11 @@ function EventCard({ title, fee, category, onClick, isOpen, t }) {
           </span>
         </div>
 
-        <h3 className={`text-xl sm:text-2xl font-black text-white mb-4 leading-tight transition-colors uppercase tracking-tight break-words overflow-hidden ${theme.hoverText}`}>
-          {title}
-        </h3>
+        <div className="min-h-[3.5rem] sm:min-h-[4rem] flex flex-col justify-center">
+          <h3 className={`text-xl sm:text-2xl font-black text-white leading-tight transition-colors uppercase tracking-tight break-words overflow-hidden ${theme.hoverText}`}>
+            {title}
+          </h3>
+        </div>
       </div>
 
       <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/5">
@@ -593,8 +595,8 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
               <span key={i} className="xl:block">{char}</span>
             ))}
           </motion.h2>
-          <div className="saarang-block mt-0 xl:mt-8 ml-4 xl:ml-0 flex-1">
-            <p className={`saarang-serif italic text-[10px] md:text-xl lg:text-2xl ${t.text}`}>{subtitle}</p>
+          <div className="saarang-block mt-0 xl:mt-8 ml-4 xl:ml-0 flex-1 max-w-[150px] sm:max-w-none">
+            <p className={`saarang-serif italic text-[8px] sm:text-[10px] md:text-xl lg:text-2xl ${t.text} leading-tight`}>{subtitle}</p>
           </div>
         </div>
 
