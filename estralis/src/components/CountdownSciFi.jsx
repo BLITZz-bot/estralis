@@ -126,7 +126,7 @@ export default function CountdownSciFi() {
           shadow-[0_20px_50px_rgba(0,0,0,0.5)]
           flex flex-col items-center justify-center group transition-all hover:bg-teal-500/10"
       >
-        <span className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter text-white leading-none font-astral group-hover:text-teal-400 transition-colors">
+        <span className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter text-white leading-none font-astral group-hover:text-teal-400 transition-colors">
           {String(v).padStart(2, "0")}
         </span>
       </div>
@@ -153,7 +153,7 @@ export default function CountdownSciFi() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 20, opacity: 0 }}
             transition={{ type: "spring", stiffness: 320, damping: 24 }}
-            className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-cyan-400 leading-none font-mono"
+            className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-cyan-400 leading-none font-mono"
           >
             {String(v).padStart(2, "0")}
           </motion.span>
