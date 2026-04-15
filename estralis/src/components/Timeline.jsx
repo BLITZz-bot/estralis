@@ -31,8 +31,8 @@ export default function Timeline() {
     <section id="timeline" className="relative py-24 md:py-32 overflow-hidden group">
       
       <SectionBackground 
-        src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80" 
-        alt="Temporal Sequence" 
+        src="https://images.unsplash.com/photo-1544256718-3bcf237f3974?auto=format&fit=crop&q=80" 
+        alt="Temporal Clock" 
       />
 
       <div className="relative z-10 px-6 max-w-7xl mx-auto">
