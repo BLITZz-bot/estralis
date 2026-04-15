@@ -45,7 +45,7 @@ export default function Venue() {
             href="https://maps.google.com/?q=Gopalan+College+of+Engineering+and+Management"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-10 py-4 bg-teal-500 text-black font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl hover:bg-white hover:shadow-[0_0_30px_rgba(45,212,191,0.4)] transition-all font-astral w-fit text-center"
+            className="px-10 py-4 bg-teal-500 text-black font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl hover:bg-white hover:shadow-[0_0_30px_rgba(45,212,191,0.4)] hover:scale-105 active:scale-95 transition-all duration-300 font-astral w-fit text-center"
           >
             OPEN IN GOOGLE MAPS
           </a>
@@ -55,9 +55,15 @@ export default function Venue() {
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
+          whileHover={{ scale: 1.02 }}
           viewport={{ once: true, margin: "-120px" }}
-          transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}
-          className="w-full h-full min-h-[400px] astral-glass overflow-hidden relative group z-10 p-2 border-teal-500/20"
+          transition={{ 
+            duration: 0.9, 
+            ease: "easeOut", 
+            delay: 0.2,
+            scale: { type: "spring", stiffness: 300, damping: 20 }
+          }}
+          className="w-full h-full min-h-[400px] astral-glass overflow-hidden relative group z-10 p-2 border-teal-500/20 cursor-pointer"
         >
           <div className="w-full h-full rounded-2xl overflow-hidden relative">
           {/* Floating Expand Button (Always visible on mobile, hover on desktop) */}
