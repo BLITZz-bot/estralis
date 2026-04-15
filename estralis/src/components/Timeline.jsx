@@ -31,15 +31,15 @@ export default function Timeline() {
     <section id="timeline" className="relative py-24 md:py-32 overflow-hidden group">
       
       <SectionBackground 
-        src="https://images.unsplash.com/photo-1544256718-3bcf237f3974?auto=format&fit=crop&q=80" 
-        alt="Chronological Track" 
+        src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80" 
+        alt="Temporal Sequence" 
       />
 
       <div className="relative z-10 px-6 max-w-7xl mx-auto">
         {/* Block Header */}
         <div className="flex flex-col mb-16 md:mb-24 text-center md:text-left">
-         <span className="astral-eyebrow text-teal-500 mb-2 block">SEQUENCE LOG</span>
-         <h2 className="saarang-banner-text text-5xl sm:text-6xl md:text-[6rem] lg:text-[8rem] text-teal-400 leading-[0.85] tracking-tighter">
+         <span className="astral-eyebrow text-teal-500 mb-2 block uppercase font-astral tracking-[0.5em]">Sequence_Log</span>
+         <h2 className="astral-heading text-5xl sm:text-6xl md:text-[6rem] lg:text-[8rem] text-white leading-[0.85] tracking-tighter uppercase">
             TIMELINE
          </h2>
       </div>
