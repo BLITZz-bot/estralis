@@ -28,10 +28,10 @@ export default function About({ onOpenProtocol }) {
           className="w-full md:w-1/3 flex flex-col text-center md:text-left relative md:sticky md:top-32 z-0"
         >
           <span className="astral-eyebrow text-teal-500 mb-4 block uppercase font-astral">Decrypting_Data</span>
-          <h2 className="astral-heading text-5xl sm:text-6xl lg:text-7xl mb-2 text-white uppercase tracking-tighter">
+          <h2 className="astral-heading text-5xl sm:text-6xl lg:text-6xl mb-2 text-white uppercase tracking-tighter">
             ABOUT
           </h2>
-          <h2 className="saarang-banner-text text-6xl sm:text-7xl lg:text-[5rem] text-teal-400 font-astral">
+          <h2 className="saarang-banner-text text-6xl sm:text-7xl lg:text-[4rem] text-teal-400 font-astral">
             ESTRALIS
           </h2>
         </motion.div>
