@@ -138,13 +138,12 @@ export default function CountdownSciFi() {
   const AnimatedBox = ({ v, l }) => (
     <div className="flex flex-col items-center">
       <div
-        className="w-[72px] h-[82px] sm:w-[88px] sm:h-[96px] md:w-[106px] md:h-[116px]
-          rounded-2xl
-          bg-black/40
+        className="w-[72px] h-[82px] sm:w-[88px] sm:h-[96px] md:w-[110px] md:h-[120px]
+          bg-slate-900/40
           backdrop-blur-xl
-          border border-cyan-500/30
-          shadow-[0_0_30px_rgba(34,211,238,0.1)]
-          flex flex-col items-center justify-center overflow-hidden"
+          border-l-4 border-l-cyan-500 border-r border-y border-white/5
+          shadow-[0_20px_50px_rgba(0,0,0,0.5)]
+          flex flex-col items-center justify-center overflow-hidden group transition-all hover:bg-cyan-500/10"
       >
         <AnimatePresence mode="popLayout">
           <motion.span
@@ -153,7 +152,7 @@ export default function CountdownSciFi() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 20, opacity: 0 }}
             transition={{ type: "spring", stiffness: 320, damping: 24 }}
-            className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-cyan-400 leading-none font-mono"
+            className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter text-cyan-400 leading-none font-astral"
           >
             {String(v).padStart(2, "0")}
           </motion.span>

@@ -70,7 +70,7 @@ export default function PrizePool() {
 
           <div className="inline-block relative">
              <h1 className="saarang-banner-text text-[12vw] md:text-[10vw] lg:text-[8vw] text-white tracking-tighter leading-none drop-shadow-[0_20px_60px_rgba(45,212,191,0.2)]">
-                <Counter value="200000" duration={3} />
+                <Counter value="210000" duration={3} />
              </h1>
           </div>
 

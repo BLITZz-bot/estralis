@@ -46,28 +46,17 @@ export const eventsDay1 = [
     prize: "₹30,000",
     minTeamSize: 2,
     maxTeamSize: 15,
-    rules: ["1. Participants must be currently enrolled students of their respective institutions.",
-      "2. Each team must consist of 1 to 3 members. Individual participation is allowed.",
-      "3. All participants must carry a valid college ID card for verification.",
-      "4. The event will be conducted on lab computers provided by the organizers. Use of personal laptops is strictly prohibited.",
-      "5. The competition will run for a total duration of 3 hours, and teams must adhere strictly to the time limits.",
-      "6. Participants will access the platform through a secured browser environment. Switching tabs, accessing external websites, or attempting to bypass system restrictions will result in penalties or disqualification.",
-      "7. Mobile phones, smart devices, and any external storage devices are not permitted during the event. Participants may be asked to keep their phones aside before the competition begins.",
-      "8. Teams must solve the challenges sequentially. A level must be completed to unlock the next level.",
-      "9. A “Hint” option will be available. Using a hint will result in a time and points penalty as specified during the event.",
-      "10. The leaderboard and scoring will be managed automatically by the system. The decision of the organizing team regarding scoring, eliminations, and final results will be final and binding.",
-      "11. Eliminations will occur after designated levels based on performance.",
-      "12. Any attempt to tamper with the system, share answers, or engage in unfair practices will lead to immediate disqualification.",
-      "13. Specific instructions and login credentials will be provided at the venue before the event begins.",
-      "14. Prizes will be awarded based on final rankings.",
-      "15. Please check the event schedule before registering multiple events. Participants are responsible for checking the event schedule. The MANAGEMENT is not responsible for clashes with other events, and no refund will be provided in case of overlap.The participants from Gopalan Group of Institutions should contact the respective event coordinator before registering",
-      "16. Report to the coordinator 30 minutes before the event starts.",
-      "17.Participants of other events will get a complimentary audience pass for VINTARA (Fashion Show).",],
-    coordinators: ["Jyesht M – 8951323830",
-      "Vivek Kashyap – 8850623515",
-      "Thanishka Reddy – 9449119449"],
+    rules: ["Participants must be currently enrolled students of their respective institutions.",
+      "Submit music in advance in MP3 format 2 days prior to the event (no changes on spot)",
+      "Each participant will be allotted a performance time of 4+1 minutes. Exceeding the time limit may result in penalties.",
+      "Only Western dance styles such as Hip-Hop, Freestyle, Contemporary, Jazz, etc., are permitted.​",
+      "Use of dangerous or hazardous props (such as fire, glass, sharp objects, etc.) is strictly prohibited.​",
+      "Performances must be appropriate and respectful. Any vulgar or offensive content will lead to disqualification",
+      "Participants must report to the venue at least 30 minutes prior to their scheduled time.​",
+    ],
+    coordinators: ["Arsha – 8951323830",],
     registerLink: "#",
-    fee: "₹300",
+    fee: "₹1,500",
   },
   {
     time: "10:30 AM",
@@ -75,7 +64,7 @@ export const eventsDay1 = [
     location: "1st Floor",
     description: "A digital creativity challenge where participants create short, engaging videos. From concept and shooting to editing and storytelling, this event tests creativity, trend awareness, and presentation skills.",
     category: "Fun",
-    prize: "₹6,000",
+    prize: "₹9,000",
     minTeamSize: 1,
     maxTeamSize: 1,
     rules: ["*GAME RULES ARE SAME AS FIDE TOURNAMENTS*",
@@ -108,7 +97,7 @@ export const eventsDay1 = [
     ],
     coordinators: ["Saravanan M – 8618648916", "Nithesh – 8431648766"],
     registerLink: "#",
-    fee: "₹250"
+    fee: "₹500"
   },
   {
     time: "11:00 AM",
@@ -116,10 +105,10 @@ export const eventsDay1 = [
     location: "410 Room, 4th Floor,GCEM Campus",
     description: "An adventurous team-based game where participants solve clues and complete challenges to find the final treasure. It encourages logical thinking, teamwork, and quick decision-making under time pressure.",
     category: "Fun",
-    prize: "₹7,500",
+    prize: "₹10,000",
     comboPass: "₹450 (HIGHLIGHT REEL + SHOT CUT)",
-    minTeamSize: 2,
-    maxTeamSize: 3,
+    minTeamSize: 5,
+    maxTeamSize: 5,
     rules: ["1. Participants must be currently enrolled in their college.",
       "2.  Participants must bring a valid college ID card.",
       "3.The participants should not misbehave during the event. If caught misbehaving, it might lead to disqualification.",
@@ -135,7 +124,7 @@ export const eventsDay1 = [
       "13.Participants of other events will get a complimentary audience pass for VINTARA (Fashion Show).",],
     coordinators: ["Abdul Shuaib – 7892698624", "Veeresh Viraktamath – 9380022929"],
     registerLink: "#",
-    fee: "₹300",
+    fee: "₹500",
   },
   {
     time: "11:00 AM",
@@ -163,7 +152,7 @@ export const eventsDay1 = [
     location: "Room 405,406 & 407, 4th Floor, GCEM Campus",
     description: "A test of strength and endurance featuring push-up and plank challenges. Participants compete against time to push their physical limits, showcasing stamina, discipline, and determination.",
     category: "Sports",
-    prize: "₹12,000",
+    prize: "₹7,500",
     minTeamSize: 4,
     maxTeamSize: 4,
     rules: ["All participants should arrive at the venue 30 min prior to the event.", "1. Participants must be currently enrolled students of their respective institutions.",
@@ -221,7 +210,7 @@ export const eventsDay1 = [
       "22.Participants of other events will get a complimentary audience pass for VINTARA (Fashion Show)."],
     coordinators: ["Rajesh – 8073439040", "Pavan - 8073083421", "Darshan R- 7760055444"],
     registerLink: "#",
-    fee: "₹600",
+    fee: "₹500",
   },
   {
     time: "11:00 AM",
@@ -256,9 +245,9 @@ export const eventsDay1 = [
     location: "LAB 3, 4th Floor,GCEM Campus",
     description: "A high-energy vocal percussion battle where participants create beats, rhythms, and musical effects using only their voice. This event challenges creativity, breath control, and rhythm sense as performers showcase unique sound patterns and freestyle skills. Stage presence and crowd engagement play a key role in standing out.",
     category: "Fun",
-    prize: "₹7,500",
+    prize: "₹8,000",
     minTeamSize: 1,
-    maxTeamSize: 2,
+    maxTeamSize: 1,
     rules: ["1. This event consists of two rounds that will be conducted on HackerRank.",
 
       "2. Participants may use any programming language.",
@@ -289,7 +278,7 @@ export const eventsDay1 = [
       "Bettina – 7619689937"
     ],
     registerLink: "#",
-    fee: "₹350",
+    fee: "₹300",
   },
   {
     time: "12:00 PM",
@@ -297,9 +286,9 @@ export const eventsDay1 = [
     location: "Amphitheatre",
     description: "An individual dance competition focusing on western styles such as hip-hop, contemporary, jazz, or freestyle. Participants must showcase technique, expression, and strong stage presence while delivering a powerful and engaging solo performance.",
     category: "Dance",
-    prize: "₹12,000",
-    minTeamSize: 5,
-    maxTeamSize: 8,
+    prize: "₹8,000",
+    minTeamSize: 1,
+    maxTeamSize: 1,
     rules: ["1.	Each team must have 4-8 members.",
       "2.	Performance time limit: 3–4 minutes (strict).",
       "3.	Vulgarity or inappropriate content is strictly prohibited.",
@@ -325,7 +314,7 @@ export const eventsDay1 = [
       "",],
     coordinators: ["Shreeka K - 8861619612", "Vishaka - 8431217851", "Yeshwanth - 8884359993"],
     registerLink: "#",
-    fee: "₹800",
+    fee: "₹500",
     theme: "OPEN THEME"
   },
   {
@@ -334,9 +323,9 @@ export const eventsDay1 = [
     location: "1st Floor, GCEM Campus",
     description: "A competitive gaming event where players battle in BGMI matches to prove their strategy and survival skills. Team coordination, quick reflexes, and tactical gameplay are essential to secure victory.",
     category: "Gaming",
-    prize: "₹12,000",
+    prize: "₹15,000",
     minTeamSize: 5,
-    maxTeamSize: 8,
+    maxTeamSize: 5,
     rules: ["1.	Each team must have 4-8 members.",
       "2.	Performance time limit: 3–4 minutes (strict).",
       "3.	Vulgarity or inappropriate content is strictly prohibited.",
@@ -362,7 +351,7 @@ export const eventsDay1 = [
       "",],
     coordinators: ["Shreeka K - 8861619612", "Vishaka - 8431217851", "Yeshwanth - 8884359993"],
     registerLink: "#",
-    fee: "₹800",
+    fee: "₹1000",
     theme: "OPEN THEME"
   },
 ]
@@ -374,9 +363,9 @@ export const eventsDay2 = [
     location: "Main stage, GCEM Campus",
     description: "A dynamic group dance competition where teams perform energetic western routines. Coordination, formations, creativity, and synchronization are key as groups deliver impactful and entertaining performances.",
     category: "Dance",
-    prize: "₹6,000",
-    minTeamSize: 4,
-    maxTeamSize: 4,
+    prize: "₹30,000",
+    minTeamSize: 8,
+    maxTeamSize: 15,
     rules: ["  1. Participants must be currently enrolled in their respective colleges.",
       "2. Each team must consist of 4 members.",
       "3. All participants must carry a valid college ID card.",
@@ -391,7 +380,7 @@ export const eventsDay2 = [
     ],
     coordinators: ["Himashree - 8885392795", "Pratiksha – 8867114450"],
     registerLink: "#",
-    fee: "₹500"
+    fee: "₹2,500"
   },
   {
     time: "11:00 AM",
@@ -399,9 +388,9 @@ export const eventsDay2 = [
     location: "Main stage, GCEM Campus",
     description: "A thrilling live music competition where bands perform to showcase their musical talent and coordination. Whether it’s original compositions or covers, bands are judged on rhythm, harmony, stage presence, and connection with the audience.",
     category: "Fun",
-    prize: "₹3,500",
-    minTeamSize: 1,
-    maxTeamSize: 2,
+    prize: "₹30,000",
+    minTeamSize: 3,
+    maxTeamSize: 8,
     rules: ["1.	Participants must be currently enrolled students of their respective institutions.",
       "2.	Each team must consist of 1 to 2 members. Individual participation is allowed.",
       "3.	All participants must carry a valid college ID card for verification.",
@@ -422,17 +411,17 @@ export const eventsDay2 = [
     ],
     coordinators: ["Charan Kumar – 9482886761", "Vadla Chaturya - 9986070222"],
     registerLink: "#",
-    fee: "₹200"
+    fee: "₹2,500"
   },
   {
     time: "01:00 PM",
-    title: "FASHION WALK",
+    title: "FASHION SHOW",
     location: "Main stage, GCEM Campus",
     description: "A visually captivating runway event where teams present a predefined theme through style, choreography, and attitude. From costume design to expressions, every element contributes to storytelling on stage. It’s a perfect blend of fashion, creativity, and confidence.",
     category: "Fashion",
-    prize: "₹6,000",
-    minTeamSize: 2,
-    maxTeamSize: 3,
+    prize: "₹45,000",
+    minTeamSize: 8,
+    maxTeamSize: 15,
     rules: ["1. Participants must carry valid college ID card.",
       "2. Teams must report 45 minutes before event start.",
       "3. Topic will be given 30 minutes prior to debate.",
@@ -449,61 +438,61 @@ export const eventsDay2 = [
     coordinators: ["Prince Kumar – 7277402658",
       "Tarun Kumar Pathak – 8073165834"],
     registerLink: "#",
-    fee: "₹300",
+    fee: "₹3,000",
   },
 
-  {
-    time: "06:00 PM",
-    title: "ARTIST PERFORMANCE AND DJ NIGHT",
-    location: "Main stage, GCEM Campus",
-    description: "Step into the spotlight and let your passion ignite the stage, where every move tells a story and every rhythm captivates the soul. Witness an electrifying showcase of talent, energy, and grace, as dancers compete to turn dreams into motion.",
-    category: "Fun",
-    prize: "₹300",
-    minTeamSize: 2,
-    maxTeamSize: 15,
-    rules: ["*Duration: 6-8 minutes per team for their performance*",
-      "All participants should arrive at the venue 1 hour prior to the event.",
-      "1. Music",
-      "• Teams must submit their music tracks in MP3 format via Google Drive/email by 07/03/2026.",
-      "• File name format: College/Group Name.mp3",
-      "• Backup copies of music tracks should be brought on USB drive.",
-      "• Music should be appropriate and not contain any explicit content.",
-      ".",
-      "2. Choreography",
-      "• All dance forms are allowed (Classical, Hip-hop, Semi-classical, Folk,Contemporary).",
-      "• Choreography should be original or legally permissible.",
-      ".",
-      "3. Costumes",
-      "• Costumes should be appropriate and respectful of cultural sensitivities.",
-      "• Any form of obscenity will result in disqualification.",
-      ".",
-      "4. Props",
-      "• Props are allowed but must be handled by participants themselves.",
-      "• Dangerous/Problematic props (fire, sharp objects,powders etc) are prohibited.",
-      ".",
-      // "• There will be 2 prizes if more than 8 registrations; otherwise, only 1 prize",
-      "5. Note",
-      "• Please check the schedule for overlapping events before registering multiple events",
-      "• If registered for overlapping events, MANAGEMENT is not responsible and no refund will be initiated.The participants from Gopalan Group of Institutions should contact the respective event coordinators before registering",
-      "• Arrive at the venue and report to the coordinators 1 hour before the event starts",
-      ".",
-      "CODE OF CONDUCT",
-      "• Participants are expected to maintain decorum and sportsmanship.",
-      "• Any form of misbehavior or disrespect towards organizers, judges, or fellow will lead to disqualification.",
-      "• Vulgar language, inappropriate gestures, and offensive content are strictly prohibited.",
-      "• If technical issues occur, participants may be allowed to restart (subject to judges approval).",
-      "• The decision of the judges is final and binding.",
-      "• Performances are judged based on choreography, synchronization,expression, creativity, and overall impact.",
-      ".",
-      "SAFETY",
-      "•Participants should ensure their performance is safe and does not pose any risk to themselves or the audience",
-      "13.Participants of other events will get a complimentary audience pass for VINTARA (Fashion Show).",
+  // {
+  //   time: "06:00 PM",
+  //   title: "ARTIST PERFORMANCE AND DJ NIGHT",
+  //   location: "Main stage, GCEM Campus",
+  //   description: "Step into the spotlight and let your passion ignite the stage, where every move tells a story and every rhythm captivates the soul. Witness an electrifying showcase of talent, energy, and grace, as dancers compete to turn dreams into motion.",
+  //   category: "Fun",
+  //   prize: "₹300",
+  //   minTeamSize: 2,
+  //   maxTeamSize: 15,
+  //   rules: ["*Duration: 6-8 minutes per team for their performance*",
+  //     "All participants should arrive at the venue 1 hour prior to the event.",
+  //     "1. Music",
+  //     "• Teams must submit their music tracks in MP3 format via Google Drive/email by 07/03/2026.",
+  //     "• File name format: College/Group Name.mp3",
+  //     "• Backup copies of music tracks should be brought on USB drive.",
+  //     "• Music should be appropriate and not contain any explicit content.",
+  //     ".",
+  //     "2. Choreography",
+  //     "• All dance forms are allowed (Classical, Hip-hop, Semi-classical, Folk,Contemporary).",
+  //     "• Choreography should be original or legally permissible.",
+  //     ".",
+  //     "3. Costumes",
+  //     "• Costumes should be appropriate and respectful of cultural sensitivities.",
+  //     "• Any form of obscenity will result in disqualification.",
+  //     ".",
+  //     "4. Props",
+  //     "• Props are allowed but must be handled by participants themselves.",
+  //     "• Dangerous/Problematic props (fire, sharp objects,powders etc) are prohibited.",
+  //     ".",
+  //     // "• There will be 2 prizes if more than 8 registrations; otherwise, only 1 prize",
+  //     "5. Note",
+  //     "• Please check the schedule for overlapping events before registering multiple events",
+  //     "• If registered for overlapping events, MANAGEMENT is not responsible and no refund will be initiated.The participants from Gopalan Group of Institutions should contact the respective event coordinators before registering",
+  //     "• Arrive at the venue and report to the coordinators 1 hour before the event starts",
+  //     ".",
+  //     "CODE OF CONDUCT",
+  //     "• Participants are expected to maintain decorum and sportsmanship.",
+  //     "• Any form of misbehavior or disrespect towards organizers, judges, or fellow will lead to disqualification.",
+  //     "• Vulgar language, inappropriate gestures, and offensive content are strictly prohibited.",
+  //     "• If technical issues occur, participants may be allowed to restart (subject to judges approval).",
+  //     "• The decision of the judges is final and binding.",
+  //     "• Performances are judged based on choreography, synchronization,expression, creativity, and overall impact.",
+  //     ".",
+  //     "SAFETY",
+  //     "•Participants should ensure their performance is safe and does not pose any risk to themselves or the audience",
+  //     "13.Participants of other events will get a complimentary audience pass for VINTARA (Fashion Show).",
 
-    ],
-    coordinators: ["Divyashree RM – 7019691887", "Abhishek R - 7019323085"],
-    registerLink: "#",
-    fee: "₹700",
-  },
+  //   ],
+  //   coordinators: ["Divyashree RM – 7019691887", "Abhishek R - 7019323085"],
+  //   registerLink: "#",
+  //   fee: "₹700",
+  // },
 
 ]
 
@@ -536,7 +525,7 @@ function EventCard({ title, fee, category, onClick, isOpen, t }) {
       className={`relative group cursor-pointer astral-glass border-l-4 p-8 h-full flex flex-col justify-between transition-all duration-500 ${theme.borderL} ${theme.hoverBg} hover:border-l-white`}
     >
       {/* Blocky Price Tag (Saarang Style) */}
-      <div className={`absolute top-0 right-0 text-black px-4 py-1.5 font-black text-xs tracking-widest uppercase ${theme.bg}`}>
+      <div className={`absolute top-0 right-0 text-black px-4 py-1.5 font-black text-xs tracking-widest uppercase transition-colors duration-500 rounded-tr-[1.5rem] rounded-bl-2xl ${theme.bg}`}>
         {fee || "FREE"}
       </div>
 
@@ -615,8 +604,69 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
   )
 }
 
-function EventModal({ event, isEventOpen, onClose, onRegister }) {
+function getThemeForCategory(category) {
+  const normalized = category?.toLowerCase();
+  
+  if (["cultural", "dance", "fashion"].includes(normalized)) {
+    return { 
+      text: "text-cyan-400", 
+      hoverText: "group-hover:text-cyan-400", 
+      borderB: "border-b-cyan-500/10", 
+      bg: "bg-cyan-500", 
+      hoverBg: "hover:bg-cyan-500/10", 
+      borderL: "border-l-cyan-500", 
+      bgSoft: "bg-cyan-500/10",
+      accent: "cyan-500" 
+    };
+  }
+  
+  if (["fun"].includes(normalized)) {
+    return { 
+      text: "text-fuchsia-400", 
+      hoverText: "group-hover:text-fuchsia-400", 
+      borderB: "border-b-fuchsia-500/10", 
+      bg: "bg-fuchsia-500", 
+      hoverBg: "hover:bg-fuchsia-500/10", 
+      borderL: "border-l-fuchsia-500", 
+      bgSoft: "bg-fuchsia-500/10",
+      accent: "fuchsia-500"
+    };
+  }
+  
+  if (["gaming", "tech", "sports"].includes(normalized)) {
+    return { 
+      text: "text-blue-400", 
+      hoverText: "group-hover:text-blue-400", 
+      borderB: "border-b-blue-500/10", 
+      bg: "bg-blue-500", 
+      hoverBg: "hover:bg-blue-500/10", 
+      borderL: "border-l-blue-500", 
+      bgSoft: "bg-blue-500/10",
+      accent: "blue-500"
+    };
+  }
+
+  // Default Teal
+  return { 
+    text: "text-teal-400", 
+    hoverText: "group-hover:text-teal-400", 
+    borderB: "border-b-teal-500/10", 
+    bg: "bg-teal-500", 
+    hoverBg: "hover:bg-teal-500/10", 
+    borderL: "border-l-teal-500", 
+    bgSoft: "bg-teal-500/10",
+    accent: "teal-500" 
+  };
+}
+
+export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTheme }) {
   const [activeTab, setActiveTab] = useState("about")
+  
+  const theme = overrideTheme || getThemeForCategory(event?.category);
+  const accentHex = theme.accent === "cyan-500" ? "rgba(6,182,212,0.5)" : 
+                    theme.accent === "fuchsia-500" ? "rgba(217,70,239,0.5)" : 
+                    theme.accent === "blue-500" ? "rgba(59,130,246,0.5)" : 
+                    "rgba(45,212,191,0.5)";
 
   useEffect(() => {
     setActiveTab("about");
@@ -661,21 +711,28 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
             </button>
 
             <div className="space-y-4">
-              <span className="astral-eyebrow text-teal-500 uppercase">
+              <span className={`astral-eyebrow ${theme.text} uppercase`}>
                 {cat} SECTOR
               </span>
-              <h3 className="text-4xl sm:text-6xl font-black text-white leading-[0.9] uppercase tracking-tighter astral-heading">
+              <h3 
+                className="text-3xl sm:text-5xl font-black leading-[1] uppercase tracking-tighter astral-heading max-w-2xl"
+                style={{ 
+                  backgroundImage: `linear-gradient(to bottom, ${accentHex.replace('0.5', '1')}, ${accentHex.replace('0.5', '0.8')})`,
+                  filter: `drop-shadow(0 0 20px ${accentHex})`,
+                  WebkitTextStroke: `1px ${accentHex.replace('0.5', '0.2')}`
+                }}
+              >
                 {event.title}
               </h3>
-              
-              <div className="flex flex-wrap gap-6 pt-2">
+
+              <div className="flex flex-wrap gap-6 pt-6">
                 <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse" />
+                  <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} animate-pulse`} />
                   <span className="text-[10px] font-bold text-white/50 tracking-widest uppercase font-tech">SQUAD SIZE: {teamText}</span>
                 </div>
                 {event.theme && (
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-teal-500/30" />
+                    <div className={`w-1.5 h-1.5 rounded-full ${theme.bgSoft}`} />
                     <span className="text-[10px] font-bold text-white/50 tracking-widest uppercase font-tech">THEME: {event.theme}</span>
                   </div>
                 )}
@@ -696,7 +753,7 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
                 {activeTab === tab.id && (
                   <motion.div
                     layoutId="activeTabUnderline"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-500 shadow-[0_0_10px_rgba(45,212,191,0.5)]"
+                    className={`absolute bottom-0 left-0 right-0 h-0.5 ${theme.bg} shadow-[0_0_10px_${accentHex}]`}
                   />
                 )}
               </button>
@@ -716,27 +773,38 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
               >
                 {activeTab === "about" && (
                   <div className="space-y-12">
-                     <p className="saarang-serif text-white/80 text-xl leading-relaxed italic border-l-4 border-teal-500/30 pl-8">
-                        "{event.description}"
-                      </p>
+                    <p className={`saarang-serif text-white/80 text-xl leading-relaxed italic border-l-4 ${theme.borderL} opacity-30 pl-8`}>
+                      "{event.description}"
+                    </p>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                      <div className="p-8 astral-glass-bright flex flex-col items-center text-center group">
-                        <span className="text-[9px] font-black text-teal-400 uppercase tracking-widest mb-3 font-astral">Price</span>
-                        <span className="text-2xl font-black text-white italic font-astral">{event.fee}</span>
+                    <div className={`grid grid-cols-1 ${event.prize ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-6`}>
+                      <div 
+                        className="p-8 astral-glass-bright flex flex-col items-center text-center group transition-all"
+                        style={{ borderColor: `rgba(${accentHex.match(/\d+, \d+, \d+/)}, 0.2)` }}
+                      >
+                        <span className={`text-[9px] font-black ${theme.text} uppercase tracking-widest mb-3 font-astral`}>Reg Fees</span>
+                        <span className={`text-2xl font-black ${theme.text} italic font-astral`}>{event.fee}</span>
                       </div>
-                      <div className="p-8 astral-glass-bright flex flex-col items-center text-center group">
-                        <span className="text-[9px] font-black text-teal-400 uppercase tracking-widest mb-3 font-astral">Location</span>
+                      <div 
+                        className="p-8 astral-glass-bright flex flex-col items-center text-center group transition-all"
+                        style={{ borderColor: `rgba(${accentHex.match(/\d+, \d+, \d+/)}, 0.2)` }}
+                      >
+                        <span className={`text-[9px] font-black ${theme.text} uppercase tracking-widest mb-3 font-astral`}>Location</span>
                         <span className="text-base font-bold text-white uppercase italic font-tech text-center">@{event.location}</span>
                       </div>
-                      <div className="p-8 astral-glass-bright flex flex-col items-center text-center group">
-                        <span className="text-[9px] font-black text-teal-400 uppercase tracking-widest mb-3 font-astral">Prizes</span>
-                        <span className="text-xl font-black text-teal-400 italic font-astral">{event.prize || "Participation"}</span>
-                      </div>
+                      {event.prize && (
+                        <div 
+                          className="p-8 astral-glass-bright flex flex-col items-center text-center group transition-all"
+                          style={{ borderColor: `rgba(${accentHex.match(/\d+, \d+, \d+/)}, 0.2)` }}
+                        >
+                          <span className={`text-[9px] font-black ${theme.text} uppercase tracking-widest mb-3 font-astral`}>Prizes</span>
+                          <span className={`text-xl font-black ${theme.text} italic font-astral`}>{event.prize}</span>
+                        </div>
+                      )}
                     </div>
 
                     <div className="pt-6 flex justify-center">
-                      <button 
+                      <button
                         onClick={() => setActiveTab("rules")}
                         className="px-10 py-5 bg-white/5 border border-white/10 rounded-2xl text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-black transition-all font-astral"
                       >
@@ -755,9 +823,9 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: idx * 0.05 }}
-                          className="flex items-start gap-6 p-6 astral-glass-bright border-transparent hover:border-teal-500/20 transition-all group"
+                          className={`flex items-start gap-6 p-6 astral-glass-bright border-transparent hover:border-${theme.accent}/20 transition-all group`}
                         >
-                          <span className="text-sm font-black text-teal-500/40 font-astral mt-1">
+                          <span className={`text-sm font-black ${theme.text} opacity-40 font-astral mt-1`}>
                             {(idx + 1).toString().padStart(2, '0')}
                           </span>
                           <p className="text-sm text-white/70 leading-relaxed font-medium font-tech">
@@ -769,17 +837,17 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
 
                     {isEventOpen && (
                       <div className="pt-8 flex flex-col items-center gap-4">
-                         <div className="flex items-center gap-3 text-teal-500/50 mb-2">
-                            <div className="w-12 h-[1px] bg-teal-500/30" />
-                            <span className="text-[9px] font-black tracking-widest uppercase font-astral">Protocol Complete</span>
-                            <div className="w-12 h-[1px] bg-teal-500/30" />
-                         </div>
-                         <button
-                            onClick={() => onRegister(event)}
-                            className="w-full max-w-md py-6 bg-teal-500 text-black text-[12px] font-black tracking-[0.4em] uppercase rounded-2xl hover:bg-white transition-all shadow-[0_0_40px_rgba(45,212,191,0.3)] font-astral"
-                          >
-                            PROCEED_TO_REGISTRY
-                          </button>
+                        <div className={`flex items-center gap-3 ${theme.text} opacity-50 mb-2`}>
+                          <div className={`w-12 h-[1px] ${theme.bgSoft}`} />
+                          <span className="text-[9px] font-black tracking-widest uppercase font-astral">Protocol Complete</span>
+                          <div className={`w-12 h-[1px] ${theme.bgSoft}`} />
+                        </div>
+                        <button
+                          onClick={() => onRegister(event)}
+                          className={`w-full max-w-md py-6 ${theme.bg} text-black text-[12px] font-black tracking-[0.4em] uppercase rounded-2xl hover:bg-white transition-all shadow-[0_0_40px_${accentHex}] font-astral`}
+                        >
+                          PROCEED_TO_REGISTRY
+                        </button>
                       </div>
                     )}
                   </div>
@@ -789,7 +857,11 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
                   <div className="space-y-6">
                     <div className="grid gap-4">
                       {event.coordinators.map((c, i) => {
-                        const [name, phone] = c.split(' – ');
+                        // More robust splitting that handles different hyphen types and spaces
+                        const parts = c.split(/ [–-] |-| – /);
+                        const name = parts[0]?.trim();
+                        const phone = parts[1]?.trim();
+
                         return (
                           <motion.div
                             key={i}
@@ -799,11 +871,16 @@ function EventModal({ event, isEventOpen, onClose, onRegister }) {
                           >
                             <div>
                               <p className="text-white font-black tracking-widest uppercase text-xl font-astral">{name}</p>
-                              <p className="text-[9px] font-black text-teal-500/50 tracking-widest uppercase font-astral mt-1">Coordinator Access</p>
+                              <p className={`text-[9px] font-black ${theme.text} opacity-50 tracking-widest uppercase font-astral mt-1`}>Coordinator Access</p>
                             </div>
                             <div className="text-right">
-                               <p className="text-teal-400 font-bold font-tech text-lg">{phone}</p>
-                               <span className="text-[8px] font-black text-white/20 uppercase tracking-widest font-tech">Secure Line</span>
+                              <a 
+                                href={`tel:${phone}`}
+                                className={`${theme.text} font-bold font-tech text-xl hover:brightness-150 transition-all block`}
+                              >
+                                {phone}
+                              </a>
+                              <span className="text-[8px] font-black text-white/20 uppercase tracking-widest font-tech">Secure Line</span>
                             </div>
                           </motion.div>
                         );
@@ -878,7 +955,12 @@ export default function Schedule({ onModalToggle }) {
         const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/status?t=${Date.now()}`);
         const data = await res.json();
         if (data.success) {
-          setEventStatuses(data.data);
+          // Map snake_case is_open to camelCase isOpen for frontend consistency
+          const mapped = data.data.map(item => ({
+            ...item,
+            isOpen: item.is_open
+          }));
+          setEventStatuses(mapped);
         }
       } catch (err) {
         console.error("Failed to fetch event statuses", err);
@@ -966,10 +1048,6 @@ export default function Schedule({ onModalToggle }) {
           themeObj={{ text: "text-blue-400", hoverText: "group-hover:text-blue-400", borderB: "border-b-blue-500/10", bg: "bg-blue-500", hoverBg: "hover:bg-blue-500/10", borderL: "border-l-blue-500", bgSoft: "bg-blue-500/10" }}
         />
 
-        <div className="py-20 text-center astral-glass mx-6 mt-20 border-teal-500/20">
-          <p className="astral-eyebrow text-teal-400">Archive Transmission End</p>
-          <h3 className="saarang-serif text-3xl mt-4 italic text-white/40">More signals to be decoded soon.</h3>
-        </div>
       </section>
 
       <AnimatePresence>

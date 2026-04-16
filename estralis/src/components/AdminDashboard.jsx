@@ -278,7 +278,12 @@ export default function AdminDashboard({ isOpen, onClose }) {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/status?t=${Date.now()}`);
             const data = await res.json();
             if (data.success) {
-                setEventStatuses(data.data);
+                // Map snake_case is_open to camelCase isOpen for frontend consistency
+                const mapped = data.data.map(item => ({
+                    ...item,
+                    isOpen: item.is_open
+                }));
+                setEventStatuses(mapped);
             }
         } catch (err) {
             console.error("Failed to fetch event statuses", err);
@@ -547,6 +552,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
             // Define columns
             worksheet.columns = [
+                { header: 'Category', key: 'category', width: 15 },
                 { header: 'Pass Type', key: 'passType', width: 20 },
                 { header: 'Amount Paid', key: 'amountPaid', width: 20 },
                 { header: 'Team Name', key: 'teamName', width: 25 },
@@ -577,6 +583,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
                 // 1. ADD LEADER ROW
                 worksheet.addRow({
+                    category: reg.category || "Tech",
                     passType: reg.pass_type || "Standard Pass",
                     amountPaid: reg.amount_paid || "N/A",
                     teamName: reg.team_name || "N/A",
@@ -594,17 +601,18 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 if (reg.team_members && Array.isArray(reg.team_members)) {
                     reg.team_members.forEach((m, idx) => {
                         worksheet.addRow({
+                            category: reg.category || "Tech",
                             passType: reg.pass_type || "Standard Pass",
-                            amountPaid: "---", // Already covered in leader row
+                            amountPaid: reg.amount_paid || "N/A",
                             teamName: reg.team_name || "N/A",
                             id: reg.id,
-                            timestamp: "---", // ONLY ON LEADER ROW AS REQUESTED
+                            timestamp: new Date(reg.timestamp).toLocaleString('en-IN'),
                             fullName: `[MEMBER ${idx + 2}] ${m.fullName}`,
                             email: m.email,
                             phone: m.phone,
-                            college: m.college || reg.college, // Default to leader college if empty
-                            paymentId: "---",
-                            teamMembers: "---"
+                            college: m.college || reg.college,
+                            paymentId: reg.razorpay_payment_id || "N/A",
+                            teamMembers: `Part of ${reg.full_name}'s Team`
                         });
                     });
                 }
@@ -651,8 +659,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
                         <div className="text-center mb-8">
-                            <h2 className="astral-heading text-2xl mb-2">Command Access</h2>
-                            <p className="text-[10px] text-teal-400/50 tracking-[0.3em] uppercase">Authorized Personnel Only</p>
+                            <h2 className="astral-heading text-2xl mb-2">Admin Login</h2>
+                            <p className="text-[10px] text-teal-400/50 tracking-[0.3em] uppercase">Authorized Access Only</p>
                         </div>
                         <form onSubmit={handleLogin} className="space-y-6">
                             <div>
@@ -668,7 +676,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                             </div>
                             {loginError && <p className="text-red-400 text-[10px] font-black uppercase tracking-widest text-center">{loginError}</p>}
                             <button type="submit" className="w-full bg-gradient-to-r from-teal-600 to-cyan-700 text-white font-black tracking-widest uppercase py-4 rounded-xl hover:shadow-[0_0_25px_rgba(45,212,191,0.3)] transition-all">
-                                Initialize Link
+                                Access Dashboard
                             </button>
                         </form>
                     </motion.div>
@@ -683,13 +691,13 @@ export default function AdminDashboard({ isOpen, onClose }) {
                         {/* HEADER */}
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 relative z-10">
                             <div className="text-center md:text-left">
-                                <h2 className="astral-heading text-2xl md:text-4xl">Admin Console</h2>
-                                <p className="text-teal-400/50 text-[10px] font-black uppercase tracking-[0.3em]">Fleet Management System</p>
+                                <h2 className="astral-heading text-2xl md:text-4xl text-white">Admin Dashboard</h2>
+                                <p className="text-teal-400/50 text-[10px] font-black uppercase tracking-[0.3em]">Event Management System</p>
                             </div>
                             <div className="flex items-center justify-center md:justify-end gap-3">
                                 <button onClick={() => { fetchRegistrations(); setCountdown(30); }} className="px-5 py-3 astral-glass rounded-xl text-teal-300 text-[10px] font-black tracking-widest uppercase hover:border-teal-400/50 transition-all flex items-center gap-2">
                                     <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                    SYNC ({countdown}S)
+                                    REFRESH ({countdown}S)
                                 </button>
                                 <button onClick={downloadExcel} className="px-3 py-2 bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 rounded-xl text-[10px] sm:text-sm hover:bg-emerald-600/30 transition flex items-center gap-1.5 font-semibold min-w-0">
                                     <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -702,8 +710,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     className={`px-3 py-2 border rounded-xl text-[10px] sm:text-sm transition flex items-center gap-1.5 font-semibold min-w-0 ${emailing ? 'bg-gray-600/20 border-gray-500/30 text-gray-500' : 'bg-pink-600/20 border-pink-500/30 text-pink-400 hover:bg-pink-600/30'}`}
                                 >
                                     <svg className={`w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 ${emailing ? 'animate-pulse' : ''}`} fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" /></svg>
-                                    <span className="hidden sm:inline">{emailing ? 'Sending...' : 'GMAIL REPORT'}</span>
-                                    <span className="sm:hidden">GMAIL</span>
+                                    <span className="hidden sm:inline">{emailing ? 'Sending...' : 'EMAIL REPORT'}</span>
+                                    <span className="sm:hidden">EMAIL</span>
                                 </button>
                                 <button onClick={onClose} className="p-2 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white transition flex-shrink-0">
                                     <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -715,12 +723,12 @@ export default function AdminDashboard({ isOpen, onClose }) {
                         <div className="relative mb-8 z-10">
                             <div className="flex border-b border-teal-500/10 gap-8 overflow-x-auto whitespace-nowrap hide-scrollbar pr-10">
                                 {[
-                                    { id: "registrations", label: "Fleet Data", color: "text-teal-400", border: "border-teal-500" },
-                                    { id: "controls", label: "Sector Status", color: "text-cyan-400", border: "border-cyan-500" },
-                                    { id: "manage", label: "Data Purge", color: "text-rose-400", border: "border-rose-500" },
-                                    { id: "emails", label: "Signal Broadcast", color: "text-amber-400", border: "border-amber-500" },
-                                    { id: "themeReveal", label: "Theme Launch", color: "text-blue-400", border: "border-blue-500" },
-                                    { id: "eventMailer", label: "Mail Hub", color: "text-emerald-400", border: "border-emerald-500" }
+                                    { id: "registrations", label: "Registrations", color: "text-teal-400", border: "border-teal-500" },
+                                    { id: "controls", label: "Event Controls", color: "text-cyan-400", border: "border-cyan-500" },
+                                    { id: "manage", label: "Database", color: "text-rose-400", border: "border-rose-500" },
+                                    { id: "emails", label: "Automated Reports", color: "text-amber-400", border: "border-amber-500" },
+                                    { id: "themeReveal", label: "Theme Config", color: "text-blue-400", border: "border-blue-500" },
+                                    { id: "eventMailer", label: "Manual Emailer", color: "text-emerald-400", border: "border-emerald-500" }
                                 ].map((tab) => (
                                     <button
                                         key={tab.id}
@@ -788,74 +796,103 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     {fetchError ? (
                                         <div className="p-32 text-center">
                                             <p className="text-red-400 font-black uppercase tracking-widest text-xs mb-4">{fetchError}</p>
-                                            <button onClick={() => fetchRegistrations()} className="px-6 py-3 bg-teal-500/10 border border-teal-500/30 text-teal-400 text-[10px] font-black tracking-widest uppercase rounded-xl hover:bg-teal-500/20 transition-all">Reconnect Signal</button>
+                                            <button onClick={() => fetchRegistrations()} className="px-6 py-3 bg-teal-500/10 border border-teal-500/30 text-teal-400 text-[10px] font-black tracking-widest uppercase rounded-xl hover:bg-teal-500/20 transition-all">Refresh Data</button>
                                         </div>
                                     ) : (
                                         <table className="w-full text-left border-collapse min-w-[1200px]">
                                             <thead className="sticky top-0 bg-[#020617] z-20">
                                                 <tr className="border-b border-teal-500/20">
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Member Detail</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Comms Link</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Mission Segment</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Squad Matrix</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Access Tier</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Credit Flow</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10">Payment ID</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest">Status</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">ID</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Date & Time</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Team Name</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Full Name</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">College</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Email</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Phone</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Team Members</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Event</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Category</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Payment</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest whitespace-nowrap">Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-teal-500/5">
                                                 {filteredData.length > 0 ? filteredData.map((reg) => (
                                                     <tr key={reg.id} className="hover:bg-teal-500/5 transition-all group border-b border-teal-500/5">
                                                         <td className="px-6 py-6 border-r border-teal-500/10">
-                                                            <div className="font-black text-white uppercase tracking-wider text-[11px] group-hover:text-teal-400 transition-colors">{reg.full_name}</div>
-                                                            <div className="text-[9px] font-black text-teal-500/70 mt-1 uppercase tracking-[0.2em]">{reg.college}</div>
+                                                            <div className="text-[9px] font-mono text-cyan-500/60 break-all max-w-[80px]">{reg.id.split('-')[0]}...</div>
+                                                        </td>
+                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
+                                                            <div className="text-[10px] font-black text-white">{new Date(reg.timestamp).toLocaleDateString('en-IN')}</div>
+                                                            <div className="text-[8px] font-bold text-teal-400/40 mt-1">{new Date(reg.timestamp).toLocaleTimeString('en-IN')}</div>
                                                         </td>
                                                         <td className="px-6 py-6 border-r border-teal-500/10">
-                                                            <a href={`mailto:${reg.email}`} className="text-[11px] font-black text-cyan-400 hover:text-cyan-300 transition-all block mb-1">
-                                                                {reg.email}
-                                                            </a>
-                                                            <div className="text-[10px] text-teal-400/40 font-mono tracking-tighter">{reg.phone}</div>
+                                                            <div className="text-[10px] font-black text-teal-400 uppercase tracking-widest whitespace-nowrap">
+                                                                {reg.team_name || "SOLO"}
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
+                                                            <div className="font-black text-white uppercase tracking-wider text-[11px]">{reg.full_name}</div>
                                                         </td>
                                                         <td className="px-6 py-6 border-r border-teal-500/10">
-                                                            <div className="text-[11px] font-black text-white uppercase tracking-widest">{reg.event_title}</div>
-                                                            <div className="text-[9px] text-teal-400/40 mt-1 uppercase font-black tracking-tighter">{new Date(reg.timestamp).toLocaleString('en-IN')}</div>
+                                                            <div className="text-[10px] font-bold text-teal-500/60 uppercase tracking-tight">{reg.college}</div>
                                                         </td>
                                                         <td className="px-6 py-6 border-r border-teal-500/10">
-                                                            {reg.team_name && <div className="text-[9px] font-black text-cyan-500 mb-3 uppercase tracking-widest border-b border-cyan-500/20 pb-2">Squad: {reg.team_name}</div>}
+                                                            <a href={`mailto:${reg.email}`} className="text-[10px] font-bold text-cyan-400 hover:underline break-all">{reg.email}</a>
+                                                        </td>
+                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
+                                                            <span className="text-[10px] text-teal-400 font-mono">{reg.phone}</span>
+                                                        </td>
+                                                        <td className="px-6 py-6 border-r border-teal-500/10 min-w-[280px]">
                                                             {reg.team_members?.length > 0 ? (
-                                                                <div className="space-y-4">
+                                                                <div className="flex flex-col gap-2">
                                                                     {reg.team_members.map((m, idx) => (
-                                                                        <div key={idx} className="bg-teal-500/5 rounded-xl p-3 border border-teal-500/10 group-hover:border-teal-400/20 transition-all">
-                                                                            <div className="text-[10px] font-black text-white uppercase tracking-widest">{m.fullName}</div>
-                                                                            <div className="text-[9px] text-teal-400/40 truncate mt-1">{m.email}</div>
-                                                                            <div className="text-[10px] text-cyan-400/70 font-mono mt-1">{m.phone}</div>
+                                                                        <div key={idx} className="bg-white/5 rounded-lg p-3 border border-white/5 hover:border-teal-500/20 transition-colors">
+                                                                            <div className="flex justify-between items-start mb-1">
+                                                                                <div className="text-[10px] font-black text-white uppercase tracking-wider">{m.fullName}</div>
+                                                                                <div className="text-[8px] font-black text-teal-500/30 uppercase">MEMBER {idx + 1}</div>
+                                                                            </div>
+                                                                            <div className="text-[9px] font-bold text-teal-400/50 uppercase tracking-tight mb-2 truncate">{m.college || reg.college}</div>
+                                                                            <div className="flex flex-col gap-0.5 border-t border-white/5 pt-1.5">
+                                                                                <div className="text-[9px] text-cyan-400/70 font-medium truncate">{m.email}</div>
+                                                                                <div className="text-[9px] text-teal-400/40 font-mono italic">{m.phone}</div>
+                                                                            </div>
                                                                         </div>
                                                                     ))}
                                                                 </div>
-                                                            ) : <span className="text-teal-500/40 text-[9px] font-black uppercase tracking-widest bg-teal-500/5 px-4 py-2 rounded-lg border border-teal-500/10">SOLO PILOT</span>}
+                                                            ) : <span className="text-white/10 text-[9px] font-black uppercase tracking-widest">SOLORIDE</span>}
                                                         </td>
-                                                        <td className="px-6 py-6 whitespace-nowrap border-r border-teal-500/10">
-                                                            <span className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] ${reg.pass_type === 'Combo Pass' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'}`}>
-                                                                {reg.pass_type || "Basic"}
+                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
+                                                            <div className="text-[10px] font-black text-white uppercase">{reg.event_title}</div>
+                                                        </td>
+                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
+                                                            <span className={`px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest ${reg.category === 'Fun' ? 'bg-pink-500/10 text-pink-400' : reg.category === 'Workshop' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-cyan-500/10 text-cyan-400'}`}>
+                                                                {reg.category || "Tech"}
                                                             </span>
                                                         </td>
-                                                        <td className="px-6 py-6 whitespace-nowrap text-[11px] text-white font-black font-mono border-r border-teal-500/10 italic">
-                                                            {reg.amount_paid || "0.00"}
+                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap text-center">
+                                                            <div className="text-[10px] font-black text-emerald-400 uppercase">{reg.amount}</div>
+                                                            <div className="text-[8px] font-mono text-white/20 mt-1">{reg.payment_id || "N/A"}</div>
                                                         </td>
-                                                        <td className="px-6 py-6 whitespace-nowrap text-[10px] text-teal-400/40 font-black font-mono border-r border-teal-500/10">
-                                                            {reg.razorpay_payment_id || "VERIFYING_HASH"}
+                                                        <td className="px-6 py-6 border-r border-teal-500/10">
+                                                            <div className="flex flex-col gap-2">
+                                                                <span className={`w-fit px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest ${reg.pass_type === 'Combo Pass' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'}`}>
+                                                                    {reg.pass_type || "Basic"}
+                                                                </span>
+                                                                <div className="text-base font-black text-white italic">₹{reg.amount_paid || "0.00"}</div>
+                                                                <div className="text-[9px] text-teal-400/20 font-mono truncate max-w-[120px]">{reg.razorpay_payment_id || "PENDING"}</div>
+                                                            </div>
                                                         </td>
                                                         <td className="px-6 py-6 text-center">
                                                             <div className="flex items-center justify-center gap-2">
-                                                                <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.5)] animate-pulse"></div>
-                                                                <span className="text-[8px] font-black text-emerald-400 uppercase tracking-widest">LIVE</span>
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
+                                                                <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">CONFIRMED</span>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                 )) : (
                                                     <tr>
-                                                        <td colSpan="8" className="px-6 py-20 text-center text-gray-500 italic">No registrations found for this selection.</td>
+                                                        <td colSpan="6" className="px-6 py-20 text-center text-gray-500 italic">No records found.</td>
                                                     </tr>
                                                 )}
                                             </tbody>

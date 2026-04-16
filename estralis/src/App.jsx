@@ -26,6 +26,7 @@ import PrizePool from "./components/PrizePool"
 import ThemeRevealModal from "./components/ThemeRevealModal"
 import SectionBackground from "./components/SectionBackground"
 import ProtocolModal from "./components/ProtocolModal"
+import SpecialGuest from "./components/SpecialGuest"
 import { useState, useEffect } from "react"
 
 export default function App() {
@@ -194,6 +195,13 @@ export default function App() {
         <Section id="events">
           <Schedule onModalToggle={setIsScheduleModalOpen} />
         </Section>
+
+        <SpecialGuest />
+        
+        <div className="py-20 text-center astral-glass mx-6 mt-10 border-teal-500/10">
+          <p className="astral-eyebrow text-teal-400">Archive Transmission End</p>
+          <h3 className="saarang-serif text-3xl mt-4 italic text-white/40">More signals to be decoded soon.</h3>
+        </div>
 
         <Timeline />
 

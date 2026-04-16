@@ -251,9 +251,9 @@ export default function RegistrationForm({ event, onClose }) {
                                                     key={index}
                                                     initial={{ opacity: 0, y: 10 }}
                                                     animate={{ opacity: 1, y: 0 }}
-                                                    className="p-6 md:p-8 rounded-2xl border border-white/5 bg-white/[0.03] relative"
+                                                    className="p-6 md:p-8 rounded-3xl border border-white/5 bg-white/[0.03] space-y-6 relative"
                                                 >
-                                                     <div className="flex justify-between items-center mb-6">
+                                                     <div className="flex justify-between items-center mb-2">
                                                         <h4 className="text-[10px] font-black uppercase tracking-widest text-white/40 font-astral">MEMBER 0{index + 2}</h4>
                                                         {isRequired ? (
                                                             <span className="text-teal-500/50 text-[9px] font-black uppercase tracking-widest font-astral px-2 py-1 border border-teal-500/20 rounded-lg">
@@ -266,16 +266,38 @@ export default function RegistrationForm({ event, onClose }) {
                                                         )}
                                                      </div>
                                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                        <input required type="text" value={member.fullName} onChange={(e) => {
-                                                            const newMembers = [...teamMembers];
-                                                            newMembers[index].fullName = e.target.value;
-                                                            setTeamMembers(newMembers);
-                                                        }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="NAME" />
-                                                        <input required type="email" value={member.email} onChange={(e) => {
-                                                            const newMembers = [...teamMembers];
-                                                            newMembers[index].email = e.target.value;
-                                                            setTeamMembers(newMembers);
-                                                        }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="EMAIL" />
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">NAME</label>
+                                                            <input required type="text" value={member.fullName} onChange={(e) => {
+                                                                const newMembers = [...teamMembers];
+                                                                newMembers[index].fullName = e.target.value;
+                                                                setTeamMembers(newMembers);
+                                                            }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="Member Name" />
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">EMAIL</label>
+                                                            <input required type="email" value={member.email} onChange={(e) => {
+                                                                const newMembers = [...teamMembers];
+                                                                newMembers[index].email = e.target.value;
+                                                                setTeamMembers(newMembers);
+                                                            }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="member@email.com" />
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">PHONE</label>
+                                                            <input required type="tel" value={member.phone} onChange={(e) => {
+                                                                const newMembers = [...teamMembers];
+                                                                newMembers[index].phone = e.target.value;
+                                                                setTeamMembers(newMembers);
+                                                            }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="+91 XXXXX XXXXX" />
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">COLLEGE</label>
+                                                            <input required type="text" value={member.college} onChange={(e) => {
+                                                                const newMembers = [...teamMembers];
+                                                                newMembers[index].college = e.target.value;
+                                                                setTeamMembers(newMembers);
+                                                            }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="College Name" />
+                                                        </div>
                                                     </div>
                                                 </motion.div>
                                             );

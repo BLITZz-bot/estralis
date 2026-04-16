@@ -427,7 +427,7 @@ const generatePDFPass = (reg) => {
                 if (teamY > 220 * mmToPt) { doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } }); drawTicketBase(doc); teamY = 80 * mmToPt; }
                 doc.fillColor(activeColor.accent).fontSize(11).font('Helvetica-Bold').text(`Member ${i + 2}: ${m.fullName.toUpperCase()}`, 25 * mmToPt, teamY);
                 teamY += 6 * mmToPt;
-                doc.fillColor('#94a3b8').fontSize(9).font('Helvetica').text(`Email: ${m.email} | Phone: ${m.phone}`, 25 * mmToPt, teamY);
+                doc.fillColor('#94a3b8').fontSize(9).font('Helvetica').text(`Email: ${m.email} | Phone: ${m.phone} | College: ${m.college || reg.college}`, 25 * mmToPt, teamY);
                 teamY += 10 * mmToPt;
             });
         }
@@ -783,6 +783,7 @@ app.post('/api/admin/send-report', async (req, res) => {
             const sheetName = eventTitle.substring(0, 31).replace(/[\\\?\*\[\]\/]/g, "");
             const worksheet = workbook.addWorksheet(sheetName);
             worksheet.columns = [
+                { header: 'Category', key: 'category', width: 15 },
                 { header: 'Pass Type', key: 'passType', width: 20 },
                 { header: 'Amount Paid', key: 'amountPaid', width: 20 },
                 { header: 'Team Name', key: 'teamName', width: 25 },
@@ -793,7 +794,6 @@ app.post('/api/admin/send-report', async (req, res) => {
                 { header: 'Phone', key: 'phone', width: 15 },
                 { header: 'College', key: 'college', width: 30 },
                 { header: 'Payment ID', key: 'paymentId', width: 30 },
-                { header: 'Team Members details', key: 'teamMembers', width: 60 },
             ];
 
             const headerRow = worksheet.getRow(1);
@@ -802,27 +802,39 @@ app.post('/api/admin/send-report', async (req, res) => {
             headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
 
             grouped[eventTitle].forEach(reg => {
-                const row = worksheet.addRow({
+                // 1. Add Leader Row
+                worksheet.addRow({
+                    category: reg.category || "Tech",
                     passType: reg.pass_type || "Standard Pass",
                     amountPaid: reg.amount_paid || "N/A",
                     teamName: reg.team_name || "N/A",
                     id: reg.id,
                     timestamp: reg.timestamp ? new Date(reg.timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : "N/A",
-                    fullName: reg.full_name,
+                    fullName: `[LEADER] ${reg.full_name}`,
                     email: reg.email,
                     phone: reg.phone,
                     college: reg.college,
-                    paymentId: reg.razorpay_payment_id || "N/A",
-                    teamMembers: (reg.team_members && Array.isArray(reg.team_members) && reg.team_members.length > 0)
-                        ? `Member 1 (Leader): ${reg.full_name}\nEmail: ${reg.email}\nPhone: ${reg.phone}\n\n` +
-                        reg.team_members.map((m, idx) => `Member ${idx + 2}: ${m.fullName}\nEmail: ${m.email}\nPhone: ${m.phone}`).join("\n\n")
-                        : "N/A"
+                    paymentId: reg.razorpay_payment_id || "N/A"
                 });
 
-                row.getCell('teamMembers').alignment = { wrapText: true, vertical: 'top' };
-                row.getCell('timestamp').alignment = { vertical: 'top' };
-                row.getCell('fullName').alignment = { vertical: 'top' };
-                row.getCell('college').alignment = { wrapText: true, vertical: 'top' };
+                // 2. Add Team Member Rows
+                if (reg.team_members && Array.isArray(reg.team_members)) {
+                    reg.team_members.forEach((m, idx) => {
+                        worksheet.addRow({
+                            category: reg.category || "Tech",
+                            passType: reg.pass_type || "Standard Pass",
+                            amountPaid: reg.amount_paid || "N/A",
+                            teamName: reg.team_name || "N/A",
+                            id: reg.id,
+                            timestamp: reg.timestamp ? new Date(reg.timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : "N/A",
+                            fullName: `[MEMBER ${idx + 2}] ${m.fullName}`,
+                            email: m.email,
+                            phone: m.phone,
+                            college: m.college || reg.college,
+                            paymentId: reg.razorpay_payment_id || "N/A"
+                        });
+                    });
+                }
             });
         });
 
