@@ -18,7 +18,7 @@ import CountdownSciFi from "./components/CountdownSciFi"
 import StarBackground from "./components/StarBackground"
 import Timeline from "./components/Timeline"
 // import ScanLine from "./components/ScanLine"
-import CornerLogos from "./components/Cornerlogos"
+// import CornerLogos from "./components/Cornerlogos"
 import MyRegistrations from "./components/MyRegistrations"
 import AdminDashboard from "./components/AdminDashboard"
 import FixedWatermark from "./components/FixedWatermark"
@@ -125,9 +125,9 @@ export default function App() {
           }} 
         />
 
-        <CornerLogos
+        {/* <CornerLogos
           hide={isRegistrationsOpen || isAdminOpen || isScheduleModalOpen}
-        />
+        /> */}
         <FixedWatermark />
 
         <ScrollProgress />
