@@ -24,7 +24,7 @@ export default function FestivalHero() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="saarang-serif text-teal-400 italic text-xl md:text-3xl lg:text-4xl mb-2 tracking-wide"
+          className="saarang-serif text-teal-400 italic text-2xl md:text-3xl lg:text-4xl mb-2 tracking-wide"
         >
           The Interstellar Symposium
         </motion.p>
@@ -42,7 +42,7 @@ export default function FestivalHero() {
               x: { repeat: Infinity, duration: 4, ease: "easeInOut" },
               y: { repeat: Infinity, duration: 4, ease: "easeInOut" }
             }}
-            className="saarang-banner-text text-cyan-500/60 absolute text-[11vw] sm:text-[12vw] leading-normal pb-4 tracking-tight blur-[8px] z-0"
+            className="saarang-banner-text text-cyan-500/60 absolute text-[13vw] sm:text-[12vw] leading-normal pb-4 tracking-tight blur-[8px] z-0"
             style={{ transform: 'scaleY(1.4)', transformOrigin: 'bottom' }}
           >
             ESTRALIS
@@ -56,7 +56,7 @@ export default function FestivalHero() {
               x: { repeat: Infinity, duration: 3, ease: "easeInOut" },
               y: { repeat: Infinity, duration: 3, ease: "easeInOut" }
             }}
-            className="saarang-banner-text text-fuchsia-500/60 absolute text-[11vw] sm:text-[12vw] leading-normal pb-4 tracking-tight blur-[8px] z-0"
+            className="saarang-banner-text text-fuchsia-500/60 absolute text-[13vw] sm:text-[12vw] leading-normal pb-4 tracking-tight blur-[8px] z-0"
             style={{ transform: 'scaleY(1.4)', transformOrigin: 'bottom' }}
           >
             ESTRALIS
@@ -78,7 +78,7 @@ export default function FestivalHero() {
               scale: { duration: 1.2, ease: "easeOut" },
               backgroundPosition: { repeat: Infinity, duration: 8, ease: "linear" }
             }}
-            className="saarang-banner-text text-transparent bg-clip-text text-[11vw] sm:text-[12vw] leading-normal pb-4 tracking-tight z-10 bg-gradient-to-r from-teal-300 via-fuchsia-400 to-cyan-300 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+            className="saarang-banner-text text-transparent bg-clip-text text-[13vw] sm:text-[12vw] leading-normal pb-4 tracking-tight z-10 bg-gradient-to-r from-teal-300 via-fuchsia-400 to-cyan-300 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]"
             style={{
               transform: 'scaleY(1.4)',
               transformOrigin: 'bottom',
@@ -101,7 +101,7 @@ export default function FestivalHero() {
             }}
             className="absolute -top-[20%] sm:-top-[15%] md:top-[5%] left-[5%] sm:left-[10%] md:left-[20%] z-20"
           >
-            <div className="backdrop-blur-xl bg-white/5 border border-white/20 text-cyan-300 font-mono tracking-[0.2em] text-[6px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(0,255,255,0.2)] uppercase whitespace-nowrap">
+            <div className="backdrop-blur-xl bg-white/5 border border-white/20 text-cyan-300 font-mono tracking-[0.2em] text-[10px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(0,255,255,0.2)] uppercase whitespace-nowrap">
               v1.0 Symposium
             </div>
           </motion.div>
@@ -116,7 +116,7 @@ export default function FestivalHero() {
             }}
             className="absolute top-[65%] sm:top-[70%] md:top-[35%] left-1/2 md:left-[48%] -translate-x-1/2 md:translate-x-0 z-20"
           >
-            <div className="backdrop-blur-xl bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-200 font-mono tracking-[0.2em] text-[6px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(217,70,239,0.3)] uppercase transform -rotate-3 whitespace-nowrap">
+            <div className="backdrop-blur-xl bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-200 font-mono tracking-[0.2em] text-[10px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(217,70,239,0.3)] uppercase transform -rotate-3 whitespace-nowrap">
               May 12-13
             </div>
           </motion.div>
@@ -131,7 +131,7 @@ export default function FestivalHero() {
             }}
             className="absolute -top-[20%] sm:top-[2%] md:top-[10%] right-[5%] sm:right-[15%] md:right-[25%] z-20"
           >
-            <div className="backdrop-blur-xl bg-white/5 border border-white/20 text-teal-300 font-mono tracking-[0.2em] text-[6px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(20,184,166,0.3)] uppercase whitespace-nowrap">
+            <div className="backdrop-blur-xl bg-white/5 border border-white/20 text-teal-300 font-mono tracking-[0.2em] text-[10px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(20,184,166,0.3)] uppercase whitespace-nowrap">
               Coordinates Locked
             </div>
           </motion.div>
@@ -163,13 +163,13 @@ export default function FestivalHero() {
           className="mt-8 flex flex-col md:flex-row items-center justify-center w-full max-w-5xl"
         >
           <div className="flex flex-col items-center md:items-end w-full md:w-1/2 md:pr-12 md:border-r border-teal-500/30 pb-4 md:pb-0 mb-4 md:mb-0 md:text-right text-center">
-            <span className="text-teal-400 font-bold text-[13px] tracking-[0.25em] uppercase">Coordinates</span>
-            <span className="text-white/50 font-mono text-[11px] uppercase tracking-[0.15em] mt-1">GCEM CAMPUS, BENGALURU</span>
+            <span className="text-teal-400 font-bold text-[15px] tracking-[0.25em] uppercase">Coordinates</span>
+            <span className="text-white/50 font-mono text-[13px] uppercase tracking-[0.15em] mt-1">GCEM CAMPUS, BENGALURU</span>
           </div>
 
           <div className="flex flex-col items-center md:items-start w-full md:w-1/2 md:pl-12 text-center md:text-left">
-            <span className="text-teal-400 font-bold text-[13px] tracking-[0.25em] uppercase">Launch Window</span>
-            <span className="text-white/50 font-mono text-[11px] uppercase tracking-[0.15em] mt-1">MAY 12 — 13, 2026</span>
+            <span className="text-teal-400 font-bold text-[15px] tracking-[0.25em] uppercase">Launch Window</span>
+            <span className="text-white/50 font-mono text-[13px] uppercase tracking-[0.15em] mt-1">MAY 12 — 13, 2026</span>
           </div>
         </motion.div>
       </div>
