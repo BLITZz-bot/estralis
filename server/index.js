@@ -9,6 +9,9 @@ const dns = require('dns');
 const PDFDocument = require('pdfkit');
 const { createClient } = require('@supabase/supabase-js');
 const Razorpay = require('razorpay');
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 // FORCE IPv4 Priority at the DNS level
 dns.setDefaultResultOrder('ipv4first');
@@ -43,6 +46,25 @@ const razorpayKeySecret = (process.env.RAZORPAY_KEY_SECRET || '').trim();
 const razorpay = (razorpayKeyId && !razorpayKeyId.includes('your_')) 
     ? new Razorpay({ key_id: razorpayKeyId, key_secret: razorpayKeySecret })
     : null;
+
+// Cloudinary Configuration
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Multer Storage Configuration for Cloudinary
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'payment_screenshots',
+        allowed_formats: ['jpg', 'png', 'jpeg'],
+        public_id: (req, file) => `screenshot_${Date.now()}_${Math.round(Math.random() * 1e9)}`
+    }
+});
+
+const upload = multer({ storage: storage });
 
 // Trim config values
 const SENDER_EMAIL = (process.env.SENDER_EMAIL || "").trim();
@@ -253,28 +275,26 @@ app.post('/api/create-order', async (req, res) => {
     }
 });
 
-// 2. Verify Payment & Save Registration
+// 2. Verify Payment & Save Registration (Razorpay - Legacy)
 app.post('/api/verify-payment', async (req, res) => {
+    // ... (keeping for backward compatibility or removing later)
+    res.status(410).json({ success: false, message: 'Razorpay integration is disabled.' });
+});
+
+// 3. Manual Registration with Screenshot Upload
+app.post('/api/register-manual', async (req, res) => {
     try {
-        const { 
-            razorpay_order_id, 
-            razorpay_payment_id, 
-            razorpay_signature,
-            registrationData 
-        } = req.body;
-
-        // Verify Signature
-        const crypto = require('crypto');
-        const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET);
-        hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
-        const generated_signature = hmac.digest('hex');
-
-        if (generated_signature !== razorpay_signature) {
-            return res.status(400).json({ success: false, message: 'Invalid payment signature' });
+        const { registrationData } = req.body;
+        
+        if (!supabase) {
+            return res.status(503).json({ success: false, message: 'Database Connection Error' });
         }
 
-        // Save to Supabase
-        const { fullName, email, phone, college, teamName, teamMembers, eventTitle, category, amountPaid, passType } = registrationData;
+        const { 
+            fullName, email, phone, college, teamName, teamMembers, 
+            eventTitle, category, amountPaid, passType,
+            utrNumber, transactionDate, screenshotUrl 
+        } = registrationData;
 
         const { data, error } = await supabase
             .from('registrations')
@@ -289,10 +309,10 @@ app.post('/api/verify-payment', async (req, res) => {
                 category: category || 'Tech',
                 amount_paid: amountPaid,
                 pass_type: passType,
-                razorpay_order_id,
-                razorpay_payment_id,
-                razorpay_signature,
-                status: 'completed'
+                utr_number: utrNumber,
+                transaction_date: transactionDate,
+                screenshot_url: screenshotUrl,
+                status: 'pending_verification'
             }])
             .select();
 
@@ -302,7 +322,7 @@ app.post('/api/verify-payment', async (req, res) => {
         }
 
         const newRegistration = data[0];
-        console.log(`✅ Registration Saved (Supabase) for ${eventTitle} by ${fullName}`);
+        console.log(`✅ Manual Registration Saved (Supabase) for ${eventTitle} by ${fullName}`);
 
         // Trigger confirmation email in background
         sendConfirmationEmail(newRegistration).catch(err => {
@@ -311,13 +331,30 @@ app.post('/api/verify-payment', async (req, res) => {
 
         res.status(201).json({
             success: true,
-            message: 'Payment verified and registration successful',
+            message: 'Registration submitted successfully. Pending verification.',
             data: newRegistration
         });
 
     } catch (error) {
-        console.error("Payment Verification Error:", error);
-        res.status(500).json({ success: false, message: 'Server error during payment verification' });
+        console.error("Manual Registration Error:", error);
+        res.status(500).json({ success: false, message: 'Server error during registration' });
+    }
+});
+
+// 4. Screenshot Upload Endpoint
+app.post('/api/upload-screenshot', upload.single('screenshot'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'No file uploaded' });
+        }
+        res.status(200).json({ 
+            success: true, 
+            imageUrl: req.file.path,
+            publicId: req.file.filename 
+        });
+    } catch (error) {
+        console.error("Upload Error:", error);
+        res.status(500).json({ success: false, message: 'Upload failed' });
     }
 });
 
@@ -391,9 +428,9 @@ const generatePDFPass = (reg) => {
         };
 
         drawTicketBase(doc);
-        // UTR & VERIFIED Badge (Using payment_id now)
-        doc.fillColor('#94a3b8').fontSize(9).font('Helvetica-Bold').text("PAYMENT ID:", 20 * mmToPt, 80 * mmToPt);
-        doc.fillColor('#ffffff').fontSize(12).font('Helvetica').text(reg.razorpay_payment_id || 'VERIFIED', 20 * mmToPt, 88 * mmToPt);
+        // UTR & VERIFIED Badge (Using utr_number now)
+        doc.fillColor('#94a3b8').fontSize(9).font('Helvetica-Bold').text("UTR NUMBER:", 20 * mmToPt, 80 * mmToPt);
+        doc.fillColor('#ffffff').fontSize(12).font('Helvetica').text(reg.utr_number || 'VERIFIED', 20 * mmToPt, 88 * mmToPt);
 
         // Status Badge (Green Pill - Centered Text)
         doc.fillColor('#10b981').roundedRect(130 * mmToPt, 76 * mmToPt, 35 * mmToPt, 12 * mmToPt, 6 * mmToPt).fill();
@@ -471,6 +508,10 @@ const sendConfirmationEmail = async (reg) => {
                             <tr>
                                 <td style="padding: 8px 0; color: #718096; font-size: 14px;">College:</td>
                                 <td style="padding: 8px 0; font-weight: 700; color: #2d3748;">${reg.college}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; color: #718096; font-size: 14px;">UTR Number:</td>
+                                <td style="padding: 8px 0; font-weight: 700; color: #2d3748;">${reg.utr_number}</td>
                             </tr>
                         </table>
                     </div>
@@ -563,15 +604,56 @@ app.get('/api/admin/registrations', async (req, res) => {
             .order('timestamp', { ascending: false });
 
         if (error) throw error;
-
-        res.status(200).json({
-            success: true,
-            count: data.length,
-            data: data
-        });
+        res.status(200).json({ success: true, data });
     } catch (error) {
-        console.error("Admin Fetch Error:", error);
-        res.status(500).json({ success: false, message: 'Server error during admin fetch' });
+        console.error("Admin registration fetch error:", error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// Admin: Delete registration
+app.delete('/api/admin/registrations/:id', async (req, res) => {
+    try {
+        const password = req.headers['x-admin-password'];
+        if (password !== 'estralis@admin2026') {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+
+        const { id } = req.params;
+        const { error } = await supabase
+            .from('registrations')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
+        res.status(200).json({ success: true, message: 'Registration deleted' });
+    } catch (error) {
+        console.error("Admin delete error:", error);
+        res.status(500).json({ success: false, message: 'Failed to delete registration' });
+    }
+});
+
+// Admin: Update registration status
+app.patch('/api/admin/registrations/:id', async (req, res) => {
+    try {
+        const password = req.headers['x-admin-password'];
+        if (password !== 'estralis@admin2026') {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+
+        const { id } = req.params;
+        const updates = req.body; // Allows status, full_name, email, phone, college, etc.
+
+        const { error } = await supabase
+            .from('registrations')
+            .update(updates)
+            .eq('id', id);
+
+        if (error) throw error;
+        res.status(200).json({ success: true, message: 'Registration updated successfully' });
+    } catch (error) {
+        console.error("Admin update error:", error);
+        res.status(500).json({ success: false, message: 'Failed to update registration' });
     }
 });
 
@@ -762,6 +844,7 @@ app.post('/api/admin/send-report', async (req, res) => {
         const { data: registrations, error } = await supabase
             .from('registrations')
             .select('*')
+            .eq('status', 'verified')
             .order('event_title', { ascending: true });
 
         if (error) throw error;
@@ -794,6 +877,9 @@ app.post('/api/admin/send-report', async (req, res) => {
                 { header: 'Phone', key: 'phone', width: 15 },
                 { header: 'College', key: 'college', width: 30 },
                 { header: 'Payment ID', key: 'paymentId', width: 30 },
+                { header: 'UTR Number', key: 'utrNumber', width: 25 },
+                { header: 'Transaction Date', key: 'transactionDate', width: 20 },
+                { header: 'Screenshot Link', key: 'screenshotUrl', width: 50 },
             ];
 
             const headerRow = worksheet.getRow(1);
@@ -814,7 +900,10 @@ app.post('/api/admin/send-report', async (req, res) => {
                     email: reg.email,
                     phone: reg.phone,
                     college: reg.college,
-                    paymentId: reg.razorpay_payment_id || "N/A"
+                    paymentId: reg.razorpay_payment_id || "N/A",
+                    utrNumber: reg.utr_number || "N/A",
+                    transactionDate: reg.transaction_date || "N/A",
+                    screenshotUrl: reg.screenshot_url || "N/A"
                 });
 
                 // 2. Add Team Member Rows
@@ -831,7 +920,10 @@ app.post('/api/admin/send-report', async (req, res) => {
                             email: m.email,
                             phone: m.phone,
                             college: m.college || reg.college,
-                            paymentId: reg.razorpay_payment_id || "N/A"
+                            paymentId: reg.razorpay_payment_id || "N/A",
+                            utrNumber: reg.utr_number || "N/A",
+                            transactionDate: reg.transaction_date || "N/A",
+                            screenshotUrl: reg.screenshot_url || "N/A"
                         });
                     });
                 }

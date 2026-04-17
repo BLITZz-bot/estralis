@@ -8,10 +8,23 @@ import { supabase } from '../supabaseClient';
 export default function AdminDashboard({ isOpen, onClose }) {
     const [password, setPassword] = useState("");
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    
+    // Edit Modal State
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [editingReg, setEditingReg] = useState(null);
+    const [editForm, setEditForm] = useState({
+        full_name: "",
+        email: "",
+        phone: "",
+        college: ""
+    });
+    const [isUpdating, setIsUpdating] = useState(false);
+
     const [loginError, setLoginError] = useState("");
     const [registrations, setRegistrations] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [filterEvent, setFilterEvent] = useState("All");
+    const [statusFilter, setStatusFilter] = useState("verified"); // Default to verified as per user request
     const [loading, setLoading] = useState(false);
     const [fetchError, setFetchError] = useState("");
     const [emailing, setEmailing] = useState(false);
@@ -446,6 +459,71 @@ export default function AdminDashboard({ isOpen, onClose }) {
         }
     };
 
+    const updateRegistrationStatus = async (id, newStatus) => {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/registrations/${id}`, {
+                method: 'PATCH',
+                headers: { 
+                    'x-admin-password': password,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: newStatus })
+            });
+            const data = await res.json();
+            if (data.success) {
+                addToast(`✅ Status updated to ${newStatus}`, "success");
+            } else {
+                addToast(data.message || "Failed to update status", "error");
+            }
+        } catch (err) {
+            addToast("Server error during status update", "error");
+        }
+    };
+
+    const confirmDeleteRegistration = (reg) => {
+        setDeleteTargetId(reg.id);
+        setDeleteTargetName(reg.full_name);
+        setIsClearModalOpen(true);
+    };
+
+    const openEditModal = (reg) => {
+        setEditingReg(reg);
+        setEditForm({
+            full_name: reg.full_name || "",
+            email: reg.email || "",
+            phone: reg.phone || "",
+            college: reg.college || ""
+        });
+        setIsEditModalOpen(true);
+    };
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault();
+        setIsUpdating(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/registrations/${editingReg.id}`, {
+                method: 'PATCH',
+                headers: { 
+                    'x-admin-password': password,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(editForm)
+            });
+            const data = await res.json();
+            if (data.success) {
+                addToast("✅ Registration updated!", "success");
+                setIsEditModalOpen(false);
+                fetchRegistrations(); // Refresh data
+            } else {
+                addToast(data.message || "Failed to update", "error");
+            }
+        } catch (err) {
+            addToast("Server error during update", "error");
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
     // Reset password on close and handle back button
     useEffect(() => {
         if (isOpen) {
@@ -522,15 +600,29 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
     // Handle filtering
     useEffect(() => {
-        if (filterEvent === "All") {
-            setFilteredData(registrations);
-        } else {
-            setFilteredData(registrations.filter(r => r.event_title === filterEvent));
+        let filtered = registrations;
+        
+        // Filter by Event
+        if (filterEvent !== "All") {
+            filtered = filtered.filter(r => r.event_title === filterEvent);
         }
-    }, [filterEvent, registrations]);
+        
+        // Filter by Status
+        if (statusFilter !== "All") {
+            filtered = filtered.filter(r => (r.status || 'pending').toLowerCase() === statusFilter.toLowerCase());
+        }
+        
+        setFilteredData(filtered);
+    }, [filterEvent, statusFilter, registrations]);
 
     const downloadExcel = async () => {
-        if (registrations.length === 0) return;
+        // Only export successfull (verified) registrations as per user request
+        const successfulRegistrations = registrations.filter(r => (r.status || 'pending').toLowerCase() === 'verified');
+        
+        if (successfulRegistrations.length === 0) {
+            addToast("No verified (successful) registrations to export.", "error");
+            return;
+        }
 
         const workbook = new ExcelJS.Workbook();
         workbook.creator = 'AlgoRhythm Admin';
@@ -563,6 +655,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 { header: 'Phone', key: 'phone', width: 15 },
                 { header: 'College', key: 'college', width: 30 },
                 { header: 'Payment ID', key: 'paymentId', width: 30 },
+                { header: 'UTR Number', key: 'utrNumber', width: 25 },
+                { header: 'Transaction Date', key: 'transactionDate', width: 20 },
+                { header: 'Screenshot URL', key: 'screenshotUrl', width: 50 },
                 { header: 'Team Members details', key: 'teamMembers', width: 60 },
             ];
 
@@ -594,6 +689,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
                     phone: reg.phone,
                     college: reg.college,
                     paymentId: reg.razorpay_payment_id || "N/A",
+                    utrNumber: reg.utr_number || "N/A",
+                    transactionDate: reg.transaction_date || "N/A",
+                    screenshotUrl: reg.screenshot_url || "N/A",
                     teamMembers: (teamCount > 0) ? `Total: ${totalParticipants} (Lead + ${teamCount})` : "Solo Registration"
                 });
 
@@ -612,6 +710,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
                             phone: m.phone,
                             college: m.college || reg.college,
                             paymentId: reg.razorpay_payment_id || "N/A",
+                            utrNumber: reg.utr_number || "N/A",
+                            transactionDate: reg.transaction_date || "N/A",
+                            screenshotUrl: reg.screenshot_url || "N/A",
                             teamMembers: `Part of ${reg.full_name}'s Team`
                         });
                     });
@@ -713,6 +814,17 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     <span className="hidden sm:inline">{emailing ? 'Sending...' : 'EMAIL REPORT'}</span>
                                     <span className="sm:hidden">EMAIL</span>
                                 </button>
+                                <button
+                                    onClick={() => handleActionConfirm("Clear All Data", "This will permanently delete ALL registrations. Are you sure?", handleClearData, "danger")}
+                                    className="px-3 py-2 bg-red-600/20 border border-red-500/30 text-red-400 rounded-xl text-[10px] sm:text-sm hover:bg-red-600/30 transition flex items-center gap-1.5 font-semibold"
+                                >
+                                    <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    <span className="hidden sm:inline">CLEAR ALL</span>
+                                    <span className="sm:hidden">CLEAR</span>
+                                </button>
+                                <button onClick={() => setIsAuthenticated(false)} className="px-5 py-2 astral-glass rounded-xl text-teal-400/40 text-[10px] font-black tracking-widest uppercase hover:text-red-400 transition-all border border-white/5">
+                                    Logout
+                                </button>
                                 <button onClick={onClose} className="p-2 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white transition flex-shrink-0">
                                     <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                 </button>
@@ -786,8 +898,20 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                             {uniqueEvents.map(ev => <option key={ev} value={ev} className="bg-[#0f111a]">{ev}</option>)}
                                         </select>
                                     </div>
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-pink-400/60 text-[10px] font-black uppercase tracking-widest">Status Filter:</span>
+                                        <select
+                                            value={statusFilter}
+                                            onChange={(e) => setStatusFilter(e.target.value)}
+                                            className="bg-black/40 border border-pink-500/10 rounded-xl px-5 py-2.5 text-white text-xs focus:outline-none focus:border-pink-500/50 transition cursor-pointer font-bold"
+                                        >
+                                            <option value="All" className="bg-[#0f111a]">ALL SIGNALS</option>
+                                            <option value="verified" className="bg-[#0f111a]">SUCCESSFULL (VERIFIED)</option>
+                                            <option value="pending" className="bg-[#0f111a]">PENDING APPROVAL</option>
+                                        </select>
+                                    </div>
                                     <span className="sm:ml-auto text-[10px] font-black text-cyan-400 tracking-widest uppercase bg-cyan-500/5 border border-cyan-500/20 px-4 py-2.5 rounded-xl">
-                                        SIGNAL STRENGTH: {filteredData.length} RECORDS FOUND
+                                        SIGNAL STRENGTH: {filteredData.length} {statusFilter === 'verified' ? 'SUCCESSFUL' : statusFilter === 'pending' ? 'PENDING' : ''} RECORDS FOUND
                                     </span>
                                 </div>
 
@@ -813,7 +937,12 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Event</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Category</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Payment</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest whitespace-nowrap">Status</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Pass Info</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">UTR No.</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">Trans. Date</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">Proof</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">Status</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest whitespace-nowrap text-center">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-teal-500/5">
@@ -880,13 +1009,54 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                                     {reg.pass_type || "Basic"}
                                                                 </span>
                                                                 <div className="text-base font-black text-white italic">₹{reg.amount_paid || "0.00"}</div>
-                                                                <div className="text-[9px] text-teal-400/20 font-mono truncate max-w-[120px]">{reg.razorpay_payment_id || "PENDING"}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap text-center">
+                                                            <div className="text-[10px] font-black text-cyan-400 tracking-wider bg-cyan-500/5 px-2 py-1 rounded border border-cyan-500/10 inline-block">{reg.utr_number || "N/A"}</div>
+                                                        </td>
+                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap text-center">
+                                                            <div className="text-[9px] font-bold text-teal-300 uppercase tracking-widest">{reg.transaction_date || "N/A"}</div>
+                                                        </td>
+                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap text-center">
+                                                            {reg.screenshot_url ? (
+                                                                <a href={reg.screenshot_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-500/10 border border-teal-500/20 rounded-lg text-[9px] font-black text-teal-400 hover:bg-teal-500/20 hover:text-white transition-all">
+                                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                                    VIEW PROOF
+                                                                </a>
+                                                            ) : <span className="text-[9px] text-white/10 italic">NO PROOF</span>}
+                                                        </td>
+                                                        <td className="px-6 py-6 text-center border-r border-teal-500/10">
+                                                            <div className="flex flex-col items-center gap-2">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className={`w-1.5 h-1.5 rounded-full ${reg.status === 'verified' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400 animate-pulse'}`}></div>
+                                                                    <span className={`text-[9px] font-black uppercase tracking-widest ${reg.status === 'verified' ? 'text-emerald-400' : 'text-amber-400'}`}>
+                                                                        {reg.status || 'PENDING'}
+                                                                    </span>
+                                                                </div>
+                                                                <button 
+                                                                    onClick={() => updateRegistrationStatus(reg.id, reg.status === 'verified' ? 'pending' : 'verified')}
+                                                                    className="text-[8px] font-black text-teal-500 hover:text-white uppercase tracking-widest px-2 py-1 rounded border border-teal-500/20 hover:bg-teal-500/10 transition-all"
+                                                                >
+                                                                    {reg.status === 'verified' ? "MARK PENDING" : "VERIFY"}
+                                                                </button>
                                                             </div>
                                                         </td>
                                                         <td className="px-6 py-6 text-center">
                                                             <div className="flex items-center justify-center gap-2">
-                                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
-                                                                <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">CONFIRMED</span>
+                                                                <button 
+                                                                    onClick={() => openEditModal(reg)}
+                                                                    className="p-2 text-teal-500/40 hover:text-teal-500 hover:bg-teal-500/10 rounded-lg transition-all"
+                                                                    title="Edit Registration"
+                                                                >
+                                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                                </button>
+                                                                <button 
+                                                                    onClick={() => confirmDeleteRegistration(reg)}
+                                                                    className="p-2 text-red-500/40 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                                                                    title="Delete Registration"
+                                                                >
+                                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                                </button>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -905,7 +1075,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                 <h3 className="text-xl font-bold text-white mb-6">Event Registerations Control</h3>
                                 <p className="text-gray-400 text-sm mb-8">Use this section to control the registration status of events.</p>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {[...eventsDay1, ...eventsDay2].map(eventObj => {
+                                    {[...eventsDay1, ...eventsDay2, { title: "ARTIST PERFORMANCE" }, { title: "DJ NIGHT" }].map(eventObj => {
                                         const ev = eventObj.title;
                                         const statusObj = eventStatuses.find(s => s.title === ev);
                                         const isOpen = statusObj ? statusObj.isOpen : true; // default true

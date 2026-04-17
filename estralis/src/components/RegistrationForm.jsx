@@ -16,7 +16,11 @@ export default function RegistrationForm({ event, onClose }) {
         email: "",
         phone: "",
         college: "",
-        teamName: ""
+        teamName: "",
+        utrNumber: "",
+        transactionDate: new Date().toISOString().split('T')[0],
+        screenshot: null,
+        screenshotUrl: ""
     })
 
     const cat = event?.category || "Tech"
@@ -67,71 +71,59 @@ export default function RegistrationForm({ event, onClose }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
+        
+        if (!formData.utrNumber || !formData.transactionDate || !formData.screenshot) {
+            alert("Please provide the Transaction ID, Date, and Payment Screenshot to proceed.");
+            return;
+        }
 
+        setIsSubmitting(true);
         const amount = (passType === 'combo' && comboPassDetails) ? comboPassDetails : standardFeeString;
 
         try {
-            const orderRes = await fetch(`${import.meta.env.VITE_API_URL}/api/create-order`, {
+            // 1. Upload Screenshot first
+            const uploadFormData = new FormData();
+            uploadFormData.append('screenshot', formData.screenshot);
+
+            const uploadRes = await fetch(`${import.meta.env.VITE_API_URL}/api/upload-screenshot`, {
+                method: 'POST',
+                body: uploadFormData
+            });
+
+            const uploadResult = await uploadRes.json();
+            if (!uploadResult.success) {
+                throw new Error(uploadResult.message || "Screenshot upload failed");
+            }
+
+            const imageUrl = uploadResult.imageUrl;
+
+            // 2. Submit Registration
+            const registerRes = await fetch(`${import.meta.env.VITE_API_URL}/api/register-manual`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount, receipt: `reg_${Date.now()}` })
-            });
-            const { order } = await orderRes.json();
-
-            const options = {
-                key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-                amount: order.amount,
-                currency: order.currency,
-                name: "ESTRALIS 2026",
-                description: `Registration for ${event.title}`,
-                image: "/logo.png",
-                order_id: order.id,
-                handler: async (response) => {
-                    try {
-                        const verifyRes = await fetch(`${import.meta.env.VITE_API_URL}/api/verify-payment`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                ...response,
-                                registrationData: {
-                                    ...formData,
-                                    eventTitle: event.title,
-                                    category: event.category || "Tech",
-                                    teamMembers,
-                                    passType: passType === 'combo' ? "Combo Pass" : "Standard Pass",
-                                    amountPaid: amount
-                                }
-                            })
-                        });
-
-                        const result = await verifyRes.json();
-                        if (result.success) {
-                            setStep(3);
-                        } else {
-                            alert("Payment verification failed: " + result.message);
-                        }
-                    } catch (err) {
-                        console.error("Verification Error:", err);
-                        alert("Verification failed. Please contact support.");
+                body: JSON.stringify({
+                    registrationData: {
+                        ...formData,
+                        screenshotUrl: imageUrl,
+                        eventTitle: event.title,
+                        category: event.category || "Tech",
+                        teamMembers,
+                        passType: passType === 'combo' ? "Combo Pass" : "Standard Pass",
+                        amountPaid: amount
                     }
-                },
-                prefill: {
-                    name: formData.fullName,
-                    email: formData.email,
-                    contact: formData.phone
-                },
-                theme: {
-                    color: "#14b8a6"
-                }
-            };
+                })
+            });
 
-            const rzp = new window.Razorpay(options);
-            rzp.open();
+            const result = await registerRes.json();
+            if (result.success) {
+                setStep(3);
+            } else {
+                alert("Registration failed: " + result.message);
+            }
 
         } catch (error) {
-            console.error("Payment Order Error:", error);
-            alert("Failed to initiate payment.");
+            console.error("Registration Error:", error);
+            alert(error.message || "Failed to submit registration.");
         } finally {
             setIsSubmitting(false);
         }
@@ -145,7 +137,7 @@ export default function RegistrationForm({ event, onClose }) {
             doc.text(`ESTRALIS 2026 - ${event.title}`, 10, 10);
             doc.text(`Name: ${formData.fullName}`, 10, 20);
             doc.text(`Email: ${formData.email}`, 10, 30);
-            doc.text(`Transaction ID: Verified via Razorpay`, 10, 40);
+            doc.text(`Transaction ID: ${formData.utrNumber}`, 10, 40);
             doc.save(`Estralis_Pass_${formData.fullName}.pdf`);
         } finally {
             setIsDownloading(false);
@@ -213,7 +205,7 @@ export default function RegistrationForm({ event, onClose }) {
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">PHONE NUMBER</label>
-                                        <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="+91 XXXXX XXXXX" />
+                                        <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} maxLength={10} pattern="\d{10}" className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="10-digit Phone Number" title="Please enter a 10-digit phone number" />
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">COLLEGE / INSTITUTION</label>
@@ -288,7 +280,7 @@ export default function RegistrationForm({ event, onClose }) {
                                                                 const newMembers = [...teamMembers];
                                                                 newMembers[index].phone = e.target.value;
                                                                 setTeamMembers(newMembers);
-                                                            }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="+91 XXXXX XXXXX" />
+                                                            }} maxLength={10} pattern="\d{10}" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="10-digit Phone" title="Please enter a 10-digit phone number" />
                                                         </div>
                                                         <div className="space-y-1.5">
                                                             <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">COLLEGE</label>
@@ -328,21 +320,49 @@ export default function RegistrationForm({ event, onClose }) {
                                ))}
                             </div>
 
-                            <div className="astral-glass p-8 md:p-12 text-center space-y-10">
+                             <div className="astral-glass p-8 md:p-12 text-center space-y-10 overflow-y-auto max-h-[70vh] custom-scrollbar">
                                  <div className="space-y-2">
-                                    <h3 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter astral-heading">Checkout</h3>
-                                    <p className="text-teal-400/60 text-[10px] font-black uppercase tracking-[0.3em] font-tech">SECURE TRANSACTION VIA RAZORPAY</p>
+                                    <h3 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter astral-heading">Payment</h3>
+                                    <p className="text-teal-400/60 text-[10px] font-black uppercase tracking-[0.3em] font-tech italic underline decoration-teal-500/30 underline-offset-4">SCAN & UPLOAD PROOF</p>
                                  </div>
 
-                                 <div className="space-y-4 text-left border-y border-white/10 py-8">
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-[10px] font-black text-white/30 uppercase tracking-widest font-astral">SECTOR</span>
-                                        <span className="text-base md:text-lg text-white font-bold">{event.title}</span>
+                                 {/* QR Code Section */}
+                                 <div className="relative group mx-auto w-48 h-48 md:w-64 md:h-64 p-4 bg-white/5 rounded-3xl border border-white/10 flex items-center justify-center overflow-hidden">
+                                     <div className="absolute inset-0 bg-teal-500/5 group-hover:bg-teal-500/10 transition-colors" />
+                                     <img src="/qr.jpeg" alt="Payment QR" className="relative z-10 w-full h-full object-contain rounded-xl shadow-2xl" />
+                                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-500 to-transparent animate-scan" />
+                                 </div>
+
+                                 <div className="space-y-6 text-left border-y border-white/10 py-8">
+                                    <div className="flex justify-between items-center text-teal-400 font-black text-[10px] tracking-widest uppercase mb-4">
+                                        <span>Step 1: Scan & Pay</span>
+                                        <span>Step 2: Enter Details</span>
                                     </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-[10px] font-black text-white/30 uppercase tracking-widest font-astral">LEAD OPERATOR</span>
-                                        <span className="text-base md:text-lg text-white font-bold truncate ml-4">{formData.fullName}</span>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">UTR / Transaction ID</label>
+                                            <input required type="text" name="utrNumber" value={formData.utrNumber} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold placeholder:text-white/5" placeholder="12-digit UTR Number" />
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">Transaction Date</label>
+                                            <input required type="date" name="transactionDate" value={formData.transactionDate} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" />
+                                        </div>
                                     </div>
+
+                                    <div className="space-y-1.5">
+                                        <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">Payment Proof (Screenshot)</label>
+                                        <div className="relative">
+                                            <input required type="file" name="screenshot" accept="image/*" onChange={handleChange} className="hidden" id="screenshot-upload" />
+                                            <label htmlFor="screenshot-upload" className="flex items-center justify-between w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 cursor-pointer hover:bg-white/10 transition-all">
+                                                <span className="text-sm font-bold text-white/60 truncate max-w-[200px]">
+                                                    {formData.screenshot ? formData.screenshot.name : "Choose Image"}
+                                                </span>
+                                                <span className="text-[10px] font-black text-teal-400 uppercase tracking-widest border border-teal-500/30 px-3 py-1 rounded-lg">Browse</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
                                     <div className="flex justify-between items-center pt-8 border-t border-white/5 mt-4">
                                         <span className="text-[12px] font-black text-white uppercase tracking-widest font-astral">TOTAL FEE</span>
                                         <span className="text-4xl md:text-5xl font-black text-teal-400 italic glow-teal">{standardFeeString}</span>
@@ -355,13 +375,13 @@ export default function RegistrationForm({ event, onClose }) {
                                         disabled={isSubmitting}
                                         className="w-full py-6 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)] transition-all flex items-center justify-center gap-3 disabled:opacity-50 font-astral"
                                     >
-                                        {isSubmitting ? "PROCESSING..." : "PAY NOW"} <span className="text-lg">→</span>
+                                        {isSubmitting ? "UPLOADING PROOF..." : "SUBMIT REGISTRATION"} <span className="text-lg">→</span>
                                     </button>
                                     <button type="button" onClick={() => setStep(1)} className="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors flex items-center justify-center gap-2 font-astral">
-                                        ← GO BACK
+                                        ← EDIT DETAILS
                                     </button>
                                  </div>
-                            </div>
+                             </div>
                         </motion.div>
                     )}
 

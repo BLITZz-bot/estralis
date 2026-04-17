@@ -206,7 +206,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.setFont("helvetica", "normal");
             doc.setFontSize(12);
             doc.setTextColor(255, 255, 255);
-            const ticketId = registration.razorpay_payment_id || `ALG-${Math.floor(Math.random() * 1000000)}`;
+            const ticketId = registration.utr_number || registration.razorpay_payment_id || `ALG-${Math.floor(Math.random() * 1000000)}`;
             doc.text(ticketId, 20, 88);
 
             // Status Badge (Green Pill)
