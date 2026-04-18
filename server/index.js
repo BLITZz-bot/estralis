@@ -196,7 +196,7 @@ app.get('/api/admin/test-email', async (req, res) => {
         await sendEmailViaAPI({
             from: SENDER_EMAIL,
             to: ADMIN_EMAILS[0] || SENDER_EMAIL,
-            subject: "ALGORHYTHM GMAIL API TEST 🚀",
+            subject: "ESTRALIS GMAIL API TEST 🚀",
             text: `GMail API (HTTPS Mode) is working!\nSender: ${SENDER_EMAIL}\nTime: ${new Date().toLocaleString()}`
         });
         res.status(200).json({ success: true, message: 'API Test email sent successfully!' });
@@ -374,7 +374,7 @@ const generatePDFPass = (reg) => {
             pageDoc.roundedRect(8 * mmToPt, 8 * mmToPt, 164 * mmToPt, 50 * mmToPt, 15 * mmToPt).fill();
             pageDoc.rect(8 * mmToPt, 25 * mmToPt, 164 * mmToPt, 33 * mmToPt).fill();
             pageDoc.fillColor('#ffffff').fontSize(24).font('Helvetica-Bold')
-                .text("ALGORHYTHM 3.0", 0, 18 * mmToPt, { align: 'center', characterSpacing: 1 });
+                .text("ESTRALIS 2026", 0, 18 * mmToPt, { align: 'center', characterSpacing: 1 });
 
             pageDoc.fontSize(10).font('Helvetica')
                 .text("OFFICIAL ACCESS PASS", 0, 31 * mmToPt, { align: 'center', characterSpacing: 2 });
@@ -459,12 +459,12 @@ const sendConfirmationEmail = async (reg) => {
             html: `
                 <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e2e8f0; padding: 40px; border-radius: 24px; background: #ffffff; color: #1a202c;">
                     <div style="text-align: center; margin-bottom: 30px;">
-                        <h1 style="color: #9333ea; margin: 0; font-size: 28px; letter-spacing: -0.025em;">ALGO-RHYTHM 3.0</h1>
+                        <h1 style="color: #9333ea; margin: 0; font-size: 28px; letter-spacing: -0.025em;">ESTRALIS 2026</h1>
                         <p style="color: #718096; margin-top: 8px; font-weight: 500;">REGISTRATION SUCCESSFUL! ✅</p>
                     </div>
                     
                     <p style="font-size: 16px; line-height: 1.6;">Hello <strong>${reg.full_name}</strong>,</p>
-                    <p style="font-size: 16px; line-height: 1.6;">Your spot for <strong>${reg.event_title}</strong> at ALGO-RHYTHM 3.0 has been officially reserved! We are excited to see you there.</p>
+                    <p style="font-size: 16px; line-height: 1.6;">Your spot for <strong>${reg.event_title}</strong> at ESTRALIS 2026 has been officially reserved! We are excited to see you there.</p>
                     
                     <div style="background: #f7fafc; border: 1px solid #edf2f7; padding: 25px; border-radius: 16px; margin: 30px 0;">
                         <table style="width: 100%; border-collapse: collapse;">
@@ -500,14 +500,14 @@ const sendConfirmationEmail = async (reg) => {
                     </div>
                     
                     <p style="font-size: 14px; color: #a0aec0; text-align: center; margin-top: 40px;">
-                        AlgoRhythm 3.0 | Techno-Cultural Fest 2026<br/>
+                        Estralis 2026 | Techno-Cultural Fest<br/>
                         GCEM, Bengaluru
                     </p>
                 </div>
             `,
             attachments: [
                 {
-                    filename: `AlgoRhythm_Pass_${reg.full_name.replace(/\s+/g, '_')}.pdf`,
+                    filename: `Estralis_Pass_${reg.full_name.replace(/\s+/g, '_')}.pdf`,
                     content: pdfBuffer,
                     contentType: 'application/pdf'
                 }
@@ -875,11 +875,11 @@ app.post('/api/admin/send-report', async (req, res) => {
         const mailOptions = {
             from: SENDER_EMAIL,
             to: ADMIN_RECEIVER_EMAIL,
-            subject: `AlgoRhythm Fest 2026 - Master Registration Report (${new Date().toLocaleDateString()})`,
-            text: `Hello Admin,\n\nPlease find the attached automated registration report for AlgoRhythm Fest 2026.\n\nTotal Registrations (PostgreSQL): ${registrations.length}\nGenerated at: ${new Date().toLocaleString()}`,
+            subject: `Estralis Fest 2026 - Master Registration Report (${new Date().toLocaleDateString()})`,
+            text: `Hello Admin,\n\nPlease find the attached automated registration report for Estralis Fest 2026.\n\nTotal Registrations (PostgreSQL): ${registrations.length}\nGenerated at: ${new Date().toLocaleString()}`,
             attachments: [
                 {
-                    filename: `AlgoRhythm_Master_Report_${Date.now()}.xlsx`,
+                    filename: `Estralis_Master_Report_${Date.now()}.xlsx`,
                     content: buffer,
                     contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 }
@@ -996,7 +996,7 @@ app.post('/api/admin/send-event-mail', async (req, res) => {
 
             return `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; background: #0f111a; color: #e2e8f0; border-radius: 24px; overflow: hidden; border: 1px solid #1e1e3a;">
                         <div style="background: linear-gradient(135deg, #7c3aed 0%, #9333ea 50%, #a855f7 100%); padding: 40px 30px; text-align: center;">
-                            <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px; font-weight: 900;">ALGO-RHYTHM 3.0</h1>
+                            <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px; font-weight: 900;">ESTRALIS 2026</h1>
                         </div>
                         <div style="padding: 35px 30px;">
                             <p style="font-size: 17px; color: #f1f5f9; margin-bottom: 5px;">Hello <strong>${reg.full_name}</strong>,</p>

@@ -151,7 +151,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                 pageDoc.setTextColor(255, 255, 255);
                 pageDoc.setFont("helvetica", "bold");
                 pageDoc.setFontSize(24);
-                pageDoc.text("ALGORHYTHM 3.0", 83, 25, { align: "center", charSpace: 1 });
+                pageDoc.text("ESTRALIS 2026", 83, 25, { align: "center", charSpace: 1 });
 
                 pageDoc.setFontSize(10);
                 pageDoc.setFont("helvetica", "normal");

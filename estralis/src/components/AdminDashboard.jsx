@@ -235,7 +235,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         const instructionLines = mailerBody.split('\n').filter(l => l.trim()).map(line =>
             `<tr><td style="padding:8px 0;padding-left:20px;color:#e2e8f0;font-size:14px;line-height:1.7;border-left:3px solid #7c3aed;">${line.trim()}</td></tr>`
         ).join('');
-        return `<div style="font-family:'Segoe UI',sans-serif;max-width:100%;background:#0f111a;color:#e2e8f0;border-radius:16px;overflow:hidden;border:1px solid #1e1e3a;"><div style="background:linear-gradient(135deg,#7c3aed,#9333ea,#a855f7);padding:30px 20px;text-align:center;"><h1 style="color:#fff;margin:0;font-size:22px;letter-spacing:2px;font-weight:900;">ALGO-RHYTHM 3.0</h1><p style="color:rgba(255,255,255,0.85);margin-top:6px;font-size:11px;letter-spacing:3px;text-transform:uppercase;">Official INSTRUCTIONS</p></div><div style="padding:25px 20px;"><p style="font-size:15px;color:#f1f5f9;margin-bottom:5px;">Hello <strong style="color:#a78bfa;">PARTICIPANTS</strong>,</p><p style="font-size:13px;color:#94a3b8;margin-bottom:20px;">Registered for: <strong style="color:#c4b5fd;">EVENT NAME</strong></p><div style="background:#1a1c2e;border:1px solid #2d2f4a;border-radius:12px;padding:20px;margin-bottom:20px;"><h3 style="color:#a78bfa;font-size:11px;text-transform:uppercase;letter-spacing:3px;margin:0 0 12px 0;">📋 Instructions</h3><table style="width:100%;border-collapse:collapse;">${instructionLines}</table></div><table style="width:100%;border-collapse:collapse;margin-bottom:20px;"><tr><td style="width:50%;padding-right:6px;vertical-align:top;"><div style="background:#1a1c2e;border:1px solid #2d2f4a;border-radius:12px;padding:15px;text-align:center;"><p style="color:#7c3aed;font-size:10px;text-transform:uppercase;letter-spacing:2px;margin:0 0 6px 0;font-weight:700;">🕐 Arrival Time</p><p style="color:#f1f5f9;font-size:16px;font-weight:900;margin:0;">${mailerTime}</p></div></td><td style="width:50%;padding-left:6px;vertical-align:top;"><div style="background:#1a1c2e;border:1px solid #2d2f4a;border-radius:12px;padding:15px;text-align:center;"><p style="color:#7c3aed;font-size:10px;text-transform:uppercase;letter-spacing:2px;margin:0 0 6px 0;font-weight:700;">📍 Venue</p><p style="color:#f1f5f9;font-size:14px;font-weight:900;margin:0;">${mailerVenue}</p></div></td></tr></table><div style="background:linear-gradient(135deg,#1e1b4b,#2e1065);border:1px solid #4c1d95;border-radius:12px;padding:15px;text-align:center;margin-bottom:20px;"><p style="color:#c4b5fd;font-size:11px;text-transform:uppercase;letter-spacing:2px;margin:0 0 8px 0;">📞 On-Ground Assistance</p><p style="color:#e2e8f0;font-size:12px;margin:0 0 10px 0;line-height:1.6;">If you face any issues at the registration desk or need any help on the event day, please do not hesitate to reach out to Us.</p><p style="color:#fff;font-size:15px;font-weight:900;margin:0;"><span style="color:#a78bfa;">${mailerContact}</span> — <span style="color:#a78bfa;">${mailerPhone}</span></p></div><p style="font-size:13px;color:#64748b;text-align:center;">We can't wait to see you there! 🎉</p></div><div style="border-top:1px solid #1e1e3a;padding:15px;text-align:center;"><p style="color:#475569;font-size:11px;margin:0;">AlgoRhythm 3.0 | GCEM, Bengaluru</p></div></div>`;
+        return `<div style="font-family:'Segoe UI',sans-serif;max-width:100%;background:#0f111a;color:#e2e8f0;border-radius:16px;overflow:hidden;border:1px solid #1e1e3a;"><div style="background:linear-gradient(135deg,#7c3aed,#9333ea,#a855f7);padding:30px 20px;text-align:center;"><h1 style="color:#fff;margin:0;font-size:22px;letter-spacing:2px;font-weight:900;">ESTRALIS 2026</h1><p style="color:rgba(255,255,255,0.85);margin-top:6px;font-size:11px;letter-spacing:3px;text-transform:uppercase;">Official INSTRUCTIONS</p></div><div style="padding:25px 20px;"><p style="font-size:15px;color:#f1f5f9;margin-bottom:5px;">Hello <strong style="color:#a78bfa;">PARTICIPANTS</strong>,</p><p style="font-size:13px;color:#94a3b8;margin-bottom:20px;">Registered for: <strong style="color:#c4b5fd;">EVENT NAME</strong></p><div style="background:#1a1c2e;border:1px solid #2d2f4a;border-radius:12px;padding:20px;margin-bottom:20px;"><h3 style="color:#a78bfa;font-size:11px;text-transform:uppercase;letter-spacing:3px;margin:0 0 12px 0;">📋 Instructions</h3><table style="width:100%;border-collapse:collapse;">${instructionLines}</table></div><table style="width:100%;border-collapse:collapse;margin-bottom:20px;"><tr><td style="width:50%;padding-right:6px;vertical-align:top;"><div style="background:#1a1c2e;border:1px solid #2d2f4a;border-radius:12px;padding:15px;text-align:center;"><p style="color:#7c3aed;font-size:10px;text-transform:uppercase;letter-spacing:2px;margin:0 0 6px 0;font-weight:700;">🕐 Arrival Time</p><p style="color:#f1f5f9;font-size:16px;font-weight:900;margin:0;">${mailerTime}</p></div></td><td style="width:50%;padding-left:6px;vertical-align:top;"><div style="background:#1a1c2e;border:1px solid #2d2f4a;border-radius:12px;padding:15px;text-align:center;"><p style="color:#7c3aed;font-size:10px;text-transform:uppercase;letter-spacing:2px;margin:0 0 6px 0;font-weight:700;">📍 Venue</p><p style="color:#f1f5f9;font-size:14px;font-weight:900;margin:0;">${mailerVenue}</p></div></td></tr></table><div style="background:linear-gradient(135deg,#1e1b4b,#2e1065);border:1px solid #4c1d95;border-radius:12px;padding:15px;text-align:center;margin-bottom:20px;"><p style="color:#c4b5fd;font-size:11px;text-transform:uppercase;letter-spacing:2px;margin:0 0 8px 0;">📞 On-Ground Assistance</p><p style="color:#e2e8f0;font-size:12px;margin:0 0 10px 0;line-height:1.6;">If you face any issues at the registration desk or need any help on the event day, please do not hesitate to reach out to Us.</p><p style="color:#fff;font-size:15px;font-weight:900;margin:0;"><span style="color:#a78bfa;">${mailerContact}</span> — <span style="color:#a78bfa;">${mailerPhone}</span></p></div><p style="font-size:13px;color:#64748b;text-align:center;">We can't wait to see you there! 🎉</p></div><div style="border-top:1px solid #1e1e3a;padding:15px;text-align:center;"><p style="color:#475569;font-size:11px;margin:0;">Estralis 2026 | GCEM, Bengaluru</p></div></div>`;
     };
 
     const fetchThemeConfig = async () => {
@@ -604,8 +604,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
         }
 
         const workbook = new ExcelJS.Workbook();
-        workbook.creator = 'AlgoRhythm Admin';
-        workbook.lastModifiedBy = 'AlgoRhythm Admin';
+        workbook.creator = 'Estralis Admin';
+        workbook.lastModifiedBy = 'Estralis Admin';
         workbook.created = new Date();
 
         // Group data by event
@@ -626,18 +626,16 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 { header: 'Category', key: 'category', width: 15 },
                 { header: 'Pass Type', key: 'passType', width: 20 },
                 { header: 'Amount Paid', key: 'amountPaid', width: 20 },
-                { header: 'Team Name', key: 'teamName', width: 25 },
-                { header: 'Booking ID', key: 'id', width: 35 },
                 { header: 'Registration Time', key: 'timestamp', width: 25 },
+                { header: 'Team Name', key: 'teamName', width: 25 },
                 { header: 'Full Name', key: 'fullName', width: 25 },
                 { header: 'Email', key: 'email', width: 30 },
                 { header: 'Phone', key: 'phone', width: 15 },
                 { header: 'College', key: 'college', width: 30 },
-                { header: 'Payment ID', key: 'paymentId', width: 30 },
                 { header: 'UTR Number', key: 'utrNumber', width: 25 },
                 { header: 'Transaction Date', key: 'transactionDate', width: 20 },
                 { header: 'Screenshot URL', key: 'screenshotUrl', width: 50 },
-                { header: 'Team Members details', key: 'teamMembers', width: 60 },
+                { header: 'Squad Details', key: 'teamMembers', width: 60 },
             ];
 
             // Style headers
@@ -657,17 +655,12 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
                 // 1. ADD LEADER ROW
                 worksheet.addRow({
-                    category: reg.category || "Tech",
-                    passType: reg.pass_type || "Standard Pass",
-                    amountPaid: reg.amount_paid || "N/A",
                     teamName: reg.team_name || "N/A",
-                    id: reg.id,
                     timestamp: new Date(reg.timestamp).toLocaleString('en-IN'),
                     fullName: `[LEADER] ${reg.full_name}`,
                     email: reg.email,
                     phone: reg.phone,
                     college: reg.college,
-                    paymentId: reg.razorpay_payment_id || "N/A",
                     utrNumber: reg.utr_number || "N/A",
                     transactionDate: reg.transaction_date || "N/A",
                     screenshotUrl: reg.screenshot_url || "N/A",
@@ -678,17 +671,12 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 if (reg.team_members && Array.isArray(reg.team_members)) {
                     reg.team_members.forEach((m, idx) => {
                         worksheet.addRow({
-                            category: reg.category || "Tech",
-                            passType: reg.pass_type || "Standard Pass",
-                            amountPaid: reg.amount_paid || "N/A",
                             teamName: reg.team_name || "N/A",
-                            id: reg.id,
                             timestamp: new Date(reg.timestamp).toLocaleString('en-IN'),
                             fullName: `[MEMBER ${idx + 2}] ${m.fullName}`,
                             email: m.email,
                             phone: m.phone,
                             college: m.college || reg.college,
-                            paymentId: reg.razorpay_payment_id || "N/A",
                             utrNumber: reg.utr_number || "N/A",
                             transactionDate: reg.transaction_date || "N/A",
                             screenshotUrl: reg.screenshot_url || "N/A",
@@ -704,7 +692,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        saveAs(blob, `AlgoRhythm_2026_Master_Report_${new Date().toLocaleDateString().replace(/\//g, '-')}.xlsx`);
+        saveAs(blob, `Estralis_2026_Master_Report_${new Date().toLocaleDateString().replace(/\//g, '-')}.xlsx`);
+        addToast("✅ Excel document generated!", "success");
     };
 
 
@@ -897,18 +886,14 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         <table className="w-full text-left border-collapse min-w-[1200px]">
                                             <thead className="sticky top-0 bg-[#020617] z-20">
                                                 <tr className="border-b border-teal-500/20">
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">ID</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Date & Time</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Team Name</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Full Name</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">College</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Email</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Phone</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Team Members</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Event</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Category</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Payment</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Pass Info</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Squad Members</th>
+                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Sector</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">UTR No.</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">Trans. Date</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">Proof</th>
@@ -919,9 +904,6 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                             <tbody className="divide-y divide-teal-500/5">
                                                 {filteredData.length > 0 ? filteredData.map((reg) => (
                                                     <tr key={reg.id} className="hover:bg-teal-500/5 transition-all group border-b border-teal-500/5">
-                                                        <td className="px-6 py-6 border-r border-teal-500/10">
-                                                            <div className="text-[9px] font-mono text-cyan-500/60 break-all max-w-[80px]">{String(reg.id).split('-')[0]}...</div>
-                                                        </td>
                                                         <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
                                                             <div className="text-[10px] font-black text-white">{new Date(reg.timestamp).toLocaleDateString('en-IN')}</div>
                                                             <div className="text-[8px] font-bold text-teal-400/40 mt-1">{new Date(reg.timestamp).toLocaleTimeString('en-IN')}</div>
@@ -960,27 +942,11 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                                         </div>
                                                                     ))}
                                                                 </div>
-                                                            ) : <span className="text-white/10 text-[9px] font-black uppercase tracking-widest">SOLORIDE</span>}
+                                                            ) : <span className="text-white/10 text-[9px] font-black uppercase tracking-widest">N/A</span>}
                                                         </td>
                                                         <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
                                                             <div className="text-[10px] font-black text-white uppercase">{reg.event_title}</div>
-                                                        </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
-                                                            <span className={`px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest ${reg.category === 'Fun' ? 'bg-pink-500/10 text-pink-400' : reg.category === 'Workshop' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-cyan-500/10 text-cyan-400'}`}>
-                                                                {reg.category || "Tech"}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap text-center">
-                                                            <div className="text-[10px] font-black text-emerald-400 uppercase">{reg.amount}</div>
-                                                            <div className="text-[8px] font-mono text-white/20 mt-1">{reg.payment_id || "N/A"}</div>
-                                                        </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10">
-                                                            <div className="flex flex-col gap-2">
-                                                                <span className={`w-fit px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest ${reg.pass_type === 'Combo Pass' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'}`}>
-                                                                    {reg.pass_type || "Basic"}
-                                                                </span>
-                                                                <div className="text-base font-black text-white italic">₹{reg.amount_paid || "0.00"}</div>
-                                                            </div>
+                                                            <div className="text-[8px] font-black text-teal-500/40 italic mt-0.5 underline">₹{reg.amount_paid || "0.00"} (Paid)</div>
                                                         </td>
                                                         <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap text-center">
                                                             <div className="text-[10px] font-black text-cyan-400 tracking-wider bg-cyan-500/5 px-2 py-1 rounded border border-cyan-500/10 inline-block">{reg.utr_number || "N/A"}</div>

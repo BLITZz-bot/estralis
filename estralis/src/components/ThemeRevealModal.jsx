@@ -354,7 +354,7 @@ export default function ThemeRevealModal({ isOpen, onClose }) {
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             className="w-full bg-white/[0.03] border border-white/10 rounded-2xl pl-12 pr-6 py-4 text-white focus:outline-none focus:border-purple-500/50 focus:bg-white/[0.06] transition-all font-medium"
-                                            placeholder="algorhythm@gmail.com"
+                                            placeholder="estralis@gmail.com"
                                         />
                                     </div>
                                 </div>
