@@ -556,17 +556,8 @@ app.get('/api/admin/registrations', async (req, res) => {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
-        if (!supabase) {
-            return res.status(503).json({ success: false, message: 'Supabase client not initialized' });
-        }
-
-        const { data, error } = await supabase
-            .from('registrations')
-            .select('*')
-            .order('timestamp', { ascending: false });
-
-        if (error) throw error;
-        res.status(200).json({ success: true, data });
+        const result = await db.query('SELECT * FROM registrations ORDER BY timestamp DESC');
+        res.status(200).json({ success: true, data: result.rows });
     } catch (error) {
         console.error("Admin registration fetch error:", error);
         res.status(500).json({ success: false, message: 'Server error' });
@@ -582,12 +573,7 @@ app.delete('/api/admin/registrations/:id', async (req, res) => {
         }
 
         const { id } = req.params;
-        const { error } = await supabase
-            .from('registrations')
-            .delete()
-            .eq('id', id);
-
-        if (error) throw error;
+        await db.query('DELETE FROM registrations WHERE id = $1', [id]);
         res.status(200).json({ success: true, message: 'Registration deleted' });
     } catch (error) {
         console.error("Admin delete error:", error);
