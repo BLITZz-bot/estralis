@@ -242,25 +242,25 @@ export default function RegistrationForm({ event, onClose }) {
                 pageDoc.setFont("helvetica", "bold");
                 pageDoc.setTextColor(8, 145, 178, 40); // Cyan glow
                 pageDoc.setFontSize(26);
-                pageDoc.text("ESTRALIS 2026", 90.5, 35, { align: "center", charSpace: 1 });
+                pageDoc.text("ESTRALIS 2026", 83, 35, { align: "center", charSpace: 1 });
                 
                 pageDoc.setTextColor(255, 255, 255);
-                pageDoc.text("ESTRALIS 2026", 90, 35, { align: "center", charSpace: 1 });
+                pageDoc.text("ESTRALIS 2026", 83, 35, { align: "center", charSpace: 1 });
 
                 pageDoc.setFontSize(8);
                 pageDoc.setFont("helvetica", "normal");
                 pageDoc.setTextColor(...colors.teal);
-                pageDoc.text("THE INTERSTELLAR SYMPOSIUM", 90, 43, { align: "center", charSpace: 1.5 });
+                pageDoc.text("THE INTERSTELLAR SYMPOSIUM", 70, 43, { align: "center", charSpace: 1.5 });
 
                 pageDoc.setFontSize(7);
                 pageDoc.setTextColor(...colors.dim);
-                pageDoc.text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", 90, 50, { align: "center" });
+                pageDoc.text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", 89, 50, { align: "center" });
 
                 // 5. FOOTER DECOR
                 pageDoc.setFont("helvetica", "italic");
                 pageDoc.setFontSize(6);
                 pageDoc.setTextColor(...colors.dim);
-                pageDoc.text("THIS DOCUMENT IS ELECTRONICALLY GENERATED AND ENCRYPTED", 90, 243, { align: "center" });
+                pageDoc.text("PLEASE SUBMIT THE ACCESS PASS AT THE REGISTERATION DESK", 90, 243, { align: "center" });
             };
 
             drawTicketBase(doc);
@@ -293,16 +293,16 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setFont("helvetica", "bold");
             doc.setFontSize(32);
             doc.setTextColor(255, 255, 255);
-            doc.text(event.title.toUpperCase(), 90, startY + 35, { align: "center", charSpace: 1 });
+            doc.text(event.title.toUpperCase(), 85, startY + 35, { align: "center", charSpace: 1 });
 
             // CATEGORY TAG
             doc.setFillColor(...colors.teal);
             const catText = (event.category || "TECH").toUpperCase();
             const tagWidth = doc.getTextWidth(catText) + 10;
-            doc.roundedRect(90 - (tagWidth/2), startY + 40, tagWidth, 8, 4, 4, 'F');
+            doc.roundedRect(87 - (tagWidth/2), startY + 40, tagWidth, 8, 4, 4, 'F');
             doc.setFontSize(8);
             doc.setTextColor(...colors.bg);
-            doc.text(catText, 90, startY + 45.5, { align: "center", charSpace: 2 });
+            doc.text(catText, 85, startY + 45.5, { align: "center", charSpace: 2 });
 
             // LOGISTICS (Location & Time)
             doc.setFillColor(30, 41, 59, 40);
@@ -322,7 +322,7 @@ export default function RegistrationForm({ event, onClose }) {
             doc.text(event.time || "TBA", 100, startY + 72);
 
             // PARTICIPANT DATA
-            let currentY = startY + 100;
+            let currentY = startY + 90;
             
             doc.setDrawColor(...colors.teal);
             doc.line(20, currentY, 160, currentY);
@@ -353,18 +353,20 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setTextColor(...colors.dim); 
             doc.text(`Institute: ${formData.college}`, 20, currentY);
             currentY += 6;
-            doc.text(`Contact: ${formData.email} | ${formData.phone}`, 20, currentY);
+            doc.text(`Email: ${formData.email}`, 20, currentY);
+            currentY += 5;
+            doc.text(`Phone: ${formData.phone}`, 20, currentY);
 
             // FEE SECTION (Bottom Left)
             doc.setFont("helvetica", "bold");
             doc.setFontSize(8);
             doc.setTextColor(...colors.teal);
-            doc.text(passType === 'combo' ? "COMBO_PASS_FEE" : "BASE_FEE", 20, 225);
+            doc.text(passType === 'combo' ? "COMBO_PASS_FEE" : "BASE_FEE", 20, 232);
             
             doc.setFont("helvetica", "bold");
             doc.setFontSize(16);
             doc.setTextColor(255, 255, 255);
-            doc.text(`INR ${amount.toString().replace(/₹/g, '')}`, 20, 233);
+            doc.text(`Rs. ${amount.toString().replace(/₹/g, '')}`, 20, 240);
 
             if (teamMembers && teamMembers.length > 0) {
                 doc.addPage("portrait", "mm", [180, 260]);

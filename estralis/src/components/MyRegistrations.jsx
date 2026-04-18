@@ -150,25 +150,25 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                 pageDoc.setFont("helvetica", "bold");
                 pageDoc.setTextColor(8, 145, 178, 40); // Cyan glow
                 pageDoc.setFontSize(26);
-                pageDoc.text("ESTRALIS 2026", 90.5, 35, { align: "center", charSpace: 1 });
-                
+                pageDoc.text("ESTRALIS 2026", 83, 35, { align: "center", charSpace: 1 });
+
                 pageDoc.setTextColor(255, 255, 255);
-                pageDoc.text("ESTRALIS 2026", 90, 35, { align: "center", charSpace: 1 });
+                pageDoc.text("ESTRALIS 2026", 83, 35, { align: "center", charSpace: 1 });
 
                 pageDoc.setFontSize(8);
                 pageDoc.setFont("helvetica", "normal");
                 pageDoc.setTextColor(...colors.teal);
-                pageDoc.text("THE INTERSTELLAR SYMPOSIUM", 90, 43, { align: "center", charSpace: 1.5 });
+                pageDoc.text("THE INTERSTELLAR SYMPOSIUM", 70, 43, { align: "center", charSpace: 1.5 });
 
                 pageDoc.setFontSize(7);
                 pageDoc.setTextColor(...colors.dim);
-                pageDoc.text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", 90, 50, { align: "center" });
+                pageDoc.text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", 89, 50, { align: "center" });
 
                 // 5. FOOTER DECOR
                 pageDoc.setFont("helvetica", "italic");
                 pageDoc.setFontSize(6);
                 pageDoc.setTextColor(...colors.dim);
-                pageDoc.text("THIS DOCUMENT IS ELECTRONICALLY GENERATED AND ENCRYPTED", 90, 243, { align: "center" });
+                pageDoc.text("PLEASE SUBMIT THE ACCESS PASS AT THE REGISTERATION DESK", 90, 243, { align: "center" });
             };
 
             // START PAGE 1
@@ -176,13 +176,13 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
 
             // TICKET CONTENT
             const startY = 80;
-            
+
             // UTR / TRANSACTION ID Section
             doc.setFont("helvetica", "bold");
             doc.setFontSize(8);
             doc.setTextColor(...colors.teal);
             doc.text("TRANSACTION_ID //", 20, startY);
-            
+
             doc.setFont("courier", "bold");
             doc.setFontSize(14);
             doc.setTextColor(255, 255, 255);
@@ -202,21 +202,21 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.setFont("helvetica", "bold");
             doc.setFontSize(32);
             doc.setTextColor(255, 255, 255);
-            doc.text(registration.event_title.toUpperCase(), 90, startY + 35, { align: "center", charSpace: 1 });
+            doc.text(registration.event_title.toUpperCase(), 85, startY + 35, { align: "center", charSpace: 1 });
 
             // CATEGORY TAG
             doc.setFillColor(...colors.teal);
             const catText = (registration.category || "TECH").toUpperCase();
             const tagWidth = doc.getTextWidth(catText) + 10;
-            doc.roundedRect(90 - (tagWidth/2), startY + 40, tagWidth, 8, 4, 4, 'F');
+            doc.roundedRect(87 - (tagWidth / 2), startY + 40, tagWidth, 8, 4, 4, 'F');
             doc.setFontSize(8);
             doc.setTextColor(...colors.bg);
-            doc.text(catText, 90, startY + 45.5, { align: "center", charSpace: 2 });
+            doc.text(catText, 85, startY + 45.5, { align: "center", charSpace: 2 });
 
             // LOGISTICS (Location & Time)
             doc.setFillColor(30, 41, 59, 40);
             doc.roundedRect(20, startY + 55, 140, 30, 5, 5, 'F');
-            
+
             doc.setFont("helvetica", "bold");
             doc.setFontSize(9);
             doc.setTextColor(...colors.teal);
@@ -231,8 +231,8 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.text(registration.event_time || "TBA", 100, startY + 72);
 
             // PARTICIPANT DATA
-            let currentY = startY + 100;
-            
+            let currentY = startY + 90;
+
             doc.setDrawColor(...colors.teal);
             doc.line(20, currentY, 160, currentY);
             currentY += 10;
@@ -259,22 +259,24 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
 
             doc.setFont("helvetica", "normal");
             doc.setFontSize(10);
-            doc.setTextColor(...colors.dim); 
+            doc.setTextColor(...colors.dim);
             doc.text(`Institute: ${registration.college}`, 20, currentY);
             currentY += 6;
-            doc.text(`Contact: ${registration.email} | ${registration.phone}`, 20, currentY);
+            doc.text(`Email: ${registration.email}`, 20, currentY);
+            currentY += 5;
+            doc.text(`Phone: ${registration.phone}`, 20, currentY);
 
             // FEE SECTION (Bottom Left)
             doc.setFont("helvetica", "bold");
             doc.setFontSize(8);
             doc.setTextColor(...colors.teal);
-            doc.text(registration.pass_type === 'Combo Pass' ? "COMBO_PASS_FEE" : "BASE_FEE", 20, 225);
-            
+            doc.text(registration.pass_type === 'Combo Pass' ? "COMBO_PASS_FEE" : "BASE_FEE", 20, 232);
+
             doc.setFont("helvetica", "bold");
             doc.setFontSize(16);
             doc.setTextColor(255, 255, 255);
             let feeText = registration.amount_paid ? registration.amount_paid.toString().replace(/₹/g, "Rs. ") : "Free";
-            doc.text(feeText, 20, 233);
+            doc.text(feeText, 20, 240);
 
             // PAGE 2 (TEAM MEMBERS)
             const teamMembers = registration.team_members || [];
@@ -305,13 +307,13 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
 
                     doc.setTextColor(255, 255, 255);
                     doc.text(m.fullName.toUpperCase(), 40, teamY);
-                    
+
                     teamY += 6;
                     doc.setFont("helvetica", "normal");
                     doc.setFontSize(9);
                     doc.setTextColor(...colors.dim);
                     doc.text(`${m.email} | ${m.phone}`, 40, teamY);
-                    
+
                     teamY += 12;
                 });
             }
@@ -404,10 +406,10 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                                             <p className="text-xs font-bold font-tech text-teal-400 mb-2 uppercase tracking-widest">{reg.full_name.toUpperCase()} <span className="text-white/30 font-normal">| {reg.pass_type || "Standard Pass"}</span></p>
                                             <p className="text-[10px] text-white/40 font-tech uppercase tracking-widest">Registered: {new Date(reg.timestamp).toLocaleDateString()}</p>
                                             <div className="flex items-center gap-2 mt-3">
-                                                 <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
-                                                 <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-[0.2em] font-tech text-left">
-                                                      Status: [Verified]
-                                                 </span>
+                                                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+                                                <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-[0.2em] font-tech text-left">
+                                                    Status: [Verified]
+                                                </span>
                                             </div>
                                         </div>
 
