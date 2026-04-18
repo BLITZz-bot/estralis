@@ -651,6 +651,28 @@ app.delete('/api/admin/registrations-all', async (req, res) => {
     }
 });
 
+// Admin Delete Single Registration
+app.delete('/api/admin/registrations/:id', async (req, res) => {
+    try {
+        const password = req.headers['x-admin-password'];
+        if (password !== 'estralis@admin2026') {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+
+        const { id } = req.params;
+        await db.query('DELETE FROM registrations WHERE id = $1', [id]);
+
+        console.log(`🗑 Admin Deleted Registration: ${id}`);
+        res.status(200).json({
+            success: true,
+            message: `Registration deleted successfully.`
+        });
+    } catch (error) {
+        console.error("Admin Single Delete Error:", error);
+        res.status(500).json({ success: false, message: 'Server error during registration deletion' });
+    }
+});
+
 // Get all event statuses (Public)
 app.get('/api/events/status', async (req, res) => {
     try {
@@ -905,37 +927,84 @@ app.get('/api/theme/status', async (req, res) => {
 app.post('/api/admin/theme/update', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') return res.status(401).json({ success: false });
+        if (password !== 'estralis@admin2026') {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
 
-        const { revealed, title, description } = req.body;
+        const { title, description, revealed } = req.body;
+        const updates = [];
 
-        await db.query("INSERT INTO system_config (key, value) VALUES ('theme_revealed', $1) ON CONFLICT (key) DO UPDATE SET value = $1", [revealed]);
-        if (title !== undefined) await db.query("INSERT INTO system_config (key, value) VALUES ('theme_title', $1) ON CONFLICT (key) DO UPDATE SET value = $1", [title]);
-        if (description !== undefined) await db.query("INSERT INTO system_config (key, value) VALUES ('theme_description', $1) ON CONFLICT (key) DO UPDATE SET value = $1", [description]);
+        if (title !== undefined) updates.push({ key: 'theme_title', value: title });
+        if (description !== undefined) updates.push({ key: 'theme_description', value: description });
+        if (revealed !== undefined) updates.push({ key: 'theme_revealed', value: revealed });
 
-        res.status(200).json({ success: true });
+        if (updates.length > 0) {
+            for (const update of updates) {
+                await db.query(
+                    'INSERT INTO system_config (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = $2',
+                    [update.key, update.value.toString()]
+                );
+            }
+        }
+
+        console.log(`🎬 Theme Config Updated — Revealed: ${revealed}`);
+        res.status(200).json({ success: true, message: 'Theme config updated' });
     } catch (error) {
         console.error("Theme update error:", error);
-        res.status(500).json({ success: false });
+        res.status(500).json({ success: false, message: 'Failed to update theme config' });
     }
 });
 
-// Admin: Broadcast Bulk Email to all registrations
-app.post('/api/admin/broadcast-email', async (req, res) => {
+// --- THEME VERIFY EMAIL ---
+app.post('/api/theme/verify', async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
+
+        const ALLOWED_EVENTS = ['HIGHLIGHT REEL', 'SHOT CUT'];
+        const result = await db.query(
+            "SELECT * FROM registrations WHERE LOWER(email) = LOWER($1) AND event_title ANY($2)",
+            [email.trim(), ALLOWED_EVENTS]
+        );
+        const data = result.rows[0];
+
+        if (!data) {
+            return res.status(200).json({ success: false, verified: false, message: 'This reveal is exclusively for Highlight Reel & Shot Cut leaders.' });
+        }
+
+        res.status(200).json({ success: true, verified: true, name: data.full_name });
+    } catch (error) {
+        console.error("Theme verify error:", error);
+        res.status(500).json({ success: false, message: 'Server error during verification' });
+    }
+});
+
+// --- ADMIN: Send Custom Event Day Email ---
+app.post('/api/admin/send-event-mail', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') return res.status(401).json({ success: false });
+        if (password !== 'estralis@admin2026') {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
 
-        const { subject, body, target, registrationId, venue } = req.body;
+        const { target, registrationId, subject, body, arrivalTime, venue, contactName, contactPhone } = req.body;
+
+        if (!subject || !body) {
+            return res.status(400).json({ success: false, message: 'Subject and body are required' });
+        }
 
         const buildEventEmail = (reg) => {
-            const instructionLines = body.split('\n').map(line => `<p style="margin: 10px 0;">${line}</p>`).join('');
-            return `
-                    <div style="font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f6; padding: 40px; color: #1e293b;">
-                        <div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 40px; border-top: 6px solid #9333ea;">
-                            <h1 style="color: #9333ea; text-align: center; margin-bottom: 30px;">Estralis 2026 Info</h1>
-                            <p>Hello <strong>${reg.full_name}</strong>,</p>
-                            <div style="background: #fdf4ff; border-radius: 12px; padding: 20px; margin: 25px 0; color: #7e22ce; line-height: 1.6;">
+            const instructionLines = body.split('\n').filter(l => l.trim()).map(line =>
+                `<tr><td style="padding: 8px 0; padding-left: 20px; color: #e2e8f0; font-size: 15px; line-height: 1.7; border-left: 3px solid #7c3aed;">${line.trim()}</td></tr>`
+            ).join('');
+
+            return `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; background: #0f111a; color: #e2e8f0; border-radius: 24px; overflow: hidden; border: 1px solid #1e1e3a;">
+                        <div style="background: linear-gradient(135deg, #7c3aed 0%, #9333ea 50%, #a855f7 100%); padding: 40px 30px; text-align: center;">
+                            <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px; font-weight: 900;">ESTRALIS 2026</h1>
+                        </div>
+                        <div style="padding: 35px 30px;">
+                            <p style="font-size: 17px; color: #f1f5f9; margin-bottom: 5px;">Hello <strong>${reg.full_name}</strong>,</p>
+                            <div style="background: #1a1c2e; border: 1px solid #2d2f4a; border-radius: 16px; padding: 25px; margin-bottom: 25px;">
                                 ${instructionLines}
                             </div>
                             <p style="text-align: center; color: #94a3b8;">Venue: ${venue || 'GIS Auditorium'}</p>
@@ -970,3 +1039,4 @@ app.post('/api/admin/broadcast-email', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
+
