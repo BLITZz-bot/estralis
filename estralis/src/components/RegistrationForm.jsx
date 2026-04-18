@@ -187,14 +187,213 @@ export default function RegistrationForm({ event, onClose }) {
 
     const handleDownloadPDF = () => {
         setIsDownloading(true);
-        // Simplified PDF generation logic for stability
         try {
-            const doc = new jsPDF();
-            doc.text(`ESTRALIS 2026 - ${event.title}`, 10, 10);
-            doc.text(`Name: ${formData.fullName}`, 10, 20);
-            doc.text(`Email: ${formData.email}`, 10, 30);
-            doc.text(`Transaction ID: ${formData.utrNumber}`, 10, 40);
-            doc.save(`Estralis_Pass_${formData.fullName}.pdf`);
+            const doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: [180, 260]
+            });
+
+            const cat = event.category || "Tech";
+            const pdfColors = {
+                Tech: {
+                    banner: [14, 116, 144], // Cyan 700
+                    border: [6, 182, 212], // Cyan 500
+                    accent: [34, 211, 238],  // Cyan 400
+                    label: [103, 232, 249]   // Cyan 300
+                },
+                Fun: {
+                    banner: [225, 29, 72],  // Rose 600
+                    border: [168, 85, 247], // Purple 500
+                    accent: [232, 121, 249],  // Fuchsia 400
+                    label: [253, 164, 175]   // Pink 300
+                },
+                Workshop: {
+                    banner: [5, 150, 105],  // Emerald 600
+                    border: [20, 184, 166], // Teal 500
+                    accent: [45, 212, 191],   // Teal 400
+                    label: [110, 231, 183]    // Emerald 300
+                }
+            }
+            const colors = pdfColors[cat] || pdfColors.Tech;
+
+            const drawTicketBase = (pageDoc) => {
+                pageDoc.setFillColor(15, 17, 26);
+                pageDoc.rect(0, 0, 180, 260, 'F');
+
+                pageDoc.setDrawColor(...colors.border); 
+                pageDoc.setLineWidth(1);
+                pageDoc.roundedRect(8, 8, 164, 244, 15, 15, 'D');
+
+                pageDoc.setFillColor(30, 41, 59); 
+                pageDoc.roundedRect(8, 8, 164, 244, 15, 15, 'F');
+
+                pageDoc.setFillColor(...colors.banner); 
+                pageDoc.roundedRect(8, 8, 164, 50, 15, 15, 'F');
+                pageDoc.rect(8, 25, 164, 33, 'F');
+
+                pageDoc.setTextColor(255, 255, 255);
+                pageDoc.setFont("helvetica", "bold");
+                pageDoc.setFontSize(24);
+                pageDoc.text("ESTRALIS 2026", 83, 25, { align: "center", charSpace: 1 });
+
+                pageDoc.setFontSize(10);
+                pageDoc.setFont("helvetica", "normal");
+                pageDoc.setTextColor(255, 255, 255);
+                pageDoc.text("OFFICIAL ACCESS PASS", 65.9, 38, { align: "center", charSpace: 2.5 });
+
+                pageDoc.setDrawColor(71, 85, 105);
+                pageDoc.setLineDash([2, 2], 0);
+                pageDoc.line(15, 65, 165, 65);
+                pageDoc.setLineDash([], 0);
+
+                pageDoc.setFont("helvetica", "italic");
+                pageDoc.setFontSize(7);
+                pageDoc.setTextColor(148, 163, 184);
+                pageDoc.text("PRESENT THIS PASS AT THE REGISTRATION DESK", 90, 240, { align: "center" });
+
+                pageDoc.setFillColor(140, 130, 140); 
+                const barcodeBars = 40;
+                const barcodeWidth = barcodeBars * 2;
+                const startXPos = (180 - barcodeWidth) / 2;
+                for (let i = 0; i < barcodeBars; i++) {
+                    const widthLimit = Math.random() * 1 + 0.3;
+                    pageDoc.rect(startXPos + (i * 2), 242, widthLimit, 8, 'F');
+                }
+
+                pageDoc.setFont("helvetica", "bold");
+                pageDoc.setCharSpace(2);
+                pageDoc.setFontSize(8);
+                pageDoc.setTextColor(255, 255, 255);
+                pageDoc.text("THANKS FOR REGISTERING!", 67, 259, { align: "center" });
+                pageDoc.setCharSpace(0);
+
+                pageDoc.setFontSize(7);
+                pageDoc.setTextColor(51, 65, 85);
+                pageDoc.text("DESIGNED BY GRAFIK", 173, 235, { angle: 90 });
+            };
+
+            drawTicketBase(doc);
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(9);
+            doc.setTextColor(148, 163, 184); 
+            doc.text("UTR NO:", 20, 80);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            doc.setTextColor(255, 255, 255);
+            const ticketId = formData.utrNumber || `ALG-${Math.floor(Math.random() * 1000000)}`;
+            doc.text(ticketId, 20, 88);
+
+            doc.setFillColor(16, 185, 129);
+            doc.roundedRect(135, 76, 30, 12, 6, 6, 'F');
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(10);
+            doc.setTextColor(255, 255, 255);
+            doc.text("VERIFIED", 150, 84, { align: "center" });
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(30);
+            doc.setTextColor(...colors.border); 
+            doc.text(event.title.toUpperCase(), 90, 115, { align: "center" });
+
+            doc.setFillColor(15, 23, 42); 
+            doc.roundedRect(20, 125, 140, 28, 6, 6, 'F');
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(11);
+            doc.setTextColor(255, 255, 255);
+            doc.text("TIME:", 30, 137);
+            doc.text("VENUE:", 85, 137);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(10);
+            doc.setTextColor(148, 163, 184);
+            doc.text(event.time, 30, 146);
+
+            const venueLines = doc.splitTextToSize(event.location, 70);
+            doc.text(venueLines, 85, 146);
+
+            let currentY = 175;
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(10);
+            doc.setTextColor(...(colors.label || [253, 164, 175])); 
+            doc.text("PARTICIPANTS DETAILS", 20, currentY);
+            currentY += 10;
+            
+            if (formData.teamName) {
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(12);
+                doc.setTextColor(...colors.border);
+                doc.text(`TEAM: ${formData.teamName.toUpperCase()}`, 20, currentY);
+                currentY += 8;
+            }
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
+            doc.setTextColor(255, 255, 255);
+            doc.text(formData.fullName.toUpperCase(), 20, currentY);
+
+            currentY += 10;
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(10);
+            doc.setTextColor(148, 163, 184); 
+            doc.text(`College: ${formData.college}`, 20, currentY);
+            
+            currentY += 7;
+            doc.text(`Email: ${formData.email}`, 20, currentY);
+            
+            currentY += 7;
+            doc.text(`Phone: ${formData.phone}`, 20, currentY);
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(10);
+            doc.setTextColor(...colors.label); 
+            doc.text(passType === 'combo' ? "COMBO PASS FEE" : "STANDARD FEE", 20, 227);
+            
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(14);
+            doc.setTextColor(255, 255, 255);
+            doc.text(`Rs. ${amount.toString().replace(/₹/g, '')}`, 20, 235);
+
+            if (teamMembers && teamMembers.length > 0) {
+                doc.addPage("portrait", "mm", [180, 260]);
+                drawTicketBase(doc);
+
+                let teamY = 80;
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(16);
+                doc.setTextColor(...colors.border); 
+                doc.text(formData.teamName ? `TEAM: ${formData.teamName.toUpperCase()}` : "TEAM MEMBERS", 90, teamY, { align: "center" });
+                teamY += 15;
+
+                teamMembers.forEach((member, index) => {
+                    if (teamY > 220) {
+                        doc.addPage("portrait", "mm", [180, 260]);
+                        drawTicketBase(doc);
+                        teamY = 80;
+                    }
+
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(11);
+                    doc.setTextColor(...colors.accent);
+                    doc.text(`${index + 2}. ${member.fullName.toUpperCase()}`, 25, teamY);
+                    
+                    teamY += 6;
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(9);
+                    doc.setTextColor(148, 163, 184);
+                    doc.text(`${member.phone} | ${member.email}`, 25, teamY);
+                    
+                    teamY += 10;
+                });
+            }
+
+            doc.save(`Estralis_Pass_${formData.fullName.replace(/\s+/g, '_')}.pdf`);
+        } catch (error) {
+            console.error("PDF generation failed:", error);
+            alert("Failed to download PDF ticket. Please try again.");
         } finally {
             setIsDownloading(false);
         }
