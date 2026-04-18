@@ -571,7 +571,10 @@ export default function RegistrationForm({ event, onClose }) {
                                  </div>
                             )}
 
-                            <div className="flex justify-center py-6">
+                            <div className="flex flex-col items-center gap-6 py-6">
+                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center">
+                                    Any issue with registration? Contact <a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">Bharath 7975871167</a>
+                                 </p>
                                  <button type="submit" className="w-full max-w-md py-6 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)] transition-all flex items-center justify-center gap-3 font-astral">
                                     CONTINUE TO PAYMENT <span className="text-lg">→</span>
                                  </button>
@@ -643,6 +646,9 @@ export default function RegistrationForm({ event, onClose }) {
                                  </div>
 
                                  <div className="space-y-6">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center">
+                                       Any issue with registration? Contact <a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">Bharath 7975871167</a>
+                                    </p>
                                     <button
                                         onClick={handleSubmit}
                                         disabled={isSubmitting}
@@ -695,13 +701,6 @@ export default function RegistrationForm({ event, onClose }) {
                         </motion.div>
                     )}
                 </AnimatePresence>
-                
-                {/* Support Footer */}
-                <div className="mt-12 py-6 border-t border-white/5 w-full flex justify-center">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center px-6">
-                        Any issue with registration? Contact <span className="text-teal-400">Bharath 7975871167</span>
-                    </p>
-                </div>
             </div>
         </motion.div>
     );

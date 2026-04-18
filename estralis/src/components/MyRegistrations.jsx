@@ -371,10 +371,13 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                                 placeholder="name@college.edu"
                                 className="flex-1 bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition font-tech"
                             />
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center mb-6">
+                                Any issue with registration? Contact <a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">Bharath 7975871167</a>
+                            </p>
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="px-10 py-4 bg-teal-500 text-black font-black text-[11px] uppercase tracking-[0.3em] rounded-xl hover:bg-white hover:shadow-[0_0_30px_rgba(45,212,191,0.4)] transition-all font-astral disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shrink-0"
+                                className="w-full py-5 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.3em] rounded-2xl hover:bg-white hover:shadow-[0_0_30px_rgba(45,212,191,0.2)] transition-all flex items-center justify-center gap-2 disabled:opacity-50 font-astral"
                             >
                                 {loading ? "Searching..." : "Search"}
                             </button>
@@ -425,13 +428,6 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                             </div>
                         )}
                     </motion.div>
-
-                    {/* Support Footer */}
-                    <div className="mt-12 py-6 border-t border-white/5 w-full flex justify-center">
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center px-6">
-                            Any issue with registration? Contact <span className="text-teal-400">Bharath 7975871167</span>
-                        </p>
-                    </div>
                 </div>
             )}
         </AnimatePresence>

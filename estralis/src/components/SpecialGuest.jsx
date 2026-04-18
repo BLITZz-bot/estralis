@@ -12,39 +12,10 @@ const DJ_EVENT_DATA = {
     // prize: "₹300",
     minTeamSize: 2,
     maxTeamSize: 15,
-    rules: ["*Duration: 6-8 minutes per team for their performance*",
-        "All participants should arrive at the venue 1 hour prior to the event.",
-        "1. Music",
-        "• Teams must submit their music tracks in MP3 format via Google Drive/email by 07/03/2026.",
-        "• File name format: College/Group Name.mp3",
-        "• Backup copies of music tracks should be brought on USB drive.",
-        "• Music should be appropriate and not contain any explicit content.",
-        "2. Choreography",
-        "• All dance forms are allowed (Classical, Hip-hop, Semi-classical, Folk,Contemporary).",
-        "• Choreography should be original or legally permissible.",
-        "3. Costumes",
-        "• Costumes should be appropriate and respectful of cultural sensitivities.",
-        "• Any form of obscenity will result in disqualification.",
-        "4. Props",
-        "• Props are allowed but must be handled by participants themselves.",
-        "• Dangerous/Problematic props (fire, sharp objects,powders etc) are prohibited.",
-        "5. Note",
-        "• Please check the schedule for overlapping events before registering multiple events",
-        "• If registered for overlapping events, MANAGEMENT is not responsible and no refund will be initiated.The participants from Gopalan Group of Institutions should contact the respective event coordinators before registering",
-        "• Arrive at the venue and report to the coordinators 1 hour before the event starts",
-        "CODE OF CONDUCT",
-        "• Participants are expected to maintain decorum and sportsmanship.",
-        "• Any form of misbehavior or disrespect towards organizers, judges, or fellow will lead to disqualification.",
-        "• Vulgar language, inappropriate gestures, and offensive content are strictly prohibited.",
-        "• If technical issues occur, participants may be allowed to restart (subject to judges approval).",
-        "• The decision of the judges is final and binding.",
-        "• Performances are judged based on choreography, synchronization,expression, creativity, and overall impact.",
-        "SAFETY",
-        "•Participants should ensure their performance is safe and does not pose any risk to themselves or the audience"
-    ],
+    rules: ["ID CARD IS MANDATORY"],
     coordinators: ["Divyashree RM – 7019691887", "Abhishek R - 7019323085"],
     registerLink: "#",
-    fee: "₹300",
+    fee: "₹400",
 };
 
 const SpecialGuest = () => {
@@ -113,7 +84,7 @@ const SpecialGuest = () => {
                             >
                                 <div className="flex flex-col gap-1 border-r border-white/10 pr-12">
                                     <span className="text-[10px] uppercase tracking-widest text-white/30 font-black">Reg Fees</span>
-                                    <span className="text-4xl font-black text-teal-400 tracking-tighter">₹300</span>
+                                    <span className="text-4xl font-black text-teal-400 tracking-tighter">₹400</span>
                                 </div>
                             </motion.div>
 
@@ -139,7 +110,7 @@ const SpecialGuest = () => {
                         <div className="relative order-1 lg:order-2 flex justify-center lg:justify-end items-start pt-4 lg:pt-0">
 
                             {/* Year Badge */}
-                            <div className="absolute top-4 right-4 lg:right-0 z-20 bg-black text-white px-5 py-2 font-black text-[10px] tracking-[0.3em] border-l-4 border-teal-500 shadow-xl">
+                            <div className="absolute top-4 right-3 lg:right-0 z-20 bg-black text-white px-5 py-2 font-black text-[10px] tracking-[0.3em] border-l-4 border-teal-500 shadow-xl">
                                 2026
                             </div>
 
