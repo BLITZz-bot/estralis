@@ -89,7 +89,7 @@ export default function RegistrationForm({ event, onClose }) {
 
     const nextStep = (e) => {
         e.preventDefault();
-        
+
         // Validation Suite
         if (!validateEmail(formData.email)) {
             alert("INVALID EMAIL: Please enter a proper email address.");
@@ -104,7 +104,7 @@ export default function RegistrationForm({ event, onClose }) {
         for (let i = 0; i < teamMembers.length; i++) {
             const m = teamMembers[i];
             const isOptional = (i + 2) > minTeamSize;
-            
+
             // If it's a required member, or they filled something in, validate it
             if (!isOptional || m.fullName || m.email || m.phone) {
                 if (!m.fullName || !m.email || !m.phone) {
@@ -127,7 +127,7 @@ export default function RegistrationForm({ event, onClose }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!formData.utrNumber || !formData.transactionDate || !formData.screenshot) {
             alert("Please provide the Transaction ID, Date, and Payment Screenshot to proceed.");
             return;
@@ -189,7 +189,7 @@ export default function RegistrationForm({ event, onClose }) {
         setIsDownloading(true);
         try {
             const amount = (passType === 'combo' && comboPassDetails) ? comboPassDetails : standardFeeString;
-            
+
             const doc = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',
@@ -243,7 +243,7 @@ export default function RegistrationForm({ event, onClose }) {
                 pageDoc.setTextColor(8, 145, 178, 40); // Cyan glow
                 pageDoc.setFontSize(26);
                 pageDoc.text("ESTRALIS 2026", 83, 35, { align: "center", charSpace: 1 });
-                
+
                 pageDoc.setTextColor(255, 255, 255);
                 pageDoc.text("ESTRALIS 2026", 83, 35, { align: "center", charSpace: 1 });
 
@@ -267,13 +267,13 @@ export default function RegistrationForm({ event, onClose }) {
 
             // TICKET CONTENT
             const startY = 80;
-            
+
             // UTR / TRANSACTION ID Section
             doc.setFont("helvetica", "bold");
             doc.setFontSize(8);
             doc.setTextColor(...colors.teal);
             doc.text("TRANSACTION_ID //", 20, startY);
-            
+
             doc.setFont("courier", "bold");
             doc.setFontSize(14);
             doc.setTextColor(255, 255, 255);
@@ -299,7 +299,7 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setFillColor(...colors.teal);
             const catText = (event.category || "TECH").toUpperCase();
             const tagWidth = doc.getTextWidth(catText) + 10;
-            doc.roundedRect(87 - (tagWidth/2), startY + 40, tagWidth, 8, 4, 4, 'F');
+            doc.roundedRect(87 - (tagWidth / 2), startY + 40, tagWidth, 8, 4, 4, 'F');
             doc.setFontSize(8);
             doc.setTextColor(...colors.bg);
             doc.text(catText, 85, startY + 45.5, { align: "center", charSpace: 2 });
@@ -307,7 +307,7 @@ export default function RegistrationForm({ event, onClose }) {
             // LOGISTICS (Location & Time)
             doc.setFillColor(30, 41, 59, 40);
             doc.roundedRect(20, startY + 55, 140, 30, 5, 5, 'F');
-            
+
             doc.setFont("helvetica", "bold");
             doc.setFontSize(9);
             doc.setTextColor(...colors.teal);
@@ -323,7 +323,7 @@ export default function RegistrationForm({ event, onClose }) {
 
             // PARTICIPANT DATA
             let currentY = startY + 90;
-            
+
             doc.setDrawColor(...colors.teal);
             doc.line(20, currentY, 160, currentY);
             currentY += 10;
@@ -350,7 +350,7 @@ export default function RegistrationForm({ event, onClose }) {
 
             doc.setFont("helvetica", "normal");
             doc.setFontSize(10);
-            doc.setTextColor(...colors.dim); 
+            doc.setTextColor(...colors.dim);
             doc.text(`Institute: ${formData.college}`, 20, currentY);
             currentY += 6;
             doc.text(`Email: ${formData.email}`, 20, currentY);
@@ -362,7 +362,7 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setFontSize(8);
             doc.setTextColor(...colors.teal);
             doc.text(passType === 'combo' ? "COMBO_PASS_FEE" : "BASE_FEE", 20, 232);
-            
+
             doc.setFont("helvetica", "bold");
             doc.setFontSize(16);
             doc.setTextColor(255, 255, 255);
@@ -393,16 +393,16 @@ export default function RegistrationForm({ event, onClose }) {
                     doc.setFontSize(12);
                     doc.setTextColor(...colors.teal);
                     doc.text(`${String(index + 2).padStart(2, '0')} //`, 25, teamY);
-                    
+
                     doc.setTextColor(255, 255, 255);
                     doc.text(member.fullName.toUpperCase(), 40, teamY);
-                    
+
                     teamY += 6;
                     doc.setFont("helvetica", "normal");
                     doc.setFontSize(9);
                     doc.setTextColor(...colors.dim);
                     doc.text(`${member.email} | ${member.phone}`, 40, teamY);
-                    
+
                     teamY += 12;
                 });
             }
@@ -428,13 +428,13 @@ export default function RegistrationForm({ event, onClose }) {
             {/* Header */}
             <div className="sticky top-0 p-6 md:p-8 flex items-center justify-between border-b border-teal-500/20 bg-[#020617]/50 backdrop-blur-2xl z-20">
                 <div className="flex flex-col">
-                   <div className="flex items-center gap-2 mb-1">
-                       <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse" />
-                       <span className="text-[9px] font-black tracking-[0.4em] text-teal-500/80 uppercase font-astral">ESTRALIS_2026 // SECURE_REGISTRY</span>
-                   </div>
-                   <h2 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter astral-heading">
-                       {event.title}
-                   </h2>
+                    <div className="flex items-center gap-2 mb-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse" />
+                        <span className="text-[9px] font-black tracking-[0.4em] text-teal-500/80 uppercase font-astral">ESTRALIS_2026 // SECURE_REGISTRY</span>
+                    </div>
+                    <h2 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter astral-heading">
+                        {event.title}
+                    </h2>
                 </div>
                 <button
                     onClick={onClose}
@@ -459,14 +459,14 @@ export default function RegistrationForm({ event, onClose }) {
                         >
                             {/* Step Indicator */}
                             <div className="flex gap-3 justify-center">
-                               {[1,2,3].map(i => (
-                                   <div key={i} className={`h-1 rounded-full transition-all duration-700 ${i <= step ? 'w-12 bg-teal-500 shadow-[0_0_15px_rgba(45,212,191,0.5)]' : 'w-4 bg-white/10'}`} />
-                               ))}
+                                {[1, 2, 3].map(i => (
+                                    <div key={i} className={`h-1 rounded-full transition-all duration-700 ${i <= step ? 'w-12 bg-teal-500 shadow-[0_0_15px_rgba(45,212,191,0.5)]' : 'w-4 bg-white/10'}`} />
+                                ))}
                             </div>
 
                             {/* Basic Info */}
                             <div className="astral-glass p-8 md:p-12 space-y-10">
-                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">FULL NAME</label>
                                         <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="Your Name" />
@@ -488,7 +488,7 @@ export default function RegistrationForm({ event, onClose }) {
 
                             {/* Team Section */}
                             {isTeamEvent && (
-                                 <div className="astral-glass p-8 md:p-12 space-y-10">
+                                <div className="astral-glass p-8 md:p-12 space-y-10">
                                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                         <h3 className="text-[11px] font-black tracking-widest text-white uppercase font-astral">
                                             SQUAD DETAILS
@@ -506,18 +506,18 @@ export default function RegistrationForm({ event, onClose }) {
                                             <input required type="text" name="teamName" value={formData.teamName} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="Enter Team Name" />
                                         </div>
                                     )}
-                                    
+
                                     <div className="grid grid-cols-1 gap-6">
                                         {teamMembers.map((member, index) => {
                                             const isRequired = (index + 2) <= minTeamSize;
                                             return (
-                                                <motion.div 
+                                                <motion.div
                                                     key={index}
                                                     initial={{ opacity: 0, y: 10 }}
                                                     animate={{ opacity: 1, y: 0 }}
                                                     className="p-6 md:p-8 rounded-3xl border border-white/5 bg-white/[0.03] space-y-6 relative"
                                                 >
-                                                     <div className="flex justify-between items-center mb-2">
+                                                    <div className="flex justify-between items-center mb-2">
                                                         <h4 className="text-[10px] font-black uppercase tracking-widest text-white/40 font-astral">MEMBER 0{index + 2}</h4>
                                                         {isRequired ? (
                                                             <span className="text-teal-500/50 text-[9px] font-black uppercase tracking-widest font-astral px-2 py-1 border border-teal-500/20 rounded-lg">
@@ -528,8 +528,8 @@ export default function RegistrationForm({ event, onClose }) {
                                                                 REMOVE
                                                             </button>
                                                         )}
-                                                     </div>
-                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                    </div>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                         <div className="space-y-1.5">
                                                             <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">NAME</label>
                                                             <input required type="text" value={member.fullName} onChange={(e) => {
@@ -568,13 +568,16 @@ export default function RegistrationForm({ event, onClose }) {
                                             );
                                         })}
                                     </div>
-                                 </div>
+                                </div>
                             )}
 
                             <div className="flex flex-col items-center gap-6 py-6">
-                                 <button type="submit" className="w-full max-w-md py-6 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)] transition-all flex items-center justify-center gap-3 font-astral">
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center">
+                                    Any issue with registration? Contact <a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">Bharath 7975871167</a>
+                                </p>
+                                <button type="submit" className="w-full max-w-md py-6 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)] transition-all flex items-center justify-center gap-3 font-astral">
                                     CONTINUE TO PAYMENT <span className="text-lg">→</span>
-                                 </button>
+                                </button>
                             </div>
                         </motion.form>
                     )}
@@ -588,30 +591,30 @@ export default function RegistrationForm({ event, onClose }) {
                             className="w-full max-w-2xl space-y-8"
                         >
                             <div className="flex gap-3 justify-center">
-                               {[1,2,3].map(i => (
-                                   <div key={i} className={`h-1 rounded-full transition-all duration-700 ${i <= step ? 'w-12 bg-teal-500 shadow-[0_0_15px_rgba(45,212,191,0.5)]' : 'w-4 bg-white/10'}`} />
-                               ))}
+                                {[1, 2, 3].map(i => (
+                                    <div key={i} className={`h-1 rounded-full transition-all duration-700 ${i <= step ? 'w-12 bg-teal-500 shadow-[0_0_15px_rgba(45,212,191,0.5)]' : 'w-4 bg-white/10'}`} />
+                                ))}
                             </div>
 
-                             <div className="astral-glass p-8 md:p-12 text-center space-y-10 overflow-y-auto max-h-[70vh] custom-scrollbar">
-                                 <div className="space-y-2">
+                            <div className="astral-glass p-8 md:p-12 text-center space-y-10 overflow-y-auto max-h-[70vh] custom-scrollbar">
+                                <div className="space-y-2">
                                     <h3 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter astral-heading">Payment</h3>
                                     <p className="text-teal-400/60 text-[10px] font-black uppercase tracking-[0.3em] font-tech italic underline decoration-teal-500/30 underline-offset-4">SCAN & UPLOAD PROOF</p>
-                                 </div>
+                                </div>
 
-                                 {/* QR Code Section */}
-                                 <div className="relative group mx-auto w-48 h-48 md:w-64 md:h-64 p-4 bg-white/5 rounded-3xl border border-white/10 flex items-center justify-center overflow-hidden">
-                                     <div className="absolute inset-0 bg-teal-500/5 group-hover:bg-teal-500/10 transition-colors" />
-                                     <img src="/qr.jpeg" alt="Payment QR" className="relative z-10 w-full h-full object-contain rounded-xl shadow-2xl" />
-                                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-500 to-transparent animate-scan" />
-                                 </div>
+                                {/* QR Code Section */}
+                                <div className="relative group mx-auto w-48 h-48 md:w-64 md:h-64 p-4 bg-white/5 rounded-3xl border border-white/10 flex items-center justify-center overflow-hidden">
+                                    <div className="absolute inset-0 bg-teal-500/5 group-hover:bg-teal-500/10 transition-colors" />
+                                    <img src="/qr.jpeg" alt="Payment QR" className="relative z-10 w-full h-full object-contain rounded-xl shadow-2xl" />
+                                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-500 to-transparent animate-scan" />
+                                </div>
 
-                                 <div className="space-y-6 text-left border-y border-white/10 py-8">
+                                <div className="space-y-6 text-left border-y border-white/10 py-8">
                                     <div className="flex justify-between items-center text-teal-400 font-black text-[10px] tracking-widest uppercase mb-4">
                                         <span>Step 1: Scan & Pay</span>
                                         <span>Step 2: Enter Details</span>
                                     </div>
-                                    
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="space-y-1.5">
                                             <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">UTR / Transaction ID</label>
@@ -640,9 +643,12 @@ export default function RegistrationForm({ event, onClose }) {
                                         <span className="text-[12px] font-black text-white uppercase tracking-widest font-astral">TOTAL FEE</span>
                                         <span className="text-4xl md:text-5xl font-black text-teal-400 italic glow-teal">{standardFeeString}</span>
                                     </div>
-                                 </div>
+                                </div>
 
-                                 <div className="space-y-6">
+                                <div className="space-y-6">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center">
+                                        Any issue with registration? Contact <a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">Bharath 7975871167</a>
+                                    </p>
                                     <button
                                         onClick={handleSubmit}
                                         disabled={isSubmitting}
@@ -653,8 +659,8 @@ export default function RegistrationForm({ event, onClose }) {
                                     <button type="button" onClick={() => setStep(1)} className="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors flex items-center justify-center gap-2 font-astral">
                                         ← EDIT DETAILS
                                     </button>
-                                 </div>
-                             </div>
+                                </div>
+                            </div>
                         </motion.div>
                     )}
 
@@ -665,13 +671,13 @@ export default function RegistrationForm({ event, onClose }) {
                             animate={{ scale: 1, opacity: 1 }}
                             className="w-full max-w-2xl text-center space-y-10"
                         >
-                             <div className="astral-glass p-8 md:p-16 border-emerald-500/30">
+                            <div className="astral-glass p-8 md:p-16 border-emerald-500/30">
                                 <div className="w-20 h-20 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 text-4xl">
                                     ✓
                                 </div>
                                 <h3 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-4 astral-heading">Access Granted</h3>
                                 <p className="text-white/60 text-lg md:text-xl font-medium mb-12">Your registration for <span className="text-teal-400">{event.title}</span> is complete.</p>
-                                
+
                                 <div className="space-y-4 text-left border-t border-white/10 pt-10">
                                     <div className="flex justify-between items-center">
                                         <span className="text-[10px] font-black text-white/30 uppercase tracking-widest font-astral">STATUS</span>
