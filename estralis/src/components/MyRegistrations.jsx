@@ -362,7 +362,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                         </p>
 
                         {/* SEARCH FORM */}
-                        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4 mb-8">
+                        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4 mb-4">
                             <input
                                 type="email"
                                 required
@@ -371,17 +371,15 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                                 placeholder="name@college.edu"
                                 className="flex-1 bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition font-tech"
                             />
-                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center mb-6">
-                                Any issue with registration? Contact <a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">Bharath 7975871167</a>
-                            </p>
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full py-5 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.3em] rounded-2xl hover:bg-white hover:shadow-[0_0_30px_rgba(45,212,191,0.2)] transition-all flex items-center justify-center gap-2 disabled:opacity-50 font-astral"
+                                className="w-full sm:w-auto px-8 py-5 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.3em] rounded-2xl hover:bg-white hover:shadow-[0_0_30px_rgba(45,212,191,0.2)] transition-all flex items-center justify-center gap-2 disabled:opacity-50 font-astral"
                             >
                                 {loading ? "Searching..." : "Search"}
                             </button>
                         </form>
+
 
                         {/* ERROR MSG */}
                         {error && (
