@@ -242,19 +242,19 @@ export default function RegistrationForm({ event, onClose }) {
                 pageDoc.setFont("helvetica", "bold");
                 pageDoc.setTextColor(8, 145, 178, 40); // Cyan glow
                 pageDoc.setFontSize(26);
-                pageDoc.text("ESTRALIS 2026", 91, 35, { align: "center", charSpace: 2 });
+                pageDoc.text("ESTRALIS 2026", 90.5, 35, { align: "center", charSpace: 1 });
                 
                 pageDoc.setTextColor(255, 255, 255);
-                pageDoc.text("ESTRALIS 2026", 90, 34, { align: "center", charSpace: 2 });
+                pageDoc.text("ESTRALIS 2026", 90, 34, { align: "center", charSpace: 1 });
 
                 pageDoc.setFontSize(8);
                 pageDoc.setFont("helvetica", "normal");
                 pageDoc.setTextColor(...colors.teal);
-                pageDoc.text("THE INTERSTELLAR SYMPOSIUM", 90, 43, { align: "center", charSpace: 4 });
+                pageDoc.text("THE INTERSTELLAR SYMPOSIUM", 90, 43, { align: "center", charSpace: 1.5 });
 
                 pageDoc.setFontSize(7);
                 pageDoc.setTextColor(...colors.dim);
-                pageDoc.text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", 90, 52, { align: "center", charSpace: 1 });
+                pageDoc.text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", 90, 50, { align: "center" });
 
                 // 5. FOOTER DECOR
                 pageDoc.setFont("helvetica", "italic");
@@ -290,11 +290,11 @@ export default function RegistrationForm({ event, onClose }) {
             // Status Badge
             doc.setDrawColor(...colors.teal);
             doc.setLineWidth(0.5);
-            doc.roundedRect(130, startY - 2, 30, 12, 2, 2, 'D');
+            doc.roundedRect(130, startY + 2, 30, 10, 2, 2, 'D');
             doc.setFont("helvetica", "bold");
             doc.setFontSize(9);
             doc.setTextColor(...colors.teal);
-            doc.text("VERIFIED", 145, startY + 6, { align: "center" });
+            doc.text("VERIFIED", 145, startY + 9, { align: "center" });
 
             // EVENT TITLE (The Star of the Show)
             doc.setFont("helvetica", "bold");
@@ -358,7 +358,7 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setFont("helvetica", "normal");
             doc.setFontSize(10);
             doc.setTextColor(...colors.dim); 
-            doc.text(`Institue: ${formData.college}`, 20, currentY);
+            doc.text(`Institute: ${formData.college}`, 20, currentY);
             currentY += 6;
             doc.text(`Contact: ${formData.email} | ${formData.phone}`, 20, currentY);
 
