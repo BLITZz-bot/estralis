@@ -425,6 +425,13 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                             </div>
                         )}
                     </motion.div>
+
+                    {/* Support Footer */}
+                    <div className="mt-12 py-6 border-t border-white/5 w-full flex justify-center">
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center px-6">
+                            Any issue with registration? Contact <span className="text-teal-400">Bharath 7975871167</span>
+                        </p>
+                    </div>
                 </div>
             )}
         </AnimatePresence>
