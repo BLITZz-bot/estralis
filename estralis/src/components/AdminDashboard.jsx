@@ -582,18 +582,24 @@ export default function AdminDashboard({ isOpen, onClose }) {
         
         // Filter by Status
         if (statusFilter !== "All") {
-            filtered = filtered.filter(r => (r.status || 'pending').toLowerCase() === statusFilter.toLowerCase());
+            filtered = filtered.filter(r => {
+                const status = (r.status || 'pending').toLowerCase();
+                if (statusFilter === 'pending') {
+                    return status === 'pending' || status === 'pending_verification' || status === 'pending_approval';
+                }
+                return status === statusFilter.toLowerCase();
+            });
         }
         
         setFilteredData(filtered);
     }, [filterEvent, statusFilter, registrations]);
 
     const downloadExcel = async () => {
-        // Only export successfull (verified) registrations as per user request
-        const successfulRegistrations = registrations.filter(r => (r.status || 'pending').toLowerCase() === 'verified');
+        // Export the currently filtered data so the user gets what they see on screen
+        const dataToExport = filteredData;
         
-        if (successfulRegistrations.length === 0) {
-            addToast("No verified (successful) registrations to export.", "error");
+        if (dataToExport.length === 0) {
+            addToast(`No ${statusFilter === 'All' ? '' : statusFilter} registrations found to export.`, "error");
             return;
         }
 
@@ -603,7 +609,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         workbook.created = new Date();
 
         // Group data by event
-        const grouped = registrations.reduce((acc, curr) => {
+        const grouped = dataToExport.reduce((acc, curr) => {
             const title = curr.event_title || "Uncategorized";
             if (!acc[title]) acc[title] = [];
             acc[title].push(curr);
