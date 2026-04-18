@@ -188,6 +188,8 @@ export default function RegistrationForm({ event, onClose }) {
     const handleDownloadPDF = () => {
         setIsDownloading(true);
         try {
+            const amount = (passType === 'combo' && comboPassDetails) ? comboPassDetails : standardFeeString;
+            
             const doc = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',
