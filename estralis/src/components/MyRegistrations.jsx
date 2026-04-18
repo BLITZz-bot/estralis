@@ -100,15 +100,20 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
         try {
             const safeName = registration.full_name ? registration.full_name.replace(/\s+/g, '_') : 'Attendee';
         try {
-            const front = document.getElementById('pass-page-front');
-            const back = document.getElementById('pass-page-back');
-            if (!front) throw new Error("Front template not found");
+            const front = document.getElementById('pass-page-front-pro');
+            const back = document.getElementById('pass-page-back-pro');
+            if (!front) throw new Error("Professional template not found");
 
-            const pdf = new jsPDF('p', 'mm', [100, 210]); // Vertical ticket format
+            const pdf = new jsPDF('p', 'mm', [100, 210]); // Premium Vertical Format
 
-            // Page 1: Leader
+            // Page 1: Leader (Cinematic Capture)
             front.style.display = 'block';
-            html2canvas(front, { scale: 2, useCORS: true, backgroundColor: '#020617' }).then(canvasFront => {
+            html2canvas(front, { 
+                scale: 3, 
+                useCORS: true, 
+                backgroundColor: '#020617',
+                logging: false
+            }).then(canvasFront => {
                 front.style.display = 'none';
                 const imgFront = canvasFront.toDataURL('image/png');
                 pdf.addImage(imgFront, 'PNG', 0, 0, 100, 210);
@@ -117,20 +122,25 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                 const teamMembers = registration.team_members || [];
                 if (teamMembers.length > 0 && back) {
                     back.style.display = 'block';
-                    html2canvas(back, { scale: 2, useCORS: true, backgroundColor: '#020617' }).then(canvasBack => {
+                    html2canvas(back, { 
+                        scale: 3, 
+                        useCORS: true, 
+                        backgroundColor: '#020617',
+                        logging: false
+                    }).then(canvasBack => {
                         back.style.display = 'none';
                         const imgBack = canvasBack.toDataURL('image/png');
                         pdf.addPage([100, 210], 'p');
                         pdf.addImage(imgBack, 'PNG', 0, 0, 100, 210);
-                        pdf.save(`Estralis_Pass_${registration.full_name.replace(/\s+/g, '_')}.pdf`);
+                        pdf.save(`Estralis_Pass_2026_${registration.full_name.replace(/\s+/g, '_')}.pdf`);
                     });
                 } else {
-                    pdf.save(`Estralis_Pass_${registration.full_name.replace(/\s+/g, '_')}.pdf`);
+                    pdf.save(`Estralis_Pass_2026_${registration.full_name.replace(/\s+/g, '_')}.pdf`);
                 }
             });
         } catch (err) {
-            console.error("PDF Gen Error:", err);
-            alert("Failed to generate PDF document.");
+            console.error("Professional PDF Gen Error:", err);
+            alert("Failed to generate premium pass.");
         }
     };
 
@@ -237,107 +247,127 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                             </div>
                         )}
 
-                        {/* Hidden Access Pass Templates for Multi-Page Capture */}
-                        <div id="pass-templates-container" style={{ position: 'fixed', left: '-9999px', top: 0 }}>
+                        {/* Hidden Professional Access Pass Templates for Multi-Page Capture */}
+                        <div id="pass-templates-container-pro" style={{ position: 'fixed', left: '-9999px', top: 0 }}>
                             {results.map((reg) => {
                                 const event = allEvents.find(e => e.title === reg.event_title) || {};
                                 const teamMembers = reg.team_members || [];
                                 
                                 return (
                                     <div key={`templates-${reg.id}`}>
-                                        {/* PAGE 1: LEADER */}
-                                        <div id="pass-page-front" className="w-[400px] bg-[#020617] text-white overflow-hidden" style={{ minHeight: '800px', display: 'none', backgroundColor: '#020617', color: '#ffffff', fontFamily: 'sans-serif' }}>
-                                            <div className="p-8 m-4 rounded-[2rem] relative overflow-hidden h-[760px]" style={{ backgroundColor: '#0a0f1e', border: '4px solid rgba(45, 212, 191, 0.3)' }}>
-                                                <div className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #2dd4bf 0%, transparent 70%)', filter: 'blur(40px)' }} />
-                                                <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #d946ef 0%, transparent 70%)', filter: 'blur(40px)' }} />
-                                                
-                                                <div className="flex justify-between items-start mb-10 pb-6" style={{ borderBottom: '1px solid rgba(45, 212, 191, 0.2)' }}>
-                                                    <div>
-                                                        <div className="flex items-center gap-2 mb-1">
-                                                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#2dd4bf' }} />
-                                                            <span style={{ fontSize: '8px', fontWeight: '900', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(45, 212, 191, 0.8)' }}>ACCESS_PASS // 2026</span>
-                                                        </div>
-                                                        <h2 style={{ fontSize: '1.875rem', fontWeight: '900', fontStyle: 'italic', letterSpacing: '-0.025em', color: '#ffffff', textTransform: 'uppercase' }}>ESTRALIS</h2>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <span style={{ fontSize: '10px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.3)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block' }}>SECTOR</span>
-                                                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#2dd4bf', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{event.category || "TECH"}</span>
-                                                    </div>
-                                                </div>
-
-                                                <div className="mb-10 text-center py-6" style={{ backgroundColor: 'rgba(255, 255, 255, 0.02)', borderTop: '1px solid rgba(255, 255, 255, 0.05)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                                                    <span style={{ fontSize: '9px', fontWeight: '900', color: 'rgba(45, 212, 191, 0.5)', textTransform: 'uppercase', letterSpacing: '0.4em', marginBottom: '0.5rem', display: 'block' }}>TRANSMISSION_TARGET</span>
-                                                    <h3 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#ffffff', textTransform: 'uppercase', letterSpacing: '-0.025em' }}>{event.title}</h3>
-                                                </div>
-
-                                                <div className="space-y-10 mb-12">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-1 h-8" style={{ backgroundColor: '#2dd4bf' }} />
+                                        {/* PROFESSIONAL PAGE 1: LEADER */}
+                                        <div id="pass-page-front-pro" className="w-[400px] h-[840px] bg-[#020617] text-white overflow-hidden font-tech" style={{ display: 'none', backgroundColor: '#020617' }}>
+                                            <div className="absolute top-0 right-0 w-full h-full opacity-20" style={{ background: 'radial-gradient(circle at 100% 0%, #2dd4bf 0%, transparent 60%)' }} />
+                                            <div className="m-4 h-[808px] rounded-[2.5rem] relative border-[0.5px] border-teal-500/30 overflow-hidden shadow-2xl" style={{ backgroundColor: 'rgba(10, 15, 30, 0.95)' }}>
+                                                <div className="p-8 pb-10 border-b border-white/5 relative">
+                                                    <div className="flex justify-between items-start">
                                                         <div>
-                                                            <span style={{ fontSize: '9px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.3)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>PRIMARY_PARTICIPANT</span>
-                                                            <p style={{ fontSize: '1.4rem', fontWeight: '900', color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.025em' }}>{reg.full_name}</p>
+                                                            <div className="flex items-center gap-2 mb-2">
+                                                                <div className="w-2 h-2 rounded-full bg-teal-500 shadow-[0_0_10px_#2dd4bf]" />
+                                                                <span style={{ fontSize: '7px', fontWeight: '900', letterSpacing: '0.5em', textTransform: 'uppercase', color: 'rgba(45, 212, 191, 0.6)' }}>NETWORK_STATUS: CONNECTED // SEC_2026</span>
+                                                            </div>
+                                                            <h2 className="text-4xl font-extrabold italic tracking-tighter text-white uppercase font-astral">ESTRALIS</h2>
+                                                            <p style={{ fontSize: '9px', fontWeight: '700', letterSpacing: '0.4em', color: 'rgba(255, 255, 255, 0.3)', marginTop: '4px' }}>OFFICIAL_ACCESS_PASS</p>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em] block mb-1">NODE_ID</span>
+                                                            <span className="text-sm font-mono font-bold text-teal-400">#E26-{reg.id.toString().slice(-4)}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-8 mx-8 p-6 rounded-3xl bg-white/[0.03] border border-white/5 relative overflow-hidden">
+                                                    <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-teal-500/50 to-transparent" />
+                                                    <span className="text-[10px] font-black text-teal-500/40 uppercase tracking-[0.4em] mb-3 block text-center">TRANSMISSION_TARGET</span>
+                                                    <h3 className="text-3xl font-black text-white uppercase text-center tracking-tight mb-2">{event.title}</h3>
+                                                    <div className="flex justify-center items-center gap-3">
+                                                        <span className="w-10 h-[1px] bg-white/10" />
+                                                        <span className="text-[10px] font-bold text-teal-400/80 uppercase tracking-widest">{event.category || "TECH_ELITE"}</span>
+                                                        <span className="w-10 h-[1px] bg-white/10" />
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-12 mx-8 space-y-10">
+                                                    <div className="flex items-start gap-4">
+                                                        <div className="w-[1.5px] h-12 bg-gradient-to-b from-teal-500 to-fuchsia-500" />
+                                                        <div className="flex-1">
+                                                            <span style={{ fontSize: '10px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '6px' }}>CORE_PARTICIPANT</span>
+                                                            <p className="text-2xl font-black text-white uppercase tracking-wide leading-none">{reg.full_name}</p>
                                                         </div>
                                                     </div>
                                                     
-                                                    <div className="space-y-6 pl-4">
+                                                    <div className="space-y-8 pl-4">
                                                         <div>
-                                                            <span style={{ fontSize: '8px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: '0.25rem' }}>COLLEGE_ID</span>
-                                                            <p style={{ fontSize: '0.85rem', fontWeight: '700', color: 'rgba(255, 255, 255, 0.6)', textTransform: 'uppercase' }}>{reg.college}</p>
+                                                            <span style={{ fontSize: '9px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.15)', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '6px' }}>INSTITUTION_AFFILIATION</span>
+                                                            <p className="text-md font-bold text-white/70 uppercase leading-snug">{reg.college}</p>
                                                         </div>
                                                         <div>
-                                                            <span style={{ fontSize: '8px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: '0.25rem' }}>TRANS_ID // UTR</span>
-                                                            <p style={{ fontSize: '0.85rem', fontFamily: 'monospace', color: '#2dd4bf', fontWeight: '700' }}>{reg.utr_number || reg.razorpay_payment_id}</p>
+                                                            <span style={{ fontSize: '9px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.15)', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '6px' }}>AUTHENTICATION_ID // UTR</span>
+                                                            <div className="p-3 rounded-xl bg-teal-500/5 border border-teal-500/20">
+                                                                <p className="text-lg font-mono font-black text-teal-400 break-all">{reg.utr_number || reg.razorpay_payment_id}</p>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div className="mt-auto pt-8 flex justify-between items-end absolute bottom-12 left-8 right-8" style={{ borderTop: '1px solid rgba(45, 212, 191, 0.2)' }}>
-                                                    <div className="space-y-2">
-                                                        <div style={{ fontSize: '9px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>TIMESTAMP</div>
-                                                        <div style={{ fontSize: '10px', fontFamily: 'monospace', color: 'rgba(255, 255, 255, 0.4)' }}>{new Date(reg.timestamp).toLocaleString()}</div>
+                                                <div className="absolute bottom-10 left-8 right-8 flex justify-between items-end border-t border-white/5 pt-8">
+                                                    <div>
+                                                        <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] block mb-2">SYSTEM_CLOCK</span>
+                                                        <span className="text-[11px] font-mono text-white/50">{new Date(reg.timestamp).toLocaleString().toUpperCase()}</span>
                                                     </div>
-                                                    <div className="w-16 h-16 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                                                        <div style={{ fontSize: '8px', color: 'rgba(45, 212, 191, 0.4)', textAlign: 'center', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '-0.05em', lineHeight: '1' }}>SECURE<br/>SCAN</div>
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="text-right pr-4 border-r border-white/10">
+                                                            <span className="text-[8px] font-black text-emerald-400 uppercase tracking-widest block">STATUS</span>
+                                                            <span className="text-[10px] font-bold text-white uppercase tracking-tighter">VERIFIED</span>
+                                                        </div>
+                                                        <div className="w-16 h-16 rounded-2xl bg-white/5 p-1 flex items-center justify-center border border-white/10">
+                                                            <div className="text-[7px] text-teal-500 font-black text-center uppercase tracking-tight leading-none">SECURE<br/>SCAN</div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        {/* PAGE 2: SQUAD */}
-                                        <div id="pass-page-back" className="w-[400px] bg-[#020617] text-white overflow-hidden" style={{ minHeight: '800px', display: 'none', backgroundColor: '#020617', color: '#ffffff', fontFamily: 'sans-serif' }}>
-                                            <div className="p-8 m-4 rounded-[2rem] relative overflow-hidden h-[760px]" style={{ backgroundColor: '#0a0f1e', border: '4px solid rgba(45, 212, 191, 0.3)' }}>
-                                                <div className="flex justify-between items-start mb-10 pb-6" style={{ borderBottom: '1px solid rgba(45, 212, 191, 0.2)' }}>
-                                                    <div>
-                                                        <div className="flex items-center gap-2 mb-1">
-                                                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#2dd4bf' }} />
-                                                            <span style={{ fontSize: '8px', fontWeight: '900', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(45, 212, 191, 0.8)' }}>SQUAD_ROSTER // 2026</span>
+                                        {/* PROFESSIONAL PAGE 2: SQUAD */}
+                                        <div id="pass-page-back-pro" className="w-[400px] h-[840px] bg-[#020617] text-white overflow-hidden font-tech" style={{ display: 'none', backgroundColor: '#020617' }}>
+                                            <div className="m-4 h-[808px] rounded-[2.5rem] relative border-[0.5px] border-fuchsia-500/30 overflow-hidden shadow-2xl" style={{ backgroundColor: 'rgba(10, 15, 30, 0.95)' }}>
+                                                <div className="p-8 pb-8 border-b border-white/5">
+                                                    <div className="flex items-center gap-3 mb-3">
+                                                        <div className="flex gap-1">
+                                                            {[1,2,3].map(i => <span key={i} className="w-1 h-1 rounded-full bg-fuchsia-500" />)}
                                                         </div>
-                                                        <h2 style={{ fontSize: '1.875rem', fontWeight: '900', fontStyle: 'italic', letterSpacing: '-0.025em', color: '#ffffff', textTransform: 'uppercase' }}>ESTRALIS</h2>
+                                                        <span style={{ fontSize: '8px', fontWeight: '900', letterSpacing: '0.4em', textTransform: 'uppercase', color: 'rgba(217, 70, 239, 0.6)' }}>SQUAD_ROSTER_MANIFEST</span>
                                                     </div>
+                                                    <h2 className="text-3xl font-black italic tracking-tighter text-white uppercase font-astral">ESTRALIS</h2>
                                                 </div>
 
-                                                <div className="mt-8">
+                                                <div className="mt-6 mx-8">
                                                     {reg.team_name && (
-                                                        <div className="mb-8 p-4 rounded-xl bg-teal-500/5 border border-teal-500/20">
-                                                            <span style={{ fontSize: '8px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: '0.25rem' }}>OFFICIAL_TEAM</span>
-                                                            <p style={{ fontSize: '1.1rem', fontWeight: '700', color: '#2dd4bf', textTransform: 'uppercase' }}>{reg.team_name}</p>
+                                                        <div className="mb-10 p-5 rounded-2xl bg-fuchsia-500/5 border border-fuchsia-500/20 flex items-center justify-between">
+                                                            <div>
+                                                                <span style={{ fontSize: '8px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', marginBottom: '4px', display: 'block' }}>DESIGNATED_TEAM</span>
+                                                                <p className="text-xl font-black text-fuchsia-400 uppercase tracking-wide">{reg.team_name}</p>
+                                                            </div>
                                                         </div>
                                                     )}
+
                                                     <div className="space-y-6">
                                                         {teamMembers.map((m, i) => (
-                                                            <div key={i} className="pb-4 border-b border-white/5 last:border-0">
-                                                                <div className="flex items-baseline gap-3 mb-1">
-                                                                    <span style={{ fontSize: '10px', color: '#2dd4bf', fontWeight: '900' }}>#{i + 1}</span>
-                                                                    <p style={{ fontSize: '0.9rem', fontWeight: '900', color: '#ffffff', textTransform: 'uppercase' }}>{m.fullName}</p>
+                                                            <div key={i} className="flex items-center gap-5 p-4 rounded-2xl bg-white/[0.01]">
+                                                                <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">
+                                                                    <span className="text-[11px] font-black text-fuchsia-500">{i + 1}</span>
                                                                 </div>
-                                                                <p style={{ fontSize: '9px', fontWeight: '500', color: 'rgba(255, 255, 255, 0.3)', textTransform: 'uppercase', letterSpacing: '0.05em', paddingLeft: '1.5rem' }}>{m.college || reg.college}</p>
+                                                                <div className="flex-1">
+                                                                    <p className="text-md font-bold text-white uppercase">{m.fullName}</p>
+                                                                    <p className="text-[9px] font-medium text-white/30 uppercase tracking-widest">{m.college || reg.college}</p>
+                                                                </div>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 </div>
 
-                                                <div className="mt-auto absolute bottom-12 left-8 right-8 text-center">
-                                                    <span style={{ fontSize: '8px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.1)', textTransform: 'uppercase', letterSpacing: '0.5em' }}>THANKS_FOR_REGISTERING</span>
+                                                <div className="absolute bottom-10 left-8 right-8 text-center text-white/10 uppercase tracking-[0.5em] text-[8px]">
+                                                    THANKS_FOR_REGISTERING_2026
                                                 </div>
                                             </div>
                                         </div>
