@@ -499,71 +499,71 @@ export default function RegistrationForm({ event, onClose }) {
                 </AnimatePresence>
             </div>
 
-            {/* Hidden Access Pass Template for PDF Capture */}
-            <div id="access-pass-template" className="fixed -left-[9999px] top-0 w-[400px] bg-[#020617] text-white font-tech overflow-hidden" style={{ minHeight: '800px', display: 'none' }}>
-                <div className="p-8 border-4 border-teal-500/30 m-4 rounded-3xl bg-[#0a0f1e] relative overflow-hidden">
-                    {/* Decorative Background Elements */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/5 rounded-full blur-3xl" />
-                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-fuchsia-500/5 rounded-full blur-3xl" />
+            {/* Hidden Access Pass Template for PDF Capture - Uses explicit styles to bypass oklab parsing issues */}
+            <div id="access-pass-template" className="fixed -left-[9999px] top-0 w-[400px] bg-[#020617] text-white overflow-hidden" style={{ minHeight: '800px', display: 'none', backgroundColor: '#020617', color: '#ffffff', fontFamily: 'sans-serif' }}>
+                <div className="p-8 m-4 rounded-[2rem] relative overflow-hidden" style={{ backgroundColor: '#0a0f1e', border: '4px solid rgba(45, 212, 191, 0.3)' }}>
+                    {/* Decorative Background Elements - Simpler gradients for capture compatibility */}
+                    <div className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #2dd4bf 0%, transparent 70%)', filter: 'blur(40px)' }} />
+                    <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #d946ef 0%, transparent 70%)', filter: 'blur(40px)' }} />
                     
                     {/* Header */}
-                    <div className="flex justify-between items-start mb-10 pb-6 border-b border-teal-500/20">
+                    <div className="flex justify-between items-start mb-10 pb-6" style={{ borderBottom: '1px solid rgba(45, 212, 191, 0.2)' }}>
                         <div>
                             <div className="flex items-center gap-2 mb-1">
-                                <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
-                                <span className="text-[8px] font-black tracking-[0.3em] uppercase text-teal-500/80">ACCESS_PASS // 2026</span>
+                                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#2dd4bf' }} />
+                                <span style={{ fontSize: '8px', fontWeight: '900', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(45, 212, 191, 0.8)' }}>ACCESS_PASS // 2026</span>
                             </div>
-                            <h2 className="text-3xl font-black italic tracking-tighter text-white uppercase">ESTRALIS</h2>
+                            <h2 style={{ fontSize: '1.875rem', fontWeight: '900', fontStyle: 'italic', letterSpacing: '-0.025em', color: '#ffffff', textTransform: 'uppercase' }}>ESTRALIS</h2>
                         </div>
                         <div className="text-right">
-                            <span className="text-[10px] font-black text-white/30 uppercase tracking-widest block">SECTOR</span>
-                            <span className="text-sm font-bold text-teal-400 uppercase tracking-widest">{event.category || "TECH"}</span>
+                            <span style={{ fontSize: '10px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.3)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block' }}>SECTOR</span>
+                            <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#2dd4bf', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{event.category || "TECH"}</span>
                         </div>
                     </div>
 
                     {/* Event Title */}
-                    <div className="mb-10 text-center py-6 bg-white/[0.02] border-y border-white/5">
-                        <span className="text-[9px] font-black text-teal-500/50 uppercase tracking-[0.4em] mb-2 block">TRANSMISSION_TARGET</span>
-                        <h3 className="text-2xl font-black text-white uppercase tracking-tight">{event.title}</h3>
+                    <div className="mb-10 text-center py-6" style={{ backgroundColor: 'rgba(255, 255, 255, 0.02)', borderTop: '1px solid rgba(255, 255, 255, 0.05)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                        <span style={{ fontSize: '9px', fontWeight: '900', color: 'rgba(45, 212, 191, 0.5)', textTransform: 'uppercase', letterSpacing: '0.4em', marginBottom: '0.5rem', display: 'block' }}>TRANSMISSION_TARGET</span>
+                        <h3 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#ffffff', textTransform: 'uppercase', letterSpacing: '-0.025em' }}>{event.title}</h3>
                     </div>
 
                     {/* LEADER SECTION (Primary Details) */}
                     <div className="space-y-6 mb-12">
                          <div className="flex items-center gap-3">
-                            <div className="w-1 h-8 bg-teal-500" />
+                            <div className="w-1 h-8" style={{ backgroundColor: '#2dd4bf' }} />
                             <div>
-                                <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">PRIMARY_PARTICIPANT</span>
-                                <p className="text-xl font-black text-white uppercase tracking-wide">{formData.fullName}</p>
+                                <span style={{ fontSize: '9px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.3)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>PRIMARY_PARTICIPANT</span>
+                                <p style={{ fontSize: '1.25rem', fontWeight: '900', color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.025em' }}>{formData.fullName}</p>
                             </div>
                          </div>
                          
                          <div className="grid grid-cols-2 gap-6 pl-4">
                             <div>
-                                <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest block mb-1">COLLEGE_ID</span>
-                                <p className="text-xs font-bold text-white/60 uppercase truncate">{formData.college}</p>
+                                <span style={{ fontSize: '8px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: '0.25rem' }}>COLLEGE_ID</span>
+                                <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'rgba(255, 255, 255, 0.6)', textTransform: 'uppercase', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{formData.college}</p>
                             </div>
                             <div>
-                                <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest block mb-1">TRANS_ID</span>
-                                <p className="text-xs font-mono text-teal-400 font-bold truncate">{formData.utrNumber}</p>
+                                <span style={{ fontSize: '8px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: '0.25rem' }}>TRANS_ID</span>
+                                <p style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: '#2dd4bf', fontWeight: '700', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{formData.utrNumber}</p>
                             </div>
                          </div>
                     </div>
 
                     {/* SQUAD SECTION (If applicable) */}
                     {teamMembers.length > 0 && (
-                        <div className="mt-8 border-t border-white/10 pt-8">
-                            <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
-                                <span className="w-2 h-2 rounded-full bg-teal-500/40" />
+                        <div className="mt-8 pt-8" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                            <h4 style={{ fontSize: '10px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.4)', textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(45, 212, 191, 0.4)' }} />
                                 SQUAD_ROSTER
                             </h4>
                             {formData.teamName && (
-                                <p className="text-sm font-bold text-teal-500 uppercase mb-4 pl-5">TEAM: {formData.teamName}</p>
+                                <p style={{ fontSize: '0.875rem', fontWeight: '700', color: '#2dd4bf', textTransform: 'uppercase', marginBottom: '1rem', paddingLeft: '1.25rem' }}>TEAM: {formData.teamName}</p>
                             )}
-                            <div className="space-y-4 pl-5 border-l border-white/10">
+                            <div className="space-y-4 pl-5" style={{ borderLeft: '1px solid rgba(255, 255, 255, 0.1)' }}>
                                 {teamMembers.map((m, i) => (
                                     <div key={i} className="pb-2">
-                                        <p className="text-[11px] font-bold text-white/80 uppercase mb-0.5">{m.fullName}</p>
-                                        <p className="text-[9px] font-medium text-white/30 uppercase tracking-wider">{m.college || formData.college}</p>
+                                        <p style={{ fontSize: '11px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.8)', textTransform: 'uppercase', marginBottom: '0.125rem' }}>{m.fullName}</p>
+                                        <p style={{ fontSize: '9px', fontWeight: '500', color: 'rgba(255, 255, 255, 0.3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{m.college || formData.college}</p>
                                     </div>
                                 ))}
                             </div>
@@ -571,13 +571,13 @@ export default function RegistrationForm({ event, onClose }) {
                     )}
 
                     {/* Footer / QR Placeholder */}
-                    <div className="mt-16 pt-8 border-t border-teal-500/20 flex justify-between items-end">
+                    <div className="mt-16 pt-8 flex justify-between items-end" style={{ borderTop: '1px solid rgba(45, 212, 191, 0.2)' }}>
                         <div className="space-y-2">
-                            <div className="text-[9px] font-black text-white/20 uppercase tracking-widest">TIMESTAMP</div>
-                            <div className="text-[10px] font-mono text-white/40">{new Date().toLocaleString()}</div>
+                            <div style={{ fontSize: '9px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>TIMESTAMP</div>
+                            <div style={{ fontSize: '10px', fontFamily: 'monospace', color: 'rgba(255, 255, 255, 0.4)' }}>{new Date().toLocaleString()}</div>
                         </div>
-                        <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center">
-                             <div className="text-[8px] text-teal-500/40 text-center font-black uppercase tracking-tighter leading-none">SECURE<br/>SCAN</div>
+                        <div className="w-16 h-16 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                             <div style={{ fontSize: '8px', color: 'rgba(45, 212, 191, 0.4)', textAlign: 'center', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '-0.05em', lineHeight: '1' }}>SECURE<br/>SCAN</div>
                         </div>
                     </div>
                 </div>
