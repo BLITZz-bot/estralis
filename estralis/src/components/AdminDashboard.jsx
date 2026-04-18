@@ -787,14 +787,6 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     <span className="hidden sm:inline">{emailing ? 'Sending...' : 'EMAIL REPORT'}</span>
                                     <span className="sm:hidden">EMAIL</span>
                                 </button>
-                                <button
-                                    onClick={() => handleActionConfirm("Clear All Data", "This will permanently delete ALL registrations. Are you sure?", handleClearData, "danger")}
-                                    className="px-3 py-2 bg-red-600/20 border border-red-500/30 text-red-400 rounded-xl text-[10px] sm:text-sm hover:bg-red-600/30 transition flex items-center gap-1.5 font-semibold"
-                                >
-                                    <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                    <span className="hidden sm:inline">CLEAR ALL</span>
-                                    <span className="sm:hidden">CLEAR</span>
-                                </button>
                                 <button onClick={() => setIsAuthenticated(false)} className="px-5 py-2 astral-glass rounded-xl text-teal-400/40 text-[10px] font-black tracking-widest uppercase hover:text-red-400 transition-all border border-white/5">
                                     Logout
                                 </button>
