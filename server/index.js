@@ -445,7 +445,7 @@ const generatePDFPass = (reg) => {
         currentYPos += 10 * mmToPt;
         if (reg.team_name) {
             doc.fillColor(colors.teal).fontSize(11).font('Helvetica-Bold').text(`TEAM: ${reg.team_name.toUpperCase()}`, 20 * mmToPt, currentYPos);
-            currentYPos += 7 * mmToPt;
+            currentYPos += 9 * mmToPt;
         }
         doc.fillColor('#ffffff').fontSize(22).font('Helvetica-Bold').text(reg.full_name.toUpperCase(), 20 * mmToPt, currentYPos);
         currentYPos += 10 * mmToPt;

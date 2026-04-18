@@ -339,7 +339,7 @@ export default function RegistrationForm({ event, onClose }) {
                 doc.setFontSize(11);
                 doc.setTextColor(...colors.teal);
                 doc.text(`TEAM: ${formData.teamName.toUpperCase()}`, 20, currentY);
-                currentY += 7;
+                currentY += 9;
             }
 
             doc.setFont("helvetica", "bold");
@@ -354,7 +354,7 @@ export default function RegistrationForm({ event, onClose }) {
             doc.text(`Institute: ${formData.college}`, 20, currentY);
             currentY += 6;
             doc.text(`Email: ${formData.email}`, 20, currentY);
-            currentY += 5;
+            currentY += 6;
             doc.text(`Phone: ${formData.phone}`, 20, currentY);
 
             // FEE SECTION (Bottom Left)

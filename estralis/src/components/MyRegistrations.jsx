@@ -248,7 +248,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                 doc.setFontSize(11);
                 doc.setTextColor(...colors.teal);
                 doc.text(`TEAM: ${registration.team_name.toUpperCase()}`, 20, currentY);
-                currentY += 7;
+                currentY += 9;
             }
 
             doc.setFont("helvetica", "bold");
@@ -263,7 +263,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.text(`Institute: ${registration.college}`, 20, currentY);
             currentY += 6;
             doc.text(`Email: ${registration.email}`, 20, currentY);
-            currentY += 5;
+            currentY += 6;
             doc.text(`Phone: ${registration.phone}`, 20, currentY);
 
             // FEE SECTION (Bottom Left)
