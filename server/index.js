@@ -394,13 +394,13 @@ const generatePDFPass = (reg) => {
 
             // HEADER Text (Synced with 83mm offset)
             pageDoc.font('Helvetica-Bold').fontSize(26).fillColor(colors.aqua).opacity(0.4)
-                .text("ESTRALIS 2026", (83 - 90) * mmToPt, 35 * mmToPt, { align: 'center', width: width, characterSpacing: 1 });
+                .text("ESTRALIS 2026", (83 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
             pageDoc.opacity(1).fillColor('#ffffff')
-                .text("ESTRALIS 2026", (83 - 90) * mmToPt, 35 * mmToPt, { align: 'center', width: width, characterSpacing: 1 });
+                .text("ESTRALIS 2026", (83 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
 
             // SLOGAN (Synced with 70mm manual adjustment)
             pageDoc.fontSize(8.5).font('Helvetica').fillColor(colors.teal)
-                .text("THE INTERSTELLAR SYMPOSIUM", (70 - 90) * mmToPt, 43 * mmToPt, { align: 'center', width: width, characterSpacing: 1.5 * mmToPt });
+                .text("THE INTERSTELLAR SYMPOSIUM", (70 - 90) * mmToPt, 40.5 * mmToPt, { align: 'center', width: width, characterSpacing: 1.5 * mmToPt });
 
             // SECURE ID (Synced with 89mm)
             pageDoc.fontSize(7).fillColor(colors.dim)
@@ -422,13 +422,13 @@ const generatePDFPass = (reg) => {
 
         // EVENT TITLE (Synced with 85mm offset)
         doc.fillColor('#ffffff').fontSize(32).font('Helvetica-Bold')
-           .text(reg.event_title.toUpperCase(), (85 - 90) * mmToPt, startY + 35 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
+           .text(reg.event_title.toUpperCase(), (85 - 90) * mmToPt, startY + 26 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
         // CATEGORY TAG (Synced with 87mm box / 85mm text)
         const catTextContent = (reg.category || 'TECH').toUpperCase();
         doc.fontSize(8);
         const tagWidthValue = doc.widthOfString(catTextContent) + 10 * mmToPt;
         doc.fillColor(colors.teal).roundedRect((87 * mmToPt) - (tagWidthValue/2), startY + 40 * mmToPt, tagWidthValue, 8 * mmToPt, 4 * mmToPt).fill();
-        doc.fillColor(colors.bg).text(catTextContent, (85 - 90) * mmToPt, startY + 45.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
+        doc.fillColor(colors.bg).text(catTextContent, (85 - 90) * mmToPt, startY + 42.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
 
         // LOGISTICS
         doc.fillColor('rgba(30, 41, 59, 0.4)').roundedRect(20 * mmToPt, startY + 55 * mmToPt, 140 * mmToPt, 30 * mmToPt, 5 * mmToPt).fill();
@@ -457,7 +457,8 @@ const generatePDFPass = (reg) => {
 
         // FEE SECTION
         doc.fillColor(colors.teal).fontSize(8).font('Helvetica-Bold').text(reg.pass_type === 'Combo Pass' ? "COMBO_PASS_FEE" : "BASE_FEE", 20 * mmToPt, 232 * mmToPt);
-        doc.fillColor('#ffffff').fontSize(16).font('Helvetica-Bold').text(`Rs. ${reg.amount_paid}`, 20 * mmToPt, 240 * mmToPt);
+        const feeString = (reg.amount_paid || "0").toString().replace(/₹/g, '').trim();
+        doc.fillColor('#ffffff').fontSize(16).font('Helvetica-Bold').text(`Rs. ${feeString}`, 20 * mmToPt, 238 * mmToPt);
 
         if (reg.team_members && reg.team_members.length > 2) {
             doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } });
