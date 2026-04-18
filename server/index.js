@@ -25,7 +25,7 @@ const PORT = process.env.PORT || 5000;
 // Razorpay Configuration
 const razorpayKeyId = (process.env.RAZORPAY_KEY_ID || '').trim();
 const razorpayKeySecret = (process.env.RAZORPAY_KEY_SECRET || '').trim();
-const razorpay = (razorpayKeyId && !razorpayKeyId.includes('your_')) 
+const razorpay = (razorpayKeyId && !razorpayKeyId.includes('your_'))
     ? new Razorpay({ key_id: razorpayKeyId, key_secret: razorpayKeySecret })
     : null;
 
@@ -232,14 +232,14 @@ app.get('/api/admin/debug-mail', (req, res) => {
 app.post('/api/create-order', async (req, res) => {
     try {
         if (!razorpay) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Razorpay is not configured on the server. Please add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to your server/.env file.' 
+            return res.status(400).json({
+                success: false,
+                message: 'Razorpay is not configured on the server. Please add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to your server/.env file.'
             });
         }
 
         const { amount, currency = 'INR', receipt } = req.body;
-        
+
         // Convert amount to paise (Razorpay requirement)
         const amountInPaise = Math.round(parseFloat(amount.toString().replace(/₹/g, '')) * 100);
 
@@ -267,11 +267,11 @@ app.post('/api/verify-payment', async (req, res) => {
 app.post('/api/register-manual', async (req, res) => {
     try {
         const { registrationData } = req.body;
-        
-        const { 
-            fullName, email, phone, college, teamName, teamMembers, 
+
+        const {
+            fullName, email, phone, college, teamName, teamMembers,
             eventTitle, category, amountPaid, passType,
-            utrNumber, transactionDate, screenshotUrl 
+            utrNumber, transactionDate, screenshotUrl
         } = registrationData;
 
         const result = await db.query(
@@ -282,8 +282,8 @@ app.post('/api/register-manual', async (req, res) => {
             ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
             RETURNING *`,
             [
-                fullName, email.trim().toLowerCase(), phone, college, teamName || null, 
-                JSON.stringify(teamMembers || []), eventTitle, category || 'Tech', 
+                fullName, email.trim().toLowerCase(), phone, college, teamName || null,
+                JSON.stringify(teamMembers || []), eventTitle, category || 'Tech',
                 amountPaid, passType, utrNumber, transactionDate, screenshotUrl, 'verified'
             ]
         );
@@ -314,10 +314,10 @@ app.post('/api/upload-screenshot', upload.single('screenshot'), (req, res) => {
         if (!req.file) {
             return res.status(400).json({ success: false, message: 'No file uploaded' });
         }
-        res.status(200).json({ 
-            success: true, 
+        res.status(200).json({
+            success: true,
             imageUrl: req.file.path,
-            publicId: req.file.filename 
+            publicId: req.file.filename
         });
     } catch (error) {
         console.error("Upload Error:", error);
@@ -526,7 +526,7 @@ const sendConfirmationEmail = async (reg) => {
 app.get('/api/registrations/:email', async (req, res) => {
     try {
         const email = req.params.email.trim().toLowerCase();
-        
+
         const result = await db.query(
             `SELECT * FROM registrations 
              WHERE LOWER(email) = LOWER($1) 
@@ -815,7 +815,7 @@ app.post('/api/admin/send-report', async (req, res) => {
                 { header: 'UTR Number', key: 'utrNumber', width: 25 },
                 { header: 'Transaction Date', key: 'transactionDate', width: 20 },
                 { header: 'Screenshot Link', key: 'screenshotUrl', width: 50 },
-                { header: 'Squad Details', key: 'teamMembers', width: 60 },
+                { header: 'Squad Details', key: 'teamMembers', width: 60, style: { alignment: { wrapText: true, vertical: 'middle' } } },
             ];
 
             const headerRow = worksheet.getRow(1);
@@ -826,7 +826,8 @@ app.post('/api/admin/send-report', async (req, res) => {
             grouped[eventTitle].forEach(reg => {
                 let members = [];
                 try {
-                    members = (typeof reg.team_members === 'string') ? JSON.parse(reg.team_members) : (reg.team_members || []);
+                    const rawMembers = reg.team_members || reg.teamMembers;
+                    members = (typeof rawMembers === 'string') ? JSON.parse(rawMembers) : (rawMembers || []);
                 } catch (e) {
                     console.error("Error parsing team members:", e);
                     members = [];
@@ -855,7 +856,7 @@ app.post('/api/admin/send-report', async (req, res) => {
                     utrNumber: reg.utr_number || "N/A",
                     transactionDate: reg.transaction_date || "N/A",
                     screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" },
-                    teamMembers: { text: squadDetails, font: { size: 9 }, alignment: { wrapText: true } }
+                    teamMembers: squadDetails
                 });
 
                 // 2. Add Team Member Rows

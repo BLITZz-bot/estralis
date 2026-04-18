@@ -7,7 +7,7 @@ import { eventsDay1, eventsDay2 } from './Schedule';
 export default function AdminDashboard({ isOpen, onClose }) {
     const [password, setPassword] = useState("");
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    
+
     // Edit Modal State
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editingReg, setEditingReg] = useState(null);
@@ -463,7 +463,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         try {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/registrations/${id}`, {
                 method: 'PATCH',
-                headers: { 
+                headers: {
                     'x-admin-password': password,
                     'Content-Type': 'application/json'
                 },
@@ -503,7 +503,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         try {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/registrations/${editingReg.id}`, {
                 method: 'PATCH',
-                headers: { 
+                headers: {
                     'x-admin-password': password,
                     'Content-Type': 'application/json'
                 },
@@ -560,7 +560,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
             timer = setInterval(() => {
                 setCountdown((prev) => {
                     if (prev <= 1) {
-                        fetchRegistrations(); 
+                        fetchRegistrations();
                         return 30; // Refresh every 30s
                     }
                     return prev - 1;
@@ -575,16 +575,16 @@ export default function AdminDashboard({ isOpen, onClose }) {
     // Handle filtering
     useEffect(() => {
         let filtered = registrations;
-        
+
         // Filter by Event
         if (filterEvent !== "All") {
             filtered = filtered.filter(r => r.event_title === filterEvent);
         }
-        
+
         // Filter by Search Query (Multi-field search)
         if (searchQuery.trim() !== "") {
             const query = searchQuery.toLowerCase();
-            filtered = filtered.filter(r => 
+            filtered = filtered.filter(r =>
                 r.full_name?.toLowerCase().includes(query) ||
                 r.email?.toLowerCase().includes(query) ||
                 r.phone?.toLowerCase().includes(query) ||
@@ -592,14 +592,14 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 r.team_name?.toLowerCase().includes(query)
             );
         }
-        
+
         setFilteredData(filtered);
     }, [filterEvent, searchQuery, registrations]);
 
     const downloadExcel = async () => {
         // Export the currently filtered data so the user gets what they see on screen
         const dataToExport = filteredData;
-        
+
         if (dataToExport.length === 0) {
             addToast(`No ${statusFilter === 'All' ? '' : statusFilter} registrations found to export.`, "error");
             return;
@@ -634,7 +634,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 { header: 'UTR Number', key: 'utrNumber', width: 25 },
                 { header: 'Transaction Date', key: 'transactionDate', width: 20 },
                 { header: 'Screenshot Link', key: 'screenshotUrl', width: 50 },
-                { header: 'Squad Details', key: 'teamMembers', width: 60 },
+                { header: 'Squad Details', key: 'teamMembers', width: 60, style: { alignment: { wrapText: true, vertical: 'middle' } } },
             ];
 
             // Style headers
@@ -651,7 +651,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
             grouped[eventTitle].forEach(reg => {
                 let members = [];
                 try {
-                    members = (typeof reg.team_members === 'string') ? JSON.parse(reg.team_members) : (reg.team_members || []);
+                    const rawMembers = reg.team_members || reg.teamMembers;
+                    members = (typeof rawMembers === 'string') ? JSON.parse(rawMembers) : (rawMembers || []);
                 } catch (e) {
                     console.error("Error parsing team members:", e);
                     members = [];
@@ -680,7 +681,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                     utrNumber: reg.utr_number || "N/A",
                     transactionDate: reg.transaction_date || "N/A",
                     screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" },
-                    teamMembers: { text: squadDetails, font: { size: 9 }, alignment: { wrapText: true } }
+                    teamMembers: squadDetails
                 });
 
                 // 2. ADD TEAMMATE ROWS (If any)
@@ -854,7 +855,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-teal-400/40 group-focus-within:text-teal-400 transition-colors">
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                         </div>
-                                        <input 
+                                        <input
                                             type="text"
                                             placeholder="SCAN DATABASE (NAME, EMAIL, PHONE, TEAM...)"
                                             value={searchQuery}
@@ -978,7 +979,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                         </td>
                                                         <td className="px-6 py-6 text-center">
                                                             <div className="flex items-center justify-center gap-2">
-                                                                <button 
+                                                                <button
                                                                     onClick={() => openEditModal(reg)}
                                                                     className="p-2 text-teal-500/40 hover:text-teal-500 hover:bg-teal-500/10 rounded-lg transition-all"
                                                                     title="Edit Registration"
@@ -1547,8 +1548,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                 animate={{ opacity: 1, x: 0, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
                                 className={`pointer-events-auto flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl min-w-[300px] ${toast.type === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
-                                        toast.type === "error" ? "bg-red-500/10 border-red-500/20 text-red-400" :
-                                            "bg-blue-500/10 border-blue-500/20 text-blue-400"
+                                    toast.type === "error" ? "bg-red-500/10 border-red-500/20 text-red-400" :
+                                        "bg-blue-500/10 border-blue-500/20 text-blue-400"
                                     }`}
                             >
                                 <div className="flex-1 text-sm font-bold">{toast.message}</div>
