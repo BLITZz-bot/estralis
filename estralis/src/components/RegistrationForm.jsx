@@ -242,32 +242,25 @@ export default function RegistrationForm({ event, onClose }) {
                 pageDoc.setFont("helvetica", "bold");
                 pageDoc.setTextColor(8, 145, 178, 40); // Cyan glow
                 pageDoc.setFontSize(26);
-                pageDoc.text("ESTRALIS 2026", 90.5, 35, { align: "center", charSpace: 1 });
+                pageDoc.text("ESTRALIS 2026", 83, 35, { align: "center", charSpace: 1 });
                 
                 pageDoc.setTextColor(255, 255, 255);
-                pageDoc.text("ESTRALIS 2026", 90, 34, { align: "center", charSpace: 1 });
+                pageDoc.text("ESTRALIS 2026", 83, 35, { align: "center", charSpace: 1 });
 
                 pageDoc.setFontSize(8);
                 pageDoc.setFont("helvetica", "normal");
                 pageDoc.setTextColor(...colors.teal);
-                pageDoc.text("THE INTERSTELLAR SYMPOSIUM", 90, 43, { align: "center", charSpace: 1.5 });
+                pageDoc.text("THE INTERSTELLAR SYMPOSIUM", 70, 43, { align: "center", charSpace: 1.5 });
 
                 pageDoc.setFontSize(7);
                 pageDoc.setTextColor(...colors.dim);
-                pageDoc.text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", 90, 50, { align: "center" });
+                pageDoc.text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", 89, 50, { align: "center" });
 
                 // 5. FOOTER DECOR
                 pageDoc.setFont("helvetica", "italic");
                 pageDoc.setFontSize(6);
                 pageDoc.setTextColor(...colors.dim);
                 pageDoc.text("THIS DOCUMENT IS ELECTRONICALLY GENERATED AND ENCRYPTED", 90, 243, { align: "center" });
-
-                // Scanner Barcode (Static Decorative)
-                pageDoc.setFillColor(255, 255, 255, 10);
-                for (let i = 0; i < 60; i++) {
-                    const w = Math.random() * 1.5 + 0.5;
-                    pageDoc.rect(30 + (i * 2), 246, w, 6, 'F');
-                }
             };
 
             drawTicketBase(doc);
