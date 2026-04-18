@@ -476,19 +476,24 @@ const generatePDFPass = (reg) => {
         const feeString = (reg.amount_paid || "0").toString().replace(/₹/g, '').trim();
         doc.fillColor('#ffffff').fontSize(16).font('Helvetica-Bold').text(`Rs. ${feeString}`, 20 * mmToPt, 238 * mmToPt);
 
-        if (reg.team_members && reg.team_members.length > 2) {
+        // TEAM MEMBERS (Page 2)
+        const members = reg.team_members ? (typeof reg.team_members === 'string' ? JSON.parse(reg.team_members) : reg.team_members) : [];
+        if (members && members.length > 0) {
             doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } });
             drawTicketBase(doc);
             let teamY = 80 * mmToPt;
             doc.fillColor(colors.teal).fontSize(10).font('Helvetica-Bold').text("TEAM MEMBERS //", 20 * mmToPt, teamY);
             teamY += 15 * mmToPt;
 
-            const members = typeof reg.team_members === 'string' ? JSON.parse(reg.team_members) : reg.team_members;
             members.forEach((m, i) => {
-                if (teamY > 210 * mmToPt) { doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } }); drawTicketBase(doc); teamY = 80 * mmToPt; }
-                doc.fillColor('#ffffff').fontSize(12).font('Helvetica-Bold').text(m.fullName.toUpperCase(), 30 * mmToPt, teamY);
+                if (teamY > 210 * mmToPt) { 
+                    doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } }); 
+                    drawTicketBase(doc); 
+                    teamY = 80 * mmToPt; 
+                }
+                doc.fillColor('#ffffff').fontSize(12).font('Helvetica-Bold').text((m.fullName || m.full_name || "MEMBER").toUpperCase(), 30 * mmToPt, teamY);
                 teamY += 6 * mmToPt;
-                doc.fillColor(colors.dim).fontSize(9).font('Helvetica').text(`${m.email} | ${m.phone}`, 30 * mmToPt, teamY);
+                doc.fillColor(colors.dim).fontSize(9).font('Helvetica').text(`${m.email || ""} | ${m.phone || ""}`, 30 * mmToPt, teamY);
                 teamY += 12 * mmToPt;
             });
         }
