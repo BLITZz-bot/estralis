@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { eventsDay1, eventsDay2 } from './Schedule';
-import { supabase } from '../supabaseClient';
 
 export default function AdminDashboard({ isOpen, onClose }) {
     const [password, setPassword] = useState("");
@@ -551,33 +550,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         }
     }, [isOpen]);
 
-    // Real-time Subscription
-    useEffect(() => {
-        if (isAuthenticated && isOpen && supabase) {
-            const channel = supabase
-                .channel('registrations_db_changes')
-                .on(
-                    'postgres_changes',
-                    { event: '*', schema: 'public', table: 'registrations' },
-                    (payload) => {
-                        console.log('Real-time update received:', payload);
-                        if (payload.eventType === 'INSERT') {
-                            setRegistrations(prev => [payload.new, ...prev]);
-                            addToast(`New Registration: ${payload.new.full_name}`, "info");
-                        } else if (payload.eventType === 'UPDATE') {
-                            setRegistrations(prev => prev.map(r => r.id === payload.new.id ? payload.new : r));
-                        } else if (payload.eventType === 'DELETE') {
-                            setRegistrations(prev => prev.filter(r => r.id !== payload.old.id));
-                        }
-                    }
-                )
-                .subscribe();
-
-            return () => {
-                supabase.removeChannel(channel);
-            };
-        }
-    }, [isAuthenticated, isOpen]);
+    // Polling is already handled by the auto-refresh timer below
 
     // Auto-refresh timer (Reduced frequency since we have real-time)
     useEffect(() => {

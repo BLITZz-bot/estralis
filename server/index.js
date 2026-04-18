@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 const ExcelJS = require('exceljs');
 const dns = require('dns');
 const PDFDocument = require('pdfkit');
-const { createClient } = require('@supabase/supabase-js');
+const db = require('./db');
 const Razorpay = require('razorpay');
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
@@ -19,26 +19,8 @@ dns.setDefaultResultOrder('ipv4first');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Supabase Configuration
-const supabaseUrl = (process.env.SUPABASE_URL || '').trim();
-const supabaseServiceRole = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
-
-if (!supabaseUrl || !supabaseUrl.startsWith('http')) {
-    console.error("❌ CRITICAL: SUPABASE_URL is missing or invalid in .env");
-}
-if (!supabaseServiceRole) {
-    console.error("❌ CRITICAL: SUPABASE_SERVICE_ROLE_KEY is missing in .env");
-}
-
-const supabase = (supabaseUrl && supabaseUrl.startsWith('http')) 
-    ? createClient(supabaseUrl, supabaseServiceRole)
-    : null;
-
-if (supabase) {
-    console.log("✅ Supabase Client: Initialized successfully with URL:", supabaseUrl);
-} else {
-    console.error("❌ Supabase Client: FAILED TO INITIALIZE. Check your environment variables.");
-}
+// Database Configuration
+// (Now handled via server/db.js using PostgreSQL pool)
 
 // Razorpay Configuration
 const razorpayKeyId = (process.env.RAZORPAY_KEY_ID || '').trim();
@@ -286,43 +268,22 @@ app.post('/api/register-manual', async (req, res) => {
     try {
         const { registrationData } = req.body;
         
-        if (!supabase) {
-            return res.status(503).json({ success: false, message: 'Database Connection Error' });
-        }
+        const result = await db.query(
+            `INSERT INTO registrations (
+                full_name, email, phone, college, team_name, team_members, 
+                event_title, category, amount_paid, pass_type, 
+                utr_number, transaction_date, screenshot_url, status
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+            RETURNING *`,
+            [
+                fullName, email.trim().toLowerCase(), phone, college, teamName || null, 
+                JSON.stringify(teamMembers || []), eventTitle, category || 'Tech', 
+                amountPaid, passType, utrNumber, transactionDate, screenshotUrl, 'pending_verification'
+            ]
+        );
 
-        const { 
-            fullName, email, phone, college, teamName, teamMembers, 
-            eventTitle, category, amountPaid, passType,
-            utrNumber, transactionDate, screenshotUrl 
-        } = registrationData;
-
-        const { data, error } = await supabase
-            .from('registrations')
-            .insert([{
-                full_name: fullName,
-                email: email.trim().toLowerCase(),
-                phone,
-                college,
-                team_name: teamName || null,
-                team_members: teamMembers || [],
-                event_title: eventTitle,
-                category: category || 'Tech',
-                amount_paid: amountPaid,
-                pass_type: passType,
-                utr_number: utrNumber,
-                transaction_date: transactionDate,
-                screenshot_url: screenshotUrl,
-                status: 'pending_verification'
-            }])
-            .select();
-
-        if (error) {
-            console.error("Supabase Save Error:", error);
-            return res.status(500).json({ success: false, message: 'Database save failed' });
-        }
-
-        const newRegistration = data[0];
-        console.log(`✅ Manual Registration Saved (Supabase) for ${eventTitle} by ${fullName}`);
+        const newRegistration = result.rows[0];
+        console.log(`✅ Manual Registration Saved (PostgreSQL) for ${eventTitle} by ${fullName}`);
 
         // Trigger confirmation email in background
         sendConfirmationEmail(newRegistration).catch(err => {
@@ -560,17 +521,12 @@ app.get('/api/registrations/:email', async (req, res) => {
     try {
         const email = req.params.email.trim().toLowerCase();
         
-        if (!supabase) {
-            return res.status(503).json({ success: false, message: 'Database connecting... Please try again in a minute.' });
-        }
+        const result = await db.query(
+            'SELECT * FROM registrations WHERE LOWER(email) = LOWER($1) ORDER BY timestamp DESC',
+            [email]
+        );
 
-        const { data, error } = await supabase
-            .from('registrations')
-            .select('*')
-            .ilike('email', email)
-            .order('timestamp', { ascending: false });
-
-        if (error) throw error;
+        const data = result.rows;
 
         if (!data || data.length === 0) {
             return res.status(404).json({ success: false, message: 'No registrations found for this email address.' });
@@ -642,14 +598,20 @@ app.patch('/api/admin/registrations/:id', async (req, res) => {
         }
 
         const { id } = req.params;
-        const updates = req.body; // Allows status, full_name, email, phone, college, etc.
+        const updates = req.body;
 
-        const { error } = await supabase
-            .from('registrations')
-            .update(updates)
-            .eq('id', id);
+        // Build dynamic UPDATE query
+        const keys = Object.keys(updates);
+        if (keys.length === 0) return res.status(400).json({ success: false, message: 'No updates provided' });
 
-        if (error) throw error;
+        const setClause = keys.map((key, index) => `${key} = $${index + 1}`).join(', ');
+        const values = [...Object.values(updates), id];
+
+        await db.query(
+            `UPDATE registrations SET ${setClause} WHERE id = $${values.length}`,
+            values
+        );
+
         res.status(200).json({ success: true, message: 'Registration updated successfully' });
     } catch (error) {
         console.error("Admin update error:", error);
@@ -666,12 +628,7 @@ app.delete('/api/admin/registrations-all', async (req, res) => {
         }
 
         // Wipe entire registrations table
-        const { error } = await supabase
-            .from('registrations')
-            .delete()
-            .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete everything
-
-        if (error) throw error;
+        await db.query('TRUNCATE TABLE registrations RESTART IDENTITY');
 
         console.log(`🧹 Admin Bulk Wipe successful.`);
         res.status(200).json({
@@ -693,12 +650,7 @@ app.delete('/api/admin/registrations/:id', async (req, res) => {
         }
 
         const { id } = req.params;
-        const { error } = await supabase
-            .from('registrations')
-            .delete()
-            .eq('id', id);
-
-        if (error) throw error;
+        await db.query('DELETE FROM registrations WHERE id = $1', [id]);
 
         console.log(`🗑 Admin Deleted Registration: ${id}`);
         res.status(200).json({
@@ -714,12 +666,8 @@ app.delete('/api/admin/registrations/:id', async (req, res) => {
 // Get all event statuses (Public)
 app.get('/api/events/status', async (req, res) => {
     try {
-        const { data, error } = await supabase
-            .from('events_status')
-            .select('*');
-
-        if (error) throw error;
-        res.status(200).json({ success: true, data });
+        const result = await db.query('SELECT * FROM events_status');
+        res.status(200).json({ success: true, data: result.rows });
     } catch (error) {
         console.error("Fetch Status Error:", error);
         res.status(500).json({ success: false, message: 'Server error fetching event statuses' });
@@ -736,14 +684,15 @@ app.post('/api/admin/events/toggle', async (req, res) => {
 
         const { eventTitle, isOpen } = req.body;
 
-        const { data, error } = await supabase
-            .from('events_status')
-            .upsert({ title: eventTitle, is_open: isOpen }, { onConflict: 'title' })
-            .select();
+        const result = await db.query(
+            `INSERT INTO events_status (title, is_open) 
+             VALUES ($1, $2) 
+             ON CONFLICT (title) DO UPDATE SET is_open = $2 
+             RETURNING *`,
+            [eventTitle, isOpen]
+        );
 
-        if (error) throw error;
-
-        res.status(200).json({ success: true, data: data[0], message: `Event ${isOpen ? 'Opened' : 'Closed'} Successfully` });
+        res.status(200).json({ success: true, data: result.rows[0], message: `Event ${isOpen ? 'Opened' : 'Closed'} Successfully` });
     } catch (error) {
         console.error("Toggle Error:", error);
         res.status(500).json({ success: false, message: 'Server error toggling event' });
@@ -759,13 +708,10 @@ app.post('/api/admin/resend-confirmation/:id', async (req, res) => {
         }
 
         const { id } = req.params;
-        const { data, error } = await supabase
-            .from('registrations')
-            .select('*')
-            .eq('id', id)
-            .single();
+        const result = await db.query('SELECT * FROM registrations WHERE id = $1', [id]);
+        const data = result.rows[0];
 
-        if (error || !data) {
+        if (!data) {
             return res.status(404).json({ success: false, message: 'Registration not found' });
         }
 
@@ -794,11 +740,10 @@ app.post('/api/admin/resend-all-confirmations', async (req, res) => {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
-        const { data: registrations, error } = await supabase
-            .from('registrations')
-            .select('*');
+        const result = await db.query('SELECT * FROM registrations');
+        const registrations = result.rows;
 
-        if (error || !registrations || registrations.length === 0) {
+        if (!registrations || registrations.length === 0) {
             return res.status(404).json({ success: false, message: 'No registrations found.' });
         }
 
@@ -841,13 +786,10 @@ app.post('/api/admin/send-report', async (req, res) => {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
-        const { data: registrations, error } = await supabase
-            .from('registrations')
-            .select('*')
-            .eq('status', 'verified')
-            .order('event_title', { ascending: true });
-
-        if (error) throw error;
+        const result = await db.query(
+            "SELECT * FROM registrations WHERE status = 'verified' ORDER BY event_title ASC"
+        );
+        const registrations = result.rows;
 
         if (!registrations || registrations.length === 0) {
             return res.status(404).json({ success: false, message: 'No data to send' });
@@ -936,7 +878,7 @@ app.post('/api/admin/send-report', async (req, res) => {
             from: SENDER_EMAIL,
             to: ADMIN_RECEIVER_EMAIL,
             subject: `AlgoRhythm Fest 2026 - Master Registration Report (${new Date().toLocaleDateString()})`,
-            text: `Hello Admin,\n\nPlease find the attached automated registration report for AlgoRhythm Fest 2026.\n\nTotal Registrations (Supabase): ${registrations.length}\nGenerated at: ${new Date().toLocaleString()}`,
+            text: `Hello Admin,\n\nPlease find the attached automated registration report for AlgoRhythm Fest 2026.\n\nTotal Registrations (PostgreSQL): ${registrations.length}\nGenerated at: ${new Date().toLocaleString()}`,
             attachments: [
                 {
                     filename: `AlgoRhythm_Master_Report_${Date.now()}.xlsx`,
@@ -962,20 +904,15 @@ app.post('/api/admin/send-report', async (req, res) => {
 // --- THEME REVEAL API (Supabase migration) ---
 app.get('/api/theme/status', async (req, res) => {
     try {
-        const { data, error } = await supabase
-            .from('system_config')
-            .select('*');
-
-        if (error) throw error;
-
-        const config = data.reduce((acc, curr) => {
+        const result = await db.query('SELECT * FROM system_config');
+        const config = result.rows.reduce((acc, curr) => {
             acc[curr.key] = curr.value;
             return acc;
         }, {});
 
         res.status(200).json({
             success: true,
-            revealed: config['theme_revealed'] || false,
+            revealed: config['theme_revealed'] === 'true' || config['theme_revealed'] === true,
             title: config['theme_title'] || '',
             description: config['theme_description'] || ''
         });
@@ -1000,10 +937,12 @@ app.post('/api/admin/theme/update', async (req, res) => {
         if (revealed !== undefined) updates.push({ key: 'theme_revealed', value: revealed });
 
         if (updates.length > 0) {
-            const { error } = await supabase
-                .from('system_config')
-                .upsert(updates, { onConflict: 'key' });
-            if (error) throw error;
+            for (const update of updates) {
+                await db.query(
+                    'INSERT INTO system_config (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = $2',
+                    [update.key, update.value.toString()]
+                );
+            }
         }
 
         console.log(`🎬 Theme Config Updated — Revealed: ${revealed}`);
@@ -1021,14 +960,13 @@ app.post('/api/theme/verify', async (req, res) => {
         if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
 
         const ALLOWED_EVENTS = ['HIGHLIGHT REEL', 'SHOT CUT'];
-        const { data, error } = await supabase
-            .from('registrations')
-            .select('*')
-            .ilike('email', email.trim())
-            .in('event_title', ALLOWED_EVENTS)
-            .single();
+        const result = await db.query(
+            "SELECT * FROM registrations WHERE LOWER(email) = LOWER($1) AND event_title ANY($2)",
+            [email.trim(), ALLOWED_EVENTS]
+        );
+        const data = result.rows[0];
 
-        if (error || !data) {
+        if (!data) {
             return res.status(200).json({ success: false, verified: false, message: 'This reveal is exclusively for Highlight Reel & Shot Cut leaders.' });
         }
 
@@ -1073,14 +1011,16 @@ app.post('/api/admin/send-event-mail', async (req, res) => {
         };
 
         if (target === 'individual' && registrationId) {
-            const { data: reg, error } = await supabase.from('registrations').select('*').eq('id', registrationId).single();
-            if (error || !reg) return res.status(404).json({ success: false, message: 'Registration not found' });
+            const result = await db.query('SELECT * FROM registrations WHERE id = $1', [registrationId]);
+            const reg = result.rows[0];
+            if (!reg) return res.status(404).json({ success: false, message: 'Registration not found' });
 
             await sendEmailViaAPI({ from: SENDER_EMAIL, to: reg.email, subject, html: buildEventEmail(reg) });
             return res.status(200).json({ success: true, message: `Email sent to ${reg.full_name}` });
         } else if (target === 'all') {
-            const { data: registrations, error } = await supabase.from('registrations').select('*');
-            if (error || !registrations.length) return res.status(404).json({ success: false, message: 'No registrations found' });
+            const result = await db.query('SELECT * FROM registrations');
+            const registrations = result.rows;
+            if (!registrations.length) return res.status(404).json({ success: false, message: 'No registrations found' });
 
             for (const reg of registrations) {
                 await sendEmailViaAPI({ from: SENDER_EMAIL, to: reg.email, subject, html: buildEventEmail(reg) });
