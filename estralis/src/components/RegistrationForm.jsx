@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { jsPDF } from "jspdf"
 import JsBarcode from "jsbarcode"
+import html2canvas from "html2canvas"
 
 export default function RegistrationForm({ event, onClose }) {
     const [step, setStep] = useState(1)
@@ -185,16 +186,33 @@ export default function RegistrationForm({ event, onClose }) {
         }
     }
 
-    const handleDownloadPDF = () => {
+    const handleDownloadPDF = async () => {
         setIsDownloading(true);
-        // Simplified PDF generation logic for stability
         try {
-            const doc = new jsPDF();
-            doc.text(`ESTRALIS 2026 - ${event.title}`, 10, 10);
-            doc.text(`Name: ${formData.fullName}`, 10, 20);
-            doc.text(`Email: ${formData.email}`, 10, 30);
-            doc.text(`Transaction ID: ${formData.utrNumber}`, 10, 40);
-            doc.save(`Estralis_Pass_${formData.fullName}.pdf`);
+            const element = document.getElementById('access-pass-template');
+            if (!element) throw new Error("Template not found");
+
+            // Ensure images are loaded and the element is visible for capture
+            element.style.display = 'block';
+            const canvas = await html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#020617',
+                logging: false
+            });
+            element.style.display = 'none';
+
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', [100, 210]); // Vertical ticket format
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`Estralis_Pass_${formData.fullName.replace(/\s+/g, '_')}.pdf`);
+        } catch (error) {
+            console.error("PDF Generation Error:", error);
+            alert("Failed to generate premium pass. Please try again.");
         } finally {
             setIsDownloading(false);
         }
@@ -479,6 +497,90 @@ export default function RegistrationForm({ event, onClose }) {
                         </motion.div>
                     )}
                 </AnimatePresence>
+            </div>
+
+            {/* Hidden Access Pass Template for PDF Capture */}
+            <div id="access-pass-template" className="fixed -left-[9999px] top-0 w-[400px] bg-[#020617] text-white font-tech overflow-hidden" style={{ minHeight: '800px', display: 'none' }}>
+                <div className="p-8 border-4 border-teal-500/30 m-4 rounded-3xl bg-[#0a0f1e] relative overflow-hidden">
+                    {/* Decorative Background Elements */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/5 rounded-full blur-3xl" />
+                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-fuchsia-500/5 rounded-full blur-3xl" />
+                    
+                    {/* Header */}
+                    <div className="flex justify-between items-start mb-10 pb-6 border-b border-teal-500/20">
+                        <div>
+                            <div className="flex items-center gap-2 mb-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
+                                <span className="text-[8px] font-black tracking-[0.3em] uppercase text-teal-500/80">ACCESS_PASS // 2026</span>
+                            </div>
+                            <h2 className="text-3xl font-black italic tracking-tighter text-white uppercase">ESTRALIS</h2>
+                        </div>
+                        <div className="text-right">
+                            <span className="text-[10px] font-black text-white/30 uppercase tracking-widest block">SECTOR</span>
+                            <span className="text-sm font-bold text-teal-400 uppercase tracking-widest">{event.category || "TECH"}</span>
+                        </div>
+                    </div>
+
+                    {/* Event Title */}
+                    <div className="mb-10 text-center py-6 bg-white/[0.02] border-y border-white/5">
+                        <span className="text-[9px] font-black text-teal-500/50 uppercase tracking-[0.4em] mb-2 block">TRANSMISSION_TARGET</span>
+                        <h3 className="text-2xl font-black text-white uppercase tracking-tight">{event.title}</h3>
+                    </div>
+
+                    {/* LEADER SECTION (Primary Details) */}
+                    <div className="space-y-6 mb-12">
+                         <div className="flex items-center gap-3">
+                            <div className="w-1 h-8 bg-teal-500" />
+                            <div>
+                                <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">PRIMARY_PARTICIPANT</span>
+                                <p className="text-xl font-black text-white uppercase tracking-wide">{formData.fullName}</p>
+                            </div>
+                         </div>
+                         
+                         <div className="grid grid-cols-2 gap-6 pl-4">
+                            <div>
+                                <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest block mb-1">COLLEGE_ID</span>
+                                <p className="text-xs font-bold text-white/60 uppercase truncate">{formData.college}</p>
+                            </div>
+                            <div>
+                                <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest block mb-1">TRANS_ID</span>
+                                <p className="text-xs font-mono text-teal-400 font-bold truncate">{formData.utrNumber}</p>
+                            </div>
+                         </div>
+                    </div>
+
+                    {/* SQUAD SECTION (If applicable) */}
+                    {teamMembers.length > 0 && (
+                        <div className="mt-8 border-t border-white/10 pt-8">
+                            <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+                                <span className="w-2 h-2 rounded-full bg-teal-500/40" />
+                                SQUAD_ROSTER
+                            </h4>
+                            {formData.teamName && (
+                                <p className="text-sm font-bold text-teal-500 uppercase mb-4 pl-5">TEAM: {formData.teamName}</p>
+                            )}
+                            <div className="space-y-4 pl-5 border-l border-white/10">
+                                {teamMembers.map((m, i) => (
+                                    <div key={i} className="pb-2">
+                                        <p className="text-[11px] font-bold text-white/80 uppercase mb-0.5">{m.fullName}</p>
+                                        <p className="text-[9px] font-medium text-white/30 uppercase tracking-wider">{m.college || formData.college}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Footer / QR Placeholder */}
+                    <div className="mt-16 pt-8 border-t border-teal-500/20 flex justify-between items-end">
+                        <div className="space-y-2">
+                            <div className="text-[9px] font-black text-white/20 uppercase tracking-widest">TIMESTAMP</div>
+                            <div className="text-[10px] font-mono text-white/40">{new Date().toLocaleString()}</div>
+                        </div>
+                        <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center">
+                             <div className="text-[8px] text-teal-500/40 text-center font-black uppercase tracking-tighter leading-none">SECURE<br/>SCAN</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </motion.div>
     );
