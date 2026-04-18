@@ -528,7 +528,13 @@ app.get('/api/registrations/:email', async (req, res) => {
         const email = req.params.email.trim().toLowerCase();
         
         const result = await db.query(
-            'SELECT * FROM registrations WHERE LOWER(email) = LOWER($1) ORDER BY timestamp DESC',
+            `SELECT * FROM registrations 
+             WHERE LOWER(email) = LOWER($1) 
+             OR EXISTS (
+                 SELECT 1 FROM jsonb_array_elements(team_members) AS member 
+                 WHERE LOWER(member->>'email') = LOWER($1)
+             )
+             ORDER BY timestamp DESC`,
             [email]
         );
 
