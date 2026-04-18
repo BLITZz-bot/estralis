@@ -394,13 +394,13 @@ const generatePDFPass = (reg) => {
 
             // HEADER Text (Synced with 83mm offset)
             pageDoc.font('Helvetica-Bold').fontSize(26).fillColor(colors.aqua).opacity(0.4)
-                .text("ESTRALIS 2026", (83 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
+                .text("ESTRALIS 2026", (89 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
             pageDoc.opacity(1).fillColor('#ffffff')
-                .text("ESTRALIS 2026", (83 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
+                .text("ESTRALIS 2026", (89 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
 
             // SLOGAN (Synced with 70mm manual adjustment)
             pageDoc.fontSize(8.5).font('Helvetica').fillColor(colors.teal)
-                .text("THE INTERSTELLAR SYMPOSIUM", (70 - 90) * mmToPt, 40.5 * mmToPt, { align: 'center', width: width, characterSpacing: 1.5 * mmToPt });
+                .text("THE INTERSTELLAR SYMPOSIUM", (89 - 90) * mmToPt, 40.5 * mmToPt, { align: 'center', width: width, characterSpacing: 1.5 * mmToPt });
 
             // SECURE ID (Synced with 89mm)
             pageDoc.fontSize(7).fillColor(colors.dim)
