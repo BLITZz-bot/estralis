@@ -205,6 +205,22 @@ export default function RegistrationForm({ event, onClose }) {
                 dim: [148, 163, 184]   // Slate 400
             };
 
+            // Official Event Schedule for PDF Data
+            const EVENT_SCHEDULE = {
+                "CLASSICAL GROUP": { location: "Amphitheatre", time: "12:00 PM" },
+                "REELS MAKING": { location: "1st Floor", time: "10:00 AM" },
+                "TREASURE HUNT": { location: "410 Room, 4th Floor, GCEM Campus", time: "11:00 AM" },
+                "FACE PAINTING": { location: "Main Quadrangle", time: "11:00 AM" },
+                "FITNESS CHALLENGE": { location: "Room 405, 406 & 407, 4th Floor", time: "11:00 AM" },
+                "POSTER DESIGNING": { location: "LAB 5, Ground Floor", time: "11:00 AM" },
+                "BEAT BOXING": { location: "LAB 3, 4th Floor, GCEM Campus", time: "11:30 PM" },
+                "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
+                "BGMI": { location: "1st Floor, GCEM Campus", time: "12:00 PM" },
+                "WESTERN GROUP": { location: "Main stage, GCEM Campus", time: "09:30 AM" },
+                "BATTLE OF BANDS": { location: "Main stage, GCEM Campus", time: "11:00 AM" },
+                "FASHION SHOW": { location: "Main stage, GCEM Campus", time: "01:00 PM" }
+            };
+
             const drawTicketBase = (pageDoc) => {
                 // 1. OUTER SPACE BACKGROUND
                 pageDoc.setFillColor(...colors.bg);
@@ -242,10 +258,10 @@ export default function RegistrationForm({ event, onClose }) {
                 pageDoc.setFont("helvetica", "bold");
                 pageDoc.setTextColor(8, 145, 178, 40); // Cyan glow
                 pageDoc.setFontSize(26);
-                pageDoc.text("ESTRALIS 2026", 83, 35, { align: "center", charSpace: 1 });
+                pageDoc.text("ESTRALIS 2026", 89, 35, { align: "center", charSpace: 1 });
 
                 pageDoc.setTextColor(255, 255, 255);
-                pageDoc.text("ESTRALIS 2026", 83, 35, { align: "center", charSpace: 1 });
+                pageDoc.text("ESTRALIS 2026", 89, 35, { align: "center", charSpace: 1 });
 
                 pageDoc.setFontSize(8);
                 pageDoc.setFont("helvetica", "normal");
@@ -289,20 +305,20 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setTextColor(...colors.teal);
             doc.text("VERIFIED", 145, startY + 9, { align: "center" });
 
-            // EVENT TITLE (The Star of the Show)
+            // EVENT TITLE (The Star of the Show - Refined to 89mm)
             doc.setFont("helvetica", "bold");
             doc.setFontSize(32);
             doc.setTextColor(255, 255, 255);
-            doc.text(event.title.toUpperCase(), 85, startY + 35, { align: "center", charSpace: 1 });
+            doc.text(event.title.toUpperCase(), 89, startY + 35, { align: "center", charSpace: 1 });
 
-            // CATEGORY TAG
+            // CATEGORY TAG (Refined to 86mm)
             doc.setFillColor(...colors.teal);
             const catText = (event.category || "TECH").toUpperCase();
             const tagWidth = doc.getTextWidth(catText) + 10;
-            doc.roundedRect(87 - (tagWidth / 2), startY + 40, tagWidth, 8, 4, 4, 'F');
+            doc.roundedRect(86 - (tagWidth / 2), startY + 40, tagWidth, 8, 4, 4, 'F');
             doc.setFontSize(8);
             doc.setTextColor(...colors.bg);
-            doc.text(catText, 85, startY + 45.5, { align: "center", charSpace: 2 });
+            doc.text(catText, 86, startY + 45.5, { align: "center", charSpace: 2 });
 
             // LOGISTICS (Location & Time)
             doc.setFillColor(30, 41, 59, 40);
@@ -317,9 +333,10 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setFont("helvetica", "normal");
             doc.setFontSize(10);
             doc.setTextColor(255, 255, 255);
-            const venueLines = doc.splitTextToSize(event.location || "TBA", 60);
+            const schedule = EVENT_SCHEDULE[event.title.toUpperCase()] || { location: "TBA", time: "TBA" };
+            const venueLines = doc.splitTextToSize(schedule.location, 60);
             doc.text(venueLines, 30, startY + 72);
-            doc.text(event.time || "TBA", 100, startY + 72);
+            doc.text(schedule.time, 100, startY + 72);
 
             // PARTICIPANT DATA
             let currentY = startY + 90;
@@ -573,7 +590,7 @@ export default function RegistrationForm({ event, onClose }) {
 
                             <div className="flex flex-col items-center gap-6 py-6">
                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center">
-                                    Any issue with registration? Contact <a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">Bharath 7975871167</a>
+                                    Any issue with registration? Contact Bharath<a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">7975871167</a>
                                 </p>
                                 <button type="submit" className="w-full max-w-md py-6 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)] transition-all flex items-center justify-center gap-3 font-astral">
                                     CONTINUE TO PAYMENT <span className="text-lg">→</span>

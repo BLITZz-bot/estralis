@@ -113,6 +113,22 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                 dim: [148, 163, 184]   // Slate 400
             };
 
+            // Official Event Schedule for PDF Data
+            const EVENT_SCHEDULE = {
+                "CLASSICAL GROUP": { location: "Amphitheatre", time: "12:00 PM" },
+                "REELS MAKING": { location: "1st Floor", time: "10:00 AM" },
+                "TREASURE HUNT": { location: "410 Room, 4th Floor, GCEM Campus", time: "11:00 AM" },
+                "FACE PAINTING": { location: "Main Quadrangle", time: "11:00 AM" },
+                "FITNESS CHALLENGE": { location: "Room 405, 406 & 407, 4th Floor", time: "11:00 AM" },
+                "POSTER DESIGNING": { location: "LAB 5, Ground Floor", time: "11:00 AM" },
+                "BEAT BOXING": { location: "LAB 3, 4th Floor, GCEM Campus", time: "11:30 PM" },
+                "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
+                "BGMI": { location: "1st Floor, GCEM Campus", time: "12:00 PM" },
+                "WESTERN GROUP": { location: "Main stage, GCEM Campus", time: "09:30 AM" },
+                "BATTLE OF BANDS": { location: "Main stage, GCEM Campus", time: "11:00 AM" },
+                "FASHION SHOW": { location: "Main stage, GCEM Campus", time: "01:00 PM" }
+            };
+
             const drawTicketBase = (pageDoc) => {
                 // 1. OUTER SPACE BACKGROUND
                 pageDoc.setFillColor(...colors.bg);
@@ -150,10 +166,10 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                 pageDoc.setFont("helvetica", "bold");
                 pageDoc.setTextColor(8, 145, 178, 40); // Cyan glow
                 pageDoc.setFontSize(26);
-                pageDoc.text("ESTRALIS 2026", 83, 35, { align: "center", charSpace: 1 });
+                pageDoc.text("ESTRALIS 2026", 89, 35, { align: "center", charSpace: 1 });
 
                 pageDoc.setTextColor(255, 255, 255);
-                pageDoc.text("ESTRALIS 2026", 83, 35, { align: "center", charSpace: 1 });
+                pageDoc.text("ESTRALIS 2026", 89, 35, { align: "center", charSpace: 1 });
 
                 pageDoc.setFontSize(8);
                 pageDoc.setFont("helvetica", "normal");
@@ -198,20 +214,20 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.setTextColor(...colors.teal);
             doc.text("VERIFIED", 145, startY + 9, { align: "center" });
 
-            // EVENT TITLE (The Star of the Show)
+            // EVENT TITLE (The Star of the Show - Refined to 89mm)
             doc.setFont("helvetica", "bold");
             doc.setFontSize(32);
             doc.setTextColor(255, 255, 255);
-            doc.text(registration.event_title.toUpperCase(), 85, startY + 35, { align: "center", charSpace: 1 });
+            doc.text(registration.event_title.toUpperCase(), 89, startY + 35, { align: "center", charSpace: 1 });
 
-            // CATEGORY TAG
+            // CATEGORY TAG (Refined to 86mm)
             doc.setFillColor(...colors.teal);
             const catText = (registration.category || "TECH").toUpperCase();
             const tagWidth = doc.getTextWidth(catText) + 10;
-            doc.roundedRect(87 - (tagWidth / 2), startY + 40, tagWidth, 8, 4, 4, 'F');
+            doc.roundedRect(86 - (tagWidth / 2), startY + 40, tagWidth, 8, 4, 4, 'F');
             doc.setFontSize(8);
             doc.setTextColor(...colors.bg);
-            doc.text(catText, 85, startY + 45.5, { align: "center", charSpace: 2 });
+            doc.text(catText, 86, startY + 45.5, { align: "center", charSpace: 2 });
 
             // LOGISTICS (Location & Time)
             doc.setFillColor(30, 41, 59, 40);
@@ -226,9 +242,10 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.setFont("helvetica", "normal");
             doc.setFontSize(10);
             doc.setTextColor(255, 255, 255);
-            const venueLines = doc.splitTextToSize(registration.event_location || "TBA", 60);
+            const schedule = EVENT_SCHEDULE[registration.event_title.toUpperCase()] || { location: "TBA", time: "TBA" };
+            const venueLines = doc.splitTextToSize(schedule.location, 60);
             doc.text(venueLines, 30, startY + 72);
-            doc.text(registration.event_time || "TBA", 100, startY + 72);
+            doc.text(schedule.time, 100, startY + 72);
 
             // PARTICIPANT DATA
             let currentY = startY + 90;
