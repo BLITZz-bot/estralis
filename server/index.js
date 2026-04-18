@@ -351,86 +351,93 @@ const generatePDFPass = (reg) => {
 
         console.log(`DEBUG: Generating PDF for ${reg.email} | Event: ${reg.event_title} | Category: [${rawCat}] -> Normalized: [${normalizedCategory}]`);
 
-        const colors = {
-            Tech: { banner: '#0e748c', border: '#06b6d4', accent: '#22d3ee', label: '#67e8f9' },
-            Fun: { banner: '#e11d48', border: '#a855f7', accent: '#e879f9', label: '#fdb4af' },
-            Workshop: { banner: '#059669', border: '#14b8a6', accent: '#2dd4bf', label: '#6ee7b7' }
-        };
-        const activeColor = colors[normalizedCategory] || colors.Tech;
+        const activeColor = {
+            Tech: { banner: '#0e748c', border: '#2dd4bf', accent: '#2dd4bf', label: '#2dd4bf' },
+            Workshop: { banner: '#059669', border: '#0891b2', accent: '#0891b2', label: '#0891b2' },
+            Fun: { banner: '#e11d48', border: '#d946ef', accent: '#d946ef', label: '#d946ef' }
+        }[normalizedCategory] || { banner: '#0e748c', border: '#2dd4bf', accent: '#2dd4bf', label: '#2dd4bf' };
 
-        const drawTicketLayout = (pageDoc) => {
+        const drawTicketLayout = (pageDoc, title = "ACCESS_PASS // 2026") => {
             // Dark Background
             pageDoc.rect(0, 0, width, height).fill('#020617');
             
             // Outer Glowing Border
-            pageDoc.lineWidth(2).strokeColor(activeColor.border + '44');
+            pageDoc.lineWidth(2).strokeColor(activeColor.border + '33');
             pageDoc.roundedRect(5 * mmToPt, 5 * mmToPt, 90 * mmToPt, 200 * mmToPt, 10 * mmToPt).stroke();
             
             // Header Section
-            pageDoc.fillColor('#0f172a').roundedRect(10 * mmToPt, 10 * mmToPt, 80 * mmToPt, 30 * mmToPt, 8 * mmToPt).fill();
-            pageDoc.fillColor('#ffffff').fontSize(18).font('Helvetica-Bold').text("ESTRALIS", 0, 15 * mmToPt, { align: 'center', characterSpacing: 2 });
-            pageDoc.fillColor(activeColor.accent).fontSize(8).font('Helvetica-Bold').text("OFFICIAL ACCESS PASS // 2026", 0, 28 * mmToPt, { align: 'center', characterSpacing: 1 });
+            pageDoc.fillColor('#0a0f1e').roundedRect(10 * mmToPt, 10 * mmToPt, 80 * mmToPt, 30 * mmToPt, 8 * mmToPt).fill();
+            pageDoc.fillColor('#ffffff').fontSize(22).font('Helvetica-Bold').text("ESTRALIS", 0, 15 * mmToPt, { align: 'center', characterSpacing: 2 });
+            pageDoc.fillColor(activeColor.accent).fontSize(8).font('Helvetica-Bold').text(title, 0, 28 * mmToPt, { align: 'center', characterSpacing: 1 });
             
             // Tear Line
             pageDoc.lineWidth(0.5).strokeColor('#1e293b').dash(2, { space: 2 }).moveTo(10 * mmToPt, 45 * mmToPt).lineTo(90 * mmToPt, 45 * mmToPt).stroke().undash();
         };
 
+        // --- PAGE 1: LEADER ---
         drawTicketLayout(doc);
-
         let currentY = 55 * mmToPt;
 
         // EVENT SECTION
         doc.fillColor(activeColor.label).fontSize(7).font('Helvetica-Bold').text("TRANSMISSION_TARGET", 15 * mmToPt, currentY);
         currentY += 5 * mmToPt;
-        doc.fillColor('#ffffff').fontSize(14).font('Helvetica-Bold').text(reg.event_title.toUpperCase(), 15 * mmToPt, currentY);
-        currentY += 12 * mmToPt;
-
-        // LEADER SECTION
-        doc.fillColor(activeColor.border).lineWidth(1.5).moveTo(15 * mmToPt, currentY).lineTo(15 * mmToPt, currentY + 12 * mmToPt).stroke();
-        doc.fillColor(activeColor.label).fontSize(7).font('Helvetica-Bold').text("PRIMARY_PARTICIPANT", 20 * mmToPt, currentY + 1 * mmToPt);
-        doc.fillColor('#ffffff').fontSize(12).font('Helvetica-Bold').text(reg.full_name.toUpperCase(), 20 * mmToPt, currentY + 6 * mmToPt);
-        currentY += 20 * mmToPt;
-
-        // INFO GRID
-        doc.fillColor('#475569').fontSize(6).font('Helvetica-Bold').text("COLLEGE_ID", 15 * mmToPt, currentY);
-        doc.text("TRANS_ID", 55 * mmToPt, currentY);
-        currentY += 4 * mmToPt;
-        doc.fillColor('#94a3b8').fontSize(8).font('Helvetica').text(reg.college.toUpperCase(), 15 * mmToPt, currentY, { width: 35 * mmToPt });
-        doc.fillColor(activeColor.accent).fontSize(8).font('Helvetica-Bold').text(reg.utr_number || "VERIFIED", 55 * mmToPt, currentY);
+        doc.fillColor('#ffffff').fontSize(16).font('Helvetica-Bold').text(reg.event_title.toUpperCase(), 15 * mmToPt, currentY);
         currentY += 15 * mmToPt;
 
-        // SQUAD SECTION
-        if (reg.team_members && reg.team_members.length > 0) {
-            doc.fillColor('#1e293b').rect(10 * mmToPt, currentY, 80 * mmToPt, 0.5 * mmToPt).fill();
-            currentY += 10 * mmToPt;
-            doc.fillColor(activeColor.label).fontSize(7).font('Helvetica-Bold').text("SQUAD_ROSTER", 15 * mmToPt, currentY);
-            currentY += 6 * mmToPt;
-            if (reg.team_name) {
-                doc.fillColor(activeColor.accent).fontSize(9).font('Helvetica-Bold').text(`TEAM: ${reg.team_name.toUpperCase()}`, 15 * mmToPt, currentY);
-                currentY += 8 * mmToPt;
-            }
-            
-            // List Team Members with ample spacing
-            reg.team_members.forEach((m, i) => {
-                if (currentY > 180 * mmToPt) {
-                    doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } });
-                    drawTicketLayout(doc);
-                    currentY = 55 * mmToPt;
-                }
-                doc.fillColor('#ffffff').fontSize(9).font('Helvetica-Bold').text(m.fullName.toUpperCase(), 15 * mmToPt, currentY);
-                currentY += 4 * mmToPt;
-                doc.fillColor('#64748b').fontSize(7).font('Helvetica').text(m.college || reg.college, 15 * mmToPt, currentY);
-                currentY += 8 * mmToPt;
-            });
-        }
+        // LEADER SECTION
+        doc.fillColor(activeColor.accent).lineWidth(2).moveTo(15 * mmToPt, currentY).lineTo(15 * mmToPt, currentY + 14 * mmToPt).stroke();
+        doc.fillColor('#64748b').fontSize(7).font('Helvetica-Bold').text("PRIMARY_PARTICIPANT", 20 * mmToPt, currentY + 1 * mmToPt);
+        doc.fillColor('#ffffff').fontSize(13).font('Helvetica-Bold').text(reg.full_name.toUpperCase(), 20 * mmToPt, currentY + 7 * mmToPt);
+        currentY += 25 * mmToPt;
 
-        // FOOTER
+        // STACKED INFO GRID (PREVENTS CROPPING)
+        doc.fillColor('#475569').fontSize(7).font('Helvetica-Bold').text("COLLEGE_ID", 15 * mmToPt, currentY);
+        currentY += 4 * mmToPt;
+        doc.fillColor('#94a3b8').fontSize(9).font('Helvetica').text(reg.college.toUpperCase(), 15 * mmToPt, currentY, { width: 70 * mmToPt });
+        currentY += 12 * mmToPt;
+
+        doc.fillColor('#475569').fontSize(7).font('Helvetica-Bold').text("TRANS_ID // UTR", 15 * mmToPt, currentY);
+        currentY += 4 * mmToPt;
+        doc.fillColor(activeColor.accent).fontSize(9).font('Helvetica-Bold').text(reg.utr_number || "VERIFIED_REG", 15 * mmToPt, currentY);
+        currentY += 15 * mmToPt;
+
+        // FOOTER (Page 1)
         doc.fillColor('#1e293b').rect(10 * mmToPt, 190 * mmToPt, 80 * mmToPt, 0.5 * mmToPt).fill();
         doc.fillColor('#475569').fontSize(6).font('Helvetica-Bold').text("TIMESTAMP", 15 * mmToPt, 195 * mmToPt);
         doc.fillColor('#64748b').fontSize(7).font('Helvetica').text(new Date().toLocaleString(), 15 * mmToPt, 199 * mmToPt);
-        
-        doc.fillColor('#0f172a').roundedRect(70 * mmToPt, 192 * mmToPt, 15 * mmToPt, 15 * mmToPt, 4 * mmToPt).fill();
-        doc.fillColor(activeColor.border + '44').lineWidth(0.5).roundedRect(70 * mmToPt, 192 * mmToPt, 15 * mmToPt, 15 * mmToPt, 4 * mmToPt).stroke();
+        doc.fillColor('#0a0f1e').roundedRect(72 * mmToPt, 193 * mmToPt, 12 * mmToPt, 12 * mmToPt, 3 * mmToPt).fill();
+        doc.fillColor(activeColor.border + '33').lineWidth(1).roundedRect(72 * mmToPt, 193 * mmToPt, 12 * mmToPt, 12 * mmToPt, 3 * mmToPt).stroke();
+
+        // --- PAGE 2: SQUAD (IF APPLICABLE) ---
+        if (reg.team_members && reg.team_members.length > 0) {
+            doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } });
+            drawTicketLayout(doc, "SQUAD_ROSTER // 2026");
+            let squadY = 55 * mmToPt;
+
+            if (reg.team_name) {
+                doc.fillColor(activeColor.accent + '11').roundedRect(12 * mmToPt, squadY, 76 * mmToPt, 15 * mmToPt, 4 * mmToPt).fill();
+                doc.fillColor('#475569').fontSize(6).font('Helvetica-Bold').text("OFFICIAL_TEAM", 16 * mmToPt, squadY + 3 * mmToPt);
+                doc.fillColor(activeColor.accent).fontSize(11).font('Helvetica-Bold').text(reg.team_name.toUpperCase(), 16 * mmToPt, squadY + 8 * mmToPt);
+                squadY += 22 * mmToPt;
+            }
+
+            reg.team_members.forEach((m, i) => {
+                if (squadY > 180 * mmToPt) {
+                    doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } });
+                    drawTicketLayout(doc, "SQUAD_ROSTER // CONTINUED");
+                    squadY = 55 * mmToPt;
+                }
+                doc.fillColor(activeColor.accent).fontSize(8).font('Helvetica-Bold').text(`#${i + 1}`, 15 * mmToPt, squadY);
+                doc.fillColor('#ffffff').fontSize(10).font('Helvetica-Bold').text(m.fullName.toUpperCase(), 22 * mmToPt, squadY);
+                squadY += 5 * mmToPt;
+                doc.fillColor('#64748b').fontSize(7).font('Helvetica').text(m.college || reg.college, 22 * mmToPt, squadY);
+                squadY += 10 * mmToPt;
+            });
+
+            // Footer (Page 2)
+            doc.fillColor('#1e293b').rect(10 * mmToPt, 190 * mmToPt, 80 * mmToPt, 0.5 * mmToPt).fill();
+            doc.fillColor('#475569').fontSize(7).font('Helvetica-Bold').text("THANKS_FOR_REGISTERING", 0, 198 * mmToPt, { align: 'center', characterSpacing: 2 });
+        }
 
         doc.end();
     });

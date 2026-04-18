@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 import { eventsDay1, eventsDay2 } from "./Schedule";
 
 export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDownload }) {
@@ -98,231 +99,43 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
 
         try {
             const safeName = registration.full_name ? registration.full_name.replace(/\s+/g, '_') : 'Attendee';
-            const doc = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: [180, 260]
+        try {
+            const front = document.getElementById('pass-page-front');
+            const back = document.getElementById('pass-page-back');
+            if (!front) throw new Error("Front template not found");
+
+            const pdf = new jsPDF('p', 'mm', [100, 210]); // Vertical ticket format
+
+            // Page 1: Leader
+            front.style.display = 'block';
+            html2canvas(front, { scale: 2, useCORS: true, backgroundColor: '#020617' }).then(canvasFront => {
+                front.style.display = 'none';
+                const imgFront = canvasFront.toDataURL('image/png');
+                pdf.addImage(imgFront, 'PNG', 0, 0, 100, 210);
+
+                // Page 2: Squad (If exists)
+                const teamMembers = registration.team_members || [];
+                if (teamMembers.length > 0 && back) {
+                    back.style.display = 'block';
+                    html2canvas(back, { scale: 2, useCORS: true, backgroundColor: '#020617' }).then(canvasBack => {
+                        back.style.display = 'none';
+                        const imgBack = canvasBack.toDataURL('image/png');
+                        pdf.addPage([100, 210], 'p');
+                        pdf.addImage(imgBack, 'PNG', 0, 0, 100, 210);
+                        pdf.save(`Estralis_Pass_${registration.full_name.replace(/\s+/g, '_')}.pdf`);
+                    });
+                } else {
+                    pdf.save(`Estralis_Pass_${registration.full_name.replace(/\s+/g, '_')}.pdf`);
+                }
             });
-
-            const cat = event.category || "Tech";
-            const pdfColors = {
-                Tech: {
-                    banner: [14, 116, 144], // Cyan 700
-                    border: [6, 182, 212], // Cyan 500
-                    accent: [34, 211, 238],  // Cyan 400
-                    label: [103, 232, 249]   // Cyan 300
-                },
-                Fun: {
-                    banner: [225, 29, 72],  // Rose 600
-                    border: [168, 85, 247], // Purple 500
-                    accent: [232, 121, 249],  // Fuchsia 400
-                    label: [253, 164, 175]   // Pink 300
-                },
-                Workshop: {
-                    banner: [5, 150, 105],  // Emerald 600
-                    border: [20, 184, 166], // Teal 500
-                    accent: [45, 212, 191],   // Teal 400
-                    label: [110, 231, 183]    // Emerald 300
-                }
-            }
-            const colors = pdfColors[cat] || pdfColors.Tech;
-
-            // Helper function to draw the common background, header, barcode and footer
-            const drawTicketBase = (pageDoc) => {
-                // 1. Solid Outside Background
-                pageDoc.setFillColor(15, 17, 26);
-                pageDoc.rect(0, 0, 180, 260, 'F');
-
-                // 2. Main Ticket Container
-                pageDoc.setDrawColor(...colors.border); 
-                pageDoc.setLineWidth(1);
-                pageDoc.roundedRect(8, 8, 164, 244, 15, 15, 'D');
-
-                // 3. Inner Content Background
-                pageDoc.setFillColor(30, 41, 59); 
-                pageDoc.roundedRect(8, 8, 164, 244, 15, 15, 'F');
-
-                // 4. HEADER BANNER (DYNAMIC)
-                pageDoc.setFillColor(...colors.banner); 
-                pageDoc.roundedRect(8, 8, 164, 50, 15, 15, 'F');
-                pageDoc.rect(8, 25, 164, 33, 'F');
-
-                // Header Text (MATCHING USER COORDINATES FROM REG FORM)
-                pageDoc.setTextColor(255, 255, 255);
-                pageDoc.setFont("helvetica", "bold");
-                pageDoc.setFontSize(24);
-                pageDoc.text("ESTRALIS 2026", 83, 25, { align: "center", charSpace: 1 });
-
-                pageDoc.setFontSize(10);
-                pageDoc.setFont("helvetica", "normal");
-                pageDoc.setTextColor(255, 255, 255);
-                pageDoc.text("OFFICIAL ACCESS PASS", 65.9, 38, { align: "center", charSpace: 2.5 });
-
-                // 5. Tear Line
-                pageDoc.setDrawColor(71, 85, 105);
-                pageDoc.setLineDash([2, 2], 0);
-                pageDoc.line(15, 65, 165, 65);
-                pageDoc.setLineDash([], 0);
-
-                // Instruction (MATCHING USER COORDINATES)
-                pageDoc.setFont("helvetica", "italic");
-                pageDoc.setFontSize(7);
-                pageDoc.setTextColor(148, 163, 184);
-                pageDoc.text("PRESENT THIS PASS AT THE REGISTRATION DESK", 90, 240, { align: "center" });
-
-                // Barcode (MATCHING USER COORDINATES)
-                pageDoc.setFillColor(140, 130, 140); 
-                const barcodeBars = 40;
-                const barcodeWidth = barcodeBars * 2;
-                const startXPos = (180 - barcodeWidth) / 2;
-                for (let i = 0; i < barcodeBars; i++) {
-                    const widthLimit = Math.random() * 1 + 0.3;
-                    pageDoc.rect(startXPos + (i * 2), 242, widthLimit, 8, 'F');
-                }
-
-                // Footer Text (MATCHING USER COORDINATES)
-                pageDoc.setFont("helvetica", "bold");
-                pageDoc.setCharSpace(2);
-                pageDoc.setFontSize(8);
-                pageDoc.setTextColor(255, 255, 255);
-                pageDoc.text("THANKS FOR REGISTERING!", 67, 259, { align: "center" });
-                pageDoc.setCharSpace(0);
-
-                // Vertical Watermark (MATCHING USER COORDINATES)
-                pageDoc.setFontSize(7);
-                pageDoc.setTextColor(51, 65, 85);
-                pageDoc.text("DESIGNED BY GRAFIK", 173, 235, { angle: 90 });
-            };
-
-            // START PAGE 1
-            drawTicketBase(doc);
-
-            // 6. UTR & VERIFIED Badge
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(9);
-            doc.setTextColor(148, 163, 184); 
-            doc.text("UTR NO:", 20, 80);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(12);
-            doc.setTextColor(255, 255, 255);
-            const ticketId = registration.utr_number || registration.razorpay_payment_id || `ALG-${Math.floor(Math.random() * 1000000)}`;
-            doc.text(ticketId, 20, 88);
-
-            // Status Badge (Green Pill)
-            doc.setFillColor(16, 185, 129); // Emerald 500
-            doc.roundedRect(135, 76, 30, 12, 6, 6, 'F');
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(10);
-            doc.setTextColor(255, 255, 255);
-            doc.text("VERIFIED", 150, 84, { align: "center" });
-
-            // 7. EVENT TITLE
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(30);
-            doc.setTextColor(...colors.border); 
-            doc.text(event.title.toUpperCase(), 90, 115, { align: "center" });
-
-            // 8. TIME & VENUE BOX
-            doc.setFillColor(15, 23, 42); 
-            doc.roundedRect(20, 125, 140, 28, 6, 6, 'F');
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(11);
-            doc.setTextColor(255, 255, 255);
-            doc.text("TIME:", 30, 137);
-            doc.text("VENUE:", 85, 137);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.setTextColor(148, 163, 184);
-            doc.text(event.time, 30, 146);
-
-            const venueLines = doc.splitTextToSize(event.location, 70);
-            doc.text(venueLines, 85, 146);
-
-            // 9. LEADER DATA ONLY ON PAGE 1
-            let currentY = 175;
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(10);
-            doc.setTextColor(...(colors.label || [253, 164, 175])); 
-            doc.text("PARTICIPANTS DETAILS", 20, currentY);
-            currentY += 10;
-
-            if (registration.team_name) {
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(12);
-                doc.setTextColor(...colors.border);
-                doc.text(`TEAM: ${registration.team_name.toUpperCase()}`, 20, currentY);
-                currentY += 8;
-            }
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(18);
-            doc.setTextColor(255, 255, 255);
-            doc.text(registration.full_name.toUpperCase(), 20, currentY);
-            currentY += 10;
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.setTextColor(148, 163, 184);
-            doc.text(`College: ${registration.college}`, 20, currentY);
-            currentY += 7;
-            doc.text(`Email: ${registration.email}`, 20, currentY);
-            currentY += 7;
-            doc.text(`Phone: ${registration.phone}`, 20, currentY);
-            
-            // 10. FINANCIALS
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(10);
-            doc.setTextColor(...(colors.label || [253, 164, 175]));
-            doc.text(registration.pass_type === 'Combo Pass' ? "COMBO PASS FEE" : "STANDARD FEE", 20, 230);
-            doc.setFontSize(14);
-            doc.setTextColor(255, 255, 255);
-            let feeText = registration.amount_paid ? registration.amount_paid.toString().replace(/₹/g, "Rs. ") : "Free";
-            doc.text(feeText, 20, 238);
-
-
-            // PAGE 2 (TEAM MEMBERS)
-            const teamMembers = registration.team_members || [];
-            if (teamMembers.length > 0) {
-                doc.addPage([180, 260], 'portrait');
-                drawTicketBase(doc);
-
-                let teamY = 80;
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(16);
-                doc.setTextColor(...colors.border);
-                doc.text(registration.team_name ? `TEAM: ${registration.team_name.toUpperCase()}` : "TEAM MEMBERS", 90, teamY, { align: "center" });
-                teamY += 15;
-
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(10);
-                doc.setTextColor(203, 213, 225);
-                
-                teamMembers.forEach((m, i) => {
-                    if (teamY > 220) {
-                        doc.addPage([180, 260], 'portrait');
-                        drawTicketBase(doc);
-                        teamY = 80;
-                    }
-                    doc.setFont("helvetica", "bold");
-                    doc.setTextColor(255, 255, 255);
-                    doc.text(`${i + 1}. ${m.fullName.toUpperCase()}`, 20, teamY);
-                    teamY += 6;
-                    doc.setFont("helvetica", "normal");
-                    doc.setTextColor(148, 163, 184);
-                    doc.text(`   ${m.phone} | ${m.email}`, 20, teamY);
-                    teamY += 10;
-                });
-            }
-
-            doc.save(`Access_Pass_${safeName}.pdf`);
-
         } catch (err) {
             console.error("PDF Gen Error:", err);
             alert("Failed to generate PDF document.");
         }
+    };
+
+    // Prepare data for the hidden capture templates
+    const teamMembers = results.length > 0 ? (results.find(r => r.id === results[0].id)?.team_members || []) : [];
     };
 
     return (
@@ -423,6 +236,115 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                                 ))}
                             </div>
                         )}
+
+                        {/* Hidden Access Pass Templates for Multi-Page Capture */}
+                        <div id="pass-templates-container" style={{ position: 'fixed', left: '-9999px', top: 0 }}>
+                            {results.map((reg) => {
+                                const event = allEvents.find(e => e.title === reg.event_title) || {};
+                                const teamMembers = reg.team_members || [];
+                                
+                                return (
+                                    <div key={`templates-${reg.id}`}>
+                                        {/* PAGE 1: LEADER */}
+                                        <div id="pass-page-front" className="w-[400px] bg-[#020617] text-white overflow-hidden" style={{ minHeight: '800px', display: 'none', backgroundColor: '#020617', color: '#ffffff', fontFamily: 'sans-serif' }}>
+                                            <div className="p-8 m-4 rounded-[2rem] relative overflow-hidden h-[760px]" style={{ backgroundColor: '#0a0f1e', border: '4px solid rgba(45, 212, 191, 0.3)' }}>
+                                                <div className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #2dd4bf 0%, transparent 70%)', filter: 'blur(40px)' }} />
+                                                <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #d946ef 0%, transparent 70%)', filter: 'blur(40px)' }} />
+                                                
+                                                <div className="flex justify-between items-start mb-10 pb-6" style={{ borderBottom: '1px solid rgba(45, 212, 191, 0.2)' }}>
+                                                    <div>
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#2dd4bf' }} />
+                                                            <span style={{ fontSize: '8px', fontWeight: '900', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(45, 212, 191, 0.8)' }}>ACCESS_PASS // 2026</span>
+                                                        </div>
+                                                        <h2 style={{ fontSize: '1.875rem', fontWeight: '900', fontStyle: 'italic', letterSpacing: '-0.025em', color: '#ffffff', textTransform: 'uppercase' }}>ESTRALIS</h2>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <span style={{ fontSize: '10px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.3)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block' }}>SECTOR</span>
+                                                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#2dd4bf', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{event.category || "TECH"}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="mb-10 text-center py-6" style={{ backgroundColor: 'rgba(255, 255, 255, 0.02)', borderTop: '1px solid rgba(255, 255, 255, 0.05)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                                                    <span style={{ fontSize: '9px', fontWeight: '900', color: 'rgba(45, 212, 191, 0.5)', textTransform: 'uppercase', letterSpacing: '0.4em', marginBottom: '0.5rem', display: 'block' }}>TRANSMISSION_TARGET</span>
+                                                    <h3 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#ffffff', textTransform: 'uppercase', letterSpacing: '-0.025em' }}>{event.title}</h3>
+                                                </div>
+
+                                                <div className="space-y-10 mb-12">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-1 h-8" style={{ backgroundColor: '#2dd4bf' }} />
+                                                        <div>
+                                                            <span style={{ fontSize: '9px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.3)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>PRIMARY_PARTICIPANT</span>
+                                                            <p style={{ fontSize: '1.4rem', fontWeight: '900', color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.025em' }}>{reg.full_name}</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div className="space-y-6 pl-4">
+                                                        <div>
+                                                            <span style={{ fontSize: '8px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: '0.25rem' }}>COLLEGE_ID</span>
+                                                            <p style={{ fontSize: '0.85rem', fontWeight: '700', color: 'rgba(255, 255, 255, 0.6)', textTransform: 'uppercase' }}>{reg.college}</p>
+                                                        </div>
+                                                        <div>
+                                                            <span style={{ fontSize: '8px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: '0.25rem' }}>TRANS_ID // UTR</span>
+                                                            <p style={{ fontSize: '0.85rem', fontFamily: 'monospace', color: '#2dd4bf', fontWeight: '700' }}>{reg.utr_number || reg.razorpay_payment_id}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-auto pt-8 flex justify-between items-end absolute bottom-12 left-8 right-8" style={{ borderTop: '1px solid rgba(45, 212, 191, 0.2)' }}>
+                                                    <div className="space-y-2">
+                                                        <div style={{ fontSize: '9px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>TIMESTAMP</div>
+                                                        <div style={{ fontSize: '10px', fontFamily: 'monospace', color: 'rgba(255, 255, 255, 0.4)' }}>{new Date(reg.timestamp).toLocaleString()}</div>
+                                                    </div>
+                                                    <div className="w-16 h-16 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                                                        <div style={{ fontSize: '8px', color: 'rgba(45, 212, 191, 0.4)', textAlign: 'center', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '-0.05em', lineHeight: '1' }}>SECURE<br/>SCAN</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* PAGE 2: SQUAD */}
+                                        <div id="pass-page-back" className="w-[400px] bg-[#020617] text-white overflow-hidden" style={{ minHeight: '800px', display: 'none', backgroundColor: '#020617', color: '#ffffff', fontFamily: 'sans-serif' }}>
+                                            <div className="p-8 m-4 rounded-[2rem] relative overflow-hidden h-[760px]" style={{ backgroundColor: '#0a0f1e', border: '4px solid rgba(45, 212, 191, 0.3)' }}>
+                                                <div className="flex justify-between items-start mb-10 pb-6" style={{ borderBottom: '1px solid rgba(45, 212, 191, 0.2)' }}>
+                                                    <div>
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#2dd4bf' }} />
+                                                            <span style={{ fontSize: '8px', fontWeight: '900', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(45, 212, 191, 0.8)' }}>SQUAD_ROSTER // 2026</span>
+                                                        </div>
+                                                        <h2 style={{ fontSize: '1.875rem', fontWeight: '900', fontStyle: 'italic', letterSpacing: '-0.025em', color: '#ffffff', textTransform: 'uppercase' }}>ESTRALIS</h2>
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-8">
+                                                    {reg.team_name && (
+                                                        <div className="mb-8 p-4 rounded-xl bg-teal-500/5 border border-teal-500/20">
+                                                            <span style={{ fontSize: '8px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: '0.25rem' }}>OFFICIAL_TEAM</span>
+                                                            <p style={{ fontSize: '1.1rem', fontWeight: '700', color: '#2dd4bf', textTransform: 'uppercase' }}>{reg.team_name}</p>
+                                                        </div>
+                                                    )}
+                                                    <div className="space-y-6">
+                                                        {teamMembers.map((m, i) => (
+                                                            <div key={i} className="pb-4 border-b border-white/5 last:border-0">
+                                                                <div className="flex items-baseline gap-3 mb-1">
+                                                                    <span style={{ fontSize: '10px', color: '#2dd4bf', fontWeight: '900' }}>#{i + 1}</span>
+                                                                    <p style={{ fontSize: '0.9rem', fontWeight: '900', color: '#ffffff', textTransform: 'uppercase' }}>{m.fullName}</p>
+                                                                </div>
+                                                                <p style={{ fontSize: '9px', fontWeight: '500', color: 'rgba(255, 255, 255, 0.3)', textTransform: 'uppercase', letterSpacing: '0.05em', paddingLeft: '1.5rem' }}>{m.college || reg.college}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-auto absolute bottom-12 left-8 right-8 text-center">
+                                                    <span style={{ fontSize: '8px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.1)', textTransform: 'uppercase', letterSpacing: '0.5em' }}>THANKS_FOR_REGISTERING</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </motion.div>
                 </div>
             )}
