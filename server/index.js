@@ -407,19 +407,19 @@ const generatePDFPass = (reg) => {
             pageDoc.fillColor(colors.bg).rect(12 * mmToPt, 12 * mmToPt, 156 * mmToPt, 50 * mmToPt).fill();
             pageDoc.strokeColor(colors.teal).moveTo(12 * mmToPt, 62 * mmToPt).lineTo(168 * mmToPt, 62 * mmToPt).stroke();
 
-            // HEADER Text (Synced with 83mm offset)
+            // HEADER Text (Synced with 82.5mm user refinement)
             pageDoc.font('Helvetica-Bold').fontSize(26).fillColor(colors.aqua).opacity(0.4)
-                .text("ESTRALIS 2026", (89 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
+                .text("ESTRALIS 2026", (82.5 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
             pageDoc.opacity(1).fillColor('#ffffff')
-                .text("ESTRALIS 2026", (89 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
+                .text("ESTRALIS 2026", (82.5 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
 
-            // SLOGAN (Synced with 70mm manual adjustment)
+            // SLOGAN (Synced with 69.5mm user refinement)
             pageDoc.fontSize(8.5).font('Helvetica').fillColor(colors.teal)
-                .text("THE INTERSTELLAR SYMPOSIUM", (89 - 90) * mmToPt, 40.5 * mmToPt, { align: 'center', width: width, characterSpacing: 1.5 * mmToPt });
+                .text("THE INTERSTELLAR SYMPOSIUM", (69.5 - 90) * mmToPt, 40.5 * mmToPt, { align: 'center', width: width, characterSpacing: 1.5 * mmToPt });
 
-            // SECURE ID (Synced with 89mm)
+            // SECURE ID (Synced with 88mm user refinement)
             pageDoc.fontSize(7).fillColor(colors.dim)
-                .text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", (89 - 90) * mmToPt, 50 * mmToPt, { align: 'center', width: width });
+                .text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", (88 - 90) * mmToPt, 50 * mmToPt, { align: 'center', width: width });
 
             // FOOTER - Synced with RegistrationForm latest text
             pageDoc.fontSize(7).font('Helvetica-Oblique').fillColor(colors.dim)
@@ -435,21 +435,21 @@ const generatePDFPass = (reg) => {
         doc.strokeColor(colors.teal).lineWidth(0.5).roundedRect(130 * mmToPt, startY + 2 * mmToPt, 30 * mmToPt, 10 * mmToPt, 2 * mmToPt).stroke();
         doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("VERIFIED", (145 - 90) * mmToPt, startY + 9 * mmToPt, { width: width, align: 'center' });
 
-        // EVENT TITLE (Synced with 89mm offset to match header)
+        // EVENT TITLE (Synced with 85mm user refinement)
         doc.fillColor('#ffffff').fontSize(32).font('Helvetica-Bold')
-           .text(reg.event_title.toUpperCase(), (89 - 90) * mmToPt, startY + 26 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
-        // CATEGORY TAG (Synced with 86mm box / 86mm text - Pushed left as requested)
+           .text(reg.event_title.toUpperCase(), (85 - 90) * mmToPt, startY + 26 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
+        // CATEGORY TAG (Synced with 86mm box / 84mm text as per user refinement)
         const catTextContent = (reg.category || 'TECH').toUpperCase();
         doc.fontSize(8);
         const tagWidthValue = doc.widthOfString(catTextContent) + 10 * mmToPt;
         doc.fillColor(colors.teal).roundedRect((86 * mmToPt) - (tagWidthValue/2), startY + 40 * mmToPt, tagWidthValue, 8 * mmToPt, 4 * mmToPt).fill();
-        doc.fillColor(colors.bg).text(catTextContent, (86 - 90) * mmToPt, startY + 42.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
+        doc.fillColor(colors.bg).text(catTextContent, (84 - 90) * mmToPt, startY + 42.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
 
         // LOGISTICS
         const schedule = EVENT_SCHEDULE[reg.event_title.toUpperCase()] || { location: "TBA", time: "TBA" };
         doc.fillColor('rgba(30, 41, 59, 0.4)').roundedRect(20 * mmToPt, startY + 55 * mmToPt, 140 * mmToPt, 30 * mmToPt, 5 * mmToPt).fill();
         doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("LOCATION", 30 * mmToPt, startY + 65 * mmToPt);
-        doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("ARRIVAL_TIME", 100 * mmToPt, startY + 65 * mmToPt);
+        doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("TIME", 100 * mmToPt, startY + 65 * mmToPt);
         doc.fillColor('#ffffff').fontSize(10).font('Helvetica').text(schedule.location, 30 * mmToPt, startY + 72 * mmToPt, { width: 60 * mmToPt });
         doc.text(schedule.time, 100 * mmToPt, startY + 72 * mmToPt);
 

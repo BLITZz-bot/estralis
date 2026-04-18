@@ -258,19 +258,19 @@ export default function RegistrationForm({ event, onClose }) {
                 pageDoc.setFont("helvetica", "bold");
                 pageDoc.setTextColor(8, 145, 178, 40); // Cyan glow
                 pageDoc.setFontSize(26);
-                pageDoc.text("ESTRALIS 2026", 89, 35, { align: "center", charSpace: 1 });
+                pageDoc.text("ESTRALIS 2026", 82.5, 35, { align: "center", charSpace: 1 });
 
                 pageDoc.setTextColor(255, 255, 255);
-                pageDoc.text("ESTRALIS 2026", 89, 35, { align: "center", charSpace: 1 });
+                pageDoc.text("ESTRALIS 2026", 82.5, 35, { align: "center", charSpace: 1 });
 
                 pageDoc.setFontSize(8);
                 pageDoc.setFont("helvetica", "normal");
                 pageDoc.setTextColor(...colors.teal);
-                pageDoc.text("THE INTERSTELLAR SYMPOSIUM", 70, 43, { align: "center", charSpace: 1.5 });
+                pageDoc.text("THE INTERSTELLAR SYMPOSIUM", 69.5, 43, { align: "center", charSpace: 1.5 });
 
                 pageDoc.setFontSize(7);
                 pageDoc.setTextColor(...colors.dim);
-                pageDoc.text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", 89, 50, { align: "center" });
+                pageDoc.text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", 88, 50, { align: "center" });
 
                 // 5. FOOTER DECOR
                 pageDoc.setFont("helvetica", "italic");
@@ -309,7 +309,7 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setFont("helvetica", "bold");
             doc.setFontSize(32);
             doc.setTextColor(255, 255, 255);
-            doc.text(event.title.toUpperCase(), 89, startY + 35, { align: "center", charSpace: 1 });
+            doc.text(event.title.toUpperCase(), 85, startY + 35, { align: "center", charSpace: 1 });
 
             // CATEGORY TAG (Refined to 86mm)
             doc.setFillColor(...colors.teal);
@@ -318,7 +318,7 @@ export default function RegistrationForm({ event, onClose }) {
             doc.roundedRect(86 - (tagWidth / 2), startY + 40, tagWidth, 8, 4, 4, 'F');
             doc.setFontSize(8);
             doc.setTextColor(...colors.bg);
-            doc.text(catText, 86, startY + 45.5, { align: "center", charSpace: 2 });
+            doc.text(catText, 84, startY + 45.5, { align: "center", charSpace: 2 });
 
             // LOGISTICS (Location & Time)
             doc.setFillColor(30, 41, 59, 40);
@@ -328,7 +328,7 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setFontSize(9);
             doc.setTextColor(...colors.teal);
             doc.text("LOCATION", 30, startY + 65);
-            doc.text("ARRIVAL_TIME", 100, startY + 65);
+            doc.text("TIME", 100, startY + 65);
 
             doc.setFont("helvetica", "normal");
             doc.setFontSize(10);
