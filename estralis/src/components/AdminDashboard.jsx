@@ -914,7 +914,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                 {filteredData.length > 0 ? filteredData.map((reg) => (
                                                     <tr key={reg.id} className="hover:bg-teal-500/5 transition-all group border-b border-teal-500/5">
                                                         <td className="px-6 py-6 border-r border-teal-500/10">
-                                                            <div className="text-[9px] font-mono text-cyan-500/60 break-all max-w-[80px]">{reg.id.split('-')[0]}...</div>
+                                                            <div className="text-[9px] font-mono text-cyan-500/60 break-all max-w-[80px]">{String(reg.id).split('-')[0]}...</div>
                                                         </td>
                                                         <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
                                                             <div className="text-[10px] font-black text-white">{new Date(reg.timestamp).toLocaleDateString('en-IN')}</div>
