@@ -1,6 +1,6 @@
-# 🚀 AlgoRhythm Fest 2026
+# 🚀 Estralis Fest 2026
 
-**AlgoRhythm 3.0** is the official professional techno-cultural fest platform for Gopalan College of Engineering and Management (GCEM). This repository contains the complete frontend and backend infrastructure for event registrations, dynamic scheduling, and automated high-fidelity pass generation.
+**Estralis 2026** is the official professional techno-cultural fest platform for Gopalan College of Engineering and Management (GCEM). This repository contains the complete frontend and backend infrastructure for event registrations, dynamic scheduling, and automated high-fidelity pass generation.
 
 ---
 
@@ -18,9 +18,9 @@
 - **Deep-Link Integration**: Quick access to passes via automated Gmail confirmation links.
 
 ### 🛡️ Secure Backend Infrastructure
-- **MongoDB Integration**: Robust data storage for thousands of participants.
+- **PostgreSQL Integration**: Robust data storage for thousands of participants.
 - **Cloudinary Storage**: Secure, high-speed hosting for payment proof and screenshots.
-- **SMTP Automation**: Reliable Gmail-based confirmation system with PDF attachments.
+- **GMail API Automation**: Reliable HTTPS-based confirmation system with PDF attachments.
 - **Admin Control**: Centralized dashboard for registration management and reporting.
 
 ---
@@ -28,7 +28,7 @@
 ## 🛠️ Tech Stack
 
 - **Frontend**: React, Vite, Tailwind CSS, Framer Motion, Lucide React, jsPDF
-- **Backend**: Node.js, Express, MongoDB (Mongoose), Cloudinary, Nodemailer, PDFKit
+- **Backend**: Node.js, Express, PostgreSQL, Cloudinary, GMail API, PDFKit
 - **DevOps**: GitHub, Vercel (Frontend), Render (Backend)
 
 ---
@@ -45,21 +45,21 @@ This project was envisioned and developed under the leadership of **[Bharatha01]
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v16+)
-- MongoDB Atlas Account
+- Node.js (v18+)
+- PostgreSQL Database (Neon.tech / Local)
 - Cloudinary Account
-- Gmail account with App Password
+- Google Project with GMail API access
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/BLITZz-bot/Algorhythm-Fest.git
+   git clone https://github.com/BLITZz-bot/estralis.git
    ```
 
 2. **Initialize Frontend**
    ```bash
-   cd algorhythm-fest
+   cd estralis
    npm install
    npm run dev
    ```
@@ -72,13 +72,13 @@ This project was envisioned and developed under the leadership of **[Bharatha01]
    ```
 
 4. **Environment Setup**
-   Create a `.env` file in both `algorhythm-fest` and `server` folders and add your credentials (MONGODB_URI, CLOUDINARY_URL, SENDER_EMAIL, etc.).
+   Create a `.env` file in both `estralis` and `server` folders and add your credentials (DATABASE_URL, CLOUDINARY_URL, SENDER_EMAIL, etc.).
 
 ---
 
 ## 📄 License
 
-This project is proprietary and built specifically for **AlgoRhythm Fest 2026**.
+This project is proprietary and built specifically for **Estralis Fest 2026**.
 
 ---
 
