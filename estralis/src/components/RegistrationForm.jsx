@@ -196,168 +196,182 @@ export default function RegistrationForm({ event, onClose }) {
                 format: [180, 260]
             });
 
-            const cat = event.category || "Tech";
-            const pdfColors = {
-                Tech: {
-                    banner: [14, 116, 144], // Cyan 700
-                    border: [6, 182, 212], // Cyan 500
-                    accent: [34, 211, 238],  // Cyan 400
-                    label: [103, 232, 249]   // Cyan 300
-                },
-                Fun: {
-                    banner: [225, 29, 72],  // Rose 600
-                    border: [168, 85, 247], // Purple 500
-                    accent: [232, 121, 249],  // Fuchsia 400
-                    label: [253, 164, 175]   // Pink 300
-                },
-                Workshop: {
-                    banner: [5, 150, 105],  // Emerald 600
-                    border: [20, 184, 166], // Teal 500
-                    accent: [45, 212, 191],   // Teal 400
-                    label: [110, 231, 183]    // Emerald 300
-                }
-            }
-            const colors = pdfColors[cat] || pdfColors.Tech;
+            const colors = {
+                bg: [2, 6, 23],        // Space #020617
+                card: [15, 23, 42],    // Slate 900
+                teal: [45, 212, 191],  // Teal 400
+                aqua: [8, 145, 178],   // Aqua 700
+                text: [248, 250, 252], // Starlight
+                dim: [148, 163, 184]   // Slate 400
+            };
 
             const drawTicketBase = (pageDoc) => {
-                pageDoc.setFillColor(15, 17, 26);
+                // 1. OUTER SPACE BACKGROUND
+                pageDoc.setFillColor(...colors.bg);
                 pageDoc.rect(0, 0, 180, 260, 'F');
 
-                pageDoc.setDrawColor(...colors.border); 
-                pageDoc.setLineWidth(1);
-                pageDoc.roundedRect(8, 8, 164, 244, 15, 15, 'D');
+                // 2. TECH HUD ACCENTS (Decorative corners)
+                pageDoc.setDrawColor(...colors.teal);
+                pageDoc.setLineWidth(0.5);
+                // Top Left
+                pageDoc.line(10, 10, 25, 10);
+                pageDoc.line(10, 10, 10, 25);
+                // Top Right
+                pageDoc.line(155, 10, 170, 10);
+                pageDoc.line(170, 10, 170, 25);
+                // Bottom Left
+                pageDoc.line(10, 250, 25, 250);
+                pageDoc.line(10, 250, 10, 235);
+                // Bottom Right
+                pageDoc.line(155, 250, 170, 250);
+                pageDoc.line(170, 250, 170, 235);
 
-                pageDoc.setFillColor(30, 41, 59); 
-                pageDoc.roundedRect(8, 8, 164, 244, 15, 15, 'F');
+                // 3. MAIN CARD GLASS
+                pageDoc.setFillColor(...colors.card);
+                pageDoc.roundedRect(12, 12, 156, 236, 10, 10, 'F');
+                pageDoc.setDrawColor(45, 212, 191, 50); // Semi-transparent teal
+                pageDoc.roundedRect(12, 12, 156, 236, 10, 10, 'D');
 
-                pageDoc.setFillColor(...colors.banner); 
-                pageDoc.roundedRect(8, 8, 164, 50, 15, 15, 'F');
-                pageDoc.rect(8, 25, 164, 33, 'F');
+                // 4. HEADER SECTION
+                pageDoc.setFillColor(...colors.bg);
+                pageDoc.rect(12, 12, 156, 50, 'F');
+                pageDoc.setDrawColor(...colors.teal);
+                pageDoc.line(12, 62, 168, 62);
 
-                pageDoc.setTextColor(255, 255, 255);
+                // Holographic Text Effect (Shifted layers)
                 pageDoc.setFont("helvetica", "bold");
-                pageDoc.setFontSize(24);
-                pageDoc.text("ESTRALIS 2026", 83, 25, { align: "center", charSpace: 1 });
-
-                pageDoc.setFontSize(10);
-                pageDoc.setFont("helvetica", "normal");
+                pageDoc.setTextColor(8, 145, 178, 40); // Cyan glow
+                pageDoc.setFontSize(26);
+                pageDoc.text("ESTRALIS 2026", 91, 35, { align: "center", charSpace: 2 });
+                
                 pageDoc.setTextColor(255, 255, 255);
-                pageDoc.text("OFFICIAL ACCESS PASS", 65.9, 38, { align: "center", charSpace: 2.5 });
+                pageDoc.text("ESTRALIS 2026", 90, 34, { align: "center", charSpace: 2 });
 
-                pageDoc.setDrawColor(71, 85, 105);
-                pageDoc.setLineDash([2, 2], 0);
-                pageDoc.line(15, 65, 165, 65);
-                pageDoc.setLineDash([], 0);
-
-                pageDoc.setFont("helvetica", "italic");
-                pageDoc.setFontSize(7);
-                pageDoc.setTextColor(148, 163, 184);
-                pageDoc.text("PRESENT THIS PASS AT THE REGISTRATION DESK", 90, 240, { align: "center" });
-
-                pageDoc.setFillColor(140, 130, 140); 
-                const barcodeBars = 40;
-                const barcodeWidth = barcodeBars * 2;
-                const startXPos = (180 - barcodeWidth) / 2;
-                for (let i = 0; i < barcodeBars; i++) {
-                    const widthLimit = Math.random() * 1 + 0.3;
-                    pageDoc.rect(startXPos + (i * 2), 242, widthLimit, 8, 'F');
-                }
-
-                pageDoc.setFont("helvetica", "bold");
-                pageDoc.setCharSpace(2);
                 pageDoc.setFontSize(8);
-                pageDoc.setTextColor(255, 255, 255);
-                pageDoc.text("THANKS FOR REGISTERING!", 67, 259, { align: "center" });
-                pageDoc.setCharSpace(0);
+                pageDoc.setFont("helvetica", "normal");
+                pageDoc.setTextColor(...colors.teal);
+                pageDoc.text("THE INTERSTELLAR SYMPOSIUM", 90, 43, { align: "center", charSpace: 4 });
 
                 pageDoc.setFontSize(7);
-                pageDoc.setTextColor(51, 65, 85);
-                pageDoc.text("DESIGNED BY GRAFIK", 173, 235, { angle: 90 });
+                pageDoc.setTextColor(...colors.dim);
+                pageDoc.text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", 90, 52, { align: "center", charSpace: 1 });
+
+                // 5. FOOTER DECOR
+                pageDoc.setFont("helvetica", "italic");
+                pageDoc.setFontSize(6);
+                pageDoc.setTextColor(...colors.dim);
+                pageDoc.text("THIS DOCUMENT IS ELECTRONICALLY GENERATED AND ENCRYPTED", 90, 243, { align: "center" });
+
+                // Scanner Barcode (Static Decorative)
+                pageDoc.setFillColor(255, 255, 255, 10);
+                for (let i = 0; i < 60; i++) {
+                    const w = Math.random() * 1.5 + 0.5;
+                    pageDoc.rect(30 + (i * 2), 246, w, 6, 'F');
+                }
             };
 
             drawTicketBase(doc);
 
+            // TICKET CONTENT
+            const startY = 80;
+            
+            // UTR / TRANSACTION ID Section
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(8);
+            doc.setTextColor(...colors.teal);
+            doc.text("TRANSACTION_ID //", 20, startY);
+            
+            doc.setFont("courier", "bold");
+            doc.setFontSize(14);
+            doc.setTextColor(255, 255, 255);
+            const ticketId = (formData.utrNumber || "PENDING").toUpperCase();
+            doc.text(ticketId, 20, startY + 8);
+
+            // Status Badge
+            doc.setDrawColor(...colors.teal);
+            doc.setLineWidth(0.5);
+            doc.roundedRect(130, startY - 2, 30, 12, 2, 2, 'D');
             doc.setFont("helvetica", "bold");
             doc.setFontSize(9);
-            doc.setTextColor(148, 163, 184); 
-            doc.text("UTR NO:", 20, 80);
+            doc.setTextColor(...colors.teal);
+            doc.text("VERIFIED", 145, startY + 6, { align: "center" });
 
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(12);
+            // EVENT TITLE (The Star of the Show)
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(32);
             doc.setTextColor(255, 255, 255);
-            const ticketId = formData.utrNumber || `ALG-${Math.floor(Math.random() * 1000000)}`;
-            doc.text(ticketId, 20, 88);
+            doc.text(event.title.toUpperCase(), 90, startY + 35, { align: "center", charSpace: 1 });
 
-            doc.setFillColor(16, 185, 129);
-            doc.roundedRect(135, 76, 30, 12, 6, 6, 'F');
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(10);
-            doc.setTextColor(255, 255, 255);
-            doc.text("VERIFIED", 150, 84, { align: "center" });
+            // CATEGORY TAG
+            doc.setFillColor(...colors.teal);
+            const catText = (event.category || "TECH").toUpperCase();
+            const tagWidth = doc.getTextWidth(catText) + 10;
+            doc.roundedRect(90 - (tagWidth/2), startY + 40, tagWidth, 8, 4, 4, 'F');
+            doc.setFontSize(8);
+            doc.setTextColor(...colors.bg);
+            doc.text(catText, 90, startY + 45.5, { align: "center", charSpace: 2 });
 
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(30);
-            doc.setTextColor(...colors.border); 
-            doc.text(event.title.toUpperCase(), 90, 115, { align: "center" });
-
-            doc.setFillColor(15, 23, 42); 
-            doc.roundedRect(20, 125, 140, 28, 6, 6, 'F');
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(11);
-            doc.setTextColor(255, 255, 255);
-            doc.text("TIME:", 30, 137);
-            doc.text("VENUE:", 85, 137);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.setTextColor(148, 163, 184);
-            doc.text(event.time, 30, 146);
-
-            const venueLines = doc.splitTextToSize(event.location, 70);
-            doc.text(venueLines, 85, 146);
-
-            let currentY = 175;
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(10);
-            doc.setTextColor(...(colors.label || [253, 164, 175])); 
-            doc.text("PARTICIPANTS DETAILS", 20, currentY);
-            currentY += 10;
+            // LOGISTICS (Location & Time)
+            doc.setFillColor(30, 41, 59, 40);
+            doc.roundedRect(20, startY + 55, 140, 30, 5, 5, 'F');
             
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(9);
+            doc.setTextColor(...colors.teal);
+            doc.text("LOCATION", 30, startY + 65);
+            doc.text("ARRIVAL_TIME", 100, startY + 65);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(10);
+            doc.setTextColor(255, 255, 255);
+            const venueLines = doc.splitTextToSize(event.location || "TBA", 60);
+            doc.text(venueLines, 30, startY + 72);
+            doc.text(event.time || "TBA", 100, startY + 72);
+
+            // PARTICIPANT DATA
+            let currentY = startY + 100;
+            
+            doc.setDrawColor(...colors.teal);
+            doc.line(20, currentY, 160, currentY);
+            currentY += 10;
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(8);
+            doc.setTextColor(...colors.teal);
+            doc.text("PARTICIPANT_IDENTIFIER //", 20, currentY);
+            currentY += 10;
+
             if (formData.teamName) {
                 doc.setFont("helvetica", "bold");
-                doc.setFontSize(12);
-                doc.setTextColor(...colors.border);
+                doc.setFontSize(11);
+                doc.setTextColor(...colors.teal);
                 doc.text(`TEAM: ${formData.teamName.toUpperCase()}`, 20, currentY);
-                currentY += 8;
+                currentY += 7;
             }
 
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(18);
+            doc.setFontSize(22);
             doc.setTextColor(255, 255, 255);
             doc.text(formData.fullName.toUpperCase(), 20, currentY);
-
             currentY += 10;
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.setTextColor(148, 163, 184); 
-            doc.text(`College: ${formData.college}`, 20, currentY);
-            
-            currentY += 7;
-            doc.text(`Email: ${formData.email}`, 20, currentY);
-            
-            currentY += 7;
-            doc.text(`Phone: ${formData.phone}`, 20, currentY);
 
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(10);
-            doc.setTextColor(...colors.label); 
-            doc.text(passType === 'combo' ? "COMBO PASS FEE" : "STANDARD FEE", 20, 227);
-            
             doc.setFont("helvetica", "normal");
-            doc.setFontSize(14);
+            doc.setFontSize(10);
+            doc.setTextColor(...colors.dim); 
+            doc.text(`Institue: ${formData.college}`, 20, currentY);
+            currentY += 6;
+            doc.text(`Contact: ${formData.email} | ${formData.phone}`, 20, currentY);
+
+            // FEE SECTION (Bottom Left)
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(8);
+            doc.setTextColor(...colors.teal);
+            doc.text(passType === 'combo' ? "COMBO_PASS_FEE" : "BASE_FEE", 20, 225);
+            
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(16);
             doc.setTextColor(255, 255, 255);
-            doc.text(`Rs. ${amount.toString().replace(/₹/g, '')}`, 20, 235);
+            doc.text(`INR ${amount.toString().replace(/₹/g, '')}`, 20, 233);
 
             if (teamMembers && teamMembers.length > 0) {
                 doc.addPage("portrait", "mm", [180, 260]);
@@ -366,8 +380,11 @@ export default function RegistrationForm({ event, onClose }) {
                 let teamY = 80;
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(16);
-                doc.setTextColor(...colors.border); 
-                doc.text(formData.teamName ? `TEAM: ${formData.teamName.toUpperCase()}` : "TEAM MEMBERS", 90, teamY, { align: "center" });
+                doc.setTextColor(255, 255, 255);
+                doc.text(formData.teamName ? `SQUAD: ${formData.teamName.toUpperCase()}` : "SQUAD MEMBERS", 90, teamY, { align: "center" });
+                teamY += 10;
+                doc.setDrawColor(...colors.teal);
+                doc.line(40, teamY, 140, teamY);
                 teamY += 15;
 
                 teamMembers.forEach((member, index) => {
@@ -378,17 +395,20 @@ export default function RegistrationForm({ event, onClose }) {
                     }
 
                     doc.setFont("helvetica", "bold");
-                    doc.setFontSize(11);
-                    doc.setTextColor(...colors.accent);
-                    doc.text(`${index + 2}. ${member.fullName.toUpperCase()}`, 25, teamY);
+                    doc.setFontSize(12);
+                    doc.setTextColor(...colors.teal);
+                    doc.text(`${String(index + 2).padStart(2, '0')} //`, 25, teamY);
+                    
+                    doc.setTextColor(255, 255, 255);
+                    doc.text(member.fullName.toUpperCase(), 40, teamY);
                     
                     teamY += 6;
                     doc.setFont("helvetica", "normal");
                     doc.setFontSize(9);
-                    doc.setTextColor(148, 163, 184);
-                    doc.text(`${member.phone} | ${member.email}`, 25, teamY);
+                    doc.setTextColor(...colors.dim);
+                    doc.text(`${member.email} | ${member.phone}`, 40, teamY);
                     
-                    teamY += 10;
+                    teamY += 12;
                 });
             }
 
