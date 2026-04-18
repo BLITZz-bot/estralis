@@ -325,7 +325,22 @@ app.post('/api/upload-screenshot', upload.single('screenshot'), (req, res) => {
     }
 });
 
-// Helper: Send Confirmation Email to User with Website Download Link
+// Official Event Schedule for PDF Data
+const EVENT_SCHEDULE = {
+    "CLASSICAL GROUP": { location: "Amphitheatre", time: "12:00 PM" },
+    "REELS MAKING": { location: "1st Floor", time: "10:00 AM" },
+    "TREASURE HUNT": { location: "410 Room, 4th Floor, GCEM Campus", time: "11:00 AM" },
+    "FACE PAINTING": { location: "Main Quadrangle", time: "11:00 AM" },
+    "FITNESS CHALLENGE": { location: "Room 405, 406 & 407, 4th Floor", time: "11:00 AM" },
+    "POSTER DESIGNING": { location: "LAB 5, Ground Floor", time: "11:00 AM" },
+    "BEAT BOXING": { location: "LAB 3, 4th Floor, GCEM Campus", time: "11:30 PM" },
+    "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
+    "BGMI": { location: "1st Floor, GCEM Campus", time: "12:00 PM" },
+    "WESTERN GROUP": { location: "Main stage, GCEM Campus", time: "09:30 AM" },
+    "BATTLE OF BANDS": { location: "Main stage, GCEM Campus", time: "11:00 AM" },
+    "FASHION SHOW": { location: "Main stage, GCEM Campus", time: "01:00 PM" }
+};
+
 /**
  * Generates a professional PDF pass using pdfkit
  */
@@ -423,19 +438,20 @@ const generatePDFPass = (reg) => {
         // EVENT TITLE (Synced with 89mm offset to match header)
         doc.fillColor('#ffffff').fontSize(32).font('Helvetica-Bold')
            .text(reg.event_title.toUpperCase(), (89 - 90) * mmToPt, startY + 26 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
-        // CATEGORY TAG (Synced with 89mm box / 89mm text)
+        // CATEGORY TAG (Synced with 86mm box / 86mm text - Pushed left as requested)
         const catTextContent = (reg.category || 'TECH').toUpperCase();
         doc.fontSize(8);
         const tagWidthValue = doc.widthOfString(catTextContent) + 10 * mmToPt;
-        doc.fillColor(colors.teal).roundedRect((89 * mmToPt) - (tagWidthValue/2), startY + 40 * mmToPt, tagWidthValue, 8 * mmToPt, 4 * mmToPt).fill();
-        doc.fillColor(colors.bg).text(catTextContent, (89 - 90) * mmToPt, startY + 42.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
+        doc.fillColor(colors.teal).roundedRect((86 * mmToPt) - (tagWidthValue/2), startY + 40 * mmToPt, tagWidthValue, 8 * mmToPt, 4 * mmToPt).fill();
+        doc.fillColor(colors.bg).text(catTextContent, (86 - 90) * mmToPt, startY + 42.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
 
         // LOGISTICS
+        const schedule = EVENT_SCHEDULE[reg.event_title.toUpperCase()] || { location: "TBA", time: "TBA" };
         doc.fillColor('rgba(30, 41, 59, 0.4)').roundedRect(20 * mmToPt, startY + 55 * mmToPt, 140 * mmToPt, 30 * mmToPt, 5 * mmToPt).fill();
         doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("LOCATION", 30 * mmToPt, startY + 65 * mmToPt);
-        doc.text("ARRIVAL_TIME", 100 * mmToPt, startY + 65 * mmToPt);
-        doc.fillColor('#ffffff').fontSize(10).font('Helvetica').text(reg.event_location || "TBA", 30 * mmToPt, startY + 72 * mmToPt, { width: 60 * mmToPt });
-        doc.text(reg.event_time || "TBA", 100 * mmToPt, startY + 72 * mmToPt);
+        doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("ARRIVAL_TIME", 100 * mmToPt, startY + 65 * mmToPt);
+        doc.fillColor('#ffffff').fontSize(10).font('Helvetica').text(schedule.location, 30 * mmToPt, startY + 72 * mmToPt, { width: 60 * mmToPt });
+        doc.text(schedule.time, 100 * mmToPt, startY + 72 * mmToPt);
 
         // PARTICIPANT DATA
         let currentYPos = (startY + 90 * mmToPt);
