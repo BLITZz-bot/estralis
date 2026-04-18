@@ -116,13 +116,13 @@ export default function App() {
         />
         <AdminDashboard isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
         <ThemeRevealModal isOpen={isThemeRevealOpen} onClose={() => setIsThemeRevealOpen(false)} />
-        <ProtocolModal 
-          isOpen={isProtocolModalOpen} 
-          onClose={() => setIsProtocolModalOpen(false)} 
+        <ProtocolModal
+          isOpen={isProtocolModalOpen}
+          onClose={() => setIsProtocolModalOpen(false)}
           onAccept={() => {
             setIsProtocolAccepted(true);
             document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
-          }} 
+          }}
         />
 
         {/* <CornerLogos
@@ -197,7 +197,7 @@ export default function App() {
         </Section>
 
         <SpecialGuest />
-        
+
         <div className="py-20 text-center astral-glass mx-6 mt-10 border-teal-500/10">
           <p className="astral-eyebrow text-teal-400">Archive Transmission End</p>
           <h3 className="saarang-serif text-3xl mt-4 italic text-white/40">More signals to be decoded soon.</h3>

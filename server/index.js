@@ -859,23 +859,6 @@ app.post('/api/admin/send-report', async (req, res) => {
                     teamMembers: squadDetails
                 });
 
-                // 2. Add Team Member Rows
-                if (teamCount > 0) {
-                    members.forEach((m, idx) => {
-                        worksheet.addRow({
-                            timestamp: reg.timestamp ? new Date(reg.timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : "N/A",
-                            teamName: reg.team_name || "N/A",
-                            fullName: `[MEMBER ${idx + 2}] ${m.fullName}`,
-                            email: m.email,
-                            phone: m.phone,
-                            college: m.college || reg.college,
-                            utrNumber: reg.utr_number || "N/A",
-                            transactionDate: reg.transaction_date || "N/A",
-                            screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" },
-                            teamMembers: `Part of ${reg.full_name}'s Team`
-                        });
-                    });
-                }
             });
         });
 
