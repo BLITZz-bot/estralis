@@ -623,9 +623,6 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
             // Define columns
             worksheet.columns = [
-                { header: 'Category', key: 'category', width: 15 },
-                { header: 'Pass Type', key: 'passType', width: 20 },
-                { header: 'Amount Paid', key: 'amountPaid', width: 20 },
                 { header: 'Registration Time', key: 'timestamp', width: 25 },
                 { header: 'Team Name', key: 'teamName', width: 25 },
                 { header: 'Full Name', key: 'fullName', width: 25 },
@@ -634,7 +631,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 { header: 'College', key: 'college', width: 30 },
                 { header: 'UTR Number', key: 'utrNumber', width: 25 },
                 { header: 'Transaction Date', key: 'transactionDate', width: 20 },
-                { header: 'Screenshot URL', key: 'screenshotUrl', width: 50 },
+                { header: 'Screenshot Link', key: 'screenshotUrl', width: 50 },
                 { header: 'Squad Details', key: 'teamMembers', width: 60 },
             ];
 
@@ -663,7 +660,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                     college: reg.college,
                     utrNumber: reg.utr_number || "N/A",
                     transactionDate: reg.transaction_date || "N/A",
-                    screenshotUrl: reg.screenshot_url || "N/A",
+                    screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" },
                     teamMembers: (teamCount > 0) ? `Total: ${totalParticipants} (Lead + ${teamCount})` : "Solo Registration"
                 });
 
@@ -679,7 +676,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                             college: m.college || reg.college,
                             utrNumber: reg.utr_number || "N/A",
                             transactionDate: reg.transaction_date || "N/A",
-                            screenshotUrl: reg.screenshot_url || "N/A",
+                            screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" },
                             teamMembers: `Part of ${reg.full_name}'s Team`
                         });
                     });

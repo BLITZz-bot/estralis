@@ -806,17 +806,12 @@ app.post('/api/admin/send-report', async (req, res) => {
             const sheetName = eventTitle.substring(0, 31).replace(/[\\\?\*\[\]\/]/g, "");
             const worksheet = workbook.addWorksheet(sheetName);
             worksheet.columns = [
-                { header: 'Category', key: 'category', width: 15 },
-                { header: 'Pass Type', key: 'passType', width: 20 },
-                { header: 'Amount Paid', key: 'amountPaid', width: 20 },
-                { header: 'Team Name', key: 'teamName', width: 25 },
-                { header: 'Booking ID', key: 'id', width: 35 },
                 { header: 'Registration Time', key: 'timestamp', width: 25 },
+                { header: 'Team Name', key: 'teamName', width: 25 },
                 { header: 'Full Name', key: 'fullName', width: 25 },
                 { header: 'Email', key: 'email', width: 30 },
                 { header: 'Phone', key: 'phone', width: 15 },
                 { header: 'College', key: 'college', width: 30 },
-                { header: 'Payment ID', key: 'paymentId', width: 30 },
                 { header: 'UTR Number', key: 'utrNumber', width: 25 },
                 { header: 'Transaction Date', key: 'transactionDate', width: 20 },
                 { header: 'Screenshot Link', key: 'screenshotUrl', width: 50 },
@@ -830,40 +825,30 @@ app.post('/api/admin/send-report', async (req, res) => {
             grouped[eventTitle].forEach(reg => {
                 // 1. Add Leader Row
                 worksheet.addRow({
-                    category: reg.category || "Tech",
-                    passType: reg.pass_type || "Standard Pass",
-                    amountPaid: reg.amount_paid || "N/A",
-                    teamName: reg.team_name || "N/A",
-                    id: reg.id,
                     timestamp: reg.timestamp ? new Date(reg.timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : "N/A",
+                    teamName: reg.team_name || "N/A",
                     fullName: `[LEADER] ${reg.full_name}`,
                     email: reg.email,
                     phone: reg.phone,
                     college: reg.college,
-                    paymentId: reg.razorpay_payment_id || "N/A",
                     utrNumber: reg.utr_number || "N/A",
                     transactionDate: reg.transaction_date || "N/A",
-                    screenshotUrl: reg.screenshot_url || "N/A"
+                    screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" }
                 });
 
                 // 2. Add Team Member Rows
                 if (reg.team_members && Array.isArray(reg.team_members)) {
                     reg.team_members.forEach((m, idx) => {
                         worksheet.addRow({
-                            category: reg.category || "Tech",
-                            passType: reg.pass_type || "Standard Pass",
-                            amountPaid: reg.amount_paid || "N/A",
-                            teamName: reg.team_name || "N/A",
-                            id: reg.id,
                             timestamp: reg.timestamp ? new Date(reg.timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : "N/A",
+                            teamName: reg.team_name || "N/A",
                             fullName: `[MEMBER ${idx + 2}] ${m.fullName}`,
                             email: m.email,
                             phone: m.phone,
                             college: m.college || reg.college,
-                            paymentId: reg.razorpay_payment_id || "N/A",
                             utrNumber: reg.utr_number || "N/A",
                             transactionDate: reg.transaction_date || "N/A",
-                            screenshotUrl: reg.screenshot_url || "N/A"
+                            screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" }
                         });
                     });
                 }
