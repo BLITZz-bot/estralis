@@ -284,7 +284,7 @@ app.post('/api/register-manual', async (req, res) => {
             [
                 fullName, email.trim().toLowerCase(), phone, college, teamName || null, 
                 JSON.stringify(teamMembers || []), eventTitle, category || 'Tech', 
-                amountPaid, passType, utrNumber, transactionDate, screenshotUrl, 'pending_verification'
+                amountPaid, passType, utrNumber, transactionDate, screenshotUrl, 'verified'
             ]
         );
 

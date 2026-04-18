@@ -23,7 +23,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
     const [registrations, setRegistrations] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [filterEvent, setFilterEvent] = useState("All");
-    const [statusFilter, setStatusFilter] = useState("verified"); // Default to verified as per user request
+    const [statusFilter, setStatusFilter] = useState("All");
+    const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(false);
     const [fetchError, setFetchError] = useState("");
     const [emailing, setEmailing] = useState(false);
@@ -580,19 +581,20 @@ export default function AdminDashboard({ isOpen, onClose }) {
             filtered = filtered.filter(r => r.event_title === filterEvent);
         }
         
-        // Filter by Status
-        if (statusFilter !== "All") {
-            filtered = filtered.filter(r => {
-                const status = (r.status || 'pending').toLowerCase();
-                if (statusFilter === 'pending') {
-                    return status === 'pending' || status === 'pending_verification' || status === 'pending_approval';
-                }
-                return status === statusFilter.toLowerCase();
-            });
+        // Filter by Search Query (Multi-field search)
+        if (searchQuery.trim() !== "") {
+            const query = searchQuery.toLowerCase();
+            filtered = filtered.filter(r => 
+                r.full_name?.toLowerCase().includes(query) ||
+                r.email?.toLowerCase().includes(query) ||
+                r.phone?.toLowerCase().includes(query) ||
+                r.event_title?.toLowerCase().includes(query) ||
+                r.team_name?.toLowerCase().includes(query)
+            );
         }
         
         setFilteredData(filtered);
-    }, [filterEvent, statusFilter, registrations]);
+    }, [filterEvent, searchQuery, registrations]);
 
     const downloadExcel = async () => {
         // Export the currently filtered data so the user gets what they see on screen
@@ -813,63 +815,53 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
                         {activeTab === "registrations" ? (
                             <>
-                                {/* SUMMARY METRICS OVERVIEW */}
-                                <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 relative z-10 pb-4 snap-x hide-scrollbar">
-                                    <div className="min-w-[280px] sm:min-w-0 astral-glass p-5 border-teal-500/10 flex flex-col justify-center snap-center">
-                                        <p className="text-teal-400/40 text-[9px] font-black uppercase tracking-[0.2em] mb-1">Total Passengers</p>
-                                        <h4 className="text-2xl font-black text-white font-mono">{registrations.length}</h4>
-                                        <div className="w-10 h-0.5 bg-teal-500 mt-2 rounded-full" />
+                                {/* COMPACT SUMMARY METRICS */}
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4 relative z-10 px-1">
+                                    <div className="astral-glass p-3 border-teal-500/10 flex items-center justify-between">
+                                        <p className="text-teal-400/40 text-[8px] font-black uppercase tracking-[0.2em]">Total Transmissions</p>
+                                        <h4 className="text-lg font-black text-white font-mono">{registrations.length}</h4>
                                     </div>
-                                    <div className="min-w-[280px] sm:min-w-0 astral-glass p-5 border-cyan-500/10 flex flex-col justify-center snap-center">
-                                        <p className="text-cyan-400/40 text-[9px] font-black uppercase tracking-[0.2em] mb-1">Revenue Estimate</p>
-                                        <h4 className="text-2xl font-black text-white font-mono">₹{registrations.reduce((acc, reg) => acc + (parseFloat(reg.amount_paid?.toString().replace(/[^\d.]/g, '') || 0)), 0).toLocaleString('en-IN')}</h4>
-                                        <div className="w-10 h-0.5 bg-cyan-500 mt-2 rounded-full" />
+                                    <div className="astral-glass p-3 border-cyan-500/10 flex items-center justify-between">
+                                        <p className="text-cyan-400/40 text-[8px] font-black uppercase tracking-[0.2em]">Revenue Flow</p>
+                                        <h4 className="text-lg font-black text-white font-mono">₹{registrations.reduce((acc, reg) => acc + (parseFloat(reg.amount_paid?.toString().replace(/[^\d.]/g, '') || 0)), 0).toLocaleString('en-IN')}</h4>
                                     </div>
-                                    <div className="min-w-[280px] sm:min-w-0 astral-glass p-5 border-blue-500/10 flex flex-col justify-center snap-center">
-                                        <p className="text-blue-400/40 text-[9px] font-black uppercase tracking-[0.2em] mb-1">Active Events</p>
-                                        <h4 className="text-2xl font-black text-white font-mono">{new Set(registrations.map(r => r.event_title)).size}</h4>
-                                        <div className="w-10 h-0.5 bg-blue-500 mt-2 rounded-full" />
-                                    </div>
-                                    <div className="min-w-[280px] sm:min-w-0 astral-glass p-5 border-pink-500/10 flex flex-col justify-center bg-pink-500/5 snap-center">
-                                        <p className="text-pink-400/40 text-[9px] font-black uppercase tracking-[0.2em] mb-1">Real-time status</p>
-                                        <h4 className="text-2xl font-black text-white flex items-center gap-3">
-                                            ACTIVE
-                                            <span className="flex h-3 w-3 relative">
-                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                                            </span>
-                                        </h4>
-                                        <div className="w-10 h-0.5 bg-pink-500 mt-2 rounded-full" />
+                                    <div className="astral-glass p-3 border-blue-500/10 flex items-center justify-between">
+                                        <p className="text-blue-400/40 text-[8px] font-black uppercase tracking-[0.2em]">Active Channels</p>
+                                        <h4 className="text-lg font-black text-white font-mono">{new Set(registrations.map(r => r.event_title)).size}</h4>
                                     </div>
                                 </div>
 
-                                {/* FILTERS */}
-                                <div className="mb-6 flex flex-col sm:flex-row sm:items-center gap-4 relative z-10 px-1">
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-teal-400/60 text-[10px] font-black uppercase tracking-widest">Sector Filter:</span>
+                                {/* COMMAND CENTER (FILTERS & SEARCH) */}
+                                <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-3 relative z-10 px-1">
+                                    <div className="relative flex-1 group">
+                                        <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-teal-400/40 group-focus-within:text-teal-400 transition-colors">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                        </div>
+                                        <input 
+                                            type="text"
+                                            placeholder="SCAN DATABASE (NAME, EMAIL, PHONE, TEAM...)"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            className="w-full bg-black/60 border border-teal-500/10 rounded-xl pl-12 pr-4 py-2.5 text-white text-[10px] font-mono tracking-widest focus:outline-none focus:border-teal-500/50 transition-all placeholder:text-teal-400/20"
+                                        />
+                                    </div>
+
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-teal-400/60 text-[8px] font-black uppercase tracking-widest ml-2 whitespace-nowrap">Sector:</span>
                                         <select
                                             value={filterEvent}
                                             onChange={(e) => setFilterEvent(e.target.value)}
-                                            className="bg-black/40 border border-teal-500/10 rounded-xl px-5 py-2.5 text-white text-xs focus:outline-none focus:border-teal-500/50 transition cursor-pointer font-bold"
+                                            className="bg-black/60 border border-teal-500/10 rounded-xl px-4 py-2.5 text-white text-[10px] focus:outline-none focus:border-teal-500/50 transition cursor-pointer font-black tracking-tighter"
                                         >
                                             {uniqueEvents.map(ev => <option key={ev} value={ev} className="bg-[#0f111a]">{ev}</option>)}
                                         </select>
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-pink-400/60 text-[10px] font-black uppercase tracking-widest">Status Filter:</span>
-                                        <select
-                                            value={statusFilter}
-                                            onChange={(e) => setStatusFilter(e.target.value)}
-                                            className="bg-black/40 border border-pink-500/10 rounded-xl px-5 py-2.5 text-white text-xs focus:outline-none focus:border-pink-500/50 transition cursor-pointer font-bold"
-                                        >
-                                            <option value="All" className="bg-[#0f111a]">ALL SIGNALS</option>
-                                            <option value="verified" className="bg-[#0f111a]">SUCCESSFULL (VERIFIED)</option>
-                                            <option value="pending" className="bg-[#0f111a]">PENDING APPROVAL</option>
-                                        </select>
+
+                                    <div className="hidden lg:flex items-center gap-2 bg-cyan-500/5 border border-cyan-500/10 px-4 py-2.5 rounded-xl">
+                                        <span className="text-[10px] font-black text-cyan-400 tracking-widest uppercase">
+                                            SIGNALS: {filteredData.length}
+                                        </span>
                                     </div>
-                                    <span className="sm:ml-auto text-[10px] font-black text-cyan-400 tracking-widest uppercase bg-cyan-500/5 border border-cyan-500/20 px-4 py-2.5 rounded-xl">
-                                        SIGNAL STRENGTH: {filteredData.length} {statusFilter === 'verified' ? 'SUCCESSFUL' : statusFilter === 'pending' ? 'PENDING' : ''} RECORDS FOUND
-                                    </span>
                                 </div>
 
                                 {/* TABLE HUB */}
@@ -960,13 +952,11 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                             ) : <span className="text-[9px] text-white/10 italic">NO PROOF</span>}
                                                         </td>
                                                         <td className="px-6 py-6 text-center border-r border-teal-500/10">
-                                                            <div className="flex flex-col items-center gap-2">
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className={`w-1.5 h-1.5 rounded-full ${reg.status === 'verified' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400 animate-pulse'}`}></div>
-                                                                    <span className={`text-[9px] font-black uppercase tracking-widest ${reg.status === 'verified' ? 'text-emerald-400' : 'text-amber-400'}`}>
-                                                                        {reg.status || 'PENDING'}
-                                                                    </span>
-                                                                </div>
+                                                            <div className="flex items-center justify-center gap-2">
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse outline outline-2 outline-emerald-400/20"></div>
+                                                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400">
+                                                                    SUCCESSFUL
+                                                                </span>
                                                             </div>
                                                         </td>
                                                         <td className="px-6 py-6 text-center">
