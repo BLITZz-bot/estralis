@@ -60,13 +60,69 @@ export default function RegistrationForm({ event, onClose }) {
         }
     };
 
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+
     const handleChange = (e) => {
         const { name, value, type, files } = e.target;
         if (type === 'file') {
-            setFormData(prev => ({ ...prev, [name]: files[0] }));
+            const file = files[0];
+            if (file && file.size > 500 * 1024) {
+                alert("FILE SIZE EXCEEDED: Screenshot must be less than 500KB. Please compress your image or take a smaller screenshot.");
+                e.target.value = ""; // Clear input
+                setFormData(prev => ({ ...prev, [name]: null }));
+                return;
+            }
+            setFormData(prev => ({ ...prev, [name]: file }));
+        } else if (name === 'phone') {
+            const numericValue = value.replace(/\D/g, '').slice(0, 10);
+            setFormData(prev => ({ ...prev, [name]: numericValue }));
         } else {
             setFormData(prev => ({ ...prev, [name]: value }));
         }
+    }
+
+    const nextStep = (e) => {
+        e.preventDefault();
+        
+        // Validation Suite
+        if (!validateEmail(formData.email)) {
+            alert("INVALID EMAIL: Please enter a proper email address.");
+            return;
+        }
+        if (formData.phone.length !== 10) {
+            alert("INVALID PHONE: Phone number must be exactly 10 digits.");
+            return;
+        }
+
+        // Teammate validation
+        for (let i = 0; i < teamMembers.length; i++) {
+            const m = teamMembers[i];
+            const isOptional = (i + 2) > minTeamSize;
+            
+            // If it's a required member, or they filled something in, validate it
+            if (!isOptional || m.fullName || m.email || m.phone) {
+                if (!m.fullName || !m.email || !m.phone) {
+                    alert(`SQUAD ERROR: Please complete details for Member 0${i + 2}`);
+                    return;
+                }
+                if (!validateEmail(m.email)) {
+                    alert(`SQUAD ERROR: Invalid email for Member 0${i + 2}`);
+                    return;
+                }
+                if (m.phone.length !== 10) {
+                    alert(`SQUAD ERROR: Phone must be 10 digits for Member 0${i + 2}`);
+                    return;
+                }
+            }
+        }
+
+        setStep(2);
     }
 
     const handleSubmit = async (e) => {
@@ -182,7 +238,7 @@ export default function RegistrationForm({ event, onClose }) {
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: -20, opacity: 0 }}
-                            onSubmit={(e) => { e.preventDefault(); setStep(2); }}
+                            onSubmit={nextStep}
                             className="w-full max-w-4xl space-y-8"
                         >
                             {/* Step Indicator */}
@@ -277,8 +333,9 @@ export default function RegistrationForm({ event, onClose }) {
                                                         <div className="space-y-1.5">
                                                             <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">PHONE</label>
                                                             <input required type="tel" value={member.phone} onChange={(e) => {
+                                                                const numericValue = e.target.value.replace(/\D/g, '').slice(0, 10);
                                                                 const newMembers = [...teamMembers];
-                                                                newMembers[index].phone = e.target.value;
+                                                                newMembers[index].phone = numericValue;
                                                                 setTeamMembers(newMembers);
                                                             }} maxLength={10} pattern="\d{10}" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="10-digit Phone" title="Please enter a 10-digit phone number" />
                                                         </div>

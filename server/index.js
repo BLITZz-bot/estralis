@@ -815,6 +815,7 @@ app.post('/api/admin/send-report', async (req, res) => {
                 { header: 'UTR Number', key: 'utrNumber', width: 25 },
                 { header: 'Transaction Date', key: 'transactionDate', width: 20 },
                 { header: 'Screenshot Link', key: 'screenshotUrl', width: 50 },
+                { header: 'Squad Details', key: 'teamMembers', width: 60 },
             ];
 
             const headerRow = worksheet.getRow(1);
@@ -823,6 +824,26 @@ app.post('/api/admin/send-report', async (req, res) => {
             headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
 
             grouped[eventTitle].forEach(reg => {
+                let members = [];
+                try {
+                    members = (typeof reg.team_members === 'string') ? JSON.parse(reg.team_members) : (reg.team_members || []);
+                } catch (e) {
+                    console.error("Error parsing team members:", e);
+                    members = [];
+                }
+
+                const teamCount = Array.isArray(members) ? members.length : 0;
+                const totalParticipants = 1 + teamCount;
+
+                // Create a comprehensive squad string for the leader row
+                let squadDetails = "Solo Registration";
+                if (teamCount > 0) {
+                    squadDetails = `Total: ${totalParticipants} (Lead + ${teamCount})\n\n`;
+                    members.forEach((m, idx) => {
+                        squadDetails += `[MEMBER 0${idx + 2}]: ${m.fullName || 'N/A'}\nEmail: ${m.email || 'N/A'}\nPhone: ${m.phone || 'N/A'}\nCollege: ${m.college || reg.college}\n\n`;
+                    });
+                }
+
                 // 1. Add Leader Row
                 worksheet.addRow({
                     timestamp: reg.timestamp ? new Date(reg.timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : "N/A",
@@ -833,12 +854,13 @@ app.post('/api/admin/send-report', async (req, res) => {
                     college: reg.college,
                     utrNumber: reg.utr_number || "N/A",
                     transactionDate: reg.transaction_date || "N/A",
-                    screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" }
+                    screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" },
+                    teamMembers: { text: squadDetails, font: { size: 9 }, alignment: { wrapText: true } }
                 });
 
                 // 2. Add Team Member Rows
-                if (reg.team_members && Array.isArray(reg.team_members)) {
-                    reg.team_members.forEach((m, idx) => {
+                if (teamCount > 0) {
+                    members.forEach((m, idx) => {
                         worksheet.addRow({
                             timestamp: reg.timestamp ? new Date(reg.timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : "N/A",
                             teamName: reg.team_name || "N/A",
@@ -848,7 +870,8 @@ app.post('/api/admin/send-report', async (req, res) => {
                             college: m.college || reg.college,
                             utrNumber: reg.utr_number || "N/A",
                             transactionDate: reg.transaction_date || "N/A",
-                            screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" }
+                            screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" },
+                            teamMembers: `Part of ${reg.full_name}'s Team`
                         });
                     });
                 }

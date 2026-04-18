@@ -553,7 +553,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
     // Polling is already handled by the auto-refresh timer below
 
-    // Auto-refresh timer (Reduced frequency since we have real-time)
+    // Auto-refresh timer
     useEffect(() => {
         let timer;
         if (isAuthenticated && isOpen) {
@@ -561,13 +561,13 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 setCountdown((prev) => {
                     if (prev <= 1) {
                         fetchRegistrations(); 
-                        return 60; // Refresh every 60s as backup to real-time
+                        return 30; // Refresh every 30s
                     }
                     return prev - 1;
                 });
             }, 1000);
         } else {
-            setCountdown(60);
+            setCountdown(30);
         }
         return () => clearInterval(timer);
     }, [isAuthenticated, isOpen, password]);
@@ -649,13 +649,30 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
             // Add data
             grouped[eventTitle].forEach(reg => {
-                const teamCount = (reg.team_members && Array.isArray(reg.team_members)) ? reg.team_members.length : 0;
+                let members = [];
+                try {
+                    members = (typeof reg.team_members === 'string') ? JSON.parse(reg.team_members) : (reg.team_members || []);
+                } catch (e) {
+                    console.error("Error parsing team members:", e);
+                    members = [];
+                }
+
+                const teamCount = Array.isArray(members) ? members.length : 0;
                 const totalParticipants = 1 + teamCount;
+
+                // Create a comprehensive squad string for the leader row
+                let squadDetails = "Solo Registration";
+                if (teamCount > 0) {
+                    squadDetails = `Total: ${totalParticipants} (Lead + ${teamCount})\n\n`;
+                    members.forEach((m, idx) => {
+                        squadDetails += `[MEMBER 0${idx + 2}]: ${m.fullName || 'N/A'}\nEmail: ${m.email || 'N/A'}\nPhone: ${m.phone || 'N/A'}\nCollege: ${m.college || reg.college}\n\n`;
+                    });
+                }
 
                 // 1. ADD LEADER ROW
                 worksheet.addRow({
                     teamName: reg.team_name || "N/A",
-                    timestamp: new Date(reg.timestamp).toLocaleString('en-IN'),
+                    timestamp: reg.timestamp ? new Date(reg.timestamp).toLocaleString('en-IN') : "N/A",
                     fullName: `[LEADER] ${reg.full_name}`,
                     email: reg.email,
                     phone: reg.phone,
@@ -663,15 +680,15 @@ export default function AdminDashboard({ isOpen, onClose }) {
                     utrNumber: reg.utr_number || "N/A",
                     transactionDate: reg.transaction_date || "N/A",
                     screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" },
-                    teamMembers: (teamCount > 0) ? `Total: ${totalParticipants} (Lead + ${teamCount})` : "Solo Registration"
+                    teamMembers: { text: squadDetails, font: { size: 9 }, alignment: { wrapText: true } }
                 });
 
                 // 2. ADD TEAMMATE ROWS (If any)
-                if (reg.team_members && Array.isArray(reg.team_members)) {
-                    reg.team_members.forEach((m, idx) => {
+                if (teamCount > 0) {
+                    members.forEach((m, idx) => {
                         worksheet.addRow({
                             teamName: reg.team_name || "N/A",
-                            timestamp: new Date(reg.timestamp).toLocaleString('en-IN'),
+                            timestamp: reg.timestamp ? new Date(reg.timestamp).toLocaleString('en-IN') : "N/A",
                             fullName: `[MEMBER ${idx + 2}] ${m.fullName}`,
                             email: m.email,
                             phone: m.phone,
@@ -1368,7 +1385,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                     </div>
                                                     <div>
                                                         <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Help Contact Phone</label>
-                                                        <input value={mailerPhone} onChange={(e) => setMailerPhone(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition" placeholder="e.g., 7975871167" />
+                                                        <input value={mailerPhone} onChange={(e) => setMailerPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition" placeholder="e.g., 7975871167" maxLength={10} />
                                                     </div>
                                                 </div>
 
