@@ -429,13 +429,13 @@ const generatePDFPass = (reg) => {
         const tagWidthValue = doc.widthOfString(catTextContent) + 10 * mmToPt;
         doc.fillColor(colors.teal).roundedRect((87 * mmToPt) - (tagWidthValue/2), startY + 40 * mmToPt, tagWidthValue, 8 * mmToPt, 4 * mmToPt).fill();
         doc.fillColor(colors.bg).text(catTextContent, (85 - 90) * mmToPt, startY + 45.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
-Line 432: 
-Line 433:         // LOGISTICS
-Line 434:         doc.fillColor('rgba(30, 41, 59, 0.4)').roundedRect(20 * mmToPt, startY + 55 * mmToPt, 140 * mmToPt, 30 * mmToPt, 5 * mmToPt).fill();
-Line 435:         doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("LOCATION", 30 * mmToPt, startY + 65 * mmToPt);
-Line 436:         doc.text("ARRIVAL_TIME", 100 * mmToPt, startY + 65 * mmToPt);
-Line 437:         doc.fillColor('#ffffff').fontSize(10).font('Helvetica').text(reg.event_location || "TBA", 30 * mmToPt, startY + 72 * mmToPt, { width: 60 * mmToPt });
-Line 438:         doc.text(reg.event_time || "TBA", 100 * mmToPt, startY + 72 * mmToPt);
+
+        // LOGISTICS
+        doc.fillColor('rgba(30, 41, 59, 0.4)').roundedRect(20 * mmToPt, startY + 55 * mmToPt, 140 * mmToPt, 30 * mmToPt, 5 * mmToPt).fill();
+        doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("LOCATION", 30 * mmToPt, startY + 65 * mmToPt);
+        doc.text("ARRIVAL_TIME", 100 * mmToPt, startY + 65 * mmToPt);
+        doc.fillColor('#ffffff').fontSize(10).font('Helvetica').text(reg.event_location || "TBA", 30 * mmToPt, startY + 72 * mmToPt, { width: 60 * mmToPt });
+        doc.text(reg.event_time || "TBA", 100 * mmToPt, startY + 72 * mmToPt);
 
         // PARTICIPANT DATA
         let currentYPos = (startY + 90 * mmToPt);
