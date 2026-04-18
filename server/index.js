@@ -420,15 +420,15 @@ const generatePDFPass = (reg) => {
         doc.strokeColor(colors.teal).lineWidth(0.5).roundedRect(130 * mmToPt, startY + 2 * mmToPt, 30 * mmToPt, 10 * mmToPt, 2 * mmToPt).stroke();
         doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("VERIFIED", (145 - 90) * mmToPt, startY + 9 * mmToPt, { width: width, align: 'center' });
 
-        // EVENT TITLE (Synced with 85mm offset)
+        // EVENT TITLE (Synced with 89mm offset to match header)
         doc.fillColor('#ffffff').fontSize(32).font('Helvetica-Bold')
-           .text(reg.event_title.toUpperCase(), (85 - 90) * mmToPt, startY + 26 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
-        // CATEGORY TAG (Synced with 87mm box / 85mm text)
+           .text(reg.event_title.toUpperCase(), (89 - 90) * mmToPt, startY + 26 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
+        // CATEGORY TAG (Synced with 89mm box / 89mm text)
         const catTextContent = (reg.category || 'TECH').toUpperCase();
         doc.fontSize(8);
         const tagWidthValue = doc.widthOfString(catTextContent) + 10 * mmToPt;
-        doc.fillColor(colors.teal).roundedRect((87 * mmToPt) - (tagWidthValue/2), startY + 40 * mmToPt, tagWidthValue, 8 * mmToPt, 4 * mmToPt).fill();
-        doc.fillColor(colors.bg).text(catTextContent, (85 - 90) * mmToPt, startY + 42.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
+        doc.fillColor(colors.teal).roundedRect((89 * mmToPt) - (tagWidthValue/2), startY + 40 * mmToPt, tagWidthValue, 8 * mmToPt, 4 * mmToPt).fill();
+        doc.fillColor(colors.bg).text(catTextContent, (89 - 90) * mmToPt, startY + 42.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
 
         // LOGISTICS
         doc.fillColor('rgba(30, 41, 59, 0.4)').roundedRect(20 * mmToPt, startY + 55 * mmToPt, 140 * mmToPt, 30 * mmToPt, 5 * mmToPt).fill();
