@@ -268,6 +268,12 @@ app.post('/api/register-manual', async (req, res) => {
     try {
         const { registrationData } = req.body;
         
+        const { 
+            fullName, email, phone, college, teamName, teamMembers, 
+            eventTitle, category, amountPaid, passType,
+            utrNumber, transactionDate, screenshotUrl 
+        } = registrationData;
+
         const result = await db.query(
             `INSERT INTO registrations (
                 full_name, email, phone, college, team_name, team_members, 
