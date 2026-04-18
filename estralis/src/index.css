@@ -98,9 +98,7 @@ body {
   pointer-events: none;
   opacity: 0.03;
   z-index: 9999;
-  z-index: 9999;
-  /* Fixed: Removed external noise.svg URL to prevent 403 errors and PDF capture failures */
-  background: transparent;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
 }
 
 /* ⚡ NEON WIREFRAME */

@@ -331,9 +331,9 @@ app.post('/api/upload-screenshot', upload.single('screenshot'), (req, res) => {
  */
 const generatePDFPass = (reg) => {
     return new Promise((resolve, reject) => {
-        const mmToPt = 2.83465;
-        const width = 100 * mmToPt;
-        const height = 210 * mmToPt;
+        const mmToPt = 2.8346;
+        const width = 180 * mmToPt;
+        const height = 260 * mmToPt;
 
         const doc = new PDFDocument({
             size: [width, height],
@@ -345,107 +345,95 @@ const generatePDFPass = (reg) => {
         doc.on('end', () => resolve(Buffer.concat(chunks)));
         doc.on('error', (err) => reject(err));
 
+        // Background / Branding
+        doc.rect(0, 0, doc.page.width, doc.page.height).fill('#ffffff');
+
+        // Header Banner
+        doc.rect(0, 0, doc.page.width, 140).fill('#9333ea');
+
         // Robust Category Normalization (Case-insensitive)
         const rawCat = reg.category || "Tech";
         const normalizedCategory = rawCat.trim().charAt(0).toUpperCase() + rawCat.trim().slice(1).toLowerCase();
 
         console.log(`DEBUG: Generating PDF for ${reg.email} | Event: ${reg.event_title} | Category: [${rawCat}] -> Normalized: [${normalizedCategory}]`);
 
-        const activeColor = {
-            Tech: { banner: '#0a0f1e', border: '#2dd4bf', accent: '#2dd4bf', label: '#2dd4bf' },
-            Workshop: { banner: '#0a0f1e', border: '#0891b2', accent: '#0891b2', label: '#0891b2' },
-            Fun: { banner: '#0a0f1e', border: '#d946ef', accent: '#d946ef', label: '#d946ef' }
-        }[normalizedCategory] || { banner: '#0a0f1e', border: '#2dd4bf', accent: '#2dd4bf', label: '#2dd4bf' };
+        const colors = {
+            Tech: { banner: '#0e748c', border: '#06b6d4', accent: '#22d3ee', label: '#67e8f9' },
+            Fun: { banner: '#e11d48', border: '#a855f7', accent: '#e879f9', label: '#fdb4af' },
+            Workshop: { banner: '#059669', border: '#14b8a6', accent: '#2dd4bf', label: '#6ee7b7' }
+        };
+        const activeColor = colors[normalizedCategory] || colors.Tech;
 
-        const drawTicketLayout = (pageDoc, title = "ACCESS_PASS // 2026") => {
-            // Dark Obsidian Background
-            pageDoc.rect(0, 0, width, height).fill('#020617');
-            
-            // Background Glows (Manual Radial Emulation)
-            pageDoc.save();
-            pageDoc.opacity(0.15);
-            pageDoc.fillColor(activeColor.border).circle(width, 0, 100 * mmToPt).fill();
-            pageDoc.opacity(0.1);
-            pageDoc.fillColor('#d946ef').circle(0, height, 100 * mmToPt).fill();
+        const drawTicketBase = (pageDoc) => {
+            pageDoc.rect(0, 0, width, height).fill('#0f111a');
+            pageDoc.fillColor('#1e293b');
+            pageDoc.roundedRect(8 * mmToPt, 8 * mmToPt, 164 * mmToPt, 244 * mmToPt, 15 * mmToPt).fill();
+            pageDoc.lineWidth(1).strokeColor(activeColor.border);
+            pageDoc.roundedRect(8 * mmToPt, 8 * mmToPt, 164 * mmToPt, 244 * mmToPt, 15 * mmToPt).stroke();
+            pageDoc.fillColor(activeColor.banner);
+            pageDoc.roundedRect(8 * mmToPt, 8 * mmToPt, 164 * mmToPt, 50 * mmToPt, 15 * mmToPt).fill();
+            pageDoc.rect(8 * mmToPt, 25 * mmToPt, 164 * mmToPt, 33 * mmToPt).fill();
+            pageDoc.fillColor('#ffffff').fontSize(24).font('Helvetica-Bold')
+                .text("ESTRALIS 2026", 0, 18 * mmToPt, { align: 'center', characterSpacing: 1 });
+
+            pageDoc.fontSize(10).font('Helvetica')
+                .text("OFFICIAL ACCESS PASS", 0, 31 * mmToPt, { align: 'center', characterSpacing: 2 });
+
+            // Tear Line (Dashed)
+            pageDoc.lineWidth(1).strokeColor('#475569').dash(2 * mmToPt, { space: 2 * mmToPt })
+                .moveTo(15 * mmToPt, 65 * mmToPt).lineTo(165 * mmToPt, 65 * mmToPt).stroke().undash();
+
+            // Instructions Bottom
+            pageDoc.fillColor('#94a3b8').fontSize(7).font('Helvetica-Oblique')
+                .text("SUBMIT THIS PASS AT THE REGISTRATION DESK", 0, 246 * mmToPt, { align: 'center' });
+
+            pageDoc.fillColor('#ffffff').fontSize(8).font('Helvetica-Bold')
+                .text("THANKS FOR REGISTERING!", 0, 253 * mmToPt, { align: 'center', characterSpacing: 1 });
+            pageDoc.save().translate(171 * mmToPt, 220 * mmToPt).rotate(90);
+            pageDoc.fillColor('#344155').fontSize(7).font('Helvetica').text("DESIGNED BY GRAFIK", 0, 0);
             pageDoc.restore();
-
-            // Main Glassmorphic Container
-            pageDoc.fillColor('#0a0f1e').roundedRect(5 * mmToPt, 5 * mmToPt, 90 * mmToPt, 200 * mmToPt, 12 * mmToPt).fill();
-            pageDoc.lineWidth(0.5).strokeColor(activeColor.border + '33').roundedRect(5 * mmToPt, 5 * mmToPt, 90 * mmToPt, 200 * mmToPt, 12 * mmToPt).stroke();
-            
-            // Header Section
-            pageDoc.fillColor('#ffffff').fontSize(24).font('Helvetica-Bold').text("ESTRALIS", 0, 15 * mmToPt, { align: 'center', characterSpacing: 1.5 });
-            pageDoc.fillColor(activeColor.accent).fontSize(7).font('Helvetica-Bold').text(title, 0, 28 * mmToPt, { align: 'center', characterSpacing: 2 });
-            
-            // Tear Line (Refined)
-            pageDoc.lineWidth(0.3).strokeColor('#1e293b').dash(1, { space: 3 }).moveTo(10 * mmToPt, 42 * mmToPt).lineTo(90 * mmToPt, 42 * mmToPt).stroke().undash();
         };
 
-        // --- PAGE 1: LEADER ---
-        drawTicketLayout(doc);
-        let currentY = 52 * mmToPt;
+        drawTicketBase(doc);
+        // UTR & VERIFIED Badge (Using utr_number now)
+        doc.fillColor('#94a3b8').fontSize(9).font('Helvetica-Bold').text("UTR NUMBER:", 20 * mmToPt, 80 * mmToPt);
+        doc.fillColor('#ffffff').fontSize(12).font('Helvetica').text(reg.utr_number || 'VERIFIED', 20 * mmToPt, 88 * mmToPt);
 
-        // EVENT PANEL (Professional Background)
-        doc.fillColor('#ffffff08').roundedRect(12 * mmToPt, currentY, 76 * mmToPt, 25 * mmToPt, 6 * mmToPt).fill();
-        doc.fillColor('#ffffff22').fontSize(6).font('Helvetica-Bold').text("TRANSMISSION_TARGET", 0, currentY + 5 * mmToPt, { align: 'center' });
-        doc.fillColor('#ffffff').fontSize(15).font('Helvetica-Bold').text(reg.event_title.toUpperCase(), 15 * mmToPt, currentY + 10 * mmToPt, { width: 70 * mmToPt, align: 'center' });
-        currentY += 35 * mmToPt;
+        // Status Badge (Green Pill - Centered Text)
+        doc.fillColor('#10b981').roundedRect(130 * mmToPt, 76 * mmToPt, 35 * mmToPt, 12 * mmToPt, 6 * mmToPt).fill();
+        doc.fillColor('#ffffff').fontSize(9).font('Helvetica-Bold').text("VERIFIED", 130 * mmToPt, 81 * mmToPt, { width: 35 * mmToPt, align: 'center' });
+        doc.fillColor(activeColor.border).fontSize(30).font('Helvetica-Bold').text(reg.event_title.toUpperCase(), 0, 108 * mmToPt, { align: 'center' });
+        doc.fillColor('#0f172a').roundedRect(20 * mmToPt, 125 * mmToPt, 140 * mmToPt, 28 * mmToPt, 6 * mmToPt).fill();
+        doc.fillColor('#ffffff').fontSize(11).font('Helvetica-Bold').text("TIME:", 30 * mmToPt, 133 * mmToPt);
+        doc.text("VENUE:", 85 * mmToPt, 133 * mmToPt);
+        doc.fillColor('#94a3b8').fontSize(10).font('Helvetica').text("9:00 AM ONWARDS", 30 * mmToPt, 142 * mmToPt);
+        doc.text("GIS AUDITORIUM, GCEM", 85 * mmToPt, 142 * mmToPt);
 
-        // LEADER SECTION (Telemetry Style)
-        doc.fillColor(activeColor.accent).rect(15 * mmToPt, currentY, 1.5 * mmToPt, 12 * mmToPt).fill();
-        doc.fillColor('#475569').fontSize(7).font('Helvetica-Bold').text("CORE_PARTICIPANT", 20 * mmToPt, currentY);
-        doc.fillColor('#ffffff').fontSize(14).font('Helvetica-Bold').text(reg.full_name.toUpperCase(), 20 * mmToPt, currentY + 5 * mmToPt);
-        currentY += 25 * mmToPt;
+        let currentY = 175 * mmToPt;
+        doc.fillColor(activeColor.label).fontSize(10).font('Helvetica-Bold').text("PARTICIPANTS DETAILS", 20 * mmToPt, currentY);
+        currentY += 10 * mmToPt;
+        if (reg.team_name) { doc.fillColor(activeColor.border).fontSize(12).font('Helvetica-Bold').text(`TEAM: ${reg.team_name.toUpperCase()}`, 20 * mmToPt, currentY); currentY += 8 * mmToPt; }
+        doc.fillColor('#ffffff').fontSize(18).font('Helvetica-Bold').text(reg.full_name.toUpperCase(), 20 * mmToPt, currentY);
+        currentY += 10 * mmToPt;
+        doc.fillColor('#94a3b8').fontSize(10).font('Helvetica').text(`College: ${reg.college}`, 20 * mmToPt, currentY);
+        currentY += 7 * mmToPt; doc.text(`Email: ${reg.email}`, 20 * mmToPt, currentY);
+        currentY += 7 * mmToPt; doc.text(`Phone: ${reg.phone}`, 20 * mmToPt, currentY);
+        doc.fillColor(activeColor.label).fontSize(10).font('Helvetica-Bold').text(reg.pass_type === 'combo' ? "COMBO PASS FEE" : "STANDARD FEE", 20 * mmToPt, 227 * mmToPt);
+        doc.fillColor('#ffffff').fontSize(14).text(`Rs. ${reg.amount_paid.toString().replace(/₹/g, '')}`, 20 * mmToPt, 235 * mmToPt);
 
-        // INFO STACK (No Cropping)
-        doc.fillColor('#475569').fontSize(7).font('Helvetica-Bold').text("INSTITUTION_AFFILIATION", 15 * mmToPt, currentY);
-        currentY += 5 * mmToPt;
-        doc.fillColor('#94a3b8').fontSize(9).font('Helvetica').text(reg.college.toUpperCase(), 15 * mmToPt, currentY, { width: 70 * mmToPt });
-        currentY += 15 * mmToPt;
-
-        doc.fillColor('#475569').fontSize(7).font('Helvetica-Bold').text("AUTHENTICATION_ID // UTR", 15 * mmToPt, currentY);
-        currentY += 5 * mmToPt;
-        doc.fillColor(activeColor.accent + '11').roundedRect(15 * mmToPt, currentY - 2*mmToPt, 70 * mmToPt, 12 * mmToPt, 3 * mmToPt).fill();
-        doc.fillColor(activeColor.accent).fontSize(9).font('Helvetica-Bold').text(reg.utr_number || "VERIFIED_NODE", 18 * mmToPt, currentY + 2 * mmToPt);
-        currentY += 25 * mmToPt;
-
-        // SCAN AREA (Footer Page 1)
-        doc.fillColor('#1e293b').rect(10 * mmToPt, 185 * mmToPt, 80 * mmToPt, 0.3 * mmToPt).fill();
-        doc.fillColor('#475569').fontSize(6).font('Helvetica-Bold').text("TIMESTAMP", 15 * mmToPt, 190 * mmToPt);
-        doc.fillColor('#64748b').fontSize(7).font('Helvetica').text(new Date().toLocaleString().toUpperCase(), 15 * mmToPt, 194 * mmToPt);
-        
-        doc.fillColor(activeColor.border + '11').roundedRect(72 * mmToPt, 188 * mmToPt, 13 * mmToPt, 13 * mmToPt, 4 * mmToPt).fill();
-        doc.fillColor(activeColor.border).fontSize(5).font('Helvetica-Bold').text("SECURE SCAN", 72 * mmToPt, 193 * mmToPt, { width: 13 * mmToPt, align: 'center' });
-
-        // --- PAGE 2: SQUAD (Professional Roster) ---
         if (reg.team_members && reg.team_members.length > 0) {
             doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } });
-            drawTicketLayout(doc, "SQUAD_ROSTER_MANIFEST // 2026");
-            let squadY = 52 * mmToPt;
-
-            if (reg.team_name) {
-                doc.fillColor('#d946ef11').roundedRect(12 * mmToPt, squadY, 76 * mmToPt, 15 * mmToPt, 5 * mmToPt).fill();
-                doc.fillColor('#475569').fontSize(6).font('Helvetica-Bold').text("DESIGNATED_TEAM", 16 * mmToPt, squadY + 3 * mmToPt);
-                doc.fillColor('#d946ef').fontSize(11).font('Helvetica-Bold').text(reg.team_name.toUpperCase(), 16 * mmToPt, squadY + 8 * mmToPt);
-                squadY += 22 * mmToPt;
-            }
-
+            drawTicketBase(doc);
+            let teamY = 80 * mmToPt;
+            doc.fillColor(activeColor.border).fontSize(16).font('Helvetica-Bold').text(reg.team_name ? `TEAM: ${reg.team_name.toUpperCase()}` : "TEAM MEMBERS", 0, teamY, { align: 'center' });
+            teamY += 15 * mmToPt;
             reg.team_members.forEach((m, i) => {
-                if (squadY > 180 * mmToPt) {
-                    doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } });
-                    drawTicketLayout(doc, "UNIT_MANIFEST_CONT // 2026");
-                    squadY = 52 * mmToPt;
-                }
-                doc.fillColor('#ffffff0a').rect(15 * mmToPt, squadY - 2*mmToPt, 70 * mmToPt, 10 * mmToPt).fill();
-                doc.fillColor('#d946ef').fontSize(8).font('Helvetica-Bold').text(`#${i + 1}`, 18 * mmToPt, squadY + 1 * mmToPt);
-                doc.fillColor('#ffffff').fontSize(9).font('Helvetica-Bold').text(m.fullName.toUpperCase(), 25 * mmToPt, squadY + 1 * mmToPt);
-                squadY += 5 * mmToPt;
-                doc.fillColor('#64748b').fontSize(6).font('Helvetica').text(m.college || reg.college, 25 * mmToPt, squadY + 1 * mmToPt);
-                squadY += 10 * mmToPt;
+                if (teamY > 220 * mmToPt) { doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } }); drawTicketBase(doc); teamY = 80 * mmToPt; }
+                doc.fillColor(activeColor.accent).fontSize(11).font('Helvetica-Bold').text(`Member ${i + 2}: ${m.fullName.toUpperCase()}`, 25 * mmToPt, teamY);
+                teamY += 6 * mmToPt;
+                doc.fillColor('#94a3b8').fontSize(9).font('Helvetica').text(`Email: ${m.email} | Phone: ${m.phone} | College: ${m.college || reg.college}`, 25 * mmToPt, teamY);
+                teamY += 10 * mmToPt;
             });
-
-            // Footer (Page 2)
-            doc.fillColor('#475569').fontSize(7).font('Helvetica-Bold').text("PREPARE_FOR_ARRIVAL_2026", 0, 198 * mmToPt, { align: 'center', characterSpacing: 3 });
         }
 
         doc.end();

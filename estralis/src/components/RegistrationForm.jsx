@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { jsPDF } from "jspdf"
 import JsBarcode from "jsbarcode"
-import html2canvas from "html2canvas"
 
 export default function RegistrationForm({ event, onClose }) {
     const [step, setStep] = useState(1)
@@ -186,48 +185,16 @@ export default function RegistrationForm({ event, onClose }) {
         }
     }
 
-    const handleDownloadPDF = async () => {
+    const handleDownloadPDF = () => {
         setIsDownloading(true);
+        // Simplified PDF generation logic for stability
         try {
-            const front = document.getElementById('pass-page-front-pro');
-            const back = document.getElementById('pass-page-back-pro');
-            if (!front) throw new Error("Professional template not found");
-
-            const pdf = new jsPDF('p', 'mm', [100, 210]); // Premium Vertical Format
-
-            // Page 1: Leader (Cinematic Capture)
-            front.style.display = 'block';
-            const canvasFront = await html2canvas(front, { 
-                scale: 3, 
-                useCORS: true, 
-                backgroundColor: '#020617',
-                logging: false
-            });
-            front.style.display = 'none';
-
-            const imgFront = canvasFront.toDataURL('image/png');
-            pdf.addImage(imgFront, 'PNG', 0, 0, 100, 210);
-
-            // Page 2: Squad (If exists)
-            if (teamMembers.length > 0 && back) {
-                back.style.display = 'block';
-                const canvasBack = await html2canvas(back, { 
-                    scale: 3, 
-                    useCORS: true, 
-                    backgroundColor: '#020617',
-                    logging: false
-                });
-                back.style.display = 'none';
-
-                const imgBack = canvasBack.toDataURL('image/png');
-                pdf.addPage([100, 210], 'p');
-                pdf.addImage(imgBack, 'PNG', 0, 0, 100, 210);
-            }
-            
-            pdf.save(`Estralis_Pass_2026_${formData.fullName.replace(/\s+/g, '_')}.pdf`);
-        } catch (error) {
-            console.error("Professional PDF Gen Error:", error);
-            alert("Failed to generate premium pass. Please try again.");
+            const doc = new jsPDF();
+            doc.text(`ESTRALIS 2026 - ${event.title}`, 10, 10);
+            doc.text(`Name: ${formData.fullName}`, 10, 20);
+            doc.text(`Email: ${formData.email}`, 10, 30);
+            doc.text(`Transaction ID: ${formData.utrNumber}`, 10, 40);
+            doc.save(`Estralis_Pass_${formData.fullName}.pdf`);
         } finally {
             setIsDownloading(false);
         }
@@ -512,150 +479,7 @@ export default function RegistrationForm({ event, onClose }) {
                         </motion.div>
                     )}
                 </AnimatePresence>
-                    {/* PROFESSIONAL ACCESS PASS TEMPLATE - PAGE 1: LEADER (Cinematic Glassmorphism) */}
-            <div id="pass-page-front-pro" className="fixed -left-[9999px] top-0 w-[400px] h-[840px] bg-[#020617] text-white overflow-hidden font-tech" style={{ display: 'none', backgroundColor: '#020617' }}>
-                {/* Layered Decorative Elements */}
-                <div className="absolute top-0 right-0 w-full h-full opacity-20 pointer-events-none" style={{ background: 'radial-gradient(circle at 100% 0%, #2dd4bf 0%, transparent 60%)' }} />
-                <div className="absolute bottom-0 left-0 w-full h-full opacity-10 pointer-events-none" style={{ background: 'radial-gradient(circle at 0% 100%, #d946ef 0%, transparent 60%)' }} />
-                
-                {/* Main Ticket Frame */}
-                <div className="m-4 h-[808px] rounded-[2.5rem] relative border-[0.5px] border-teal-500/30 overflow-hidden shadow-2xl" style={{ backgroundColor: 'rgba(10, 15, 30, 0.95)' }}>
-                    {/* Header: Branding & Telemetry */}
-                    <div className="p-8 pb-10 border-b border-white/5 relative">
-                        <div className="flex justify-between items-start">
-                            <div>
-                                <div className="flex items-center gap-2 mb-2">
-                                    <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse shadow-[0_0_10px_#2dd4bf]" />
-                                    <span style={{ fontSize: '7px', fontWeight: '900', letterSpacing: '0.5em', textTransform: 'uppercase', color: 'rgba(45, 212, 191, 0.6)' }}>NETWORK_STATUS: CONNECTED // SEC_2026</span>
-                                </div>
-                                <h2 className="text-4xl font-extrabold italic tracking-tighter text-white uppercase font-astral">ESTRALIS</h2>
-                                <p style={{ fontSize: '9px', fontWeight: '700', letterSpacing: '0.4em', color: 'rgba(255, 255, 255, 0.3)', marginTop: '4px' }}>OFFICIAL_ACCESS_PASS</p>
-                            </div>
-                            <div className="text-right">
-                                <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em] block mb-1">NODE_ID</span>
-                                <span className="text-sm font-mono font-bold text-teal-400">#E26-{Math.floor(Math.random() * 9000) + 1000}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Content: Event & Category Panel */}
-                    <div className="mt-8 mx-8 p-6 rounded-3xl bg-white/[0.03] border border-white/5 relative group overflow-hidden">
-                        <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-teal-500/50 to-transparent" />
-                        <span className="text-[10px] font-black text-teal-500/40 uppercase tracking-[0.4em] mb-3 block text-center">TRANSMISSION_TARGET</span>
-                        <h3 className="text-3xl font-black text-white uppercase text-center tracking-tight mb-2">{event.title}</h3>
-                        <div className="flex justify-center items-center gap-3">
-                            <span className="w-10 h-[1px] bg-white/10" />
-                            <span className="text-[10px] font-bold text-teal-400/80 uppercase tracking-widest">{event.category || "TECH_ELITE"}</span>
-                            <span className="w-10 h-[1px] bg-white/10" />
-                        </div>
-                    </div>
-
-                    {/* Details: Stacked Primary Participant (No Cropping) */}
-                    <div className="mt-12 mx-8 space-y-10">
-                        <div className="flex items-start gap-4">
-                            <div className="w-[1.5px] h-12 bg-gradient-to-b from-teal-500 to-fuchsia-500" />
-                            <div className="flex-1">
-                                <span style={{ fontSize: '10px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '6px' }}>CORE_PARTICIPANT</span>
-                                <p className="text-2xl font-black text-white uppercase tracking-wide leading-none">{formData.fullName}</p>
-                            </div>
-                        </div>
-
-                        <div className="space-y-8 pl-4">
-                            <div>
-                                <span style={{ fontSize: '9px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.15)', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '6px' }}>INSTITUTION_AFFILIATION</span>
-                                <p className="text-md font-bold text-white/70 uppercase leading-snug">{formData.college}</p>
-                            </div>
-                            <div>
-                                <span style={{ fontSize: '9px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.15)', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '6px' }}>AUTHENTICATION_ID // UTR</span>
-                                <div className="p-3 rounded-xl bg-teal-500/5 border border-teal-500/20">
-                                    <p className="text-lg font-mono font-black text-teal-400 break-all">{formData.utrNumber}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Footer: Secure Scan & Stamp */}
-                    <div className="absolute bottom-10 left-8 right-8 flex justify-between items-end border-t border-white/5 pt-8">
-                        <div>
-                            <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] block mb-2">SYSTEM_CLOCK</span>
-                            <span className="text-[11px] font-mono text-white/50">{new Date().toLocaleString().toUpperCase()}</span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <div className="text-right pr-4 border-r border-white/10">
-                                <span className="text-[8px] font-black text-emerald-400 uppercase tracking-widest block">STATUS</span>
-                                <span className="text-[10px] font-bold text-white uppercase tracking-tighter">VERIFIED</span>
-                            </div>
-                            <div className="w-16 h-16 rounded-2xl bg-white/5 p-1 flex items-center justify-center border border-white/10 relative overflow-hidden group">
-                                <div className="absolute inset-0 bg-teal-500/10 animate-pulse" />
-                                <div className="text-[7px] text-teal-500 font-black text-center uppercase tracking-tight leading-none z-10">GEN_TOKEN<br/>CRYPTO_SCAN</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-
-            {/* PROFESSIONAL ACCESS PASS TEMPLATE - PAGE 2: SQUAD ROSTER */}
-            <div id="pass-page-back-pro" className="fixed -left-[9999px] top-0 w-[400px] h-[840px] bg-[#020617] text-white overflow-hidden font-tech" style={{ display: 'none', backgroundColor: '#020617' }}>
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#2dd4bf 0.5px, transparent 0.5px)', backgroundSize: '20px 20px' }} />
-                
-                <div className="m-4 h-[808px] rounded-[2.5rem] relative border-[0.5px] border-fuchsia-500/30 overflow-hidden shadow-2xl" style={{ backgroundColor: 'rgba(10, 15, 30, 0.95)' }}>
-                    <div className="p-8 pb-8 border-b border-white/5">
-                        <div className="flex items-center gap-3 mb-3">
-                            <div className="flex gap-1">
-                                <span className="w-1 h-1 rounded-full bg-fuchsia-500" />
-                                <span className="w-1 h-1 rounded-full bg-fuchsia-500/50" />
-                                <span className="w-1 h-1 rounded-full bg-fuchsia-500/20" />
-                            </div>
-                            <span style={{ fontSize: '8px', fontWeight: '900', letterSpacing: '0.4em', textTransform: 'uppercase', color: 'rgba(217, 70, 239, 0.6)' }}>SQUAD_ROSTER_MANIFEST</span>
-                        </div>
-                        <h2 className="text-3xl font-black italic tracking-tighter text-white uppercase font-astral">ESTRALIS</h2>
-                    </div>
-
-                    <div className="mt-6 mx-8">
-                        {formData.teamName && (
-                            <div className="mb-10 p-5 rounded-2xl bg-fuchsia-500/5 border border-fuchsia-500/20 flex items-center justify-between">
-                                <div>
-                                    <span style={{ fontSize: '8px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.2)', textTransform: 'uppercase', marginBottom: '4px', display: 'block' }}>DESIGNATED_TEAM</span>
-                                    <p className="text-xl font-black text-fuchsia-400 uppercase tracking-wide">{formData.teamName}</p>
-                                </div>
-                                <div className="text-right">
-                                    <span className="text-[20px] font-black text-white/5 italic">#{teamMembers.length + 1}</span>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="space-y-2">
-                             <div className="flex items-center gap-3 mb-6 px-2">
-                                <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">UNIT_MEMBERS</span>
-                                <div className="flex-1 h-[1px] bg-white/5" />
-                             </div>
-
-                             <div className="space-y-6">
-                                {teamMembers.map((m, i) => (
-                                    <div key={i} className="group flex items-center gap-5 p-4 rounded-2xl transition hover:bg-white/[0.02]">
-                                        <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center border border-white/5">
-                                            <span className="text-[11px] font-black text-fuchsia-500">{i + 1}</span>
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-md font-bold text-white uppercase truncate">{m.fullName}</p>
-                                            <p className="text-[9px] font-medium text-white/30 uppercase tracking-widest truncate">{m.college || formData.college}</p>
-                                        </div>
-                                        <div className="w-2 h-2 rounded-full border border-fuchsia-500/30 group-hover:bg-fuchsia-500 shadow-sm" />
-                                    </div>
-                                ))}
-                             </div>
-                        </div>
-                    </div>
-
-                    <div className="absolute bottom-10 left-8 right-8 text-center">
-                        <div className="mb-6 flex justify-center gap-2">
-                            {[1,2,3,4,5].map(i => <div key={i} className="w-4 h-[1px] bg-white/10" />)}
-                        </div>
-                        <p style={{ fontSize: '8px', fontWeight: '900', color: 'rgba(255, 255, 255, 0.1)', textTransform: 'uppercase', letterSpacing: '0.6em' }}>PREPARE_FOR_ARRIVAL_2026</p>
-                    </div>
-                </div>
-            </div>
-     </div>
         </motion.div>
     );
 }
