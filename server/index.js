@@ -331,9 +331,9 @@ app.post('/api/upload-screenshot', upload.single('screenshot'), (req, res) => {
  */
 const generatePDFPass = (reg) => {
     return new Promise((resolve, reject) => {
-        const mmToPt = 2.8346;
-        const width = 180 * mmToPt;
-        const height = 260 * mmToPt;
+        const mmToPt = 2.83465;
+        const width = 100 * mmToPt;
+        const height = 210 * mmToPt;
 
         const doc = new PDFDocument({
             size: [width, height],
@@ -344,12 +344,6 @@ const generatePDFPass = (reg) => {
         doc.on('data', (chunk) => chunks.push(chunk));
         doc.on('end', () => resolve(Buffer.concat(chunks)));
         doc.on('error', (err) => reject(err));
-
-        // Background / Branding
-        doc.rect(0, 0, doc.page.width, doc.page.height).fill('#ffffff');
-
-        // Header Banner
-        doc.rect(0, 0, doc.page.width, 140).fill('#9333ea');
 
         // Robust Category Normalization (Case-insensitive)
         const rawCat = reg.category || "Tech";
@@ -363,10 +357,6 @@ const generatePDFPass = (reg) => {
             Workshop: { banner: '#059669', border: '#14b8a6', accent: '#2dd4bf', label: '#6ee7b7' }
         };
         const activeColor = colors[normalizedCategory] || colors.Tech;
-
-        const mmToPt = 2.83465;
-        const width = 100 * mmToPt;
-        const height = 210 * mmToPt;
 
         const drawTicketLayout = (pageDoc) => {
             // Dark Background
