@@ -42,7 +42,7 @@ export default function FestivalHero() {
               x: { repeat: Infinity, duration: 4, ease: "easeInOut" },
               y: { repeat: Infinity, duration: 4, ease: "easeInOut" }
             }}
-            className="saarang-banner-text text-cyan-500/60 absolute text-[12vw] sm:text-[11vw] leading-normal pb-4 tracking-tight blur-[8px] z-0"
+            className="saarang-banner-text text-cyan-500/60 absolute text-[13vw] sm:text-[12vw] leading-normal pb-4 tracking-tight blur-[8px] z-0"
             style={{ transform: 'scaleY(1.4)', transformOrigin: 'bottom' }}
           >
             ESTRALIS
@@ -56,7 +56,7 @@ export default function FestivalHero() {
               x: { repeat: Infinity, duration: 3, ease: "easeInOut" },
               y: { repeat: Infinity, duration: 3, ease: "easeInOut" }
             }}
-            className="saarang-banner-text text-fuchsia-500/60 absolute text-[12vw] sm:text-[11vw] leading-normal pb-4 tracking-tight blur-[8px] z-0"
+            className="saarang-banner-text text-fuchsia-500/60 absolute text-[13vw] sm:text-[12vw] leading-normal pb-4 tracking-tight blur-[8px] z-0"
             style={{ transform: 'scaleY(1.4)', transformOrigin: 'bottom' }}
           >
             ESTRALIS
@@ -78,7 +78,7 @@ export default function FestivalHero() {
               scale: { duration: 1.2, ease: "easeOut" },
               backgroundPosition: { repeat: Infinity, duration: 8, ease: "linear" }
             }}
-            className="saarang-banner-text text-transparent bg-clip-text text-[12vw] sm:text-[11vw] leading-normal pb-4 tracking-tight z-10 bg-gradient-to-r from-teal-300 via-fuchsia-400 to-cyan-300 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+            className="saarang-banner-text text-transparent bg-clip-text text-[13vw] sm:text-[12vw] leading-normal pb-4 tracking-tight z-10 bg-gradient-to-r from-teal-300 via-fuchsia-400 to-cyan-300 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]"
             style={{
               transform: 'scaleY(1.4)',
               transformOrigin: 'bottom',
@@ -129,7 +129,7 @@ export default function FestivalHero() {
               opacity: { duration: 1, delay: 1.2 },
               y: { repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.5 }
             }}
-            className="absolute -top-[15%] sm:top-[2%] md:top-[12%] right-[2%] sm:right-[10%] md:right-[20%] z-20"
+            className="absolute -top-[20%] sm:top-[2%] md:top-[10%] right-[5%] sm:right-[15%] md:right-[25%] z-20"
           >
             <div className="backdrop-blur-xl bg-white/5 border border-white/20 text-teal-300 font-mono tracking-[0.2em] text-[10px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(20,184,166,0.3)] uppercase whitespace-nowrap">
               Coordinates Locked
