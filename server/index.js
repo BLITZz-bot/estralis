@@ -392,15 +392,15 @@ const generatePDFPass = (reg) => {
             pageDoc.fillColor(colors.bg).rect(12 * mmToPt, 12 * mmToPt, 156 * mmToPt, 50 * mmToPt).fill();
             pageDoc.strokeColor(colors.teal).moveTo(12 * mmToPt, 62 * mmToPt).lineTo(168 * mmToPt, 62 * mmToPt).stroke();
 
-            // HEADER Text (Synced with 83mm manual adjustment)
-            pageDoc.font('Helvetica-Bold').fontSize(26).fillColor(colors.teal).opacity(0.15)
-                .text("ESTRALIS 2026", (83.5 - 90) * mmToPt, 35 * mmToPt, { align: 'center', width: width, characterSpacing: 1 });
+            // HEADER Text (Synced with 83mm offset)
+            pageDoc.font('Helvetica-Bold').fontSize(26).fillColor(colors.aqua).opacity(0.4)
+                .text("ESTRALIS 2026", (83 - 90) * mmToPt, 35 * mmToPt, { align: 'center', width: width, characterSpacing: 1 });
             pageDoc.opacity(1).fillColor('#ffffff')
                 .text("ESTRALIS 2026", (83 - 90) * mmToPt, 35 * mmToPt, { align: 'center', width: width, characterSpacing: 1 });
 
             // SLOGAN (Synced with 70mm manual adjustment)
             pageDoc.fontSize(8.5).font('Helvetica').fillColor(colors.teal)
-                .text("THE INTERSTELLAR SYMPOSIUM", (70 - 90) * mmToPt, 43 * mmToPt, { align: 'center', width: width, characterSpacing: 1.5 });
+                .text("THE INTERSTELLAR SYMPOSIUM", (70 - 90) * mmToPt, 43 * mmToPt, { align: 'center', width: width, characterSpacing: 1.5 * mmToPt });
 
             // SECURE ID (Synced with 89mm)
             pageDoc.fontSize(7).fillColor(colors.dim)
@@ -418,24 +418,24 @@ const generatePDFPass = (reg) => {
 
         // VERIFIED Badge
         doc.strokeColor(colors.teal).lineWidth(0.5).roundedRect(130 * mmToPt, startY + 2 * mmToPt, 30 * mmToPt, 10 * mmToPt, 2 * mmToPt).stroke();
-        doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("VERIFIED", 130 * mmToPt, startY + 5.5 * mmToPt, { width: 30 * mmToPt, align: 'center' });
+        doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("VERIFIED", (145 - 90) * mmToPt, startY + 9 * mmToPt, { width: width, align: 'center' });
 
         // EVENT TITLE (Synced with 85mm offset)
         doc.fillColor('#ffffff').fontSize(32).font('Helvetica-Bold')
-           .text(reg.event_title.toUpperCase(), (85 - 90) * mmToPt, startY + 30 * mmToPt, { align: 'center', width: width, characterSpacing: 0.5 });
+           .text(reg.event_title.toUpperCase(), (85 - 90) * mmToPt, startY + 35 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
         // CATEGORY TAG (Synced with 87mm box / 85mm text)
         const catTextContent = (reg.category || 'TECH').toUpperCase();
         doc.fontSize(8);
         const tagWidthValue = doc.widthOfString(catTextContent) + 10 * mmToPt;
-        doc.fillColor(colors.teal).roundedRect((87 * mmToPt) - (tagWidthValue/2), startY + 39 * mmToPt, tagWidthValue, 8 * mmToPt, 4 * mmToPt).fill();
-        doc.fillColor(colors.bg).text(catTextContent, (85 - 90) * mmToPt, startY + 41.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 });
-
-        // LOGISTICS
-        doc.fillColor('rgba(30, 41, 59, 0.4)').roundedRect(20 * mmToPt, startY + 55 * mmToPt, 140 * mmToPt, 30 * mmToPt, 5 * mmToPt).fill();
-        doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("LOCATION", 30 * mmToPt, startY + 63 * mmToPt);
-        doc.text("ARRIVAL_TIME", 100 * mmToPt, startY + 63 * mmToPt);
-        doc.fillColor('#ffffff').fontSize(10).font('Helvetica').text(reg.event_location || "TBA", 30 * mmToPt, startY + 71 * mmToPt, { width: 60 * mmToPt });
-        doc.text(reg.event_time || "TBA", 100 * mmToPt, startY + 71 * mmToPt);
+        doc.fillColor(colors.teal).roundedRect((87 * mmToPt) - (tagWidthValue/2), startY + 40 * mmToPt, tagWidthValue, 8 * mmToPt, 4 * mmToPt).fill();
+        doc.fillColor(colors.bg).text(catTextContent, (85 - 90) * mmToPt, startY + 45.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
+Line 432: 
+Line 433:         // LOGISTICS
+Line 434:         doc.fillColor('rgba(30, 41, 59, 0.4)').roundedRect(20 * mmToPt, startY + 55 * mmToPt, 140 * mmToPt, 30 * mmToPt, 5 * mmToPt).fill();
+Line 435:         doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("LOCATION", 30 * mmToPt, startY + 65 * mmToPt);
+Line 436:         doc.text("ARRIVAL_TIME", 100 * mmToPt, startY + 65 * mmToPt);
+Line 437:         doc.fillColor('#ffffff').fontSize(10).font('Helvetica').text(reg.event_location || "TBA", 30 * mmToPt, startY + 72 * mmToPt, { width: 60 * mmToPt });
+Line 438:         doc.text(reg.event_time || "TBA", 100 * mmToPt, startY + 72 * mmToPt);
 
         // PARTICIPANT DATA
         let currentYPos = (startY + 90 * mmToPt);
@@ -497,52 +497,52 @@ const sendConfirmationEmail = async (reg) => {
             to: reg.email,
             subject: `Spot Secured! ${reg.event_title} is waiting for you 🚀`,
             html: `
-                <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e2e8f0; padding: 40px; border-radius: 24px; background: #ffffff; color: #1a202c;">
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <h1 style="color: #9333ea; margin: 0; font-size: 28px; letter-spacing: -0.025em;">ESTRALIS 2026</h1>
-                        <p style="color: #718096; margin-top: 8px; font-weight: 500;">REGISTRATION SUCCESSFUL! ✅</p>
+                <div style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: auto; background-color: #020617; color: #ffffff; border-radius: 24px; overflow: hidden; border: 1px solid rgba(45, 212, 191, 0.2); box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+                    <!-- Header Mirror -->
+                    <div style="background: #0f172a; padding: 40px 20px; text-align: center; border-bottom: 1px solid #2dd4bf;">
+                        <p style="color: #2dd4bf; font-size: 10px; font-weight: 900; letter-spacing: 0.5em; margin: 0 0 10px 0; text-transform: uppercase;">ESTRALIS 2026 // SECURE_REGISTRY</p>
+                        <h1 style="color: #ffffff; margin: 0; font-size: 32px; letter-spacing: -0.05em; text-transform: uppercase; font-weight: 900;">${reg.event_title}</h1>
                     </div>
                     
-                    <p style="font-size: 16px; line-height: 1.6;">Hello <strong>${reg.full_name}</strong>,</p>
-                    <p style="font-size: 16px; line-height: 1.6;">Your spot for <strong>${reg.event_title}</strong> at ESTRALIS 2026 has been officially reserved! We are excited to see you there.</p>
-                    
-                    <div style="background: #f7fafc; border: 1px solid #edf2f7; padding: 25px; border-radius: 16px; margin: 30px 0;">
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <tr>
-                                <td style="padding: 8px 0; color: #718096; font-size: 14px; width: 120px;">Event Name:</td>
-                                <td style="padding: 8px 0; font-weight: 700; color: #2d3748;">${reg.event_title}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px 0; color: #718096; font-size: 14px;">College:</td>
-                                <td style="padding: 8px 0; font-weight: 700; color: #2d3748;">${reg.college}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px 0; color: #718096; font-size: 14px;">UTR Number:</td>
-                                <td style="padding: 8px 0; font-weight: 700; color: #2d3748;">${reg.utr_number}</td>
-                            </tr>
-                        </table>
-                    </div>
+                    <div style="padding: 40px; background: linear-gradient(180deg, #0f172a 0%, #020617 100%);">
+                        <p style="font-size: 18px; line-height: 1.6; margin-bottom: 24px;">Hello <strong style="color: #2dd4bf;">${reg.full_name}</strong>,</p>
+                        <p style="font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.7); margin-bottom: 30px;">Your coordinates are locked! Your spot for <strong style="color: #ffffff;">${reg.event_title}</strong> at ESTRALIS 2026 has been officially verified and reserved.</p>
+                        
+                        <!-- Mini Card Mirror -->
+                        <div style="background: rgba(45, 212, 191, 0.05); border: 1px solid rgba(45, 212, 191, 0.2); padding: 25px; border-radius: 16px; margin: 30px 0;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 10px 0; color: rgba(45, 212, 191, 0.6); font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; width: 140px;">Sector:</td>
+                                    <td style="padding: 10px 0; font-weight: 700; color: #ffffff; font-size: 15px;">${reg.category || 'Tech'}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: rgba(45, 212, 191, 0.6); font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;">Institute:</td>
+                                    <td style="padding: 10px 0; font-weight: 700; color: #ffffff; font-size: 15px;">${reg.college}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: rgba(45, 212, 191, 0.6); font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;">Transaction_ID:</td>
+                                    <td style="padding: 10px 0; font-weight: 700; color: #2dd4bf; font-family: monospace; font-size: 16px;">${reg.utr_number}</td>
+                                </tr>
+                            </table>
+                        </div>
 
-                    <div style="text-align: center; margin: 35px 0;">
-                        <a href="${downloadUrl}" 
-                           style="background: #9333ea; color: #ffffff; padding: 18px 36px; border-radius: 16px; font-weight: 700; text-decoration: none; display: inline-block; box-shadow: 0 4px 14px 0 rgba(147, 51, 234, 0.39);">
-                           DOWNLOAD OFFICIAL PDF PASS
-                        </a>
-                        <p style="color: #a0aec0; font-size: 12px; margin-top: 15px;">
-                            Access your pass anytime using <strong>TEAM LEADER GMAIL OR GMAIL USED DURING REGISTRATION</strong> on our website.
-                        </p>
-                    </div>
+                        <div style="text-align: center; margin: 40px 0;">
+                            <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;">Official Invitation Attached Below</p>
+                            <a href="${downloadUrl}" 
+                               style="background: #2dd4bf; color: #020617; padding: 20px 40px; border-radius: 12px; font-weight: 900; text-decoration: none; display: inline-block; font-size: 14px; text-transform: uppercase; letter-spacing: 0.2em; box-shadow: 0 0 30px rgba(45, 212, 191, 0.3);">
+                               Download Pass Mirror
+                            </a>
+                        </div>
 
-                    <div style="background: #faf5ff; border-left: 4px solid #9333ea; padding: 15px; border-radius: 8px; margin: 25px 0;">
-                        <p style="margin: 0; color: #6b46c1; font-size: 14px;">
-                            <strong>NOTE:</strong> All participants are required to arrive at the venue (GIS Auditorium) by 9:00 AM.
-                        </p>
+                        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; margin-top: 30px; text-align: center;">
+                            <p style="margin: 0; color: #2dd4bf; font-size: 13px; font-weight: 800; letter-spacing: 0.05em;">
+                                REPORT TO VENUE: 9:00 AM SHARP
+                            </p>
+                            <p style="margin: 10px 0 0 0; color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 500;">
+                                Estralis 2026 | GCEM, Bengaluru
+                            </p>
+                        </div>
                     </div>
-                    
-                    <p style="font-size: 14px; color: #a0aec0; text-align: center; margin-top: 40px;">
-                        Estralis 2026 | Techno-Cultural Fest<br/>
-                        GCEM, Bengaluru
-                    </p>
                 </div>
             `,
             attachments: [
