@@ -968,11 +968,13 @@ app.post('/api/admin/send-report', async (req, res) => {
                 const totalParticipants = 1 + teamCount;
 
                 // Create a comprehensive squad string for the leader row
+                const isDJNight = eventTitle === "Artist Performance and DJ Night";
                 let squadDetails = "Solo Registration";
                 if (teamCount > 0) {
                     squadDetails = `Total: ${totalParticipants} (Lead + ${teamCount})\n\n`;
                     members.forEach((m, idx) => {
-                        squadDetails += `[MEMBER 0${idx + 2}]: ${m.fullName || 'N/A'}\nEmail: ${m.email || 'N/A'}\nPhone: ${m.phone || 'N/A'}\nCollege: ${m.college || reg.college}\n\n`;
+                        const label = isDJNight ? "FRIEND" : "MEMBER";
+                        squadDetails += `[${label} 0${idx + 2}]: ${m.fullName || 'N/A'}\nEmail: ${m.email || 'N/A'}\nPhone: ${m.phone || 'N/A'}\nCollege: ${m.college || reg.college}\n\n`;
                     });
                 }
 

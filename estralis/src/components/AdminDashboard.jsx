@@ -1003,7 +1003,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                                         <div key={idx} className="bg-white/5 rounded-lg p-3 border border-white/5 hover:border-teal-500/20 transition-colors">
                                                                             <div className="flex justify-between items-start mb-1">
                                                                                 <div className="text-[10px] font-black text-white uppercase tracking-wider">{m.fullName}</div>
-                                                                                <div className="text-[8px] font-black text-teal-500/30 uppercase">MEMBER {idx + 1}</div>
+                                                                                <div className="text-[8px] font-black text-teal-500/30 uppercase">
+                                                                                    {reg.event_title === "Artist Performance and DJ Night" ? "FRIEND" : "MEMBER"} {idx + 1}
+                                                                                </div>
                                                                             </div>
                                                                             <div className="text-[9px] font-bold text-teal-400/50 uppercase tracking-tight mb-2 truncate">{m.college || reg.college}</div>
                                                                             <div className="flex flex-col gap-0.5 border-t border-white/5 pt-1.5">
