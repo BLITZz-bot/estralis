@@ -126,7 +126,8 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                 "BGMI": { location: "1st Floor, GCEM Campus", time: "12:00 PM" },
                 "WESTERN GROUP": { location: "Main stage, GCEM Campus", time: "09:30 AM" },
                 "BATTLE OF BANDS": { location: "Main stage, GCEM Campus", time: "11:00 AM" },
-                "FASHION SHOW": { location: "Main stage, GCEM Campus", time: "01:00 PM" }
+                "FASHION SHOW": { location: "Main stage, GCEM Campus", time: "01:00 PM" },
+                "ARTIST PERFORMANCE AND DJ NIGHT": { location: "Main stage, GCEM Campus", time: "06:00 PM" }
             };
 
             const drawTicketBase = (pageDoc) => {
@@ -214,11 +215,13 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.setTextColor(...colors.teal);
             doc.text("VERIFIED", 145, startY + 9, { align: "center" });
 
-            // EVENT TITLE (The Star of the Show - Refined to 89mm)
+            // EVENT TITLE (Dynamic Font Size)
+            const eventTitle = registration.event_title.toUpperCase();
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(32);
+            const titleFontSize = eventTitle.length > 25 ? 20 : 32;
+            doc.setFontSize(titleFontSize);
             doc.setTextColor(255, 255, 255);
-            doc.text(registration.event_title.toUpperCase(), 85, startY + 35, { align: "center", charSpace: 1 });
+            doc.text(eventTitle, 85, startY + (eventTitle.length > 25 ? 33 : 35), { align: "center", charSpace: 1 });
 
             // CATEGORY TAG (Refined to 86mm)
             doc.setFillColor(...colors.teal);

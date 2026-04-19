@@ -473,11 +473,13 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setTextColor(...colors.teal);
             doc.text("VERIFIED", 145, startY + 9, { align: "center" });
 
-            // EVENT TITLE (The Star of the Show - Refined to 89mm)
+            // EVENT TITLE (Dynamic Font Size)
+            const eventTitle = (event.title || "").toUpperCase();
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(32);
+            const titleFontSize = eventTitle.length > 25 ? 20 : 32;
+            doc.setFontSize(titleFontSize);
             doc.setTextColor(255, 255, 255);
-            doc.text(event.title.toUpperCase(), 85, startY + 35, { align: "center", charSpace: 1 });
+            doc.text(eventTitle, 85, startY + (eventTitle.length > 25 ? 33 : 35), { align: "center", charSpace: 1 });
 
             // CATEGORY TAG (Refined to 86mm)
             doc.setFillColor(...colors.teal);
@@ -502,6 +504,10 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setFontSize(10);
             doc.setTextColor(255, 255, 255);
             const schedule = EVENT_SCHEDULE[event.title.toUpperCase()] || { location: "TBA", time: "TBA" };
+            if (event.title.toUpperCase() === "ARTIST PERFORMANCE AND DJ NIGHT") {
+                schedule.location = "Main stage, GCEM Campus";
+                schedule.time = "06:00 PM";
+            }
             const venueLines = doc.splitTextToSize(schedule.location, 60);
             doc.text(venueLines, 30, startY + 72);
             doc.text(schedule.time, 100, startY + 72);
