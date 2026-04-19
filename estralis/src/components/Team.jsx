@@ -51,7 +51,7 @@ export default function Team() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "circOut" }}
-            className="text-[10px] font-black tracking-[1em] text-teal-500 uppercase font-astral mb-4 md:mb-6 block"
+            className="text-[7px] md:text-[10px] font-black tracking-[1em] text-teal-500 uppercase font-astral mb-4 md:mb-6 block"
           >
             Core_Command_Matrix
           </motion.span>

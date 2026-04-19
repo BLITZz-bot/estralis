@@ -833,7 +833,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="relative w-full h-full max-w-[100vw] max-h-screen bg-[#020617] p-4 sm:p-6 md:p-10 overflow-y-auto md:overflow-hidden flex flex-col"
+                        className="relative w-full h-full max-w-[100vw] max-h-screen bg-[#020617] p-4 sm:p-8 md:p-10 overflow-y-auto md:overflow-hidden flex flex-col"
                     >
                         {/* ASTRAL GRID OVERLAY */}
                         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
@@ -843,12 +843,12 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                 <h2 className="astral-heading text-2xl md:text-4xl text-white">Admin Dashboard</h2>
                                 <p className="text-teal-400/50 text-[10px] font-black uppercase tracking-[0.3em]">Event Management System</p>
                             </div>
-                            <div className="flex items-center justify-center md:justify-end gap-3">
-                                <button onClick={() => { fetchRegistrations(); setCountdown(30); }} className="px-5 py-3 astral-glass rounded-xl text-teal-300 text-[10px] font-black tracking-widest uppercase hover:border-teal-400/50 transition-all flex items-center gap-2">
-                                    <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            <div className="flex flex-wrap items-center justify-center md:justify-end gap-2 sm:gap-3">
+                                <button onClick={() => { fetchRegistrations(); setCountdown(30); }} className="px-3 sm:px-5 py-2.5 sm:py-3 astral-glass rounded-xl text-teal-300 text-[9px] sm:text-[10px] font-black tracking-widest uppercase hover:border-teal-400/50 transition-all flex items-center gap-2">
+                                    <svg className={`w-3.5 h-3.5 sm:w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                                     REFRESH ({countdown}S)
                                 </button>
-                                <button onClick={downloadExcel} className="px-3 py-2 bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 rounded-xl text-[10px] sm:text-sm hover:bg-emerald-600/30 transition flex items-center gap-1.5 font-semibold min-w-0">
+                                <button onClick={downloadExcel} className="px-3 py-2.5 sm:py-3 bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 rounded-xl text-[9px] sm:text-[10px] hover:bg-emerald-600/30 transition flex items-center gap-1.5 font-black uppercase tracking-widest min-w-0">
                                     <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                     <span className="hidden sm:inline">Export Excel</span>
                                     <span className="sm:hidden">EXCEL</span>
@@ -856,16 +856,13 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                 <button
                                     onClick={sendToAdminEmail}
                                     disabled={emailing}
-                                    className={`px-3 py-2 border rounded-xl text-[10px] sm:text-sm transition flex items-center gap-1.5 font-semibold min-w-0 ${emailing ? 'bg-gray-600/20 border-gray-500/30 text-gray-500' : 'bg-pink-600/20 border-pink-500/30 text-pink-400 hover:bg-pink-600/30'}`}
+                                    className={`px-3 py-2.5 sm:py-3 border rounded-xl text-[9px] sm:text-[10px] transition flex items-center gap-1.5 font-black uppercase tracking-widest min-w-0 ${emailing ? 'bg-gray-600/20 border-gray-500/30 text-gray-500' : 'bg-pink-600/20 border-pink-500/30 text-pink-400 hover:bg-pink-600/30'}`}
                                 >
                                     <svg className={`w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 ${emailing ? 'animate-pulse' : ''}`} fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" /></svg>
                                     <span className="hidden sm:inline">{emailing ? 'Sending...' : 'EMAIL REPORT'}</span>
                                     <span className="sm:hidden">EMAIL</span>
                                 </button>
-                                <button onClick={() => setIsAuthenticated(false)} className="px-5 py-2 astral-glass rounded-xl text-teal-400/40 text-[10px] font-black tracking-widest uppercase hover:text-red-400 transition-all border border-white/5">
-                                    Logout
-                                </button>
-                                <button onClick={onClose} className="p-2 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white transition flex-shrink-0">
+                                <button onClick={onClose} className="p-2.5 sm:p-3 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white transition flex-shrink-0">
                                     <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                 </button>
                             </div>
@@ -954,49 +951,49 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                             <button onClick={() => fetchRegistrations()} className="px-6 py-3 bg-teal-500/10 border border-teal-500/30 text-teal-400 text-[10px] font-black tracking-widest uppercase rounded-xl hover:bg-teal-500/20 transition-all">Refresh Data</button>
                                         </div>
                                     ) : (
-                                        <table className="w-full text-left border-collapse min-w-[1200px]">
+                                        <table className="w-full text-left border-collapse min-w-[1500px]">
                                             <thead className="sticky top-0 bg-[#020617] z-20">
                                                 <tr className="border-b border-teal-500/20">
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Date & Time</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Date & Time</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Team Name</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Full Name</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">College</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Email</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Phone</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Squad Members</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Sector</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">UTR No.</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">Trans. Date</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">Proof</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">Status</th>
-                                                    <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest whitespace-nowrap text-center">Actions</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">College</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Email</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Phone</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Squad Members</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Sector</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">UTR No.</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">Trans. Date</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">Proof</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap text-center">Status</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest whitespace-nowrap text-center">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-teal-500/5">
                                                 {filteredData.length > 0 ? filteredData.map((reg) => (
                                                     <tr key={reg.id} className="hover:bg-teal-500/5 transition-all group border-b border-teal-500/5">
-                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
+                                                        <td className="px-8 py-8 border-r border-teal-500/10 whitespace-nowrap">
                                                             <div className="text-[10px] font-black text-white">{new Date(reg.timestamp).toLocaleDateString('en-IN')}</div>
                                                             <div className="text-[8px] font-bold text-teal-400/40 mt-1">{new Date(reg.timestamp).toLocaleTimeString('en-IN')}</div>
                                                         </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10">
+                                                        <td className="px-8 py-8 border-r border-teal-500/10">
                                                             <div className="text-[10px] font-black text-teal-400 uppercase tracking-widest whitespace-nowrap">
                                                                 {reg.team_name || "N/A"}
                                                             </div>
                                                         </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
+                                                        <td className="px-8 py-8 border-r border-teal-500/10 whitespace-nowrap">
                                                             <div className="font-black text-white uppercase tracking-wider text-[11px]">{reg.full_name}</div>
                                                         </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10">
+                                                        <td className="px-8 py-8 border-r border-teal-500/10">
                                                             <div className="text-[10px] font-bold text-teal-500/60 uppercase tracking-tight">{reg.college}</div>
                                                         </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10">
+                                                        <td className="px-8 py-8 border-r border-teal-500/10">
                                                             <a href={`mailto:${reg.email}`} className="text-[10px] font-bold text-cyan-400 hover:underline break-all">{reg.email}</a>
                                                         </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
+                                                        <td className="px-8 py-8 border-r border-teal-500/10 whitespace-nowrap">
                                                             <span className="text-[10px] text-teal-400 font-mono">{reg.phone}</span>
                                                         </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10 min-w-[280px]">
+                                                        <td className="px-8 py-8 border-r border-teal-500/10 min-w-[280px]">
                                                             {reg.team_members?.length > 0 ? (
                                                                 <div className="flex flex-col gap-2">
                                                                     {reg.team_members.map((m, idx) => (
@@ -1017,17 +1014,17 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                                 </div>
                                                             ) : <span className="text-white/10 text-[9px] font-black uppercase tracking-widest">N/A</span>}
                                                         </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap">
+                                                        <td className="px-8 py-8 border-r border-teal-500/10 whitespace-nowrap">
                                                             <div className="text-[10px] font-black text-white uppercase">{reg.event_title}</div>
                                                             <div className="text-[8px] font-black text-teal-500/40 italic mt-0.5 underline">₹{reg.amount_paid || "0.00"} (Paid)</div>
                                                         </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap text-center">
+                                                        <td className="px-8 py-8 border-r border-teal-500/10 whitespace-nowrap text-center">
                                                             <div className="text-[10px] font-black text-cyan-400 tracking-wider bg-cyan-500/5 px-2 py-1 rounded border border-cyan-500/10 inline-block">{reg.utr_number || "N/A"}</div>
                                                         </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap text-center">
+                                                        <td className="px-8 py-8 border-r border-teal-500/10 whitespace-nowrap text-center">
                                                             <div className="text-[9px] font-bold text-teal-300 uppercase tracking-widest">{reg.transaction_date || "N/A"}</div>
                                                         </td>
-                                                        <td className="px-6 py-6 border-r border-teal-500/10 whitespace-nowrap text-center">
+                                                        <td className="px-8 py-8 border-r border-teal-500/10 whitespace-nowrap text-center">
                                                             {reg.screenshot_url ? (
                                                                 <a href={reg.screenshot_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-500/10 border border-teal-500/20 rounded-lg text-[9px] font-black text-teal-400 hover:bg-teal-500/20 hover:text-white transition-all">
                                                                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -1035,7 +1032,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                                 </a>
                                                             ) : <span className="text-[9px] text-white/10 italic">NO PROOF</span>}
                                                         </td>
-                                                        <td className="px-6 py-6 text-center border-r border-teal-500/10">
+                                                        <td className="px-8 py-8 text-center border-r border-teal-500/10">
                                                             <div className="flex items-center justify-center gap-2">
                                                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse outline outline-2 outline-emerald-400/20"></div>
                                                                 <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400">
@@ -1043,7 +1040,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                                 </span>
                                                             </div>
                                                         </td>
-                                                        <td className="px-6 py-6 text-center">
+                                                        <td className="px-8 py-8 text-center">
                                                             <div className="flex items-center justify-center gap-2">
                                                                 <button
                                                                     onClick={() => openEditModal(reg)}
