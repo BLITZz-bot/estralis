@@ -261,8 +261,8 @@ export default function RegistrationForm({ event, onClose }) {
             alert("INVALID PHONE: Phone number must be exactly 10 digits.");
             return;
         }
-        // College validation - must be from the allowed list
-        if (collegeList.length > 0 && !collegeList.includes(formData.college.toUpperCase())) {
+        // College validation - Only enforce strict list for DJ Night
+        if (isDJNight && collegeList.length > 0 && !collegeList.includes(formData.college.toUpperCase())) {
             alert("INVALID COLLEGE: Please select a valid college from the dropdown.");
             return;
         }
@@ -286,8 +286,8 @@ export default function RegistrationForm({ event, onClose }) {
                     alert(`${isDJNight ? 'FRIEND' : 'SQUAD'} ERROR: Phone must be 10 digits for ${isDJNight ? 'Friend' : 'Member'} 0${i + 2}`);
                     return;
                 }
-                // College validation for team members
-                if (collegeList.length > 0 && m.college && !collegeList.includes(m.college.toUpperCase())) {
+                // College validation for team members - Only enforce strict list for DJ Night
+                if (isDJNight && collegeList.length > 0 && m.college && !collegeList.includes(m.college.toUpperCase())) {
                     alert(`${isDJNight ? 'FRIEND' : 'SQUAD'} ERROR: Invalid college for ${isDJNight ? 'Friend' : 'Member'} 0${i + 2}. Please select from the dropdown.`);
                     return;
                 }
