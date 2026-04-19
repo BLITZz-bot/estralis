@@ -1126,8 +1126,10 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                 </button>
                                             </div>
                                         );
-                                    })}
-                                </div>
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         ) : activeTab === "manage" ? (
                             <div className="flex-1 overflow-auto rounded-3xl border border-white/10 bg-[#0f111a] flex flex-col items-center justify-center">
