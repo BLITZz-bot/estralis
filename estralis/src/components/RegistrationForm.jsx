@@ -344,16 +344,15 @@ export default function RegistrationForm({ event, onClose }) {
 
             const result = await registerRes.json();
             if (result.success) {
-                // Ensure we capture the ID from ANY possible field to prevent PENDING codes
-                const finalId = result.registrationId || result.id || result._id || result.ref_id || result.registration_id || "";
+                // The server returns the ID inside 'data.id' as seen in debug logs
+                const finalId = result.data?.id || result.registrationId || result.id || result._id || "";
                 
                 if (finalId) {
                     setRegistrationId(finalId);
                     setStep(3);
                 } else {
                     console.error("No ID returned from server", result);
-                    alert("⚠️ SYSTEM SYNC ERROR: The server registered you successfully but did not return a Unique ID. \n\nDEBUG INFO (Please tell the developer): " + JSON.stringify(result));
-                    // We still move to step 3 but the button will be locked until the state fills
+                    // Fallback to avoid blocking the user, but log the error
                     setStep(3);
                 }
             } else {
