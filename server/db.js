@@ -18,6 +18,27 @@ pool.on('error', (err) => {
   console.error('❌ PostgreSQL Pool Error:', err.message);
 });
 
+// Auto-initialize tables
+const initDB = async () => {
+    try {
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS colleges (
+                id SERIAL PRIMARY KEY,
+                name TEXT UNIQUE NOT NULL,
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
+        await pool.query(`
+            INSERT INTO colleges (name) VALUES ('GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT') ON CONFLICT (name) DO NOTHING;
+        `);
+        console.log('✅ Database Schema Verified/Initialized');
+    } catch (err) {
+        console.error('❌ Database Initialization Error:', err.message);
+    }
+};
+
+initDB();
+
 module.exports = {
   query: (text, params) => pool.query(text, params),
   pool
