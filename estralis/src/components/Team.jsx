@@ -2,48 +2,29 @@ import { motion } from "framer-motion"
 import SectionBackground from "./SectionBackground"
 
 const TEAM_MEMBERS = [
-  {
-    name: "M M BHARATH",
-    role: "TECH HEAD",
-    image: "/jj.jpeg", // Using existing photo
-    bio: "Lead Architect of the Estralis Digital Ecosystem."
-  },
-  {
-    name: "ABHISHEK R",
-    role: "EVENT HEAD",
-    image: "/special-guest.png", // Placeholder
-    bio: "Strategic Coordinator for Festival Events."
-  },
-  {
-    name: "DIVYASHREE R M",
-    role: "EVENT HEAD",
-    image: "/special-guest.png", // Placeholder
-    bio: "Manager of Cultural and Event Operations."
-  },
-  {
-    name: "BHARATH KUMAR S",
-    role: "MANAGEMENT HEAD",
-    image: "/special-guest.png", // Placeholder
-    bio: "Chief of Management and Logistics."
-  },
-  {
-    name: "VENU GOPAL",
-    role: "MANAGEMENT HEAD",
-    image: "/special-guest.png", // Placeholder
-    bio: "Lead of Administrative Operations."
-  },
-  {
-    name: "SOHAN S P",
-    role: "CREATIVE HEAD",
-    image: "/special-guest.png", // Placeholder
-    bio: "Creative Director and Visual Strategist."
-  },
-  {
-    name: "PRAVEEN KUMAR S",
-    role: "CREATIVE HEAD",
-    image: "/special-guest.png", // Placeholder
-    bio: "Chief of Visual Arts and Design."
-  }
+  { name: "AKASH SHARMA", role: "ORGANIZER", image: "/special-guest.png" },
+  { name: "VYSHNAVI D", role: "ORGANIZER", image: "/special-guest.png" },
+  { name: "SHIVAPRASAD", role: "CO-ORGANIZER", image: "/special-guest.png" },
+  { name: "DIVYA CHACHADI", role: "CO-ORGANIZER", image: "/special-guest.png" },
+  
+  // SECOND ROW (Featured)
+  { name: "M M BHARATH", role: "TECH HEAD", image: "/special-guest.png" },
+  { name: "THANISHA", role: "FINANCE / SPONSORSHIP HEAD", image: "/special-guest.png" },
+  { name: "LIKITH D T", role: "MARKETING HEAD", image: "/special-guest.png" },
+  { name: "MALLIKARJUN GOUDA", role: "MARKETING HEAD", image: "/special-guest.png" },
+  
+  // THIRD ROW & OTHERS
+  { name: "SURESH PATIL", role: "EVENT HEAD", image: "/special-guest.png" },
+  { name: "SHREYA B N", role: "EVENT HEAD", image: "/special-guest.png" },
+  { name: "HARSHITH", role: "ARTIST HEAD", image: "/special-guest.png" },
+  { name: "CHAMPA", role: "ARTIST HEAD", image: "/special-guest.png" },
+  { name: "SIRI", role: "HOSPITALITY HEAD", image: "/special-guest.png" },
+  { name: "DHYAN", role: "HOSPITALITY HEAD", image: "/special-guest.png" },
+  { name: "VINITH JOYAPPA", role: "LOGISTICS HEAD", image: "/special-guest.png" },
+  { name: "AKHILA G", role: "LOGISTICS HEAD", image: "/special-guest.png" },
+  { name: "GANESH", role: "VOLUNTEER HEAD", image: "/special-guest.png" },
+  { name: "SRINIVAS", role: "PRODUCTION HEAD", image: "/special-guest.png" },
+  { name: "BHARGAV BHAT", role: "PRODUCTION HEAD", image: "/special-guest.png" }
 ];
 
 export default function Team() {
@@ -53,7 +34,7 @@ export default function Team() {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
-      className="relative py-24 md:py-32 px-6 overflow-hidden"
+      className="relative py-24 md:py-40 px-6 overflow-hidden"
     >
       <SectionBackground
         src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80"
@@ -62,66 +43,40 @@ export default function Team() {
       />
 
       <div className="relative max-w-7xl mx-auto">
-        <div className="text-center mb-20">
+        
+        {/* ================= CENTERED HEADER ================= */}
+        <div className="text-center mb-24">
           <motion.span
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="astral-eyebrow text-teal-500 block mb-4"
+            transition={{ duration: 0.8, ease: "circOut" }}
+            className="text-[10px] font-black tracking-[1em] text-teal-500 uppercase font-astral mb-6 block"
           >
-            THE_ARCHITECTS
+            Core_Command_Matrix
           </motion.span>
           <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9, letterSpacing: "0.5em" }}
+            whileInView={{ opacity: 1, scale: 1, letterSpacing: "0.15em" }}
             viewport={{ once: true }}
-            className="astral-heading text-5xl md:text-7xl uppercase tracking-tighter"
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="astral-heading text-6xl md:text-9xl uppercase font-black whitespace-nowrap"
           >
-            CORE <span className="text-teal-400">COMMAND</span>
+            THE <span className="text-teal-400">TEAM</span>
           </motion.h2>
+          <motion.div 
+            initial={{ width: 0 }}
+            whileInView={{ width: "200px" }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="h-1 bg-gradient-to-r from-transparent via-teal-500 to-transparent mx-auto mt-8"
+          />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {/* ================= 4 IN A ROW GRID ================= */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12" style={{ perspective: "2000px" }}>
           {TEAM_MEMBERS.map((member, idx) => (
-            <motion.div
-              key={member.name}
-              initial={{ opacity: 0, scale: 0.9, y: 30 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ 
-                duration: 0.6, 
-                delay: idx * 0.1,
-                type: "spring",
-                stiffness: 100 
-              }}
-              whileHover={{ y: -10 }}
-              className="group relative"
-            >
-              <div className="astral-glass p-1 rounded-3xl overflow-hidden transition-all duration-500 group-hover:border-teal-400/50 group-hover:shadow-[0_0_40px_rgba(45,212,191,0.3)]">
-                <div className="relative h-72 overflow-hidden rounded-2xl">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale-50 group-hover:grayscale-0"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-                  
-                  {/* Floating Role Badge */}
-                  <div className="absolute bottom-4 left-4 right-4">
-                     <span className="text-[9px] font-black tracking-[0.2em] text-teal-400 uppercase bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-teal-500/30 font-astral block text-center">
-                       {member.role}
-                     </span>
-                  </div>
-                </div>
-
-                <div className="p-6 text-center">
-                  <h3 className="text-lg font-black text-white tracking-widest uppercase mb-1">
-                    {member.name}
-                  </h3>
-                  <div className="w-10 h-0.5 bg-teal-500/30 mx-auto transition-all duration-500 group-hover:w-20 group-hover:bg-teal-500" />
-                </div>
-              </div>
-            </motion.div>
+            <TeamMemberCard key={member.name} member={member} idx={idx} />
           ))}
         </div>
 
@@ -129,7 +84,7 @@ export default function Team() {
            initial={{ opacity: 0 }}
            whileInView={{ opacity: 1 }}
            viewport={{ once: true }}
-           className="mt-20 pt-10 border-t border-white/5 text-center"
+           className="mt-32 pt-10 border-t border-white/5 text-center"
         >
            <p className="text-teal-400/30 text-[10px] font-black uppercase tracking-[0.5em] font-astral">
              Signals Integrity Confirmed // Command Access ONLY
@@ -137,5 +92,60 @@ export default function Team() {
         </motion.div>
       </div>
     </motion.section>
+  )
+}
+
+function TeamMemberCard({ member, idx }) {
+  return (
+    <motion.div
+      initial={{ 
+        opacity: 0, 
+        rotateX: -90, 
+        y: 100,
+        z: -100 
+      }}
+      whileInView={{ 
+        opacity: 1, 
+        rotateX: 0, 
+        y: 0,
+        z: 0 
+      }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ 
+        type: "spring",
+        damping: 15,
+        stiffness: 70,
+        delay: idx * 0.05,
+        duration: 0.8
+      }}
+      whileHover={{ 
+        scale: 1.05,
+        y: -10,
+        transition: { duration: 0.2 }
+      }}
+      className="group relative"
+      style={{ transformStyle: "preserve-3d" }}
+    >
+      <div className="astral-glass p-1 rounded-[2.5rem] overflow-hidden transition-all duration-500 group-hover:border-teal-400/50 group-hover:shadow-[0_0_80px_rgba(45,212,191,0.3)] bg-slate-950/40">
+        <div className="relative h-64 overflow-hidden rounded-[2.2rem] m-1" style={{ transform: "translateZ(30px)" }}>
+          <img
+            src={member.image}
+            alt={member.name}
+            className="w-full h-full object-cover transition-all duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60" />
+        </div>
+
+        <div className="p-8 text-center pt-6" style={{ transform: "translateZ(60px)" }}>
+          <h3 className="text-lg font-black text-white tracking-widest uppercase mb-1">
+            {member.name}
+          </h3>
+          <span className="text-[10px] font-black tracking-[0.3em] text-teal-400 uppercase font-astral block opacity-60 group-hover:opacity-100 transition-opacity">
+            {member.role}
+          </span>
+          <div className="w-10 h-px bg-teal-500/10 mx-auto mt-6 transition-all duration-700 group-hover:w-24 group-hover:bg-teal-500" />
+        </div>
+      </div>
+    </motion.div>
   )
 }

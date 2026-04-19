@@ -66,7 +66,7 @@ export const eventsDay1 = [
     description: "A digital creativity challenge where participants create short, engaging videos. From concept and shooting to editing and storytelling, this event tests creativity, trend awareness, and presentation skills.",
     category: "Fun",
     prize: "₹9,000",
-    minTeamSize: 1,
+    minTeamSize: 2,
     maxTeamSize: 3,
     rules: [
       "Duration: 30–60 seconds | Vertical video format mandatory | Individual or team (max 3 members)",
@@ -242,7 +242,7 @@ export const eventsDay1 = [
     coordinators: ["Akhila - 8073557585"],
     registerLink: "#",
     fee: "₹500",
-    theme: "OPEN THEME"
+    // theme: "OPEN THEME"
   },
   {
     time: "12:00 PM",
@@ -284,7 +284,7 @@ export const eventsDay1 = [
     coordinators: ["Kishore - 9742726867", "Hari Kumar - 6362965600", "Anas Ansari - 9008892112"],
     registerLink: "#",
     fee: "₹1000",
-    theme: "OPEN THEME"
+    // theme: "OPEN THEME"
   },
 ]
 
