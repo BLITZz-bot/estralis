@@ -103,7 +103,11 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             const typeNumber = 0; // auto
             const errorCorrectionLevel = 'M';
             const qr = qrcode(typeNumber, errorCorrectionLevel);
-            qr.addData(registration.id || registration._id || "VERIFIED");
+            
+            // FORCE A VALID STRING: Never allow an empty string to be encoded
+            const safeData = (registration.id || registration._id) ? String(registration.id || registration._id) : "VERIFIED_ID_MISSING";
+            qr.addData(safeData);
+            
             qr.make();
             const qrDataUrl = qr.createDataURL(4); // cellSize = 4
 
