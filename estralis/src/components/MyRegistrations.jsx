@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import jsPDF from "jspdf";
 import { eventsDay1, eventsDay2 } from "./Schedule";
+import { DJ_EVENT_DATA } from "./SpecialGuest";
 
 export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDownload }) {
     const [searchEmail, setSearchEmail] = useState("");
@@ -9,7 +10,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
     const [error, setError] = useState("");
     const [results, setResults] = useState([]);
 
-    const allEvents = [...eventsDay1, ...eventsDay2];
+    const allEvents = [...eventsDay1, ...eventsDay2, DJ_EVENT_DATA];
 
     useEffect(() => {
         if (isOpen) {

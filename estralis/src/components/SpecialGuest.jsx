@@ -3,13 +3,12 @@ import { useState } from "react";
 import RegistrationForm from "./RegistrationForm";
 import { EventModal } from "./Schedule";
 
-const DJ_EVENT_DATA = {
+export const DJ_EVENT_DATA = {
     time: "06:00 PM",
     title: "ARTIST PERFORMANCE AND DJ NIGHT",
     location: "Main stage, GCEM Campus",
     description: "Step into the spotlight and let your passion ignite the stage, where every move tells a story and every rhythm captivates the soul. Witness an electrifying showcase of talent, energy, and grace, as dancers compete to turn dreams into motion.",
     category: "Fun",
-    // prize: "₹300",
     minTeamSize: 1,
     maxTeamSize: 20,
     rules: ["ID CARD IS MANDATORY"],
