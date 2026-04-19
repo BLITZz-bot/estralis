@@ -352,7 +352,7 @@ export default function RegistrationForm({ event, onClose }) {
                     setStep(3);
                 } else {
                     console.error("No ID returned from server", result);
-                    addToast("System failed to assign a Unique ID. Re-fetching...", "warning");
+                    alert("⚠️ SYSTEM SYNC ERROR: The server registered you successfully but did not return a Unique ID. \n\nDEBUG INFO (Please tell the developer): " + JSON.stringify(result));
                     // We still move to step 3 but the button will be locked until the state fills
                     setStep(3);
                 }
