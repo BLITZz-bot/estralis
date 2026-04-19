@@ -240,6 +240,8 @@ export default function RegistrationForm({ event, onClose }) {
         } else if (name === 'phone') {
             const numericValue = value.replace(/\D/g, '').slice(0, 10);
             setFormData(prev => ({ ...prev, [name]: numericValue }));
+        } else if (name === 'college') {
+            setFormData(prev => ({ ...prev, [name]: value.toUpperCase() }));
         } else {
             setFormData(prev => ({ ...prev, [name]: value }));
         }
@@ -673,13 +675,25 @@ export default function RegistrationForm({ event, onClose }) {
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">COLLEGE / INSTITUTION</label>
-                                        <CollegeSelect
-                                            value={formData.college}
-                                            onChange={(val) => setFormData(prev => ({ ...prev, college: val }))}
-                                            colleges={collegeList}
-                                            placeholder="Search College..."
-                                            inputClassName="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10"
-                                        />
+                                        {isDJNight ? (
+                                            <CollegeSelect
+                                                value={formData.college}
+                                                onChange={(val) => setFormData(prev => ({ ...prev, college: val }))}
+                                                colleges={collegeList}
+                                                placeholder="Search College..."
+                                                inputClassName="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10"
+                                            />
+                                        ) : (
+                                            <input 
+                                                required 
+                                                type="text" 
+                                                name="college" 
+                                                value={formData.college} 
+                                                onChange={handleChange} 
+                                                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10 uppercase" 
+                                                placeholder="Your College Name" 
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -762,17 +776,32 @@ export default function RegistrationForm({ event, onClose }) {
                                                         </div>
                                                         <div className="space-y-1.5">
                                                             <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">COLLEGE</label>
-                                                            <CollegeSelect
-                                                                value={member.college}
-                                                                onChange={(val) => {
-                                                                    const newMembers = [...teamMembers];
-                                                                    newMembers[index].college = val;
-                                                                    setTeamMembers(newMembers);
-                                                                }}
-                                                                colleges={collegeList}
-                                                                placeholder="Search College..."
-                                                                inputClassName="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold"
-                                                            />
+                                                            {isDJNight ? (
+                                                                <CollegeSelect
+                                                                    value={member.college}
+                                                                    onChange={(val) => {
+                                                                        const newMembers = [...teamMembers];
+                                                                        newMembers[index].college = val;
+                                                                        setTeamMembers(newMembers);
+                                                                    }}
+                                                                    colleges={collegeList}
+                                                                    placeholder="Search College..."
+                                                                    inputClassName="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold"
+                                                                />
+                                                            ) : (
+                                                                <input 
+                                                                    required 
+                                                                    type="text" 
+                                                                    value={member.college} 
+                                                                    onChange={(e) => {
+                                                                        const newMembers = [...teamMembers];
+                                                                        newMembers[index].college = e.target.value.toUpperCase();
+                                                                        setTeamMembers(newMembers);
+                                                                    }} 
+                                                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold uppercase" 
+                                                                    placeholder="Member College" 
+                                                                />
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </motion.div>
