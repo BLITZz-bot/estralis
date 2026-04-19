@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { eventsDay1, eventsDay2 } from './Schedule';
-import { Html5Qrcode } from "html5-qrcode";
+import { Scanner } from "@yudiel/react-qr-scanner";
 
 
 export default function AdminDashboard({ isOpen, onClose }) {
@@ -651,55 +651,31 @@ export default function AdminDashboard({ isOpen, onClose }) {
         }
     }, [isOpen]);
 
-    // Polling is already handled by the auto-refresh timer below
+    // Robust Scan Success Logic
+    const handleScanResult = (detectedCodes) => {
+        if (!detectedCodes || detectedCodes.length === 0) return;
 
+        const decodedText = detectedCodes[0].rawValue;
+        const cleanText = String(decodedText).trim();
+        
+        // Search across all common ID fields to be ultra-robust (Enterprise Standard)
+        const found = registrations.find(r => 
+            String(r.id) === cleanText || 
+            String(r._id) === cleanText || 
+            String(r.ref_id) === cleanText || 
+            String(r.registration_id) === cleanText ||
+            String(r.registrationId) === cleanText
+        );
 
-    // Scanner Logic
-    useEffect(() => {
-        let scanner = null;
-        if (activeTab === "scanner" && scannerActive) {
-            scanner = new Html5Qrcode("reader");
-            const config = { 
-                fps: 10, 
-                qrbox: { width: 250, height: 250 },
-                aspectRatio: 1.0
-            };
-
-            const onScanSuccess = (decodedText) => {
-                const cleanText = String(decodedText).trim();
-                
-                // Search across all common ID fields to be robust
-                const found = registrations.find(r => 
-                    String(r.id) === cleanText || 
-                    String(r._id) === cleanText || 
-                    String(r.ref_id) === cleanText || 
-                    String(r.registration_id) === cleanText ||
-                    String(r.registrationId) === cleanText
-                );
-
-                if (found) {
-                    setScannedReg(found);
-                    setScannerActive(false);
-                    scanner.stop().catch(err => console.error("Stop failed", err));
-                    // Fallback search in case of sync delay or field name variation
-                    fetchRegistrations(); // Background refresh
-                    addToast(`❌ Unrecognized. Read: "${cleanText}" | IDs in DB: ${registrations.length}`, "error");
-                }
-            };
-
-            scanner.start({ facingMode: "environment" }, config, onScanSuccess)
-                .catch(err => {
-                    console.error("Scanner start error", err);
-                    addToast("Failed to start camera. Please check permissions.", "error");
-                });
+        if (found) {
+            setScannedReg(found);
+            setScannerActive(false);
+        } else {
+            // Background refresh to catch latest DB writes
+            fetchRegistrations(); 
+            addToast(`❌ Unrecognized. Read: "${cleanText}" | IDs in DB: ${registrations.length}`, "error");
         }
-
-        return () => {
-            if (scanner && scanner.isScanning) {
-                scanner.stop().catch(err => console.error("Final clear failed", err));
-            }
-        };
-    }, [activeTab, scannerActive, registrations]);
+    };
 
     const handleCheckIn = async (reg) => {
         setIsScanning(true);
@@ -1724,17 +1700,29 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         )}
                                     </div>
 
-                                    {/* Reader Viewport */}
+                                    {/* Reader Viewport - High Performance Native Scanner */}
                                     {scannerActive && (
                                         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative overflow-hidden rounded-3xl border-2 border-emerald-500/30 bg-black aspect-square max-w-sm mx-auto shadow-[0_0_50px_rgba(16,185,129,0.1)]">
-                                            <div id="reader" className="w-full h-full"></div>
+                                            <Scanner 
+                                                onScan={handleScanResult}
+                                                onError={(err) => {
+                                                    console.error("Scanner Error:", err);
+                                                    addToast("Scanner Error. Check camera permissions.", "error");
+                                                }}
+                                                constraints={{ facingMode: "environment" }}
+                                                styles={{ container: { width: '100%', height: '100%' } }}
+                                                components={{
+                                                    audio: false,
+                                                    torch: true
+                                                }}
+                                            />
                                             <button 
                                                 onClick={() => setScannerActive(false)}
-                                                className="absolute top-4 right-4 z-10 p-2 bg-black/50 text-white rounded-full hover:bg-black transition"
+                                                className="absolute top-4 right-4 z-50 p-2 bg-black/50 text-white rounded-full hover:bg-black transition"
                                             >
                                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                             </button>
-                                            <div className="absolute inset-0 pointer-events-none border-[20px] border-transparent border-t-emerald-500/20 animate-pulse"></div>
+                                            <div className="absolute inset-0 pointer-events-none border-[20px] border-transparent border-t-emerald-500/20 animate-pulse z-40"></div>
                                         </motion.div>
                                     )}
 
