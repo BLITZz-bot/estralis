@@ -117,7 +117,7 @@ export default function FestivalHero() {
             className="absolute top-[65%] sm:top-[70%] md:top-[35%] left-1/2 md:left-[48%] -translate-x-1/2 md:translate-x-0 z-20"
           >
             <div className="backdrop-blur-xl bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-200 font-mono tracking-[0.2em] text-[10px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(217,70,239,0.3)] uppercase transform -rotate-3 whitespace-nowrap">
-              May 12-13
+              May 14-15
             </div>
           </motion.div>
 
@@ -169,7 +169,7 @@ export default function FestivalHero() {
 
           <div className="flex flex-col items-center md:items-start w-full md:w-1/2 md:pl-12 text-center md:text-left">
             <span className="text-teal-400 font-bold text-[15px] tracking-[0.25em] uppercase">Launch Window</span>
-            <span className="text-white/50 font-mono text-[13px] uppercase tracking-[0.15em] mt-1">MAY 12 — 13, 2026</span>
+            <span className="text-white/50 font-mono text-[13px] uppercase tracking-[0.15em] mt-1">MAY 14 — 15, 2026</span>
           </div>
         </motion.div>
       </div>

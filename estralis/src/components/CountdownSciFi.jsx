@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import confetti from "canvas-confetti"
 
 export default function CountdownSciFi() {
-  const target = new Date("2026-05-12T09:00:00")
+  const target = new Date("2026-05-14T09:00:00")
   const canvasRef = useRef(null);
 
   const calc = () => {

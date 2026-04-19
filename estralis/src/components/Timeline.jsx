@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import SectionBackground from "./SectionBackground"
 
 const timelineData = {
-  "MAY 12": [
+  "MAY 14": [
     { time: "09:00 AM – 10:00 AM", title: "INAUGURATION",      type: "Ceremony" },
     { time: "10:30 AM – 12:00 PM", title: "CLASSICAL GROUP",   type: "Cultural" },
     { time: "10:30 AM – 01:00 PM", title: "REELS MAKING",      type: "Fun" },
@@ -14,7 +14,7 @@ const timelineData = {
     { time: "12:00 PM – 01:00 PM", title: "WESTERN SOLO",      type: "Cultural" },
     { time: "12:00 PM – 03:00 PM", title: "BGMI",              type: "Gaming" },
   ],
-  "MAY 13": [
+  "MAY 15": [
     { time: "09:30 AM – 10:30 AM", title: "WESTERN GROUP",       type: "Cultural" },
     { time: "11:00 AM – 12:30 PM", title: "BATTLE OF BANDS",     type: "Cultural" },
     { time: "01:00 PM – 03:00 PM", title: "PRIZE DISTRIBUTION",  type: "Ceremony" },

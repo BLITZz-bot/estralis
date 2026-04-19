@@ -12,7 +12,7 @@ export default function HeroContent() {
         </h1>
 
         <p className="text-xl md:text-3xl text-purple-200 mb-2">
-          MAY 12 & 13
+          MAY 14 & 15
         </p>
 
         <p className="text-xl md:text-2xl text-purple-200 mb-4">
