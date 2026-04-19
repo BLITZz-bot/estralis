@@ -1709,21 +1709,29 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     {scannerActive && (
                                         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative overflow-hidden rounded-3xl border-2 border-emerald-500/30 bg-black aspect-square max-w-sm mx-auto shadow-[0_0_50px_rgba(16,185,129,0.1)]">
                                             <Scanner 
-                                                onScan={handleScanResult}
+                                                onScan={(codes) => {
+                                                    addToast("🔍 Scan detected! Processing...", "info");
+                                                    handleScanResult(codes);
+                                                }}
                                                 onError={(err) => {
                                                     console.error("Scanner Error:", err);
-                                                    addToast("Scanner Error. Check camera permissions.", "error");
+                                                    addToast(`❌ Scanner Error: ${err?.message || "Check permissions"}`, "error");
                                                 }}
-                                                constraints={{ facingMode: "environment" }}
+                                                constraints={{ 
+                                                    facingMode: "environment",
+                                                    video: { width: { ideal: 1280 }, height: { ideal: 720 } }
+                                                }}
                                                 styles={{ container: { width: '100%', height: '100%' } }}
                                                 components={{
                                                     audio: false,
                                                     torch: true
                                                 }}
+                                                allowMultiple={true}
+                                                scanDelay={2000}
                                             />
                                             <button 
                                                 onClick={() => setScannerActive(false)}
-                                                className="absolute top-4 right-4 z-50 p-2 bg-black/50 text-white rounded-full hover:bg-black transition"
+                                                className="absolute top-4 right-4 z-[100] p-2 bg-black/80 text-white rounded-full hover:bg-black transition border border-white/20"
                                             >
                                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                             </button>
