@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { jsPDF } from "jspdf"
 import JsBarcode from "jsbarcode"
+import QRCode from 'qrcode'
 
 // Searchable College Dropdown Component
 function CollegeSelect({ value, onChange, colleges, placeholder, inputClassName }) {
@@ -139,6 +140,7 @@ export default function RegistrationForm({ event, onClose }) {
     const receiptRef = useRef(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isDownloading, setIsDownloading] = useState(false)
+    const [registrationId, setRegistrationId] = useState("")
     const [utrError, setUtrError] = useState("")
     const [teamMembers, setTeamMembers] = useState([])
     const [passType, setPassType] = useState('standard') // 'standard' or 'combo'
@@ -342,6 +344,7 @@ export default function RegistrationForm({ event, onClose }) {
 
             const result = await registerRes.json();
             if (result.success) {
+                setRegistrationId(result.registrationId || result.id || "");
                 setStep(3);
             } else {
                 alert("Registration failed: " + result.message);
@@ -355,10 +358,21 @@ export default function RegistrationForm({ event, onClose }) {
         }
     }
 
-    const handleDownloadPDF = () => {
+    const handleDownloadPDF = async () => {
         setIsDownloading(true);
         try {
             const amount = isDJNight ? totalDJFee : ((passType === 'combo' && comboPassDetails) ? comboPassDetails : standardFeeString);
+
+            // Generate QR Code
+            const verifyUrl = `${window.location.origin}/verify/${registrationId}`;
+            const qrDataUrl = await QRCode.toDataURL(registrationId || "PENDING", {
+                margin: 2,
+                width: 200,
+                color: {
+                    dark: '#2dd4bf', // Teal 400
+                    light: '#020617' // Space BG
+                }
+            });
 
             const doc = new jsPDF({
                 orientation: 'portrait',
@@ -561,6 +575,15 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setFontSize(16);
             doc.setTextColor(255, 255, 255);
             doc.text(`Rs. ${amount.toString().replace(/₹/g, '')}`, 20, 240);
+
+            // 6. QR CODE (Bottom Right)
+            doc.setDrawColor(...colors.teal);
+            doc.setLineWidth(0.5);
+            doc.roundedRect(138, 218, 25, 25, 3, 3, 'D');
+            doc.addImage(qrDataUrl, 'PNG', 139, 219, 23, 23);
+            doc.setFontSize(5);
+            doc.setTextColor(...colors.dim);
+            doc.text("SCAN TO VERIFY", 150.5, 246, { align: "center" });
 
             if (teamMembers && teamMembers.length > 0) {
                 doc.addPage("portrait", "mm", [180, 260]);

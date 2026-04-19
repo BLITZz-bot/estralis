@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import jsPDF from "jspdf";
 import { eventsDay1, eventsDay2 } from "./Schedule";
 import { DJ_EVENT_DATA } from "./SpecialGuest";
+import QRCode from 'qrcode'
 
 export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDownload }) {
     const [searchEmail, setSearchEmail] = useState("");
@@ -88,7 +89,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
         }
     }, [isOpen, initialEmail]);
 
-    const handleDownloadReceipt = (registration) => {
+    const handleDownloadReceipt = async (registration) => {
         // Find the full event details to rebuild the receipt
         const event = allEvents.find(e => e.title === registration.event_title);
 
@@ -98,6 +99,16 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
         }
 
         try {
+            // Generate QR Code
+            const qrDataUrl = await QRCode.toDataURL(registration.id || registration._id || "VERIFIED", {
+                margin: 2,
+                width: 200,
+                color: {
+                    dark: '#2dd4bf', // Teal 400
+                    light: '#020617' // Space BG
+                }
+            });
+
             const safeName = registration.full_name ? registration.full_name.replace(/\s+/g, '_') : 'Attendee';
             const doc = new jsPDF({
                 orientation: 'portrait',
@@ -288,17 +299,17 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             currentY += 6;
             doc.text(`Phone: ${registration.phone}`, 20, currentY);
 
-            // FEE SECTION (Bottom Left)
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(8);
-            doc.setTextColor(...colors.teal);
-            doc.text(registration.pass_type === 'Combo Pass' ? "COMBO_PASS_FEE" : "BASE_FEE", 20, 232);
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(16);
-            doc.setTextColor(255, 255, 255);
             let feeText = registration.amount_paid ? registration.amount_paid.toString().replace(/₹/g, "Rs. ") : "Free";
             doc.text(feeText, 20, 240);
+
+            // 6. QR CODE (Bottom Right)
+            doc.setDrawColor(...colors.teal);
+            doc.setLineWidth(0.5);
+            doc.roundedRect(138, 218, 25, 25, 3, 3, 'D');
+            doc.addImage(qrDataUrl, 'PNG', 139, 219, 23, 23);
+            doc.setFontSize(5);
+            doc.setTextColor(...colors.dim);
+            doc.text("SCAN TO VERIFY", 150.5, 246, { align: "center" });
 
             // PAGE 2 (TEAM MEMBERS)
             const teamMembers = registration.team_members || [];

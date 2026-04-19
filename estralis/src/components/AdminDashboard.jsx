@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { eventsDay1, eventsDay2 } from './Schedule';
+import { Html5QrcodeScanner } from "html5-qrcode";
+import QRCode from 'qrcode'
 
 export default function AdminDashboard({ isOpen, onClose }) {
     const [password, setPassword] = useState("");
@@ -21,6 +23,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
     const [loginError, setLoginError] = useState("");
     const [registrations, setRegistrations] = useState([]);
+    const [scannedReg, setScannedReg] = useState(null);
+    const [scannerActive, setScannerActive] = useState(false);
+    const [isScanning, setIsScanning] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
     const [filterEvent, setFilterEvent] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
@@ -648,6 +653,59 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
     // Polling is already handled by the auto-refresh timer below
 
+            setIsUpdating(false);
+        }
+    };
+
+    // Scanner Logic
+    useEffect(() => {
+        let scanner = null;
+        if (activeTab === "scanner" && scannerActive) {
+            scanner = new Html5QrcodeScanner("reader", { 
+                fps: 10, 
+                qrbox: { width: 250, height: 250 },
+                aspectRatio: 1.0
+            });
+
+            const onScanSuccess = (decodedText) => {
+                // Find the registration by ID (decodedText)
+                const found = registrations.find(r => r.id === decodedText || r._id === decodedText);
+                if (found) {
+                    setScannedReg(found);
+                    setScannerActive(false);
+                    scanner.clear();
+                } else {
+                    addToast("Unrecognized QR Code. Please check registration ID.", "error");
+                }
+            };
+
+            scanner.render(onScanSuccess, (err) => {
+                // Ignore errors as they fire continuously when no QR is in view
+            });
+        }
+
+        return () => {
+            if (scanner) {
+                scanner.clear().catch(err => console.error("Failed to clear scanner", err));
+            }
+        };
+    }, [activeTab, scannerActive, registrations]);
+
+    const handleCheckIn = async (reg) => {
+        setIsScanning(true);
+        try {
+            await updateRegistrationStatus(reg.id, 'visited');
+            // Optimistic update
+            setRegistrations(prev => prev.map(r => r.id === reg.id ? { ...r, status: 'visited' } : r));
+            addToast(`✅ ${reg.full_name} checked in successfully!`, "success");
+            setScannedReg(null);
+        } catch (err) {
+            addToast("Failed to check in.", "error");
+        } finally {
+            setIsScanning(false);
+        }
+    };
+
     // Auto-refresh timer
     useEffect(() => {
         let timer;
@@ -894,7 +952,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     { id: "emails", label: "Automated Reports", color: "text-amber-400", border: "border-amber-500" },
                                     { id: "themeReveal", label: "Theme Config", color: "text-blue-400", border: "border-blue-500" },
                                     { id: "eventMailer", label: "Manual Emailer", color: "text-emerald-400", border: "border-emerald-500" },
-                                    { id: "colleges", label: "Colleges", color: "text-purple-400", border: "border-purple-500" }
+                                    { id: "colleges", label: "Colleges", color: "text-purple-400", border: "border-purple-500" },
+                                    { id: "scanner", label: "Scan Center", color: "text-emerald-400", border: "border-emerald-500" }
                                 ].map((tab) => (
                                     <button
                                         key={tab.id}
@@ -1629,6 +1688,141 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         </div>
                                     </div>
                                 )}
+                            </div>
+                        ) : activeTab === "scanner" ? (
+                            <div className="flex-1 overflow-auto rounded-3xl border border-white/10 bg-[#0f111a] flex flex-col p-4 sm:p-8">
+                                <div className="max-w-4xl mx-auto w-full space-y-8">
+                                    {/* Scanner Control Header */}
+                                    <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-emerald-500/5 border border-emerald-500/10 p-6 rounded-3xl">
+                                        <div className="text-center md:text-left">
+                                            <div className="flex items-center gap-3 justify-center md:justify-start mb-1">
+                                                <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-500">
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v-3m0 0h-3m3 0h3m-9 3H5m0 0v3m0-3h3m0 9h-3m0 0v-3m0 3h3m11-3v3m0 0h-3m3 0h3"></path></svg>
+                                                </div>
+                                                <h3 className="text-xl font-bold text-white uppercase tracking-wider">Security Scan Station</h3>
+                                            </div>
+                                            <p className="text-gray-400 text-sm">Verify student identity and grant venue access.</p>
+                                        </div>
+                                        {!scannerActive && !scannedReg && (
+                                            <button 
+                                                onClick={() => setScannerActive(true)}
+                                                className="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-3 active:scale-95"
+                                            >
+                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                                OPEN CAMERA
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {/* Reader Viewport */}
+                                    {scannerActive && (
+                                        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative overflow-hidden rounded-3xl border-2 border-emerald-500/30 bg-black aspect-square max-w-sm mx-auto shadow-[0_0_50px_rgba(16,185,129,0.1)]">
+                                            <div id="reader" className="w-full h-full"></div>
+                                            <button 
+                                                onClick={() => setScannerActive(false)}
+                                                className="absolute top-4 right-4 z-10 p-2 bg-black/50 text-white rounded-full hover:bg-black transition"
+                                            >
+                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                            </button>
+                                            <div className="absolute inset-0 pointer-events-none border-[20px] border-transparent border-t-emerald-500/20 animate-pulse"></div>
+                                        </motion.div>
+                                    )}
+
+                                    {/* Result / Decision View */}
+                                    {scannedReg && (
+                                        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="astral-glass border-teal-500/20 p-8 max-w-md mx-auto text-center relative overflow-hidden">
+                                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
+                                            <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-400">
+                                                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            </div>
+                                            <h4 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">{scannedReg.full_name}</h4>
+                                            <p className="text-teal-400/60 font-mono text-xs uppercase tracking-[0.2em] mb-6">{scannedReg.event_title}</p>
+                                            
+                                            <div className="space-y-4 mb-8">
+                                                <div className="flex justify-between text-[10px] px-4">
+                                                    <span className="text-gray-500 font-bold uppercase tracking-widest">PAYMENT</span>
+                                                    <span className="text-emerald-400 font-black">VERIFIED</span>
+                                                </div>
+                                                <div className="flex justify-between text-[10px] px-4">
+                                                    <span className="text-gray-500 font-bold uppercase tracking-widest">COLLEGE</span>
+                                                    <span className="text-white font-black truncate max-w-[150px]">{scannedReg.college}</span>
+                                                </div>
+                                                <div className="flex justify-between text-[10px] px-4">
+                                                    <span className="text-gray-500 font-bold uppercase tracking-widest">TEAM</span>
+                                                    <span className="text-white font-black">{scannedReg.team_name || "INDIVIDUAL"}</span>
+                                                </div>
+                                            </div>
+
+                                            {scannedReg.status === 'visited' ? (
+                                                <div className="py-4 bg-amber-500/20 border border-amber-500/30 rounded-2xl text-amber-400 font-black text-sm uppercase tracking-widest animate-pulse">
+                                                    ⚠️ ALREADY CHECKED IN
+                                                </div>
+                                            ) : (
+                                                <button 
+                                                    onClick={() => handleCheckIn(scannedReg)}
+                                                    disabled={isScanning}
+                                                    className="w-full py-5 bg-emerald-500 text-black font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-white transition-all shadow-[0_0_30px_rgba(45,212,191,0.2)] disabled:opacity-50 active:scale-95"
+                                                >
+                                                    {isScanning ? "DOUBE-CHECKING..." : "GRANT ENTRY"}
+                                                </button>
+                                            )}
+                                            
+                                            <button 
+                                                onClick={() => setScannedReg(null)}
+                                                className="mt-6 text-gray-500 hover:text-white text-[10px] font-bold uppercase tracking-widest transition"
+                                            >
+                                                Back to Scanner
+                                            </button>
+                                        </motion.div>
+                                    )}
+
+                                    {/* History View (Scanned Registrations) */}
+                                    <div className="space-y-4 pt-10">
+                                        <div className="flex items-center justify-between mb-6">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                <h3 className="text-[10px] font-black tracking-[0.3em] text-gray-500 uppercase">Live Entry Signals ({registrations.filter(r => r.status === 'visited').length})</h3>
+                                            </div>
+                                        </div>
+
+                                        <div className="astral-glass border-emerald-500/10 overflow-hidden bg-white/[0.02]">
+                                            <div className="overflow-x-auto">
+                                                <table className="w-full text-left">
+                                                    <thead className="bg-emerald-500/5">
+                                                        <tr className="border-b border-emerald-500/10">
+                                                            <th className="px-6 py-5 text-[9px] font-black text-emerald-500/50 uppercase tracking-[0.3em]">Identity</th>
+                                                            <th className="px-6 py-5 text-[9px] font-black text-emerald-500/50 uppercase tracking-[0.3em]">Assigned Sector</th>
+                                                            <th className="px-6 py-5 text-[9px] font-black text-emerald-500/50 uppercase tracking-[0.3em] text-right">Verification Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-white/5">
+                                                        {registrations.filter(r => r.status === 'visited').length === 0 ? (
+                                                            <tr>
+                                                                <td colSpan="3" className="px-6 py-16 text-center text-gray-600 font-mono text-xs uppercase tracking-widest">Seeking entry signals... Scan a pass to begin.</td>
+                                                            </tr>
+                                                        ) : (
+                                                            registrations.filter(r => r.status === 'visited').map(r => (
+                                                                <tr key={r.id} className="hover:bg-emerald-500/5 transition-colors group">
+                                                                    <td className="px-6 py-5">
+                                                                        <div className="text-[11px] font-black text-white uppercase tracking-tight group-hover:text-emerald-400 transition-colors">{r.full_name}</div>
+                                                                        <div className="text-[9px] text-gray-500 mt-1 uppercase font-bold">{r.college}</div>
+                                                                    </td>
+                                                                    <td className="px-6 py-5">
+                                                                        <div className="text-[10px] font-black text-emerald-500/70 uppercase tracking-widest">{r.event_title}</div>
+                                                                        <div className="text-[8px] text-gray-500 mt-0.5 font-bold uppercase tracking-tighter">{r.team_name || "INDIVIDUAL"}</div>
+                                                                    </td>
+                                                                    <td className="px-6 py-5 text-right">
+                                                                        <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-[9px] font-black rounded-lg border border-emerald-500/30 uppercase tracking-widest">GRANTED</span>
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        )}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         ) : null}
                     </motion.div>
