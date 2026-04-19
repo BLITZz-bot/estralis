@@ -666,7 +666,10 @@ export default function AdminDashboard({ isOpen, onClose }) {
             };
 
             const onScanSuccess = (decodedText) => {
-                const found = registrations.find(r => r.id === decodedText || r._id === decodedText);
+                const found = registrations.find(r => 
+                    String(r.id) === String(decodedText) || 
+                    String(r._id) === String(decodedText)
+                );
                 if (found) {
                     setScannedReg(found);
                     setScannerActive(false);
