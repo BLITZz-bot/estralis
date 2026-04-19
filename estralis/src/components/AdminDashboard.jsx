@@ -745,8 +745,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
     // Handle filtering
     useEffect(() => {
-        // Start with all registrations (Master List)
-        let filtered = [...registrations];
+        // Show only 'verified' (successful) and 'visited' (checked-in) participants
+        // This ensures they don't 'move' out of the list after scanning.
+        let filtered = registrations.filter(r => r.status === 'verified' || r.status === 'visited');
 
         // Filter by Event
         if (filterEvent !== "All") {
