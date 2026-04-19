@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { eventsDay1, eventsDay2 } from './Schedule';
-import { Scanner } from "@yudiel/react-qr-scanner";
+import { Html5Qrcode } from "html5-qrcode";
 
 
 export default function AdminDashboard({ isOpen, onClose }) {
@@ -651,36 +651,58 @@ export default function AdminDashboard({ isOpen, onClose }) {
         }
     }, [isOpen]);
 
-    // Robust Scan Success Logic
-    const handleScanResult = (detectedCodes) => {
-        if (!detectedCodes || detectedCodes.length === 0) return;
+    // Scanner Logic (Stable Recovery Engine)
+    useEffect(() => {
+        let scanner = null;
+        if (activeTab === "scanner" && scannerActive) {
+            scanner = new Html5Qrcode("reader");
+            const config = { 
+                fps: 10, 
+                qrbox: { width: 250, height: 250 },
+                aspectRatio: 1.0
+            };
 
-        const decodedText = detectedCodes[0].rawValue;
-        const cleanText = String(decodedText).trim();
-        
-        // Search across all common ID fields to be ultra-robust (Enterprise Standard)
-        const found = registrations.find(r => 
-            String(r.id) === cleanText || 
-            String(r._id) === cleanText || 
-            String(r.ref_id) === cleanText || 
-            String(r.registration_id) === cleanText ||
-            String(r.registrationId) === cleanText
-        );
+            const onScanSuccess = (decodedText) => {
+                const cleanText = String(decodedText).trim();
+                
+                // Search across all common ID fields to be robust (Fixed Mapping)
+                const found = registrations.find(r => 
+                    String(r.id) === cleanText || 
+                    String(r._id) === cleanText || 
+                    String(r.ref_id) === cleanText || 
+                    String(r.registration_id) === cleanText ||
+                    String(r.registrationId) === cleanText
+                );
 
-        if (found) {
-            setScannedReg(found);
-            setScannerActive(false);
-        } else {
-            // Background refresh to catch latest DB writes
-            fetchRegistrations(); 
-            
-            if (cleanText === "PENDING") {
-                addToast(`⚠️ INVALID PASS: This pass was generated before the ID was confirmed. Ask the student to re-download it.`, "warning");
-            } else {
-                addToast(`❌ Unrecognized. Read: "${cleanText}" | IDs in DB: ${registrations.length}`, "error");
-            }
+                if (found) {
+                    setScannedReg(found);
+                    setScannerActive(false);
+                    scanner.stop().catch(err => console.error("Stop failed", err));
+                } else {
+                    // Fallback search / Auto-refresh
+                    fetchRegistrations(); 
+                    
+                    if (cleanText === "PENDING") {
+                        addToast(`⚠️ INVALID PASS: This pass was generated before the ID was confirmed. Ask the student to re-download it.`, "warning");
+                    } else {
+                        addToast(`❌ Unrecognized. Read: "${cleanText}" | IDs in DB: ${registrations.length}`, "error");
+                    }
+                }
+            };
+
+            scanner.start({ facingMode: "environment" }, config, onScanSuccess)
+                .catch(err => {
+                    console.error("Scanner start error", err);
+                    addToast("Failed to start camera. Please check permissions.", "error");
+                });
         }
-    };
+
+        return () => {
+            if (scanner && scanner.isScanning) {
+                scanner.stop().catch(err => console.error("Final clear failed", err));
+            }
+        };
+    }, [activeTab, scannerActive, registrations]);
 
     const handleCheckIn = async (reg) => {
         setIsScanning(true);
@@ -1705,37 +1727,17 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         )}
                                     </div>
 
-                                    {/* Reader Viewport - High Performance Native Scanner */}
+                                    {/* Reader Viewport - Stable Build-Safe Engine */}
                                     {scannerActive && (
                                         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative overflow-hidden rounded-3xl border-2 border-emerald-500/30 bg-black aspect-square max-w-sm mx-auto shadow-[0_0_50px_rgba(16,185,129,0.1)]">
-                                            <Scanner 
-                                                onScan={(codes) => {
-                                                    addToast("🔍 Scan detected! Processing...", "info");
-                                                    handleScanResult(codes);
-                                                }}
-                                                onError={(err) => {
-                                                    console.error("Scanner Error:", err);
-                                                    addToast(`❌ Scanner Error: ${err?.message || "Check permissions"}`, "error");
-                                                }}
-                                                constraints={{ 
-                                                    facingMode: "environment",
-                                                    video: { width: { ideal: 1280 }, height: { ideal: 720 } }
-                                                }}
-                                                styles={{ container: { width: '100%', height: '100%' } }}
-                                                components={{
-                                                    audio: false,
-                                                    torch: true
-                                                }}
-                                                allowMultiple={true}
-                                                scanDelay={2000}
-                                            />
+                                            <div id="reader" className="w-full h-full"></div>
                                             <button 
                                                 onClick={() => setScannerActive(false)}
-                                                className="absolute top-4 right-4 z-[100] p-2 bg-black/80 text-white rounded-full hover:bg-black transition border border-white/20"
+                                                className="absolute top-4 right-4 z-50 p-2 bg-black/50 text-white rounded-full hover:bg-black transition"
                                             >
                                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                             </button>
-                                            <div className="absolute inset-0 pointer-events-none border-[20px] border-transparent border-t-emerald-500/20 animate-pulse z-40"></div>
+                                            <div className="absolute inset-0 pointer-events-none border-[20px] border-transparent border-t-emerald-500/20 animate-pulse"></div>
                                         </motion.div>
                                     )}
 
