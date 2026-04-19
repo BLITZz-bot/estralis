@@ -23,7 +23,6 @@ export default function AdminDashboard({ isOpen, onClose }) {
     const [registrations, setRegistrations] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [filterEvent, setFilterEvent] = useState("All");
-    const [statusFilter, setStatusFilter] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(false);
     const [fetchError, setFetchError] = useState("");
@@ -47,10 +46,17 @@ export default function AdminDashboard({ isOpen, onClose }) {
     // Secondary Authentication states
     const [isManageAuth, setIsManageAuth] = useState(false);
     const [isEmailAuth, setIsEmailAuth] = useState(false);
+    const [isCollegesAuth, setIsCollegesAuth] = useState(false);
     const [managePassInput, setManagePassInput] = useState("");
     const [emailPassInput, setEmailPassInput] = useState("");
+    const [collegesPassInput, setCollegesPassInput] = useState("");
     const [manageAuthErr, setManageAuthErr] = useState("");
     const [emailAuthErr, setEmailAuthErr] = useState("");
+    const [collegesAuthErr, setCollegesAuthErr] = useState("");
+
+    const [collegesList, setCollegesList] = useState([]);
+    const [newCollegeName, setNewCollegeName] = useState("");
+    const [isAddingCollege, setIsAddingCollege] = useState(false);
 
     const [individualResending, setIndividualResending] = useState({}); // Tracking individual resends
     const [resending, setResending] = useState(false);
@@ -146,6 +152,77 @@ export default function AdminDashboard({ isOpen, onClose }) {
         } else {
             setEmailAuthErr("Incorrect Password");
         }
+    };
+
+    const handleCollegesAuth = (e) => {
+        e.preventDefault();
+        if (collegesPassInput === "bharatha2111") {
+            setIsCollegesAuth(true);
+            setCollegesAuthErr("");
+            fetchColleges(); // Load initial list when unlocked
+        } else {
+            setCollegesAuthErr("Incorrect Password");
+        }
+    };
+
+    const fetchColleges = async () => {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/colleges`);
+            const data = await res.json();
+            if (data.success) setCollegesList(data.data);
+        } catch (err) {
+            addToast("Failed to fetch colleges", "error");
+        }
+    };
+
+    const addCollege = async (e) => {
+        e.preventDefault();
+        if (!newCollegeName.trim()) return;
+        setIsAddingCollege(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/colleges`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
+                body: JSON.stringify({ name: newCollegeName })
+            });
+            const data = await res.json();
+            if (data.success) {
+                addToast("✅ College Added", "success");
+                setNewCollegeName("");
+                fetchColleges();
+            } else {
+                addToast(`❌ ${data.message}`, "error");
+            }
+        } catch (err) {
+            addToast("❌ Server Error", "error");
+        } finally {
+            setIsAddingCollege(false);
+        }
+    };
+
+    const removeCollege = async (id, name) => {
+        handleActionConfirm(
+            "Remove College",
+            `Are you sure you want to remove ${name} from the allowed list?`,
+            async () => {
+                try {
+                    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/colleges/${id}`, {
+                        method: 'DELETE',
+                        headers: { 'x-admin-password': password }
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        addToast("🗑 College Removed", "success");
+                        fetchColleges();
+                    } else {
+                        addToast(`❌ ${data.message}`, "error");
+                    }
+                } catch (err) {
+                    addToast("❌ Server Error", "error");
+                }
+            },
+            "primary"
+        );
     };
 
     const resendIndividualEmail = async (reg) => {
@@ -544,9 +621,11 @@ export default function AdminDashboard({ isOpen, onClose }) {
             setIsAuthenticated(false);
             setIsManageAuth(false);
             setIsEmailAuth(false);
+            setIsCollegesAuth(false);
             setPassword("");
             setManagePassInput("");
             setEmailPassInput("");
+            setCollegesPassInput("");
             setLoginError("");
         }
     }, [isOpen]);
@@ -574,7 +653,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
     // Handle filtering
     useEffect(() => {
-        let filtered = registrations;
+        // Apply hard filter for 'verified' status only (as per user instruction)
+        let filtered = registrations.filter(r => r.status === 'verified');
 
         // Filter by Event
         if (filterEvent !== "All") {
@@ -735,7 +815,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                             <div>
                                 <label className="text-teal-400/60 text-[10px] font-black uppercase tracking-widest block mb-2">Entry Key</label>
                                 <input
-                                    type="password"
+                                    type="password" autoComplete="new-password"
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -800,7 +880,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     { id: "manage", label: "Database", color: "text-rose-400", border: "border-rose-500" },
                                     { id: "emails", label: "Automated Reports", color: "text-amber-400", border: "border-amber-500" },
                                     { id: "themeReveal", label: "Theme Config", color: "text-blue-400", border: "border-blue-500" },
-                                    { id: "eventMailer", label: "Manual Emailer", color: "text-emerald-400", border: "border-emerald-500" }
+                                    { id: "eventMailer", label: "Manual Emailer", color: "text-emerald-400", border: "border-emerald-500" },
+                                    { id: "colleges", label: "Colleges", color: "text-purple-400", border: "border-purple-500" }
                                 ].map((tab) => (
                                     <button
                                         key={tab.id}
@@ -1020,7 +1101,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         <p className="text-gray-400 text-sm mb-6">Secondary authentication required to modify registration records.</p>
                                         <form onSubmit={handleManageAuth} className="space-y-4">
                                             <input
-                                                type="password"
+                                                type="password" autoComplete="new-password"
                                                 autoFocus
                                                 value={managePassInput}
                                                 onChange={(e) => setManagePassInput(e.target.value)}
@@ -1073,7 +1154,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         <p className="text-gray-400 text-sm mb-6">Secondary authentication required for bulk communication actions.</p>
                                         <form onSubmit={handleEmailAuth} className="space-y-4">
                                             <input
-                                                type="password"
+                                                type="password" autoComplete="new-password"
                                                 autoFocus
                                                 value={emailPassInput}
                                                 onChange={(e) => setEmailPassInput(e.target.value)}
@@ -1170,7 +1251,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         <p className="text-gray-400 text-sm mb-6">Manage the cinematic theme reveal for event leaders.</p>
                                         <form onSubmit={handleThemeAuth} className="space-y-4">
                                             <input
-                                                type="password"
+                                                type="password" autoComplete="new-password"
                                                 autoFocus
                                                 value={themePassInput}
                                                 onChange={(e) => setThemePassInput(e.target.value)}
@@ -1287,7 +1368,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                             <p className="text-gray-400 text-sm mb-6">Secondary authentication required for custom mailing.</p>
                                             <form onSubmit={handleMailerAuth} className="space-y-4">
                                                 <input
-                                                    type="password"
+                                                    type="password" autoComplete="new-password"
                                                     autoFocus
                                                     value={mailerPassInput}
                                                     onChange={(e) => setMailerPassInput(e.target.value)}
@@ -1419,6 +1500,91 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     </div>
                                 )}
                             </div>
+                        ) : activeTab === "colleges" ? (
+                            <div className="flex-1 overflow-hidden rounded-3xl border border-teal-500/10 bg-[#0f111a] flex flex-col">
+                                {!isCollegesAuth ? (
+                                    <div className="flex-1 flex flex-col items-center justify-center p-4">
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="max-w-sm w-full p-8 bg-white/5 border border-white/10 rounded-3xl shadow-2xl text-center"
+                                        >
+                                            <div className="w-16 h-16 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4 text-purple-400">
+                                                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                            </div>
+                                            <h3 className="text-xl font-bold text-white mb-2">College List Editor</h3>
+                                            <p className="text-gray-400 text-sm mb-6">Secondary authentication required to modify allowed colleges list.</p>
+                                            <form onSubmit={handleCollegesAuth} className="space-y-4">
+                                                <input
+                                                    type="password" autoComplete="new-password"
+                                                    autoFocus
+                                                    value={collegesPassInput}
+                                                    onChange={(e) => setCollegesPassInput(e.target.value)}
+                                                    placeholder="Secondary Password"
+                                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition"
+                                                />
+                                                {collegesAuthErr && <p className="text-red-400 text-xs font-bold">{collegesAuthErr}</p>}
+                                                <button type="submit" className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition">
+                                                    Unlock Editor
+                                                </button>
+                                            </form>
+                                        </motion.div>
+                                    </div>
+                                ) : (
+                                    <div className="w-full h-full p-4 sm:p-8 flex flex-col space-y-6 overflow-hidden">
+                                        <div className="bg-purple-500/5 border border-purple-500/10 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shrink-0">
+                                            <div className="flex-1 text-center md:text-left">
+                                                <div className="flex items-center gap-3 justify-center md:justify-start mb-2">
+                                                    <div className="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400">
+                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                                    </div>
+                                                    <h3 className="text-2xl font-bold text-white uppercase tracking-wider">Permitted Colleges</h3>
+                                                </div>
+                                                <p className="text-gray-400 text-sm">Add or remove colleges that are permitted to register for Estralis events. The list is automatically sorted alphabetically.</p>
+                                            </div>
+                                            
+                                            <form onSubmit={addCollege} className="flex w-full md:w-auto items-center gap-3">
+                                                <input 
+                                                    type="text" 
+                                                    value={newCollegeName}
+                                                    onChange={e => setNewCollegeName(e.target.value)}
+                                                    placeholder="NEW COLLEGE NAME"
+                                                    className="w-full md:w-64 bg-black/60 border border-purple-500/30 rounded-xl px-4 py-3 text-white uppercase text-xs focus:outline-none focus:border-purple-500 transition-all placeholder:text-gray-600 placeholder:normal-case font-bold"
+                                                />
+                                                <button 
+                                                    type="submit"
+                                                    disabled={isAddingCollege || !newCollegeName.trim()}
+                                                    className="px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white rounded-xl font-bold transition shadow-lg shrink-0 text-xs tracking-widest uppercase flex items-center gap-2"
+                                                >
+                                                    {isAddingCollege ? 'ADDING...' : '+ ADD'}
+                                                </button>
+                                            </form>
+                                        </div>
+
+                                        <div className="flex-1 overflow-auto rounded-xl border border-white/5 bg-white/[0.02]">
+                                            <div className="p-4 grid gap-3">
+                                                {collegesList.map((c, i) => (
+                                                    <div key={c.id} className="bg-black/40 border border-white/5 rounded-xl p-4 flex items-center justify-between hover:border-purple-500/30 transition-colors group">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="text-purple-400/50 font-mono text-xs font-black min-w-[24px]">#{(i+1).toString().padStart(2, '0')}</div>
+                                                            <div className="text-white font-bold text-sm tracking-wide uppercase">{c.name}</div>
+                                                        </div>
+                                                        <button 
+                                                            onClick={() => removeCollege(c.id, c.name)}
+                                                            className="text-red-400/50 hover:text-red-400 text-[10px] uppercase font-black tracking-widest px-4 py-2 border border-red-500/0 hover:border-red-500/20 rounded-lg bg-red-500/0 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
+                                                        >
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                                {collegesList.length === 0 && (
+                                                    <div className="py-20 text-center text-gray-500 italic">No colleges listed. Add a college to begin.</div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         ) : null}
                     </motion.div>
                 )}
@@ -1443,7 +1609,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
                             {!clearConfirm && (
                                 <input
-                                    type="password"
+                                    type="password" autoComplete="new-password"
                                     value={clearPassword}
                                     onChange={(e) => setClearPassword(e.target.value)}
                                     placeholder="Admin Password"
@@ -1492,7 +1658,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
                             {!resendConfirm && (
                                 <input
-                                    type="password"
+                                    type="password" autoComplete="new-password"
                                     value={resendPassword}
                                     onChange={(e) => setResendPassword(e.target.value)}
                                     placeholder="Admin Password"
@@ -1595,7 +1761,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                 <p className="text-gray-500 text-xs mb-6">Enter the admin password to confirm.</p>
 
                                 <input
-                                    type="password"
+                                    type="password" autoComplete="new-password"
                                     value={mailerConfirmPassword}
                                     onChange={(e) => setMailerConfirmPassword(e.target.value)}
                                     placeholder="Admin Password"

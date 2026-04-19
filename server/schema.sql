@@ -40,3 +40,13 @@ CREATE TABLE IF NOT EXISTS system_config (
     value TEXT NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Table for admin-managed allowed colleges
+CREATE TABLE IF NOT EXISTS colleges (
+    id SERIAL PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Seed initial college
+INSERT INTO colleges (name) VALUES ('GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT') ON CONFLICT (name) DO NOTHING;

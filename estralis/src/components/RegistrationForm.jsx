@@ -3,6 +3,137 @@ import { motion, AnimatePresence } from "framer-motion"
 import { jsPDF } from "jspdf"
 import JsBarcode from "jsbarcode"
 
+// Searchable College Dropdown Component
+function CollegeSelect({ value, onChange, colleges, placeholder, inputClassName }) {
+    const [search, setSearch] = useState(value || "");
+    const [isOpen, setIsOpen] = useState(false);
+    const [highlighted, setHighlighted] = useState(-1);
+    const wrapperRef = useRef(null);
+    const listRef = useRef(null);
+
+    // Sync external value changes
+    useEffect(() => {
+        setSearch(value || "");
+    }, [value]);
+
+    // Close dropdown on outside click
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+                setIsOpen(false);
+                // If the current search text doesn't match a valid college, reset
+                if (!colleges.includes(search.toUpperCase())) {
+                    setSearch(value || "");
+                }
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [colleges, search, value]);
+
+    const filtered = colleges.filter(c =>
+        c.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const handleSelect = (college) => {
+        setSearch(college);
+        onChange(college);
+        setIsOpen(false);
+        setHighlighted(-1);
+    };
+
+    const handleKeyDown = (e) => {
+        if (!isOpen) return;
+        if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setHighlighted(prev => Math.min(prev + 1, filtered.length - 1));
+        } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setHighlighted(prev => Math.max(prev - 1, 0));
+        } else if (e.key === "Enter") {
+            e.preventDefault();
+            if (highlighted >= 0 && highlighted < filtered.length) {
+                handleSelect(filtered[highlighted]);
+            }
+        } else if (e.key === "Escape") {
+            setIsOpen(false);
+        }
+    };
+
+    // Scroll highlighted item into view
+    useEffect(() => {
+        if (listRef.current && highlighted >= 0) {
+            const items = listRef.current.children;
+            if (items[highlighted]) {
+                items[highlighted].scrollIntoView({ block: "nearest" });
+            }
+        }
+    }, [highlighted]);
+
+    const isValid = value && colleges.includes(value.toUpperCase());
+
+    return (
+        <div ref={wrapperRef} className="relative">
+            <input
+                type="text"
+                value={search}
+                onChange={(e) => {
+                    setSearch(e.target.value);
+                    onChange(""); // Clear selection when typing
+                    setIsOpen(true);
+                    setHighlighted(0);
+                }}
+                onFocus={() => {
+                    setIsOpen(true);
+                    setHighlighted(0);
+                }}
+                onKeyDown={handleKeyDown}
+                placeholder={placeholder || "Search College..."}
+                className={inputClassName}
+                autoComplete="off"
+            />
+            {/* Validation indicator */}
+            {search && (
+                <div className={`absolute right-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full ${isValid ? 'bg-emerald-400' : 'bg-red-400'} animate-pulse`} />
+            )}
+            {/* Dropdown List */}
+            <AnimatePresence>
+                {isOpen && search.length > 0 && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        transition={{ duration: 0.15 }}
+                        ref={listRef}
+                        className="absolute z-50 w-full mt-2 max-h-48 overflow-y-auto bg-[#0f172a] border border-teal-500/20 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] custom-scrollbar"
+                    >
+                        {filtered.length > 0 ? (
+                            filtered.map((college, i) => (
+                                <div
+                                    key={college}
+                                    onClick={() => handleSelect(college)}
+                                    className={`px-5 py-3 cursor-pointer text-sm font-bold transition-all ${
+                                        i === highlighted
+                                            ? 'bg-teal-500/20 text-teal-300'
+                                            : 'text-white/70 hover:bg-teal-500/10 hover:text-white'
+                                    }`}
+                                >
+                                    {college}
+                                </div>
+                            ))
+                        ) : (
+                            <div className="px-5 py-4 text-center">
+                                <p className="text-red-400 text-xs font-black uppercase tracking-widest">College Not Available</p>
+                                <p className="text-white/30 text-[10px] mt-1">Contact admin to add your college</p>
+                            </div>
+                        )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
+
 export default function RegistrationForm({ event, onClose }) {
     const [step, setStep] = useState(1)
     const receiptRef = useRef(null)
@@ -11,6 +142,7 @@ export default function RegistrationForm({ event, onClose }) {
     const [utrError, setUtrError] = useState("")
     const [teamMembers, setTeamMembers] = useState([])
     const [passType, setPassType] = useState('standard') // 'standard' or 'combo'
+    const [collegeList, setCollegeList] = useState([])
     const [formData, setFormData] = useState({
         fullName: "",
         email: "",
@@ -32,11 +164,37 @@ export default function RegistrationForm({ event, onClose }) {
     const maxTeamSize = event?.maxTeamSize || 1;
     const isTeamEvent = maxTeamSize > 1;
 
+    // DJ Night specific logic
+    const isDJNight = event?.title === "ARTIST PERFORMANCE AND DJ NIGHT";
+    const djPerPersonFee = 400;
+    const totalDJFee = isDJNight ? `₹${djPerPersonFee * (1 + teamMembers.length)}` : null;
+    const displayFee = isDJNight ? totalDJFee : standardFeeString;
+
+    // Fetch allowed colleges
+    useEffect(() => {
+        const fetchColleges = async () => {
+            try {
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/colleges`);
+                const data = await res.json();
+                if (data.success) {
+                    setCollegeList(data.data.map(c => c.name));
+                }
+            } catch (err) {
+                console.error("Failed to fetch colleges", err);
+            }
+        };
+        fetchColleges();
+    }, []);
+
+
     useEffect(() => {
         // Initialize with minimum required team members (excluding leader)
         if (event && minTeamSize > 1) {
             const initialCount = Math.max(0, minTeamSize - 1);
             setTeamMembers(Array.from({ length: initialCount }, () => ({ fullName: "", email: "", phone: "", college: "" })));
+        } else if (isDJNight) {
+            // DJ Night starts with 0 members - single person can register alone
+            setTeamMembers([]);
         } else {
             setTeamMembers([]);
         }
@@ -99,6 +257,11 @@ export default function RegistrationForm({ event, onClose }) {
             alert("INVALID PHONE: Phone number must be exactly 10 digits.");
             return;
         }
+        // College validation - must be from the allowed list
+        if (collegeList.length > 0 && !collegeList.includes(formData.college.toUpperCase())) {
+            alert("INVALID COLLEGE: Please select a valid college from the dropdown.");
+            return;
+        }
 
         // Teammate validation
         for (let i = 0; i < teamMembers.length; i++) {
@@ -108,15 +271,20 @@ export default function RegistrationForm({ event, onClose }) {
             // If it's a required member, or they filled something in, validate it
             if (!isOptional || m.fullName || m.email || m.phone) {
                 if (!m.fullName || !m.email || !m.phone) {
-                    alert(`SQUAD ERROR: Please complete details for Member 0${i + 2}`);
+                    alert(`${isDJNight ? 'FRIEND' : 'SQUAD'} ERROR: Please complete details for ${isDJNight ? 'Friend' : 'Member'} 0${i + 2}`);
                     return;
                 }
                 if (!validateEmail(m.email)) {
-                    alert(`SQUAD ERROR: Invalid email for Member 0${i + 2}`);
+                    alert(`${isDJNight ? 'FRIEND' : 'SQUAD'} ERROR: Invalid email for ${isDJNight ? 'Friend' : 'Member'} 0${i + 2}`);
                     return;
                 }
                 if (m.phone.length !== 10) {
-                    alert(`SQUAD ERROR: Phone must be 10 digits for Member 0${i + 2}`);
+                    alert(`${isDJNight ? 'FRIEND' : 'SQUAD'} ERROR: Phone must be 10 digits for ${isDJNight ? 'Friend' : 'Member'} 0${i + 2}`);
+                    return;
+                }
+                // College validation for team members
+                if (collegeList.length > 0 && m.college && !collegeList.includes(m.college.toUpperCase())) {
+                    alert(`${isDJNight ? 'FRIEND' : 'SQUAD'} ERROR: Invalid college for ${isDJNight ? 'Friend' : 'Member'} 0${i + 2}. Please select from the dropdown.`);
                     return;
                 }
             }
@@ -134,7 +302,7 @@ export default function RegistrationForm({ event, onClose }) {
         }
 
         setIsSubmitting(true);
-        const amount = (passType === 'combo' && comboPassDetails) ? comboPassDetails : standardFeeString;
+        const amount = isDJNight ? totalDJFee : ((passType === 'combo' && comboPassDetails) ? comboPassDetails : standardFeeString);
 
         try {
             // 1. Upload Screenshot first
@@ -188,7 +356,7 @@ export default function RegistrationForm({ event, onClose }) {
     const handleDownloadPDF = () => {
         setIsDownloading(true);
         try {
-            const amount = (passType === 'combo' && comboPassDetails) ? comboPassDetails : standardFeeString;
+            const amount = isDJNight ? totalDJFee : ((passType === 'combo' && comboPassDetails) ? comboPassDetails : standardFeeString);
 
             const doc = new jsPDF({
                 orientation: 'portrait',
@@ -498,26 +666,39 @@ export default function RegistrationForm({ event, onClose }) {
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">COLLEGE / INSTITUTION</label>
-                                        <input required type="text" name="college" value={formData.college} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="College Name" />
+                                        <CollegeSelect
+                                            value={formData.college}
+                                            onChange={(val) => setFormData(prev => ({ ...prev, college: val }))}
+                                            colleges={collegeList}
+                                            placeholder="Search College..."
+                                            inputClassName="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10"
+                                        />
                                     </div>
                                 </div>
                             </div>
 
                             {/* Team Section */}
-                            {isTeamEvent && (
+                            {(isTeamEvent || isDJNight) && (
                                 <div className="astral-glass p-8 md:p-12 space-y-10">
                                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                         <h3 className="text-[11px] font-black tracking-widest text-white uppercase font-astral">
-                                            SQUAD DETAILS
+                                            {isDJNight ? 'ADD FRIENDS (OPTIONAL)' : 'SQUAD DETAILS'}
                                         </h3>
                                         {teamMembers.length + 1 < maxTeamSize && (
                                             <button type="button" onClick={addMember} className="px-6 py-2 rounded-xl border border-teal-500/30 text-teal-400 text-[10px] font-black uppercase tracking-widest hover:bg-teal-500 hover:text-black transition-all font-astral">
-                                                + ADD MEMBER
+                                                + ADD {isDJNight ? 'FRIEND' : 'MEMBER'}
                                             </button>
                                         )}
                                     </div>
 
-                                    {maxTeamSize > 1 && (
+                                    {isDJNight && (
+                                        <div className="flex items-center justify-between p-4 rounded-xl bg-teal-500/5 border border-teal-500/10">
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-teal-400/60 font-astral">PRICE PER PERSON</span>
+                                            <span className="text-lg font-black text-teal-400">₹{djPerPersonFee}</span>
+                                        </div>
+                                    )}
+
+                                    {!isDJNight && maxTeamSize > 1 && (
                                         <div className="space-y-2">
                                             <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">TEAM NAME</label>
                                             <input required type="text" name="teamName" value={formData.teamName} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="Enter Team Name" />
@@ -535,7 +716,7 @@ export default function RegistrationForm({ event, onClose }) {
                                                     className="p-6 md:p-8 rounded-3xl border border-white/5 bg-white/[0.03] space-y-6 relative"
                                                 >
                                                     <div className="flex justify-between items-center mb-2">
-                                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-white/40 font-astral">MEMBER 0{index + 2}</h4>
+                                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-white/40 font-astral">{isDJNight ? 'FRIEND' : 'MEMBER'} 0{index + 2}</h4>
                                                         {isRequired ? (
                                                             <span className="text-teal-500/50 text-[9px] font-black uppercase tracking-widest font-astral px-2 py-1 border border-teal-500/20 rounded-lg">
                                                                 REQUIRED
@@ -574,23 +755,36 @@ export default function RegistrationForm({ event, onClose }) {
                                                         </div>
                                                         <div className="space-y-1.5">
                                                             <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">COLLEGE</label>
-                                                            <input required type="text" value={member.college} onChange={(e) => {
-                                                                const newMembers = [...teamMembers];
-                                                                newMembers[index].college = e.target.value;
-                                                                setTeamMembers(newMembers);
-                                                            }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="College Name" />
+                                                            <CollegeSelect
+                                                                value={member.college}
+                                                                onChange={(val) => {
+                                                                    const newMembers = [...teamMembers];
+                                                                    newMembers[index].college = val;
+                                                                    setTeamMembers(newMembers);
+                                                                }}
+                                                                colleges={collegeList}
+                                                                placeholder="Search College..."
+                                                                inputClassName="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold"
+                                                            />
                                                         </div>
                                                     </div>
                                                 </motion.div>
                                             );
                                         })}
                                     </div>
+
+                                    {isDJNight && teamMembers.length > 0 && (
+                                        <div className="flex justify-between items-center p-4 rounded-xl bg-teal-500/10 border border-teal-500/20">
+                                            <span className="text-[11px] font-black uppercase tracking-widest text-white font-astral">TOTAL ({1 + teamMembers.length} × ₹{djPerPersonFee})</span>
+                                            <span className="text-2xl font-black text-teal-400 italic glow-teal">{totalDJFee}</span>
+                                        </div>
+                                    )}
                                 </div>
                             )}
 
                             <div className="flex flex-col items-center gap-6 py-6">
                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center">
-                                    Any issue with registration? Contact Bharath<a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">7975871167</a>
+                                    Any issue with registration? Contact Bharath <a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">7975871167</a>
                                 </p>
                                 <button type="submit" className="w-full max-w-md py-6 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)] transition-all flex items-center justify-center gap-3 font-astral">
                                     CONTINUE TO PAYMENT <span className="text-lg">→</span>
@@ -658,7 +852,7 @@ export default function RegistrationForm({ event, onClose }) {
 
                                     <div className="flex justify-between items-center pt-8 border-t border-white/5 mt-4">
                                         <span className="text-[12px] font-black text-white uppercase tracking-widest font-astral">TOTAL FEE</span>
-                                        <span className="text-4xl md:text-5xl font-black text-teal-400 italic glow-teal">{standardFeeString}</span>
+                                        <span className="text-4xl md:text-5xl font-black text-teal-400 italic glow-teal">{displayFee}</span>
                                     </div>
                                 </div>
 

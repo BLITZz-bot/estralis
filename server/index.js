@@ -328,17 +328,18 @@ app.post('/api/upload-screenshot', upload.single('screenshot'), (req, res) => {
 // Official Event Schedule for PDF Data
 const EVENT_SCHEDULE = {
     "CLASSICAL GROUP": { location: "Amphitheatre", time: "12:00 PM" },
-    "REELS MAKING": { location: "1st Floor", time: "10:00 AM" },
-    "TREASURE HUNT": { location: "410 Room, 4th Floor, GCEM Campus", time: "11:00 AM" },
-    "FACE PAINTING": { location: "Main Quadrangle", time: "11:00 AM" },
-    "FITNESS CHALLENGE": { location: "Room 405, 406 & 407, 4th Floor", time: "11:00 AM" },
+    "REELS MAKING": { location: "Online", time: "10:00 AM" },
+    "TREASURE HUNT": { location: "GCEM Campus", time: "11:00 AM" },
+    "FACE PAINTING": { location: "Amphitheatre", time: "11:00 AM" },
+    "FITNESS CHALLENGE": { location: "Open Amphitheatre", time: "11:00 AM" },
     "POSTER DESIGNING": { location: "LAB 5, Ground Floor", time: "11:00 AM" },
-    "BEAT BOXING": { location: "LAB 3, 4th Floor, GCEM Campus", time: "11:30 PM" },
+    "BEAT BOXING": { location: "Amphitheatre", time: "11:30 PM" },
     "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
-    "BGMI": { location: "1st Floor, GCEM Campus", time: "12:00 PM" },
-    "WESTERN GROUP": { location: "Main stage, GCEM Campus", time: "09:30 AM" },
-    "BATTLE OF BANDS": { location: "Main stage, GCEM Campus", time: "11:00 AM" },
-    "FASHION SHOW": { location: "Main stage, GCEM Campus", time: "01:00 PM" }
+    "BGMI": { location: "6th floor Seminar hall", time: "12:00 PM" },
+    "WESTERN GROUP": { location: "Amphitheatre", time: "09:30 AM" },
+    "BATTLE OF BANDS": { location: "Amphitheatre", time: "11:00 AM" },
+    "FASHION SHOW": { location: "Amphitheatre", time: "01:00 PM" },
+    "ARTIST PERFORMANCE AND DJ NIGHT": { location: "Main stage, GCEM Campus", time: "06:00 PM" }
 };
 
 /**
@@ -449,7 +450,7 @@ const generatePDFPass = (reg) => {
         const schedule = EVENT_SCHEDULE[reg.event_title.toUpperCase()] || { location: "TBA", time: "TBA" };
         doc.fillColor('rgba(30, 41, 59, 0.4)').roundedRect(20 * mmToPt, startY + 55 * mmToPt, 140 * mmToPt, 30 * mmToPt, 5 * mmToPt).fill();
         doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("LOCATION", 30 * mmToPt, startY + 65 * mmToPt);
-        doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("ARRIVAL_TIME", 100 * mmToPt, startY + 65 * mmToPt);
+        doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("TIME", 100 * mmToPt, startY + 65 * mmToPt);
         doc.fillColor('#ffffff').fontSize(10).font('Helvetica').text(schedule.location, 30 * mmToPt, startY + 72 * mmToPt, { width: 60 * mmToPt });
         doc.text(schedule.time, 100 * mmToPt, startY + 72 * mmToPt);
 
@@ -833,6 +834,74 @@ app.post('/api/admin/resend-all-confirmations', async (req, res) => {
     } catch (error) {
         console.error("Bulk Resend Error:", error);
         // Response may already be sent, so just log
+    }
+});
+
+// --- COLLEGES MANAGEMENT ENDPOINTS ---
+
+// Public: Get all allowed colleges (sorted A-Z)
+app.get('/api/colleges', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM colleges ORDER BY name ASC');
+        res.status(200).json({ success: true, data: result.rows });
+    } catch (error) {
+        console.error("Fetch Colleges Error:", error);
+        res.status(500).json({ success: false, message: 'Failed to fetch colleges' });
+    }
+});
+
+// Admin: Add a college (auto-uppercase)
+app.post('/api/admin/colleges', async (req, res) => {
+    try {
+        const password = req.headers['x-admin-password'];
+        if (password !== 'estralis@admin2026') {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+
+        const { name } = req.body;
+        if (!name || !name.trim()) {
+            return res.status(400).json({ success: false, message: 'College name is required' });
+        }
+
+        const upperName = name.trim().toUpperCase();
+
+        const result = await db.query(
+            'INSERT INTO colleges (name) VALUES ($1) ON CONFLICT (name) DO NOTHING RETURNING *',
+            [upperName]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(409).json({ success: false, message: 'College already exists' });
+        }
+
+        console.log(`🏫 College Added: ${upperName}`);
+        res.status(201).json({ success: true, data: result.rows[0], message: 'College added successfully' });
+    } catch (error) {
+        console.error("Add College Error:", error);
+        res.status(500).json({ success: false, message: 'Failed to add college' });
+    }
+});
+
+// Admin: Delete a college
+app.delete('/api/admin/colleges/:id', async (req, res) => {
+    try {
+        const password = req.headers['x-admin-password'];
+        if (password !== 'estralis@admin2026') {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+
+        const { id } = req.params;
+        const result = await db.query('DELETE FROM colleges WHERE id = $1 RETURNING *', [id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'College not found' });
+        }
+
+        console.log(`🗑 College Removed: ${result.rows[0].name}`);
+        res.status(200).json({ success: true, message: 'College removed successfully' });
+    } catch (error) {
+        console.error("Delete College Error:", error);
+        res.status(500).json({ success: false, message: 'Failed to remove college' });
     }
 });
 

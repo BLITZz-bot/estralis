@@ -133,3 +133,16 @@ a, button {
 ::-webkit-scrollbar-thumb:hover {
   background: #2dd4bf;
 }
+
+/* 📱 MOBILE PERFORMANCE OPTIMIZATION */
+@media (max-width: 767px) {
+  .astral-glass {
+    backdrop-filter: blur(10px) saturate(160%);
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
+  }
+
+  .astral-glass-bright {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
