@@ -2,22 +2,18 @@ import { motion, useScroll, useTransform } from "framer-motion"
 
 import Navbar from "./components/Navbar"
 import Schedule from "./components/Schedule"
-// import Countdown from "./components/Countdown"
 import Venue from "./components/Venue"
 import Footer from "./components/Footer"
 import ParticlesBg from "./components/ParticlesBg"
 import About from "./components/About"
-// import Clubs from "./components/Clubs"
 import ScrollProgress from "./components/ScrollProgress"
 import CursorGlow from "./components/CursorGlow"
 import Section from "./components/Section"
 import FestivalHero from "./components/FestivalHero"
 import HeroVideo from "./components/HeroVideo"
-// import GalleryPreview from "./components/GalleryPreview"
 import CountdownSciFi from "./components/CountdownSciFi"
 import StarBackground from "./components/StarBackground"
 import Timeline from "./components/Timeline"
-// import ScanLine from "./components/ScanLine"
 // import CornerLogos from "./components/Cornerlogos"
 import MyRegistrations from "./components/MyRegistrations"
 import AdminDashboard from "./components/AdminDashboard"
@@ -190,8 +186,6 @@ export default function App() {
           <About onOpenProtocol={() => setIsProtocolModalOpen(true)} />
         </Section>
 
-        {/* <GalleryPreview /> */}
-
         {/* ================= EVENTS ================= */}
         <Section id="events">
           <Schedule onModalToggle={setIsScheduleModalOpen} />
@@ -214,13 +208,6 @@ export default function App() {
         <Section id="team">
           <Team />
         </Section>
-
-
-
-        {/* ================= CLUBS ================= */}
-        {/* <Section id="clubs">
-          <Clubs />
-        </Section> */}
 
         {/* ================= FOOTER ================= */}
         <Footer />
