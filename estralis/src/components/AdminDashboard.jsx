@@ -666,16 +666,24 @@ export default function AdminDashboard({ isOpen, onClose }) {
             };
 
             const onScanSuccess = (decodedText) => {
+                const cleanText = String(decodedText).trim();
+                
+                // Search across all common ID fields to be robust
                 const found = registrations.find(r => 
-                    String(r.id) === String(decodedText) || 
-                    String(r._id) === String(decodedText)
+                    String(r.id) === cleanText || 
+                    String(r._id) === cleanText || 
+                    String(r.ref_id) === cleanText || 
+                    String(r.registration_id) === cleanText ||
+                    String(r.registrationId) === cleanText
                 );
+
                 if (found) {
                     setScannedReg(found);
                     setScannerActive(false);
                     scanner.stop().catch(err => console.error("Stop failed", err));
                 } else {
-                    addToast("Unrecognized QR Code.", "error");
+                    // DIAGNOSTIC TOAST: Show exactly what was read to help debug
+                    addToast(`❌ Unrecognized. Read: "${cleanText}" | db_size: ${registrations.length}`, "error");
                 }
             };
 
