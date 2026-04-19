@@ -895,18 +895,18 @@ export default function AdminDashboard({ isOpen, onClose }) {
                         {activeTab === "registrations" ? (
                             <>
                                 {/* COMPACT SUMMARY METRICS */}
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4 relative z-10 px-1">
-                                    <div className="astral-glass p-3 border-teal-500/10 flex items-center justify-between">
-                                        <p className="text-teal-400/40 text-[8px] font-black uppercase tracking-[0.2em]">Total Transmissions</p>
-                                        <h4 className="text-lg font-black text-white font-mono">{registrations.length}</h4>
+                                <div className="grid grid-cols-3 gap-2 mb-4 relative z-10 px-1">
+                                    <div className="astral-glass p-2 border-teal-500/10 flex flex-col items-center justify-center text-center">
+                                        <p className="text-teal-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">Total</p>
+                                        <h4 className="text-sm sm:text-lg font-black text-white font-mono">{registrations.length}</h4>
                                     </div>
-                                    <div className="astral-glass p-3 border-cyan-500/10 flex items-center justify-between">
-                                        <p className="text-cyan-400/40 text-[8px] font-black uppercase tracking-[0.2em]">Revenue Flow</p>
-                                        <h4 className="text-lg font-black text-white font-mono">₹{registrations.reduce((acc, reg) => acc + (parseFloat(reg.amount_paid?.toString().replace(/[^\d.]/g, '') || 0)), 0).toLocaleString('en-IN')}</h4>
+                                    <div className="astral-glass p-2 border-cyan-500/10 flex flex-col items-center justify-center text-center">
+                                        <p className="text-cyan-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">Revenue</p>
+                                        <h4 className="text-sm sm:text-lg font-black text-white font-mono">₹{registrations.reduce((acc, reg) => acc + (parseFloat(reg.amount_paid?.toString().replace(/[^\d.]/g, '') || 0)), 0).toLocaleString('en-IN')}</h4>
                                     </div>
-                                    <div className="astral-glass p-3 border-blue-500/10 flex items-center justify-between">
-                                        <p className="text-blue-400/40 text-[8px] font-black uppercase tracking-[0.2em]">Active Channels</p>
-                                        <h4 className="text-lg font-black text-white font-mono">{new Set(registrations.map(r => r.event_title)).size}</h4>
+                                    <div className="astral-glass p-2 border-blue-500/10 flex flex-col items-center justify-center text-center">
+                                        <p className="text-blue-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">Channels</p>
+                                        <h4 className="text-sm sm:text-lg font-black text-white font-mono">{new Set(registrations.map(r => r.event_title)).size}</h4>
                                     </div>
                                 </div>
 
