@@ -216,13 +216,14 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.setTextColor(...colors.teal);
             doc.text("VERIFIED", 145, startY + 9, { align: "center" });
 
-            // EVENT TITLE (Dynamic Font Size)
+            // EVENT TITLE (Dynamic Font Size & Spacing)
             const eventTitle = registration.event_title.toUpperCase();
             doc.setFont("helvetica", "bold");
-            const titleFontSize = eventTitle.length > 25 ? 20 : 32;
+            const isLongTitle = eventTitle.length > 25;
+            const titleFontSize = isLongTitle ? 18 : 32;
             doc.setFontSize(titleFontSize);
             doc.setTextColor(255, 255, 255);
-            doc.text(eventTitle, 85, startY + (eventTitle.length > 25 ? 33 : 35), { align: "center", charSpace: 1 });
+            doc.text(eventTitle, 85, startY + (isLongTitle ? 33 : 35), { align: "center", charSpace: isLongTitle ? 0.1 : 1 });
 
             // CATEGORY TAG (Refined to 86mm)
             doc.setFillColor(...colors.teal);

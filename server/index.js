@@ -436,11 +436,16 @@ const generatePDFPass = (reg) => {
         doc.strokeColor(colors.teal).lineWidth(0.5).roundedRect(130 * mmToPt, startY + 2 * mmToPt, 30 * mmToPt, 10 * mmToPt, 2 * mmToPt).stroke();
         doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("VERIFIED", (145 - 90) * mmToPt, startY + 9 * mmToPt, { width: width, align: 'center' });
 
-        // EVENT TITLE (Dynamic Font Size)
+        // EVENT TITLE (Dynamic Font Size & Spacing)
         const eventTitle = reg.event_title.toUpperCase();
-        const titleFontSize = eventTitle.length > 25 ? 20 : 32;
+        const isLongTitle = eventTitle.length > 25;
+        const titleFontSize = isLongTitle ? 18 : 32;
         doc.fillColor('#ffffff').fontSize(titleFontSize).font('Helvetica-Bold')
-            .text(eventTitle, (89 - 90) * mmToPt, startY + (eventTitle.length > 25 ? 24 : 26) * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
+            .text(eventTitle, (89 - 90) * mmToPt, startY + (isLongTitle ? 24 : 26) * mmToPt, { 
+                align: 'center', 
+                width: width, 
+                characterSpacing: isLongTitle ? 0.1 * mmToPt : 1 * mmToPt 
+            });
         // CATEGORY TAG (Synced with 86mm box / 86mm text - Pushed left as requested)
         const catTextContent = (reg.category || 'TECH').toUpperCase();
         doc.fontSize(8);
