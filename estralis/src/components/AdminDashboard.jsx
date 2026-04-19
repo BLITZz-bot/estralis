@@ -666,10 +666,12 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 const cleanText = String(decodedText).trim();
                 
                 // Search across all common ID fields to be robust (Fixed Mapping)
+                // WE SEARCH THE RAW 'registrations' STATE TO BYPASS DASHBOARD FILTERS
                 const found = registrations.find(r => 
                     String(r.id) === cleanText || 
                     String(r._id) === cleanText || 
                     String(r.ref_id) === cleanText || 
+                    String(r.mongo_id) === cleanText ||
                     String(r.registration_id) === cleanText ||
                     String(r.registrationId) === cleanText
                 );
