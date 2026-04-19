@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { eventsDay1, eventsDay2 } from './Schedule';
-import { Html5QrcodeScanner } from "html5-qrcode";
+import { Html5Qrcode } from "html5-qrcode";
 
 
 export default function AdminDashboard({ isOpen, onClose }) {
@@ -658,32 +658,34 @@ export default function AdminDashboard({ isOpen, onClose }) {
     useEffect(() => {
         let scanner = null;
         if (activeTab === "scanner" && scannerActive) {
-            scanner = new Html5QrcodeScanner("reader", { 
+            scanner = new Html5Qrcode("reader");
+            const config = { 
                 fps: 10, 
                 qrbox: { width: 250, height: 250 },
                 aspectRatio: 1.0
-            });
+            };
 
             const onScanSuccess = (decodedText) => {
-                // Find the registration by ID (decodedText)
                 const found = registrations.find(r => r.id === decodedText || r._id === decodedText);
                 if (found) {
                     setScannedReg(found);
                     setScannerActive(false);
-                    scanner.clear();
+                    scanner.stop().catch(err => console.error("Stop failed", err));
                 } else {
-                    addToast("Unrecognized QR Code. Please check registration ID.", "error");
+                    addToast("Unrecognized QR Code.", "error");
                 }
             };
 
-            scanner.render(onScanSuccess, (err) => {
-                // Ignore errors as they fire continuously when no QR is in view
-            });
+            scanner.start({ facingMode: "environment" }, config, onScanSuccess)
+                .catch(err => {
+                    console.error("Scanner start error", err);
+                    addToast("Failed to start camera. Please check permissions.", "error");
+                });
         }
 
         return () => {
-            if (scanner) {
-                scanner.clear().catch(err => console.error("Failed to clear scanner", err));
+            if (scanner && scanner.isScanning) {
+                scanner.stop().catch(err => console.error("Final clear failed", err));
             }
         };
     }, [activeTab, scannerActive, registrations]);
