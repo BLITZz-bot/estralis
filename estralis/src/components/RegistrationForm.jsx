@@ -376,7 +376,11 @@ export default function RegistrationForm({ event, onClose }) {
             const typeNumber = 0; // auto
             const errorCorrectionLevel = 'M';
             const qr = qrcode(typeNumber, errorCorrectionLevel);
-            qr.addData(registrationId || "PENDING");
+            
+            // FORCE A VALID STRING: Never allow an empty string to be encoded
+            const safeData = registrationId ? String(registrationId) : "MISSING_ID_ERROR";
+            qr.addData(safeData);
+            
             qr.make();
             const qrDataUrl = qr.createDataURL(4); // cellSize = 4
 

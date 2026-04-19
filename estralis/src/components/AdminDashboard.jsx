@@ -665,6 +665,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
             const onScanSuccess = (decodedText) => {
                 const cleanText = String(decodedText).trim();
                 
+                // IGNORE EMPTY READS
+                if (!cleanText) return;
+                
                 // Search across all common ID fields to be robust (Fixed Mapping)
                 // WE SEARCH THE RAW 'registrations' STATE TO BYPASS DASHBOARD FILTERS
                 const found = registrations.find(r => 
