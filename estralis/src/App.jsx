@@ -27,6 +27,7 @@ import ThemeRevealModal from "./components/ThemeRevealModal"
 import SectionBackground from "./components/SectionBackground"
 import ProtocolModal from "./components/ProtocolModal"
 import SpecialGuest from "./components/SpecialGuest"
+import Team from "./components/Team"
 import { useState, useEffect } from "react"
 
 export default function App() {
@@ -187,6 +188,10 @@ export default function App() {
         {/* ================= ABOUT ================= */}
         <Section id="about">
           <About onOpenProtocol={() => setIsProtocolModalOpen(true)} />
+        </Section>
+
+        <Section id="team">
+          <Team />
         </Section>
 
         {/* <GalleryPreview /> */}
