@@ -673,7 +673,12 @@ export default function AdminDashboard({ isOpen, onClose }) {
         } else {
             // Background refresh to catch latest DB writes
             fetchRegistrations(); 
-            addToast(`❌ Unrecognized. Read: "${cleanText}" | IDs in DB: ${registrations.length}`, "error");
+            
+            if (cleanText === "PENDING") {
+                addToast(`⚠️ INVALID PASS: This pass was generated before the ID was confirmed. Ask the student to re-download it.`, "warning");
+            } else {
+                addToast(`❌ Unrecognized. Read: "${cleanText}" | IDs in DB: ${registrations.length}`, "error");
+            }
         }
     };
 

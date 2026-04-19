@@ -344,10 +344,18 @@ export default function RegistrationForm({ event, onClose }) {
 
             const result = await registerRes.json();
             if (result.success) {
-                // Ensure we capture the ID from any possible field (registrationId, id, _id)
-                const finalId = result.registrationId || result.id || result._id || "";
-                setRegistrationId(finalId);
-                setStep(3);
+                // Ensure we capture the ID from ANY possible field to prevent PENDING codes
+                const finalId = result.registrationId || result.id || result._id || result.ref_id || result.registration_id || "";
+                
+                if (finalId) {
+                    setRegistrationId(finalId);
+                    setStep(3);
+                } else {
+                    console.error("No ID returned from server", result);
+                    addToast("System failed to assign a Unique ID. Re-fetching...", "warning");
+                    // We still move to step 3 but the button will be locked until the state fills
+                    setStep(3);
+                }
             } else {
                 alert("Registration failed: " + result.message);
             }
@@ -960,8 +968,12 @@ export default function RegistrationForm({ event, onClose }) {
                             </div>
 
                             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                                <button onClick={handleDownloadPDF} disabled={isDownloading} className="flex-1 max-w-sm px-8 py-5 bg-teal-500 text-black font-black text-[12px] uppercase tracking-widest rounded-2xl hover:bg-white hover:shadow-[0_0_30px_rgba(45,212,191,0.2)] transition-all font-astral">
-                                    {isDownloading ? "GENERATING..." : "DOWNLOAD PASS"}
+                                <button 
+                                    onClick={handleDownloadPDF} 
+                                    disabled={isDownloading || !registrationId} 
+                                    className={`flex-1 max-w-sm px-8 py-5 font-black text-[12px] uppercase tracking-widest rounded-2xl transition-all font-astral ${!registrationId ? 'bg-gray-800 text-gray-600 cursor-not-allowed' : 'bg-teal-500 text-black hover:bg-white hover:shadow-[0_0_30px_rgba(45,212,191,0.2)]'}`}
+                                >
+                                    {isDownloading ? "GENERATING..." : !registrationId ? "SYSTEM FINALIZING..." : "DOWNLOAD PASS"}
                                 </button>
                                 <button onClick={onClose} className="flex-1 max-w-sm px-8 py-5 bg-white/5 text-white/50 border border-white/10 rounded-2xl font-black text-[12px] uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all font-astral">
                                     CLOSE
