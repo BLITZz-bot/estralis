@@ -681,9 +681,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
                     setScannedReg(found);
                     setScannerActive(false);
                     scanner.stop().catch(err => console.error("Stop failed", err));
-                } else {
-                    // DIAGNOSTIC TOAST: Show exactly what was read to help debug
-                    addToast(`❌ Unrecognized. Read: "${cleanText}" | db_size: ${registrations.length}`, "error");
+                    // Fallback search in case of sync delay or field name variation
+                    fetchRegistrations(); // Background refresh
+                    addToast(`❌ Unrecognized. Read: "${cleanText}" | IDs in DB: ${registrations.length}`, "error");
                 }
             };
 

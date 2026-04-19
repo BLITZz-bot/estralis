@@ -344,7 +344,9 @@ export default function RegistrationForm({ event, onClose }) {
 
             const result = await registerRes.json();
             if (result.success) {
-                setRegistrationId(result.registrationId || result.id || "");
+                // Ensure we capture the ID from any possible field (registrationId, id, _id)
+                const finalId = result.registrationId || result.id || result._id || "";
+                setRegistrationId(finalId);
                 setStep(3);
             } else {
                 alert("Registration failed: " + result.message);
