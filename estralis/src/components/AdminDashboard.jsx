@@ -53,6 +53,10 @@ export default function AdminDashboard({ isOpen, onClose }) {
     const [manageAuthErr, setManageAuthErr] = useState("");
     const [emailAuthErr, setEmailAuthErr] = useState("");
     const [collegesAuthErr, setCollegesAuthErr] = useState("");
+    const [controlsAuthErr, setControlsAuthErr] = useState("");
+
+    const [isControlsAuth, setIsControlsAuth] = useState(false);
+    const [controlsPassInput, setControlsPassInput] = useState("");
 
     const [collegesList, setCollegesList] = useState([]);
     const [newCollegeName, setNewCollegeName] = useState("");
@@ -162,6 +166,16 @@ export default function AdminDashboard({ isOpen, onClose }) {
             fetchColleges(); // Load initial list when unlocked
         } else {
             setCollegesAuthErr("Incorrect Password");
+        }
+    };
+
+    const handleControlsAuth = (e) => {
+        e.preventDefault();
+        if (controlsPassInput === "bharatha2111") {
+            setIsControlsAuth(true);
+            setControlsAuthErr("");
+        } else {
+            setControlsAuthErr("Incorrect Password");
         }
     };
 
@@ -622,10 +636,12 @@ export default function AdminDashboard({ isOpen, onClose }) {
             setIsManageAuth(false);
             setIsEmailAuth(false);
             setIsCollegesAuth(false);
+            setIsControlsAuth(false);
             setPassword("");
             setManagePassInput("");
             setEmailPassInput("");
             setCollegesPassInput("");
+            setControlsPassInput("");
             setLoginError("");
         }
     }, [isOpen]);
@@ -1063,11 +1079,39 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                 </div>
                             </>
                         ) : activeTab === "controls" ? (
-                            <div className="flex-1 overflow-auto rounded-2xl border border-white/10 bg-black/20 p-6">
-                                <h3 className="text-xl font-bold text-white mb-6">Event Registerations Control</h3>
-                                <p className="text-gray-400 text-sm mb-8">Use this section to control the registration status of events.</p>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {[...eventsDay1, ...eventsDay2, { title: "ARTIST PERFORMANCE" }, { title: "DJ NIGHT" }].map(eventObj => {
+                            <div className="flex-1 overflow-auto rounded-3xl border border-white/10 bg-[#0f111a] flex flex-col items-center justify-center">
+                                {!isControlsAuth ? (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="max-w-sm w-full p-8 bg-white/5 border border-white/10 rounded-3xl shadow-2xl text-center"
+                                    >
+                                        <div className="w-16 h-16 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-4 text-cyan-400">
+                                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                        </div>
+                                        <h3 className="text-xl font-bold text-white mb-2">Event Controls Access</h3>
+                                        <p className="text-gray-400 text-sm mb-6">Secondary authentication required to toggle event registration status.</p>
+                                        <form onSubmit={handleControlsAuth} className="space-y-4">
+                                            <input
+                                                type="password" autoComplete="new-password"
+                                                autoFocus
+                                                value={controlsPassInput}
+                                                onChange={(e) => setControlsPassInput(e.target.value)}
+                                                placeholder="Secondary Password"
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition"
+                                            />
+                                            {controlsAuthErr && <p className="text-red-400 text-xs font-bold">{controlsAuthErr}</p>}
+                                            <button type="submit" className="w-full bg-cyan-600 text-white font-bold py-3 rounded-xl hover:bg-cyan-700 transition">
+                                                Unlock Controls
+                                            </button>
+                                        </form>
+                                    </motion.div>
+                                ) : (
+                                    <div className="w-full h-full p-6 overflow-auto">
+                                        <h3 className="text-xl font-bold text-white mb-6">Event Registrations Control</h3>
+                                        <p className="text-gray-400 text-sm mb-8">Use this section to control the registration status of events.</p>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {[...eventsDay1, ...eventsDay2, { title: "ARTIST PERFORMANCE" }, { title: "DJ NIGHT" }].map(eventObj => {
                                         const ev = eventObj.title;
                                         const statusObj = eventStatuses.find(s => s.title === ev);
                                         const isOpen = statusObj ? statusObj.isOpen : true; // default true
