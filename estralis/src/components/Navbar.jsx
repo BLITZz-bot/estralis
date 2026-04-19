@@ -175,10 +175,10 @@ export default function Navbar({ onOpenRegistrations, onOpenAdmin, onOpenThemeRe
         }}
         animate={hidden ? "hidden" : "visible"}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className={`hidden md:block fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-[90%] max-w-5xl rounded-[2rem] 
+        className={`hidden md:block fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-[95%] max-w-6xl rounded-[2rem] 
           ${isScrolled 
             ? 'bg-gradient-to-r from-slate-950/80 via-teal-950/80 to-black/80 backdrop-blur-xl border border-teal-500/30 shadow-[0_0_30px_rgba(45,212,191,0.2)] px-8 py-4' 
-            : 'px-2 py-4'}`}
+            : 'px-8 py-4'}`}
       >
         <div className="flex items-center justify-between">
           
@@ -191,7 +191,7 @@ export default function Navbar({ onOpenRegistrations, onOpenAdmin, onOpenThemeRe
             </span>
           </div>
 
-          <div className="hidden md:flex items-center gap-12">
+          <div className="hidden md:flex items-center gap-8">
             {['Home', 'About', 'Events', 'DJ Tickets', 'Venue'].map(item => (
               <a 
                 key={item} 
@@ -204,7 +204,7 @@ export default function Navbar({ onOpenRegistrations, onOpenAdmin, onOpenThemeRe
             ))}
           </div>
 
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6">
             {themeVisible && (
               <button
                 onClick={() => onOpenThemeReveal()}
