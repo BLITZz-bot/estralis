@@ -4,21 +4,45 @@ import SectionBackground from "./SectionBackground"
 const TEAM_MEMBERS = [
   {
     name: "M M BHARATH",
-    role: "TECH HEAD & ARCHITECT",
-    image: "/jj.jpeg", // Using jj.jpeg as a placeholder or the actual photo if intended
-    bio: "Chief technology strategist and lead developer of the Estralis digital ecosystem."
+    role: "TECH HEAD",
+    image: "/jj.jpeg", // Using existing photo
+    bio: "Lead Architect of the Estralis Digital Ecosystem."
   },
   {
-    name: "CORE COMMANDER",
-    role: "FESTIVAL PRESIDENT",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80",
-    bio: "Overseeing the grand revival of the Estralis cultural legacy."
+    name: "ABHISHEK R",
+    role: "EVENT HEAD",
+    image: "/special-guest.png", // Placeholder
+    bio: "Strategic Coordinator for Festival Events."
   },
   {
-    name: "THE VISIONARY",
-    role: "VICE PRESIDENT",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80",
-    bio: "Driving the creative vision and strategic planning for the symposium."
+    name: "DIVYASHREE R M",
+    role: "EVENT HEAD",
+    image: "/special-guest.png", // Placeholder
+    bio: "Manager of Cultural and Event Operations."
+  },
+  {
+    name: "BHARATH KUMAR S",
+    role: "MANAGEMENT HEAD",
+    image: "/special-guest.png", // Placeholder
+    bio: "Chief of Management and Logistics."
+  },
+  {
+    name: "VENU GOPAL",
+    role: "MANAGEMENT HEAD",
+    image: "/special-guest.png", // Placeholder
+    bio: "Lead of Administrative Operations."
+  },
+  {
+    name: "SOHAN S P",
+    role: "CREATIVE HEAD",
+    image: "/special-guest.png", // Placeholder
+    bio: "Creative Director and Visual Strategist."
+  },
+  {
+    name: "PRAVEEN KUMAR S",
+    role: "CREATIVE HEAD",
+    image: "/special-guest.png", // Placeholder
+    bio: "Chief of Visual Arts and Design."
   }
 ];
 
@@ -38,11 +62,10 @@ export default function Team() {
       />
 
       <div className="relative max-w-7xl mx-auto">
-        {/* Header Section */}
         <div className="text-center mb-20">
           <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             className="astral-eyebrow text-teal-500 block mb-4"
           >
@@ -58,54 +81,50 @@ export default function Team() {
           </motion.h2>
         </div>
 
-        {/* Team Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {TEAM_MEMBERS.map((member, idx) => (
             <motion.div
               key={member.name}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.2 }}
+              transition={{ 
+                duration: 0.6, 
+                delay: idx * 0.1,
+                type: "spring",
+                stiffness: 100 
+              }}
+              whileHover={{ y: -10 }}
               className="group relative"
             >
-              <div className="astral-glass p-1 rounded-[2rem] overflow-hidden transition-all duration-500 group-hover:shadow-[0_0_50px_rgba(45,212,191,0.2)] group-hover:border-teal-500/50">
-                <div className="relative h-96 overflow-hidden rounded-[1.8rem]">
+              <div className="astral-glass p-1 rounded-3xl overflow-hidden transition-all duration-500 group-hover:border-teal-400/50 group-hover:shadow-[0_0_40px_rgba(45,212,191,0.3)]">
+                <div className="relative h-72 overflow-hidden rounded-2xl">
                   <img
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale-50 group-hover:grayscale-0"
                   />
-                  {/* Overlay Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
                   
-                  {/* Decorative Elements */}
-                  <div className="absolute top-4 right-4 flex gap-2">
-                     <div className="w-2 h-2 bg-teal-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(45,212,191,0.5)]" />
-                     <div className="w-8 h-[1px] bg-teal-500/30 self-center" />
+                  {/* Floating Role Badge */}
+                  <div className="absolute bottom-4 left-4 right-4">
+                     <span className="text-[9px] font-black tracking-[0.2em] text-teal-400 uppercase bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-teal-500/30 font-astral block text-center">
+                       {member.role}
+                     </span>
                   </div>
                 </div>
 
-                <div className="p-8 text-center relative">
-                  <span className="text-[10px] font-black tracking-[0.3em] text-teal-400 uppercase mb-2 block font-astral">
-                    {member.role}
-                  </span>
-                  <h3 className="text-2xl font-black text-white tracking-widest uppercase mb-4">
+                <div className="p-6 text-center">
+                  <h3 className="text-lg font-black text-white tracking-widest uppercase mb-1">
                     {member.name}
                   </h3>
-                  <p className="text-gray-400 text-sm font-tech leading-relaxed px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    {member.bio}
-                  </p>
+                  <div className="w-10 h-0.5 bg-teal-500/30 mx-auto transition-all duration-500 group-hover:w-20 group-hover:bg-teal-500" />
                 </div>
               </div>
-
-              {/* Background Glow for Member */}
-              <div className="absolute -inset-4 bg-teal-500/5 rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity -z-10" />
             </motion.div>
           ))}
         </div>
 
-        {/* Footer Note */}
         <motion.div 
            initial={{ opacity: 0 }}
            whileInView={{ opacity: 1 }}

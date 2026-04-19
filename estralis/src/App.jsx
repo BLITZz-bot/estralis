@@ -190,10 +190,6 @@ export default function App() {
           <About onOpenProtocol={() => setIsProtocolModalOpen(true)} />
         </Section>
 
-        <Section id="team">
-          <Team />
-        </Section>
-
         {/* <GalleryPreview /> */}
 
         {/* ================= EVENTS ================= */}
@@ -213,6 +209,10 @@ export default function App() {
         {/* ================= VENUE ================= */}
         <Section id="venue">
           <Venue />
+        </Section>
+
+        <Section id="team">
+          <Team />
         </Section>
 
 
