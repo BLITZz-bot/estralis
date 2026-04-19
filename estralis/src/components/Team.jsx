@@ -45,13 +45,13 @@ export default function Team() {
       <div className="relative max-w-7xl mx-auto">
         
         {/* ================= CENTERED HEADER ================= */}
-        <div className="text-center mb-24">
+        <div className="text-center mb-16 md:mb-24">
           <motion.span
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "circOut" }}
-            className="text-[10px] font-black tracking-[1em] text-teal-500 uppercase font-astral mb-6 block"
+            className="text-[10px] font-black tracking-[1em] text-teal-500 uppercase font-astral mb-4 md:mb-6 block"
           >
             Core_Command_Matrix
           </motion.span>
@@ -60,21 +60,21 @@ export default function Team() {
             whileInView={{ opacity: 1, scale: 1, letterSpacing: "0.15em" }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: "easeOut" }}
-            className="astral-heading text-6xl md:text-9xl uppercase font-black whitespace-nowrap"
+            className="astral-heading text-3xl md:text-9xl uppercase font-black"
           >
             THE <span className="text-teal-400">TEAM</span>
           </motion.h2>
           <motion.div 
             initial={{ width: 0 }}
-            whileInView={{ width: "200px" }}
+            whileInView={{ width: "150px" }}
             viewport={{ once: true }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="h-1 bg-gradient-to-r from-transparent via-teal-500 to-transparent mx-auto mt-8"
+            className="h-px md:h-1 bg-gradient-to-r from-transparent via-teal-500 to-transparent mx-auto mt-6 md:mt-8"
           />
         </div>
 
-        {/* ================= 4 IN A ROW GRID ================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12" style={{ perspective: "2000px" }}>
+        {/* ================= GRID ================= */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-12" style={{ perspective: "2000px" }}>
           {TEAM_MEMBERS.map((member, idx) => (
             <TeamMemberCard key={member.name} member={member} idx={idx} />
           ))}
@@ -84,9 +84,9 @@ export default function Team() {
            initial={{ opacity: 0 }}
            whileInView={{ opacity: 1 }}
            viewport={{ once: true }}
-           className="mt-32 pt-10 border-t border-white/5 text-center"
+           className="mt-20 md:mt-32 pt-10 border-t border-white/5 text-center"
         >
-           <p className="text-teal-400/30 text-[10px] font-black uppercase tracking-[0.5em] font-astral">
+           <p className="text-teal-400/30 text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] font-astral">
              Signals Integrity Confirmed // Command Access ONLY
            </p>
         </motion.div>
@@ -110,7 +110,7 @@ function TeamMemberCard({ member, idx }) {
         y: 0,
         z: 0 
       }}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, margin: "-50px" }}
       transition={{ 
         type: "spring",
         damping: 15,
@@ -126,8 +126,8 @@ function TeamMemberCard({ member, idx }) {
       className="group relative"
       style={{ transformStyle: "preserve-3d" }}
     >
-      <div className="astral-glass p-1 rounded-[2.5rem] overflow-hidden transition-all duration-500 group-hover:border-teal-400/50 group-hover:shadow-[0_0_80px_rgba(45,212,191,0.3)] bg-slate-950/40">
-        <div className="relative h-64 overflow-hidden rounded-[2.2rem] m-1" style={{ transform: "translateZ(30px)" }}>
+      <div className="astral-glass p-1 rounded-2xl md:rounded-[2.5rem] overflow-hidden transition-all duration-500 group-hover:border-teal-400/50 group-hover:shadow-[0_0_80px_rgba(45,212,191,0.3)] bg-slate-950/40">
+        <div className="relative h-40 md:h-64 overflow-hidden rounded-xl md:rounded-[2.2rem] m-1" style={{ transform: "translateZ(30px)" }}>
           <img
             src={member.image}
             alt={member.name}
@@ -136,14 +136,14 @@ function TeamMemberCard({ member, idx }) {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60" />
         </div>
 
-        <div className="p-8 text-center pt-6" style={{ transform: "translateZ(60px)" }}>
-          <h3 className="text-lg font-black text-white tracking-widest uppercase mb-1">
+        <div className="p-4 md:p-8 text-center pt-4 md:pt-6" style={{ transform: "translateZ(60px)" }}>
+          <h3 className="text-xs md:text-lg font-black text-white tracking-widest uppercase mb-1">
             {member.name}
           </h3>
-          <span className="text-[10px] font-black tracking-[0.3em] text-teal-400 uppercase font-astral block opacity-60 group-hover:opacity-100 transition-opacity">
+          <span className="text-[8px] md:text-[10px] font-black tracking-[0.2em] md:tracking-[0.3em] text-teal-400 uppercase font-astral block opacity-60 group-hover:opacity-100 transition-opacity">
             {member.role}
           </span>
-          <div className="w-10 h-px bg-teal-500/10 mx-auto mt-6 transition-all duration-700 group-hover:w-24 group-hover:bg-teal-500" />
+          <div className="w-6 md:w-10 h-px bg-teal-500/10 mx-auto mt-4 md:mt-6 transition-all duration-700 group-hover:w-16 md:group-hover:w-24 group-hover:bg-teal-500" />
         </div>
       </div>
     </motion.div>
