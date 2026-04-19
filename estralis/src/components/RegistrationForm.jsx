@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { jsPDF } from "jspdf"
 import JsBarcode from "jsbarcode"
-import QRCode from 'qrcode'
+import qrcode from 'qrcode-generator'
 
 // Searchable College Dropdown Component
 function CollegeSelect({ value, onChange, colleges, placeholder, inputClassName }) {
@@ -363,16 +363,13 @@ export default function RegistrationForm({ event, onClose }) {
         try {
             const amount = isDJNight ? totalDJFee : ((passType === 'combo' && comboPassDetails) ? comboPassDetails : standardFeeString);
 
-            // Generate QR Code
-            const verifyUrl = `${window.location.origin}/verify/${registrationId}`;
-            const qrDataUrl = await QRCode.toDataURL(registrationId || "PENDING", {
-                margin: 2,
-                width: 200,
-                color: {
-                    dark: '#2dd4bf', // Teal 400
-                    light: '#020617' // Space BG
-                }
-            });
+            // Generate QR Code using qrcode-generator
+            const typeNumber = 0; // auto
+            const errorCorrectionLevel = 'M';
+            const qr = qrcode(typeNumber, errorCorrectionLevel);
+            qr.addData(registrationId || "PENDING");
+            qr.make();
+            const qrDataUrl = qr.createDataURL(4); // cellSize = 4
 
             const doc = new jsPDF({
                 orientation: 'portrait',

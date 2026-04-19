@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import jsPDF from "jspdf";
 import { eventsDay1, eventsDay2 } from "./Schedule";
 import { DJ_EVENT_DATA } from "./SpecialGuest";
-import QRCode from 'qrcode'
+import qrcode from 'qrcode-generator'
 
 export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDownload }) {
     const [searchEmail, setSearchEmail] = useState("");
@@ -99,15 +99,13 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
         }
 
         try {
-            // Generate QR Code
-            const qrDataUrl = await QRCode.toDataURL(registration.id || registration._id || "VERIFIED", {
-                margin: 2,
-                width: 200,
-                color: {
-                    dark: '#2dd4bf', // Teal 400
-                    light: '#020617' // Space BG
-                }
-            });
+            // Generate QR Code using qrcode-generator
+            const typeNumber = 0; // auto
+            const errorCorrectionLevel = 'M';
+            const qr = qrcode(typeNumber, errorCorrectionLevel);
+            qr.addData(registration.id || registration._id || "VERIFIED");
+            qr.make();
+            const qrDataUrl = qr.createDataURL(4); // cellSize = 4
 
             const safeName = registration.full_name ? registration.full_name.replace(/\s+/g, '_') : 'Attendee';
             const doc = new jsPDF({

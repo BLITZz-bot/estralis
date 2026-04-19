@@ -4,7 +4,7 @@ import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { eventsDay1, eventsDay2 } from './Schedule';
 import { Html5QrcodeScanner } from "html5-qrcode";
-import QRCode from 'qrcode'
+
 
 export default function AdminDashboard({ isOpen, onClose }) {
     const [password, setPassword] = useState("");
@@ -653,9 +653,6 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
     // Polling is already handled by the auto-refresh timer below
 
-            setIsUpdating(false);
-        }
-    };
 
     // Scanner Logic
     useEffect(() => {
