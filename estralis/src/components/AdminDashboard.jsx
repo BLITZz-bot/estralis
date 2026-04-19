@@ -745,8 +745,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
     // Handle filtering
     useEffect(() => {
-        // Apply hard filter for 'verified' status only (as per user instruction)
-        let filtered = registrations.filter(r => r.status === 'verified');
+        // Start with all registrations (Master List)
+        let filtered = [...registrations];
 
         // Filter by Event
         if (filterEvent !== "All") {
@@ -1126,10 +1126,22 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                             ) : <span className="text-[9px] text-white/10 italic">NO PROOF</span>}
                                                         </td>
                                                         <td className="px-8 py-8 text-center border-r border-teal-500/10">
-                                                            <div className="flex items-center justify-center gap-2">
-                                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse outline outline-2 outline-emerald-400/20"></div>
-                                                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400">
-                                                                    SUCCESSFUL
+                                                            <div className="flex flex-col items-center justify-center gap-1.5">
+                                                                <div className={`w-2 h-2 rounded-full ${
+                                                                    reg.status === 'visited' ? 'bg-blue-400' :
+                                                                    reg.status === 'verified' ? 'bg-emerald-400' :
+                                                                    'bg-amber-400'
+                                                                } animate-pulse outline outline-2 ${
+                                                                    reg.status === 'visited' ? 'outline-blue-400/20' :
+                                                                    reg.status === 'verified' ? 'outline-emerald-400/20' :
+                                                                    'outline-amber-400/20'
+                                                                }`}></div>
+                                                                <span className={`text-[8px] font-black uppercase tracking-[0.2em] ${
+                                                                    reg.status === 'visited' ? 'text-blue-400' :
+                                                                    reg.status === 'verified' ? 'text-emerald-400' :
+                                                                    'text-amber-400'
+                                                                }`}>
+                                                                    {reg.status || 'PENDING'}
                                                                 </span>
                                                             </div>
                                                         </td>
@@ -1325,6 +1337,15 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                                 <div className="min-w-0 flex-1">
                                                                     <div className="text-white font-bold text-xs sm:text-sm truncate">{reg.full_name}</div>
                                                                     <div className="flex flex-col gap-0.5 mt-0.5 sm:mt-1">
+                                                                        <div className="flex items-center gap-2 mb-1">
+                                                                            <span className={`text-[7px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest ${
+                                                                                reg.status === 'visited' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                                                                                reg.status === 'verified' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                                                                'bg-amber-500/10 text-amber-500 border border-amber-500/20'
+                                                                            }`}>
+                                                                                {reg.status || 'PENDING'}
+                                                                            </span>
+                                                                        </div>
                                                                         <div className="text-gray-500 text-[9px] sm:text-[10px] truncate flex items-center gap-1">
                                                                             <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                                                             <span className="truncate">{reg.email}</span>
