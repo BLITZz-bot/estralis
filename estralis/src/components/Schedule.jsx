@@ -671,7 +671,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                         transition={{ repeat: Infinity, duration: 2 }}
                         className={`w-1.5 h-1.5 rounded-full ${slotInfo.slotsLeft > 20 ? 'bg-teal-400 shadow-[0_0_8px_#2dd4bf]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'}`} 
                       />
-                      <span className={`text-[9px] font-black tracking-widest uppercase font-astral ${slotInfo.slotsLeft > 20 ? 'text-teal-400' : 'text-red-500'}`}>
+                      <span className={`text-[10px] sm:text-[11px] font-black tracking-widest uppercase font-astral ${slotInfo.slotsLeft > 20 ? 'text-teal-400' : 'text-red-500'}`}>
                         {slotInfo.slotsLeft} SLOTS REMAINING
                       </span>
                     </div>

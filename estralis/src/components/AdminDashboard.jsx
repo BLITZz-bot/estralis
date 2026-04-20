@@ -1875,7 +1875,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                                 type="number"
                                                                 defaultValue={djSlots.maxSlots}
                                                                 id="max-slots-input"
-                                                                className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-xl font-black focus:outline-none focus:border-teal-500"
+                                                                className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-base sm:text-lg font-black focus:outline-none focus:border-teal-500 overflow-hidden"
                                                             />
                                                             <button 
                                                                 disabled={isUpdatingSlots}
@@ -1883,7 +1883,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                                     const val = parseInt(document.getElementById('max-slots-input').value);
                                                                     if (val > 0) updateDjSlots({ maxSlots: val });
                                                                 }}
-                                                                className="px-6 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all disabled:opacity-50"
+                                                                className="shrink-0 px-4 sm:px-6 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-black text-[9px] sm:text-[10px] uppercase tracking-widest transition-all disabled:opacity-50"
                                                             >
                                                                 {isUpdatingSlots ? '...' : 'SET'}
                                                             </button>
