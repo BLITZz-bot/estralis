@@ -669,10 +669,10 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                       <motion.div 
                         animate={{ opacity: [0.4, 1, 0.4] }}
                         transition={{ repeat: Infinity, duration: 2 }}
-                        className={`w-1.5 h-1.5 rounded-full ${slotInfo.slotsLeft > 20 ? 'bg-teal-400 shadow-[0_0_8px_#2dd4bf]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'}`} 
+                        className={`w-1.5 h-1.5 rounded-full ${(!slotInfo.isManualOpen || slotInfo.slotsLeft <= 0) ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : (slotInfo.slotsLeft > 20 ? 'bg-teal-400 shadow-[0_0_8px_#2dd4bf]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]')}`} 
                       />
-                      <span className={`text-[10px] sm:text-[11px] font-black tracking-widest uppercase font-astral ${slotInfo.slotsLeft > 20 ? 'text-teal-400' : 'text-red-500'}`}>
-                        {slotInfo.slotsLeft} SLOTS REMAINING
+                      <span className={`text-[10px] sm:text-[11px] font-black tracking-widest uppercase font-astral ${(!slotInfo.isManualOpen || slotInfo.slotsLeft <= 0) ? 'text-red-500' : (slotInfo.slotsLeft > 20 ? 'text-teal-400' : 'text-red-500')}`}>
+                        {!slotInfo.isManualOpen ? 'REGISTRATION CLOSED' : (slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : `${slotInfo.slotsLeft} SLOTS REMAINING`)}
                       </span>
                     </div>
                   )}

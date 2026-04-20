@@ -36,10 +36,13 @@ export default function AdminDashboard({ isOpen, onClose }) {
     const [activeTab, setActiveTab] = useState("registrations");
 
     useEffect(() => {
-        if (activeTab === "slots" && isAuthenticated) {
-            fetchDjSlots();
+        let interval;
+        if (activeTab === "slots" && isAuthenticated && isSlotsAuth) {
+            fetchDjSlots(); // Initial fetch on unlock/tab
+            interval = setInterval(fetchDjSlots, 30000); // 30s auto-refresh
         }
-    }, [activeTab, isAuthenticated]);
+        return () => interval && clearInterval(interval);
+    }, [activeTab, isAuthenticated, isSlotsAuth]);
 
     const [eventStatuses, setEventStatuses] = useState([]);
     const [deleteTargetId, setDeleteTargetId] = useState(null); // null for 'all', or specific id
@@ -64,10 +67,13 @@ export default function AdminDashboard({ isOpen, onClose }) {
     const [manageAuthErr, setManageAuthErr] = useState("");
     const [emailAuthErr, setEmailAuthErr] = useState("");
     const [collegesAuthErr, setCollegesAuthErr] = useState("");
+    const [slotsAuthErr, setSlotsAuthErr] = useState("");
     const [controlsAuthErr, setControlsAuthErr] = useState("");
 
     const [isControlsAuth, setIsControlsAuth] = useState(false);
+    const [isSlotsAuth, setIsSlotsAuth] = useState(false);
     const [controlsPassInput, setControlsPassInput] = useState("");
+    const [slotsPassInput, setSlotsPassInput] = useState("");
 
     const [collegesList, setCollegesList] = useState([]);
     const [newCollegeName, setNewCollegeName] = useState("");
@@ -188,6 +194,17 @@ export default function AdminDashboard({ isOpen, onClose }) {
             setControlsAuthErr("");
         } else {
             setControlsAuthErr("Incorrect Password");
+        }
+    };
+
+    const handleSlotsAuth = (e) => {
+        e.preventDefault();
+        if (slotsPassInput === "bharatha2111") {
+            setIsSlotsAuth(true);
+            setSlotsAuthErr("");
+            fetchDjSlots();
+        } else {
+            setSlotsAuthErr("Incorrect Password");
         }
     };
 
@@ -1781,7 +1798,36 @@ export default function AdminDashboard({ isOpen, onClose }) {
                             </div>
                         ) : activeTab === "slots" ? (
                             <div className="flex-1 overflow-auto rounded-3xl border border-white/10 bg-[#0f111a] flex flex-col p-4 sm:p-8">
-                                <div className="max-w-4xl mx-auto w-full space-y-10">
+                                {!isSlotsAuth ? (
+                                    <div className="flex-1 flex items-center justify-center">
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="max-w-sm w-full p-8 bg-white/5 border border-white/10 rounded-3xl shadow-2xl text-center"
+                                        >
+                                            <div className="w-16 h-16 bg-teal-500/20 rounded-full flex items-center justify-center mx-auto mb-4 text-teal-400">
+                                                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                            </div>
+                                            <h3 className="text-xl font-bold text-white mb-2">Slot Management Security</h3>
+                                            <p className="text-gray-400 text-sm mb-6">Secondary authorization required for capacity changes.</p>
+                                            <form onSubmit={handleSlotsAuth} className="space-y-4">
+                                                <input
+                                                    type="password" autoComplete="new-password"
+                                                    autoFocus
+                                                    value={slotsPassInput}
+                                                    onChange={(e) => setSlotsPassInput(e.target.value)}
+                                                    placeholder="Enter Secondary Password"
+                                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 transition"
+                                                />
+                                                {slotsAuthErr && <p className="text-red-400 text-xs font-bold">{slotsAuthErr}</p>}
+                                                <button type="submit" className="w-full bg-teal-600 text-white font-bold py-3 rounded-xl hover:bg-teal-700 transition">
+                                                    Unlock Slot Controls
+                                                </button>
+                                            </form>
+                                        </motion.div>
+                                    </div>
+                                ) : (
+                                    <div className="max-w-4xl mx-auto w-full space-y-10">
                                     {/* Slot Management Header */}
                                     <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-teal-500/5 border border-teal-500/10 p-6 rounded-3xl">
                                         <div className="text-center md:text-left">
