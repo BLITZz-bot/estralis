@@ -34,6 +34,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
     const [emailStatus, setEmailStatus] = useState("");
     const [countdown, setCountdown] = useState(30);
     const [activeTab, setActiveTab] = useState("registrations");
+    const [isSlotsAuth, setIsSlotsAuth] = useState(false);
+    const [slotsPassInput, setSlotsPassInput] = useState("");
+    const [slotsAuthErr, setSlotsAuthErr] = useState("");
 
     useEffect(() => {
         let interval;
@@ -67,13 +70,10 @@ export default function AdminDashboard({ isOpen, onClose }) {
     const [manageAuthErr, setManageAuthErr] = useState("");
     const [emailAuthErr, setEmailAuthErr] = useState("");
     const [collegesAuthErr, setCollegesAuthErr] = useState("");
-    const [slotsAuthErr, setSlotsAuthErr] = useState("");
     const [controlsAuthErr, setControlsAuthErr] = useState("");
 
     const [isControlsAuth, setIsControlsAuth] = useState(false);
-    const [isSlotsAuth, setIsSlotsAuth] = useState(false);
     const [controlsPassInput, setControlsPassInput] = useState("");
-    const [slotsPassInput, setSlotsPassInput] = useState("");
 
     const [collegesList, setCollegesList] = useState([]);
     const [newCollegeName, setNewCollegeName] = useState("");
@@ -1951,6 +1951,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         </div>
                                     )}
                                 </div>
+                                )}
                             </div>
                         ) : activeTab === "scanner" ? (
                             <div className="flex-1 overflow-auto rounded-3xl border border-white/10 bg-[#0f111a] flex flex-col p-4 sm:p-8">
