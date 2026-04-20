@@ -29,7 +29,17 @@ const initDB = async () => {
             );
         `);
         await pool.query(`
-            INSERT INTO colleges (name) VALUES ('GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT') ON CONFLICT (name) DO NOTHING;
+            CREATE TABLE IF NOT EXISTS event_slots (
+                event_title TEXT PRIMARY KEY,
+                max_slots INTEGER DEFAULT 200,
+                is_manual_open BOOLEAN DEFAULT TRUE
+            );
+        `);
+        // Seed default limit for DJ Night if not exists
+        await pool.query(`
+            INSERT INTO event_slots (event_title, max_slots, is_manual_open) 
+            VALUES ('ARTIST PERFORMANCE AND DJ NIGHT', 200, TRUE) 
+            ON CONFLICT (event_title) DO NOTHING;
         `);
         console.log('✅ Database Schema Verified/Initialized');
     } catch (err) {

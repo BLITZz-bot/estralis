@@ -575,6 +575,25 @@ function getThemeForCategory(category) {
 
 export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTheme }) {
   const [activeTab, setActiveTab] = useState("about")
+  const [slotInfo, setSlotInfo] = useState(null);
+
+  useEffect(() => {
+    // Only fetch for limited events (DJ Night)
+    if (event?.title === "ARTIST PERFORMANCE AND DJ NIGHT") {
+      const fetchSlots = async () => {
+        try {
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(event.title)}`);
+          const data = await res.json();
+          if (data.success && data.isLimited) {
+            setSlotInfo(data);
+          }
+        } catch (err) {
+          console.error("Slot fetch err:", err);
+        }
+      };
+      fetchSlots();
+    }
+  }, [event?.title]);
   
   const theme = overrideTheme || getThemeForCategory(event?.category);
   const accentHex = theme.accent === "cyan-500" ? "rgba(6,182,212,0.5)" : 
@@ -640,9 +659,23 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
               </h3>
 
               <div className="flex flex-wrap gap-6 pt-6">
-                <div className="flex items-center gap-2">
-                  <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} animate-pulse`} />
-                  <span className="text-[10px] font-bold text-white/50 tracking-widest uppercase font-tech">SQUAD SIZE: {teamText}</span>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-6">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} animate-pulse`} />
+                    <span className="text-[10px] font-bold text-white/50 tracking-widest uppercase font-tech">SQUAD SIZE: {teamText}</span>
+                  </div>
+                  {slotInfo && (
+                    <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3 py-1 shadow-[0_0_20px_rgba(0,0,0,0.3)]">
+                      <motion.div 
+                        animate={{ opacity: [0.4, 1, 0.4] }}
+                        transition={{ repeat: Infinity, duration: 2 }}
+                        className={`w-1.5 h-1.5 rounded-full ${slotInfo.slotsLeft > 20 ? 'bg-teal-400 shadow-[0_0_8px_#2dd4bf]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'}`} 
+                      />
+                      <span className={`text-[9px] font-black tracking-widest uppercase font-astral ${slotInfo.slotsLeft > 20 ? 'text-teal-400' : 'text-red-500'}`}>
+                        {slotInfo.slotsLeft} SLOTS REMAINING
+                      </span>
+                    </div>
+                  )}
                 </div>
                 {event.theme && (
                   <div className="flex items-center gap-2">

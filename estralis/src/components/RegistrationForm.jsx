@@ -145,6 +145,7 @@ export default function RegistrationForm({ event, onClose }) {
     const [teamMembers, setTeamMembers] = useState([])
     const [passType, setPassType] = useState('standard') // 'standard' or 'combo'
     const [collegeList, setCollegeList] = useState([])
+    const [slotInfo, setSlotInfo] = useState(null)
     const [formData, setFormData] = useState({
         fullName: "",
         email: "",
@@ -166,11 +167,14 @@ export default function RegistrationForm({ event, onClose }) {
     const maxTeamSize = event?.maxTeamSize || 1;
     const isTeamEvent = maxTeamSize > 1;
 
-    // DJ Night specific logic
     const isDJNight = event?.title === "ARTIST PERFORMANCE AND DJ NIGHT";
     const djPerPersonFee = 400;
-    const totalDJFee = isDJNight ? `₹${djPerPersonFee * (1 + teamMembers.length)}` : null;
+    const currentSquadSize = 1 + teamMembers.length;
+    const totalDJFee = isDJNight ? `₹${djPerPersonFee * currentSquadSize}` : null;
     const displayFee = isDJNight ? totalDJFee : standardFeeString;
+
+    const isManuallyClosed = isDJNight && slotInfo && !slotInfo.isManualOpen;
+    const isSoldOut = isDJNight && slotInfo && slotInfo.slotsLeft < currentSquadSize;
 
     // Fetch allowed colleges
     useEffect(() => {
@@ -187,6 +191,24 @@ export default function RegistrationForm({ event, onClose }) {
         };
         fetchColleges();
     }, []);
+
+    // Slot tracking for DJ Night
+    useEffect(() => {
+        if (event?.title === "ARTIST PERFORMANCE AND DJ NIGHT") {
+            const fetchSlots = async () => {
+                try {
+                    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(event.title)}`);
+                    const data = await res.json();
+                    if (data.success && data.isLimited) {
+                        setSlotInfo(data);
+                    }
+                } catch (err) {
+                    console.error("Slot fetch err:", err);
+                }
+            };
+            fetchSlots();
+        }
+    }, [event?.title]);
 
 
     useEffect(() => {
@@ -251,6 +273,16 @@ export default function RegistrationForm({ event, onClose }) {
 
     const nextStep = (e) => {
         e.preventDefault();
+
+        // Slot Validation
+        if (isManuallyClosed) {
+            alert("REGISTRATION CLOSED: This event is currently not accepting registrations.");
+            return;
+        }
+        if (isSoldOut) {
+            alert(`SOLD OUT: Only ${slotInfo.slotsLeft} seats left, but you are trying to register ${currentSquadSize} people.`);
+            return;
+        }
 
         // Validation Suite
         if (!validateEmail(formData.email)) {
@@ -855,8 +887,16 @@ export default function RegistrationForm({ event, onClose }) {
                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center">
                                     Any issue with registration? Contact Bharath <a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">7975871167</a>
                                 </p>
-                                <button type="submit" className="w-full max-w-md py-6 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)] transition-all flex items-center justify-center gap-3 font-astral">
-                                    CONTINUE TO PAYMENT <span className="text-lg">→</span>
+                                <button 
+                                    type="submit" 
+                                    disabled={isManuallyClosed || isSoldOut}
+                                    className={`w-full max-w-md py-6 transition-all font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl flex items-center justify-center gap-3 font-astral ${
+                                        isManuallyClosed || isSoldOut 
+                                        ? 'bg-red-500/20 text-red-500 cursor-not-allowed border border-red-500/30' 
+                                        : 'bg-teal-500 text-black hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)]'
+                                    }`}
+                                >
+                                    {isManuallyClosed ? "REGISTRY CLOSED" : isSoldOut ? "SOLD OUT" : "CONTINUE TO PAYMENT"} <span className="text-lg">→</span>
                                 </button>
                             </div>
                         </motion.form>
@@ -931,10 +971,14 @@ export default function RegistrationForm({ event, onClose }) {
                                     </p>
                                     <button
                                         onClick={handleSubmit}
-                                        disabled={isSubmitting}
-                                        className="w-full py-6 bg-teal-500 text-black font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)] transition-all flex items-center justify-center gap-3 disabled:opacity-50 font-astral"
+                                        disabled={isSubmitting || isManuallyClosed || isSoldOut}
+                                        className={`w-full py-6 font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl transition-all flex items-center justify-center gap-3 disabled:opacity-50 font-astral ${
+                                            isManuallyClosed || isSoldOut 
+                                            ? 'bg-red-500/20 text-red-500 cursor-not-allowed border border-red-500/30' 
+                                            : 'bg-teal-500 text-black hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)]'
+                                        }`}
                                     >
-                                        {isSubmitting ? "UPLOADING PROOF..." : "SUBMIT REGISTRATION"} <span className="text-lg">→</span>
+                                        {isSubmitting ? "UPLOADING PROOF..." : isManuallyClosed ? "CLOSED" : isSoldOut ? "SOLD OUT" : "SUBMIT REGISTRATION"} <span className="text-lg">→</span>
                                     </button>
                                     <button type="button" onClick={() => setStep(1)} className="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors flex items-center justify-center gap-2 font-astral">
                                         ← EDIT DETAILS

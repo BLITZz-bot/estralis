@@ -274,6 +274,40 @@ app.post('/api/register-manual', async (req, res) => {
             utrNumber, transactionDate, screenshotUrl
         } = registrationData;
 
+        // --- SLOT VALIDATION (DJ NIGHT ONLY FOR NOW) ---
+        if (eventTitle === 'ARTIST PERFORMANCE AND DJ NIGHT') {
+            const slotConfigRes = await db.query('SELECT * FROM event_slots WHERE event_title = $1', [eventTitle]);
+            const slotConfig = slotConfigRes.rows[0];
+
+            if (slotConfig) {
+                // Check Manual Switch first
+                if (!slotConfig.is_manual_open) {
+                    return res.status(403).json({ success: false, message: 'REGISTRATION CLOSED: This event is currently offline.' });
+                }
+
+                // Calculate current total headcount
+                // Sum (1 for leader + length of team_members array)
+                const countRes = await db.query(
+                    `SELECT COALESCE(SUM(1 + jsonb_array_length(team_members)), 0) as total 
+                     FROM registrations WHERE event_title = $1`, 
+                    [eventTitle]
+                );
+                const currentHeadcount = parseInt(countRes.rows[0].total);
+                
+                // Calculate incoming squad size
+                const incomingSquadSize = 1 + (teamMembers ? teamMembers.length : 0);
+
+                if (currentHeadcount + incomingSquadSize > slotConfig.max_slots) {
+                    const remaining = slotConfig.max_slots - currentHeadcount;
+                    return res.status(403).json({ 
+                        success: false, 
+                        message: `SOLD OUT: Only ${remaining < 0 ? 0 : remaining} seats left, but you are trying to register ${incomingSquadSize} people.` 
+                    });
+                }
+            }
+        }
+        // -----------------------------------------------
+
         const result = await db.query(
             `INSERT INTO registrations (
                 full_name, email, phone, college, team_name, team_members, 
@@ -1161,6 +1195,70 @@ app.post('/api/admin/send-event-mail', async (req, res) => {
     } catch (error) {
         console.error("Event Mail error:", error);
         res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// --- EVENT SLOTS MANAGEMENT ---
+
+// 1. Get Slot Status (Public/Admin)
+app.get('/api/events/slots-status', async (req, res) => {
+    try {
+        const { eventTitle } = req.query;
+        if (!eventTitle) return res.status(400).json({ success: false, message: 'eventTitle required' });
+
+        // Get Config
+        const configRes = await db.query('SELECT * FROM event_slots WHERE event_title = $1', [eventTitle]);
+        const config = configRes.rows[0];
+
+        if (!config) {
+            return res.status(200).json({ success: true, isLimited: false });
+        }
+
+        // Get Current Headcount
+        const countRes = await db.query(
+            `SELECT COALESCE(SUM(1 + jsonb_array_length(team_members)), 0) as total 
+             FROM registrations WHERE event_title = $1`, 
+            [eventTitle]
+        );
+        const currentCount = parseInt(countRes.rows[0].total);
+
+        res.status(200).json({
+            success: true,
+            isLimited: true,
+            maxSlots: config.max_slots,
+            currentCount: currentCount,
+            isManualOpen: config.is_manual_open,
+            slotsLeft: Math.max(0, config.max_slots - currentCount)
+        });
+    } catch (error) {
+        console.error("Slots fetch error:", error);
+        res.status(500).json({ success: false, message: 'Server error fetching slots' });
+    }
+});
+
+// 2. Update Slot Config (Admin Only)
+app.post('/api/admin/events/slots-update', async (req, res) => {
+    try {
+        const password = req.headers['x-admin-password'];
+        if (password !== 'admin@2026') return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+        const { eventTitle, maxSlots, isManualOpen } = req.body;
+        if (!eventTitle) return res.status(400).json({ success: false, message: 'eventTitle required' });
+
+        const result = await db.query(
+            `INSERT INTO event_slots (event_title, max_slots, is_manual_open) 
+             VALUES ($1, $2, $3) 
+             ON CONFLICT (event_title) DO UPDATE 
+             SET max_slots = COALESCE($2, event_slots.max_slots), 
+                 is_manual_open = COALESCE($3, event_slots.is_manual_open)
+             RETURNING *`,
+            [eventTitle, maxSlots, isManualOpen]
+        );
+
+        res.status(200).json({ success: true, data: result.rows[0], message: 'Slot configuration updated' });
+    } catch (error) {
+        console.error("Slots update error:", error);
+        res.status(500).json({ success: false, message: 'Server error updating slots' });
     }
 });
 

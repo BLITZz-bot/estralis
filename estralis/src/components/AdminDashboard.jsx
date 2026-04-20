@@ -9,10 +9,10 @@ import { Html5Qrcode } from "html5-qrcode";
 export default function AdminDashboard({ isOpen, onClose }) {
     const [password, setPassword] = useState("");
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    // Edit Modal State
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editingReg, setEditingReg] = useState(null);
+    const [djSlots, setDjSlots] = useState(null);
+    const [isUpdatingSlots, setIsUpdatingSlots] = useState(false);
     const [editForm, setEditForm] = useState({
         full_name: "",
         email: "",
@@ -20,7 +20,6 @@ export default function AdminDashboard({ isOpen, onClose }) {
         college: ""
     });
     const [isUpdating, setIsUpdating] = useState(false);
-
     const [loginError, setLoginError] = useState("");
     const [registrations, setRegistrations] = useState([]);
     const [scannedReg, setScannedReg] = useState(null);
@@ -35,6 +34,13 @@ export default function AdminDashboard({ isOpen, onClose }) {
     const [emailStatus, setEmailStatus] = useState("");
     const [countdown, setCountdown] = useState(30);
     const [activeTab, setActiveTab] = useState("registrations");
+
+    useEffect(() => {
+        if (activeTab === "slots" && isAuthenticated) {
+            fetchDjSlots();
+        }
+    }, [activeTab, isAuthenticated]);
+
     const [eventStatuses, setEventStatuses] = useState([]);
     const [deleteTargetId, setDeleteTargetId] = useState(null); // null for 'all', or specific id
     const [deleteTargetName, setDeleteTargetName] = useState("");
@@ -138,6 +144,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
             fetchRegistrations(password); // Automatically load data instantly on successful login
             fetchEventStatuses(); // Load event toggles
             fetchThemeConfig(); // Load theme config
+            fetchDjSlots(); // Load DJ slots
         } else {
             setLoginError("Invalid Admin Password");
         }
@@ -184,7 +191,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         }
     };
 
-    const fetchColleges = async () => {
+    async function fetchColleges() {
         try {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/api/colleges`);
             const data = await res.json();
@@ -192,7 +199,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         } catch (err) {
             addToast("Failed to fetch colleges", "error");
         }
-    };
+    }
 
     const addCollege = async (e) => {
         e.preventDefault();
@@ -216,6 +223,41 @@ export default function AdminDashboard({ isOpen, onClose }) {
             addToast("❌ Server Error", "error");
         } finally {
             setIsAddingCollege(false);
+        }
+    };
+
+    async function fetchDjSlots() {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=ARTIST PERFORMANCE AND DJ NIGHT`);
+            const data = await res.json();
+            if (data.success) setDjSlots(data);
+        } catch (err) {
+            console.error("Failed to fetch DJ slots", err);
+        }
+    }
+
+    const updateDjSlots = async (updates) => {
+        setIsUpdatingSlots(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/events/slots-update`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
+                body: JSON.stringify({
+                    eventTitle: 'ARTIST PERFORMANCE AND DJ NIGHT',
+                    ...updates
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                addToast("✅ Slot Configuration Updated", "success");
+                fetchDjSlots();
+            } else {
+                addToast(`❌ ${data.message}`, "error");
+            }
+        } catch (err) {
+            addToast("❌ Server Error", "error");
+        } finally {
+            setIsUpdatingSlots(false);
         }
     };
 
@@ -335,7 +377,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         return `<div style="font-family:'Segoe UI',sans-serif;max-width:100%;background:#0f111a;color:#e2e8f0;border-radius:16px;overflow:hidden;border:1px solid #1e1e3a;"><div style="background:linear-gradient(135deg,#7c3aed,#9333ea,#a855f7);padding:30px 20px;text-align:center;"><h1 style="color:#fff;margin:0;font-size:22px;letter-spacing:2px;font-weight:900;">ESTRALIS 2026</h1><p style="color:rgba(255,255,255,0.85);margin-top:6px;font-size:11px;letter-spacing:3px;text-transform:uppercase;">Official INSTRUCTIONS</p></div><div style="padding:25px 20px;"><p style="font-size:15px;color:#f1f5f9;margin-bottom:5px;">Hello <strong style="color:#a78bfa;">PARTICIPANTS</strong>,</p><p style="font-size:13px;color:#94a3b8;margin-bottom:20px;">Registered for: <strong style="color:#c4b5fd;">EVENT NAME</strong></p><div style="background:#1a1c2e;border:1px solid #2d2f4a;border-radius:12px;padding:20px;margin-bottom:20px;"><h3 style="color:#a78bfa;font-size:11px;text-transform:uppercase;letter-spacing:3px;margin:0 0 12px 0;">📋 Instructions</h3><table style="width:100%;border-collapse:collapse;">${instructionLines}</table></div><table style="width:100%;border-collapse:collapse;margin-bottom:20px;"><tr><td style="width:50%;padding-right:6px;vertical-align:top;"><div style="background:#1a1c2e;border:1px solid #2d2f4a;border-radius:12px;padding:15px;text-align:center;"><p style="color:#7c3aed;font-size:10px;text-transform:uppercase;letter-spacing:2px;margin:0 0 6px 0;font-weight:700;">🕐 Arrival Time</p><p style="color:#f1f5f9;font-size:16px;font-weight:900;margin:0;">${mailerTime}</p></div></td><td style="width:50%;padding-left:6px;vertical-align:top;"><div style="background:#1a1c2e;border:1px solid #2d2f4a;border-radius:12px;padding:15px;text-align:center;"><p style="color:#7c3aed;font-size:10px;text-transform:uppercase;letter-spacing:2px;margin:0 0 6px 0;font-weight:700;">📍 Venue</p><p style="color:#f1f5f9;font-size:14px;font-weight:900;margin:0;">${mailerVenue}</p></div></td></tr></table><div style="background:linear-gradient(135deg,#1e1b4b,#2e1065);border:1px solid #4c1d95;border-radius:12px;padding:15px;text-align:center;margin-bottom:20px;"><p style="color:#c4b5fd;font-size:11px;text-transform:uppercase;letter-spacing:2px;margin:0 0 8px 0;">📞 On-Ground Assistance</p><p style="color:#e2e8f0;font-size:12px;margin:0 0 10px 0;line-height:1.6;">If you face any issues at the registration desk or need any help on the event day, please do not hesitate to reach out to Us.</p><p style="color:#fff;font-size:15px;font-weight:900;margin:0;"><span style="color:#a78bfa;">${mailerContact}</span> — <span style="color:#a78bfa;">${mailerPhone}</span></p></div><p style="font-size:13px;color:#64748b;text-align:center;">We can't wait to see you there! 🎉</p></div><div style="border-top:1px solid #1e1e3a;padding:15px;text-align:center;"><p style="color:#475569;font-size:11px;margin:0;">Estralis 2026 | GCEM, Bengaluru</p></div></div>`;
     };
 
-    const fetchThemeConfig = async () => {
+    async function fetchThemeConfig() {
         try {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/api/theme/status`);
             const data = await res.json();
@@ -347,7 +389,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         } catch (err) {
             console.error("Failed to fetch theme config", err);
         }
-    };
+    }
 
     const saveThemeConfig = async (overrides = {}) => {
         setThemeSaving(true);
@@ -382,7 +424,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         await saveThemeConfig({ revealed: next });
     };
 
-    const fetchEventStatuses = async () => {
+    async function fetchEventStatuses() {
         try {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/status?t=${Date.now()}`);
             const data = await res.json();
@@ -397,7 +439,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         } catch (err) {
             console.error("Failed to fetch event statuses", err);
         }
-    };
+    }
 
     const toggleEventStatus = async (eventTitle, currentStatus) => {
         // Optimistic update for instant UI feedback
@@ -534,7 +576,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         }
     };
 
-    const fetchRegistrations = async (pass) => {
+    async function fetchRegistrations(pass) {
         setLoading(true);
         setFetchError("");
         try {
@@ -553,7 +595,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         } finally {
             setLoading(false);
         }
-    };
+    }
 
     const updateRegistrationStatus = async (id, newStatus) => {
         try {
@@ -972,6 +1014,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     { id: "themeReveal", label: "Theme Config", color: "text-blue-400", border: "border-blue-500" },
                                     { id: "eventMailer", label: "Manual Emailer", color: "text-emerald-400", border: "border-emerald-500" },
                                     { id: "colleges", label: "Colleges", color: "text-purple-400", border: "border-purple-500" },
+                                    { id: "slots", label: "Slot Control", color: "text-teal-400", border: "border-teal-500" },
                                     { id: "scanner", label: "Scan Center", color: "text-emerald-400", border: "border-emerald-500" }
                                 ].map((tab) => (
                                     <button
@@ -1209,7 +1252,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         <h3 className="text-xl font-bold text-white mb-6">Event Registrations Control</h3>
                                         <p className="text-gray-400 text-sm mb-8">Use this section to control the registration status of events.</p>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                            {[...eventsDay1, ...eventsDay2, { title: "ARTIST PERFORMANCE" }, { title: "DJ NIGHT" }].map(eventObj => {
+                                            {[...eventsDay1, ...eventsDay2, { title: "ARTIST PERFORMANCE" }].map(eventObj => {
                                                 const ev = eventObj.title;
                                                 const statusObj = eventStatuses.find(s => s.title === ev);
                                                 const isOpen = statusObj ? statusObj.isOpen : true; // default true
@@ -1735,6 +1778,132 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         </div>
                                     </div>
                                 )}
+                            </div>
+                        ) : activeTab === "slots" ? (
+                            <div className="flex-1 overflow-auto rounded-3xl border border-white/10 bg-[#0f111a] flex flex-col p-4 sm:p-8">
+                                <div className="max-w-4xl mx-auto w-full space-y-10">
+                                    {/* Slot Management Header */}
+                                    <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-teal-500/5 border border-teal-500/10 p-6 rounded-3xl">
+                                        <div className="text-center md:text-left">
+                                            <div className="flex items-center gap-3 justify-center md:justify-start mb-1">
+                                                <div className="w-8 h-8 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400">
+                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                </div>
+                                                <h3 className="text-xl font-bold text-white uppercase tracking-wider">Slot Configuration</h3>
+                                            </div>
+                                            <p className="text-gray-400 text-sm">Real-time capacity management for DJ Night.</p>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <button 
+                                                onClick={fetchDjSlots}
+                                                className="p-3 bg-white/5 border border-white/10 rounded-xl text-teal-400 hover:bg-white/10 transition-all"
+                                            >
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {djSlots ? (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                            {/* Monitoring Card */}
+                                            <div className="astral-glass p-8 space-y-8">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-[10px] font-black uppercase tracking-widest text-teal-400/80">Real-time Analytics</span>
+                                                    <span className={`text-[10px] font-black px-3 py-1 rounded-full ${djSlots.slotsLeft > 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-500'}`}>
+                                                        {djSlots.slotsLeft > 0 ? 'AVAILABLE' : 'SOLD OUT'}
+                                                    </span>
+                                                </div>
+
+                                                <div className="text-center py-6">
+                                                    <div className="text-6xl font-black text-white glow-teal mb-2">{djSlots.currentCount}</div>
+                                                    <div className="text-[10px] font-black text-gray-500 uppercase tracking-[0.4em]">Current Headcount</div>
+                                                </div>
+
+                                                <div className="space-y-4">
+                                                    <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-gray-400">
+                                                        <span>Progress</span>
+                                                        <span>{Math.round((djSlots.currentCount / djSlots.maxSlots) * 100)}% Occupied</span>
+                                                    </div>
+                                                    <div className="w-full h-3 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                                                        <motion.div 
+                                                            initial={{ width: 0 }}
+                                                            animate={{ width: `${(djSlots.currentCount / djSlots.maxSlots) * 100}%` }}
+                                                            className={`h-full ${djSlots.slotsLeft > 20 ? 'bg-teal-500' : 'bg-red-500'} shadow-[0_0_20px_rgba(45,212,191,0.3)]`}
+                                                        />
+                                                    </div>
+                                                    <div className="flex justify-between items-center pt-2">
+                                                        <div className="flex flex-col">
+                                                            <span className="text-2xl font-black text-white">{djSlots.slotsLeft}</span>
+                                                            <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Slots Remaining</span>
+                                                        </div>
+                                                        <div className="flex flex-col text-right">
+                                                            <span className="text-2xl font-black text-gray-400">{djSlots.maxSlots}</span>
+                                                            <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Total Capacity</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Control Card */}
+                                            <div className="astral-glass p-8 space-y-8">
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-orange-400/80">Command Override</span>
+                                                
+                                                <div className="space-y-6">
+                                                    <div className="flex items-center justify-between p-5 bg-white/5 border border-white/5 rounded-2xl">
+                                                        <div>
+                                                            <p className="text-sm font-bold text-white">Manual Status</p>
+                                                            <p className="text-[10px] text-gray-500 uppercase font-black mt-1">
+                                                                {djSlots.isManualOpen ? 'ONLINE // OPEN' : 'OFFLINE // CLOSED'}
+                                                            </p>
+                                                        </div>
+                                                        <button
+                                                            disabled={isUpdatingSlots}
+                                                            onClick={() => updateDjSlots({ isManualOpen: !djSlots.isManualOpen })}
+                                                            className={`w-14 h-8 rounded-full relative transition-all duration-300 border ${djSlots.isManualOpen ? 'bg-teal-500/20 border-teal-500/50' : 'bg-red-500/20 border-red-500/50'}`}
+                                                        >
+                                                            <motion.div 
+                                                                animate={{ x: djSlots.isManualOpen ? 24 : 4 }}
+                                                                className={`absolute top-1 w-6 h-6 rounded-full shadow-lg ${djSlots.isManualOpen ? 'bg-teal-400' : 'bg-red-500'}`}
+                                                            />
+                                                        </button>
+                                                    </div>
+
+                                                    <div className="p-5 bg-white/5 border border-white/5 rounded-2xl space-y-4">
+                                                        <p className="text-sm font-bold text-white">Adjust Capacity</p>
+                                                        <div className="flex gap-4">
+                                                            <input 
+                                                                type="number"
+                                                                defaultValue={djSlots.maxSlots}
+                                                                id="max-slots-input"
+                                                                className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-xl font-black focus:outline-none focus:border-teal-500"
+                                                            />
+                                                            <button 
+                                                                disabled={isUpdatingSlots}
+                                                                onClick={() => {
+                                                                    const val = parseInt(document.getElementById('max-slots-input').value);
+                                                                    if (val > 0) updateDjSlots({ maxSlots: val });
+                                                                }}
+                                                                className="px-6 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all disabled:opacity-50"
+                                                            >
+                                                                {isUpdatingSlots ? '...' : 'SET'}
+                                                            </button>
+                                                        </div>
+                                                        <p className="text-[9px] text-gray-500 font-medium">Increasing capacity will instantly reopen registration if status is ONLINE.</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-2xl">
+                                                    <p className="text-[10px] font-black text-red-400 uppercase tracking-widest mb-1">DANGER ZONE</p>
+                                                    <p className="text-[11px] text-red-400/60 leading-relaxed font-bold">Registration will automatically show <span className="text-red-400">SOLD OUT</span> when headcount reaches capacity.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="flex-1 flex items-center justify-center">
+                                            <div className="animate-spin w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full" />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         ) : activeTab === "scanner" ? (
                             <div className="flex-1 overflow-auto rounded-3xl border border-white/10 bg-[#0f111a] flex flex-col p-4 sm:p-8">
