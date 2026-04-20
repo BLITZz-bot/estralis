@@ -167,7 +167,7 @@ export default function RegistrationForm({ event, onClose }) {
     const maxTeamSize = event?.maxTeamSize || 1;
     const isTeamEvent = maxTeamSize > 1;
 
-    const isDJNight = event?.title === "ARTIST PERFORMANCE AND DJ NIGHT";
+    const isDJNight = event?.title?.toUpperCase().includes("DJ NIGHT");
     const djPerPersonFee = 400;
     const currentSquadSize = 1 + teamMembers.length;
     const totalDJFee = isDJNight ? `₹${djPerPersonFee * currentSquadSize}` : null;
@@ -194,10 +194,10 @@ export default function RegistrationForm({ event, onClose }) {
 
     // Slot tracking for DJ Night
     useEffect(() => {
-        if (event?.title === "ARTIST PERFORMANCE AND DJ NIGHT") {
+        if (event?.title?.toUpperCase().includes("DJ NIGHT")) {
             const fetchSlots = async () => {
                 try {
-                    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(event.title)}`);
+                    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(event.title.trim())}`);
                     const data = await res.json();
                     if (data.success && data.isLimited) {
                         setSlotInfo(data);
@@ -563,7 +563,7 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setFontSize(10);
             doc.setTextColor(255, 255, 255);
             const schedule = EVENT_SCHEDULE[event.title.toUpperCase()] || { location: "TBA", time: "TBA" };
-            if (event.title.toUpperCase() === "ARTIST PERFORMANCE AND DJ NIGHT") {
+            if (event.title.toUpperCase().includes("DJ NIGHT")) {
                 schedule.location = "Main stage, GCEM Campus";
                 schedule.time = "06:00 PM";
             }
