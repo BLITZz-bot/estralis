@@ -798,7 +798,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                               : theme.bg
                             } text-black text-[12px] font-black tracking-[0.4em] uppercase rounded-2xl hover:bg-white transition-all shadow-[0_0_40px_${accentHex}] font-astral`}
                         >
-                          {slotInfo.isManualOpen === false ? 'SOLD OUT' : (slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : 'PROCEED_TO_REGISTRY')}
+                          {slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'SOLD OUT' : 'PROCEED_TO_REGISTRY'}
                         </button>
                       </div>
                     )}
