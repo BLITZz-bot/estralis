@@ -214,7 +214,7 @@ app.get('/api/admin/test-email', async (req, res) => {
 // Diagnostic Route to read error logs in production
 app.get('/api/admin/debug-mail', (req, res) => {
     const password = req.headers['x-admin-password'];
-    if (password !== 'estralis@admin2026') return res.status(401).json({ success: false });
+    if (password !== 'admin@2026') return res.status(401).json({ success: false });
 
     const logPath = path.join(__dirname, 'email_errors.log');
     if (fs.existsSync(logPath)) {
@@ -628,7 +628,7 @@ app.get('/api/registrations/:email', async (req, res) => {
 app.get('/api/admin/registrations', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -644,7 +644,7 @@ app.get('/api/admin/registrations', async (req, res) => {
 app.delete('/api/admin/registrations/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -661,7 +661,7 @@ app.delete('/api/admin/registrations/:id', async (req, res) => {
 app.patch('/api/admin/registrations/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -691,7 +691,7 @@ app.patch('/api/admin/registrations/:id', async (req, res) => {
 app.delete('/api/admin/registrations-all', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -713,7 +713,7 @@ app.delete('/api/admin/registrations-all', async (req, res) => {
 app.delete('/api/admin/registrations/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -746,7 +746,7 @@ app.get('/api/events/status', async (req, res) => {
 app.post('/api/admin/events/toggle', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -771,7 +771,7 @@ app.post('/api/admin/events/toggle', async (req, res) => {
 app.post('/api/admin/resend-confirmation/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -804,7 +804,7 @@ app.post('/api/admin/resend-all-confirmations', async (req, res) => {
     console.log("--- Bulk Resend Confirmation Emails Request ---");
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -861,7 +861,7 @@ app.get('/api/colleges', async (req, res) => {
 app.post('/api/admin/colleges', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -893,7 +893,7 @@ app.post('/api/admin/colleges', async (req, res) => {
 app.delete('/api/admin/colleges/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -918,7 +918,7 @@ app.post('/api/admin/send-report', async (req, res) => {
     console.log("--- New Email Report Request Received ---");
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1055,7 +1055,7 @@ app.get('/api/theme/status', async (req, res) => {
 app.post('/api/admin/theme/update', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1111,7 +1111,7 @@ app.post('/api/theme/verify', async (req, res) => {
 app.post('/api/admin/send-event-mail', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'estralis@admin2026') {
+        if (password !== 'admin@2026') {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
