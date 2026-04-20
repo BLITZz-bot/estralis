@@ -173,7 +173,7 @@ export default function RegistrationForm({ event, onClose }) {
     const totalDJFee = isDJNight ? `₹${djPerPersonFee * currentSquadSize}` : null;
     const displayFee = isDJNight ? totalDJFee : standardFeeString;
 
-    const isManuallyClosed = isDJNight && slotInfo && !slotInfo.isManualOpen;
+    const isManuallyClosed = slotInfo && slotInfo.isManualOpen === false;
     const isSoldOut = isDJNight && slotInfo && slotInfo.slotsLeft < currentSquadSize;
 
     // Fetch allowed colleges
@@ -195,9 +195,10 @@ export default function RegistrationForm({ event, onClose }) {
     // Slot tracking for DJ Night
     useEffect(() => {
         if (event?.title?.toUpperCase().includes("DJ NIGHT")) {
-            const fetchSlots = async () => {
-                try {
-                    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(event.title.trim())}`);
+          const fetchSlots = async () => {
+            try {
+              const normalizedTitle = event.title.trim().toUpperCase();
+              const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(normalizedTitle)}`);
                     const data = await res.json();
                     if (data.success && data.isLimited) {
                         setSlotInfo(data);

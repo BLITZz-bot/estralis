@@ -582,7 +582,8 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
     if (event?.title?.toUpperCase().includes("DJ NIGHT")) {
       const fetchSlots = async () => {
         try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(event.title.trim())}`);
+          const normalizedTitle = event.title.trim().toUpperCase();
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(normalizedTitle)}`);
           const data = await res.json();
           if (data.success && data.isLimited) {
             setSlotInfo(data);
@@ -669,10 +670,10 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                       <motion.div 
                         animate={{ opacity: [0.4, 1, 0.4] }}
                         transition={{ repeat: Infinity, duration: 2 }}
-                        className={`w-1.5 h-1.5 rounded-full ${(!slotInfo.isManualOpen || slotInfo.slotsLeft <= 0) ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : (slotInfo.slotsLeft > 20 ? 'bg-teal-400 shadow-[0_0_8px_#2dd4bf]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]')}`} 
+                        className={`w-1.5 h-1.5 rounded-full ${(slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : (slotInfo.slotsLeft > 20 ? 'bg-teal-400 shadow-[0_0_8px_#2dd4bf]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]')}`} 
                       />
-                      <span className={`text-[10px] sm:text-[11px] font-black tracking-widest uppercase font-astral ${(!slotInfo.isManualOpen || slotInfo.slotsLeft <= 0) ? 'text-red-500' : (slotInfo.slotsLeft > 20 ? 'text-teal-400' : 'text-red-500')}`}>
-                        {!slotInfo.isManualOpen ? 'REGISTRATION CLOSED' : (slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : `${slotInfo.slotsLeft} SLOTS REMAINING`)}
+                      <span className={`text-[10px] sm:text-[11px] font-black tracking-widest uppercase font-astral ${(slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'text-red-500' : (slotInfo.slotsLeft > 20 ? 'text-teal-400' : 'text-red-500')}`}>
+                        {slotInfo.isManualOpen === false ? 'REGISTRATION CLOSED' : (slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : `${slotInfo.slotsLeft} SLOTS REMAINING`)}
                       </span>
                     </div>
                   )}

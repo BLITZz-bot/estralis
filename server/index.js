@@ -1206,8 +1206,10 @@ app.get('/api/events/slots-status', async (req, res) => {
         const { eventTitle } = req.query;
         if (!eventTitle) return res.status(400).json({ success: false, message: 'eventTitle required' });
 
+        const normalizedTitle = eventTitle.trim().toUpperCase();
+
         // Get Config
-        const configRes = await db.query('SELECT * FROM event_slots WHERE event_title = $1', [eventTitle]);
+        const configRes = await db.query('SELECT * FROM event_slots WHERE UPPER(TRIM(event_title)) = $1', [normalizedTitle]);
         const config = configRes.rows[0];
 
         if (!config) {
@@ -1217,8 +1219,8 @@ app.get('/api/events/slots-status', async (req, res) => {
         // Get Current Headcount
         const countRes = await db.query(
             `SELECT COALESCE(SUM(1 + jsonb_array_length(team_members)), 0) as total 
-             FROM registrations WHERE event_title = $1`, 
-            [eventTitle]
+             FROM registrations WHERE UPPER(TRIM(event_title)) = $1`, 
+            [normalizedTitle]
         );
         const currentCount = parseInt(countRes.rows[0].total);
 
@@ -1227,7 +1229,7 @@ app.get('/api/events/slots-status', async (req, res) => {
             isLimited: true,
             maxSlots: config.max_slots,
             currentCount: currentCount,
-            isManualOpen: config.is_manual_open,
+            isManualOpen: config.is_manual_open !== false, // Default to true if null/undefined
             slotsLeft: Math.max(0, config.max_slots - currentCount)
         });
     } catch (error) {
@@ -1245,6 +1247,8 @@ app.post('/api/admin/events/slots-update', async (req, res) => {
         const { eventTitle, maxSlots, isManualOpen } = req.body;
         if (!eventTitle) return res.status(400).json({ success: false, message: 'eventTitle required' });
 
+        const normalizedTitle = eventTitle.trim().toUpperCase();
+
         const result = await db.query(
             `INSERT INTO event_slots (event_title, max_slots, is_manual_open) 
              VALUES ($1, $2, $3) 
@@ -1252,7 +1256,7 @@ app.post('/api/admin/events/slots-update', async (req, res) => {
              SET max_slots = COALESCE($2, event_slots.max_slots), 
                  is_manual_open = COALESCE($3, event_slots.is_manual_open)
              RETURNING *`,
-            [eventTitle, maxSlots, isManualOpen]
+            [normalizedTitle, maxSlots, isManualOpen]
         );
 
         res.status(200).json({ success: true, data: result.rows[0], message: 'Slot configuration updated' });
