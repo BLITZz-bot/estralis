@@ -1870,20 +1870,22 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
                                                     <div className="p-5 bg-white/5 border border-white/5 rounded-2xl space-y-4">
                                                         <p className="text-sm font-bold text-white">Adjust Capacity</p>
-                                                        <div className="flex gap-4">
-                                                            <input 
-                                                                type="number"
-                                                                defaultValue={djSlots.maxSlots}
-                                                                id="max-slots-input"
-                                                                className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-base sm:text-lg font-black focus:outline-none focus:border-teal-500 overflow-hidden"
-                                                            />
+                                                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                                                            <div className="flex-1 relative">
+                                                                <input 
+                                                                    type="number"
+                                                                    defaultValue={djSlots.maxSlots}
+                                                                    id="max-slots-input"
+                                                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-base sm:text-lg font-black focus:outline-none focus:border-teal-500"
+                                                                />
+                                                            </div>
                                                             <button 
                                                                 disabled={isUpdatingSlots}
                                                                 onClick={() => {
                                                                     const val = parseInt(document.getElementById('max-slots-input').value);
                                                                     if (val > 0) updateDjSlots({ maxSlots: val });
                                                                 }}
-                                                                className="shrink-0 px-4 sm:px-6 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-black text-[9px] sm:text-[10px] uppercase tracking-widest transition-all disabled:opacity-50"
+                                                                className="h-[48px] sm:h-auto px-6 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-black text-[10px] sm:text-[11px] uppercase tracking-widest transition-all disabled:opacity-50 shadow-lg shadow-teal-900/20"
                                                             >
                                                                 {isUpdatingSlots ? '...' : 'SET'}
                                                             </button>
