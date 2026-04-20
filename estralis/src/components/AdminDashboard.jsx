@@ -132,7 +132,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        if (password === "estralis@admin2026") {
+        if (password === "admin@2026") {
             setIsAuthenticated(true);
             setLoginError("");
             fetchRegistrations(password); // Automatically load data instantly on successful login
@@ -460,7 +460,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
     };
 
     const resendAllConfirmations = async () => {
-        if (resendPassword !== "estralis@admin2026") {
+        if (resendPassword !== "admin@2026") {
             setResendError("Incorrect password");
             return;
         }
@@ -494,7 +494,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
     };
 
     const handleClearRegistrations = async () => {
-        if (clearPassword !== "estralis@admin2026") {
+        if (clearPassword !== "admin@2026") {
             setClearError("Incorrect password");
             return;
         }
@@ -656,24 +656,24 @@ export default function AdminDashboard({ isOpen, onClose }) {
         let scanner = null;
         if (activeTab === "scanner" && scannerActive) {
             scanner = new Html5Qrcode("reader");
-            const config = { 
-                fps: 10, 
+            const config = {
+                fps: 10,
                 qrbox: { width: 250, height: 250 },
                 aspectRatio: 1.0
             };
 
             const onScanSuccess = (decodedText) => {
                 const cleanText = String(decodedText).trim();
-                
+
                 // IGNORE EMPTY READS
                 if (!cleanText) return;
-                
+
                 // Search across all common ID fields to be robust (Fixed Mapping)
                 // WE SEARCH THE RAW 'registrations' STATE TO BYPASS DASHBOARD FILTERS
-                const found = registrations.find(r => 
-                    String(r.id) === cleanText || 
-                    String(r._id) === cleanText || 
-                    String(r.ref_id) === cleanText || 
+                const found = registrations.find(r =>
+                    String(r.id) === cleanText ||
+                    String(r._id) === cleanText ||
+                    String(r.ref_id) === cleanText ||
                     String(r.mongo_id) === cleanText ||
                     String(r.registration_id) === cleanText ||
                     String(r.registrationId) === cleanText
@@ -685,8 +685,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
                     scanner.stop().catch(err => console.error("Stop failed", err));
                 } else {
                     // Fallback search / Auto-refresh
-                    fetchRegistrations(); 
-                    
+                    fetchRegistrations();
+
                     if (cleanText === "PENDING") {
                         addToast(`⚠️ INVALID PASS: This pass was generated before the ID was confirmed. Ask the student to re-download it.`, "warning");
                     } else {
@@ -991,10 +991,10 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                 {/* COMPACT SUMMARY METRICS */}
                                 {(() => {
                                     const successfulRegs = registrations.filter(r => r.status === 'verified' || r.status === 'visited');
-                                    const filteredSuccess = filterEvent === "All" 
-                                        ? successfulRegs 
+                                    const filteredSuccess = filterEvent === "All"
+                                        ? successfulRegs
                                         : successfulRegs.filter(r => r.event_title === filterEvent);
-                                    
+
                                     return (
                                         <div className="grid grid-cols-3 gap-2 mb-4 relative z-10 px-1">
                                             <div className="astral-glass p-2 border-teal-500/10 flex flex-col items-center justify-center text-center">
@@ -1139,20 +1139,17 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                         </td>
                                                         <td className="px-8 py-8 text-center border-r border-teal-500/10">
                                                             <div className="flex flex-col items-center justify-center gap-1.5">
-                                                                <div className={`w-2 h-2 rounded-full ${
-                                                                    reg.status === 'visited' ? 'bg-blue-400' :
-                                                                    reg.status === 'verified' ? 'bg-emerald-400' :
-                                                                    'bg-amber-400'
-                                                                } animate-pulse outline outline-2 ${
-                                                                    reg.status === 'visited' ? 'outline-blue-400/20' :
-                                                                    reg.status === 'verified' ? 'outline-emerald-400/20' :
-                                                                    'outline-amber-400/20'
-                                                                }`}></div>
-                                                                <span className={`text-[8px] font-black uppercase tracking-[0.2em] ${
-                                                                    reg.status === 'visited' ? 'text-blue-400' :
-                                                                    reg.status === 'verified' ? 'text-emerald-400' :
-                                                                    'text-amber-400'
-                                                                }`}>
+                                                                <div className={`w-2 h-2 rounded-full ${reg.status === 'visited' ? 'bg-blue-400' :
+                                                                        reg.status === 'verified' ? 'bg-emerald-400' :
+                                                                            'bg-amber-400'
+                                                                    } animate-pulse outline outline-2 ${reg.status === 'visited' ? 'outline-blue-400/20' :
+                                                                        reg.status === 'verified' ? 'outline-emerald-400/20' :
+                                                                            'outline-amber-400/20'
+                                                                    }`}></div>
+                                                                <span className={`text-[8px] font-black uppercase tracking-[0.2em] ${reg.status === 'visited' ? 'text-blue-400' :
+                                                                        reg.status === 'verified' ? 'text-emerald-400' :
+                                                                            'text-amber-400'
+                                                                    }`}>
                                                                     {reg.status || 'PENDING'}
                                                                 </span>
                                                             </div>
@@ -1213,20 +1210,20 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         <p className="text-gray-400 text-sm mb-8">Use this section to control the registration status of events.</p>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                             {[...eventsDay1, ...eventsDay2, { title: "ARTIST PERFORMANCE" }, { title: "DJ NIGHT" }].map(eventObj => {
-                                        const ev = eventObj.title;
-                                        const statusObj = eventStatuses.find(s => s.title === ev);
-                                        const isOpen = statusObj ? statusObj.isOpen : true; // default true
-                                        return (
-                                            <div key={ev} className="bg-white/5 border border-white/10 rounded-xl p-5 flex items-center justify-between shadow-lg hover:border-white/20 transition-colors">
-                                                <span className="text-white font-medium pr-4">{ev}</span>
-                                                <button
-                                                    onClick={() => toggleEventStatus(ev, isOpen)}
-                                                    className={`px-4 py-2 rounded-lg text-xs tracking-wider font-bold transition-all shadow-md ${isOpen ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 hover:bg-emerald-500/30' : 'bg-red-500/20 text-red-500 border border-red-500/50 hover:bg-red-500/30'}`}
-                                                >
-                                                    {isOpen ? "OPEN" : "CLOSED"}
-                                                </button>
-                                            </div>
-                                        );
+                                                const ev = eventObj.title;
+                                                const statusObj = eventStatuses.find(s => s.title === ev);
+                                                const isOpen = statusObj ? statusObj.isOpen : true; // default true
+                                                return (
+                                                    <div key={ev} className="bg-white/5 border border-white/10 rounded-xl p-5 flex items-center justify-between shadow-lg hover:border-white/20 transition-colors">
+                                                        <span className="text-white font-medium pr-4">{ev}</span>
+                                                        <button
+                                                            onClick={() => toggleEventStatus(ev, isOpen)}
+                                                            className={`px-4 py-2 rounded-lg text-xs tracking-wider font-bold transition-all shadow-md ${isOpen ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 hover:bg-emerald-500/30' : 'bg-red-500/20 text-red-500 border border-red-500/50 hover:bg-red-500/30'}`}
+                                                        >
+                                                            {isOpen ? "OPEN" : "CLOSED"}
+                                                        </button>
+                                                    </div>
+                                                );
                                             })}
                                         </div>
                                     </div>
@@ -1350,11 +1347,10 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                                     <div className="text-white font-bold text-xs sm:text-sm truncate">{reg.full_name}</div>
                                                                     <div className="flex flex-col gap-0.5 mt-0.5 sm:mt-1">
                                                                         <div className="flex items-center gap-2 mb-1">
-                                                                            <span className={`text-[7px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest ${
-                                                                                reg.status === 'visited' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
-                                                                                reg.status === 'verified' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                                                                                'bg-amber-500/10 text-amber-500 border border-amber-500/20'
-                                                                            }`}>
+                                                                            <span className={`text-[7px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest ${reg.status === 'visited' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                                                                                    reg.status === 'verified' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                                                                        'bg-amber-500/10 text-amber-500 border border-amber-500/20'
+                                                                                }`}>
                                                                                 {reg.status || 'PENDING'}
                                                                             </span>
                                                                         </div>
@@ -1697,16 +1693,16 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                 </div>
                                                 <p className="text-gray-400 text-sm">Add or remove colleges that are permitted to register for Estralis events. The list is automatically sorted alphabetically.</p>
                                             </div>
-                                            
+
                                             <form onSubmit={addCollege} className="flex w-full md:w-auto items-center gap-3">
-                                                <input 
-                                                    type="text" 
+                                                <input
+                                                    type="text"
                                                     value={newCollegeName}
                                                     onChange={e => setNewCollegeName(e.target.value)}
                                                     placeholder="NEW COLLEGE NAME"
                                                     className="w-full md:w-64 bg-black/60 border border-purple-500/30 rounded-xl px-4 py-3 text-white uppercase text-xs focus:outline-none focus:border-purple-500 transition-all placeholder:text-gray-600 placeholder:normal-case font-bold"
                                                 />
-                                                <button 
+                                                <button
                                                     type="submit"
                                                     disabled={isAddingCollege || !newCollegeName.trim()}
                                                     className="px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white rounded-xl font-bold transition shadow-lg shrink-0 text-xs tracking-widest uppercase flex items-center gap-2"
@@ -1721,10 +1717,10 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                 {collegesList.map((c, i) => (
                                                     <div key={c.id} className="bg-black/40 border border-white/5 rounded-xl p-4 flex items-center justify-between hover:border-purple-500/30 transition-colors group">
                                                         <div className="flex items-center gap-4">
-                                                            <div className="text-purple-400/50 font-mono text-xs font-black min-w-[24px]">#{(i+1).toString().padStart(2, '0')}</div>
+                                                            <div className="text-purple-400/50 font-mono text-xs font-black min-w-[24px]">#{(i + 1).toString().padStart(2, '0')}</div>
                                                             <div className="text-white font-bold text-sm tracking-wide uppercase">{c.name}</div>
                                                         </div>
-                                                        <button 
+                                                        <button
                                                             onClick={() => removeCollege(c.id, c.name)}
                                                             className="text-red-400/50 hover:text-red-400 text-[10px] uppercase font-black tracking-widest px-4 py-2 border border-red-500/0 hover:border-red-500/20 rounded-lg bg-red-500/0 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
                                                         >
@@ -1755,7 +1751,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                             <p className="text-gray-400 text-sm">Verify student identity and grant venue access.</p>
                                         </div>
                                         {!scannerActive && !scannedReg && (
-                                            <button 
+                                            <button
                                                 onClick={() => setScannerActive(true)}
                                                 className="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-3 active:scale-95"
                                             >
@@ -1769,7 +1765,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     {scannerActive && (
                                         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative overflow-hidden rounded-3xl border-2 border-emerald-500/30 bg-black aspect-square max-w-sm mx-auto shadow-[0_0_50px_rgba(16,185,129,0.1)]">
                                             <div id="reader" className="w-full h-full"></div>
-                                            <button 
+                                            <button
                                                 onClick={() => setScannerActive(false)}
                                                 className="absolute top-4 right-4 z-50 p-2 bg-black/50 text-white rounded-full hover:bg-black transition"
                                             >
@@ -1788,7 +1784,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                             </div>
                                             <h4 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">{scannedReg.full_name}</h4>
                                             <p className="text-teal-400/60 font-mono text-xs uppercase tracking-[0.2em] mb-6">{scannedReg.event_title}</p>
-                                            
+
                                             <div className="space-y-4 mb-8">
                                                 <div className="flex justify-between text-[10px] px-4">
                                                     <span className="text-gray-500 font-bold uppercase tracking-widest">PAYMENT</span>
@@ -1809,7 +1805,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                     ⚠️ ALREADY CHECKED IN
                                                 </div>
                                             ) : (
-                                                <button 
+                                                <button
                                                     onClick={() => handleCheckIn(scannedReg)}
                                                     disabled={isScanning}
                                                     className="w-full py-5 bg-emerald-500 text-black font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-white transition-all shadow-[0_0_30px_rgba(45,212,191,0.2)] disabled:opacity-50 active:scale-95"
@@ -1817,8 +1813,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                     {isScanning ? "DOUBE-CHECKING..." : "GRANT ENTRY"}
                                                 </button>
                                             )}
-                                            
-                                            <button 
+
+                                            <button
                                                 onClick={() => setScannedReg(null)}
                                                 className="mt-6 text-gray-500 hover:text-white text-[10px] font-bold uppercase tracking-widest transition"
                                             >
@@ -2069,7 +2065,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     </button>
                                     <button
                                         onClick={() => {
-                                            if (mailerConfirmPassword === "estralis@admin2026") {
+                                            if (mailerConfirmPassword === "admin@2026") {
                                                 setIsMailerConfirmOpen(false);
                                                 sendEventMail('all');
                                             } else {

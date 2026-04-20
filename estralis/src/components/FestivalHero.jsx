@@ -101,7 +101,7 @@ export default function FestivalHero() {
             }}
             className="absolute -top-[20%] sm:-top-[15%] md:top-[5%] left-[5%] sm:left-[10%] md:left-[20%] z-20"
           >
-            <div className="backdrop-blur-xl bg-white/5 border border-white/20 text-cyan-300 font-mono tracking-[0.2em] text-[10px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(0,255,255,0.2)] uppercase whitespace-nowrap">
+            <div className="backdrop-blur-xl bg-white/5 border border-white/20 text-cyan-300 font-mono tracking-[0.2em] text-[7px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(0,255,255,0.2)] uppercase whitespace-nowrap">
               v1.0 Symposium
             </div>
           </motion.div>
@@ -116,7 +116,7 @@ export default function FestivalHero() {
             }}
             className="absolute top-[65%] sm:top-[70%] md:top-[35%] left-1/2 md:left-[48%] -translate-x-1/2 md:translate-x-0 z-20"
           >
-            <div className="backdrop-blur-xl bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-200 font-mono tracking-[0.2em] text-[10px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(217,70,239,0.3)] uppercase transform -rotate-3 whitespace-nowrap">
+            <div className="backdrop-blur-xl bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-200 font-mono tracking-[0.2em] text-[7px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(217,70,239,0.3)] uppercase transform -rotate-3 whitespace-nowrap">
               May 14-15
             </div>
           </motion.div>
@@ -131,7 +131,7 @@ export default function FestivalHero() {
             }}
             className="absolute -top-[20%] sm:top-[2%] md:top-[10%] right-[5%] sm:right-[15%] md:right-[25%] z-20"
           >
-            <div className="backdrop-blur-xl bg-white/5 border border-white/20 text-teal-300 font-mono tracking-[0.2em] text-[10px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(20,184,166,0.3)] uppercase whitespace-nowrap">
+            <div className="backdrop-blur-xl bg-white/5 border border-white/20 text-teal-300 font-mono tracking-[0.2em] text-[7px] sm:text-[9px] px-2 sm:px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(20,184,166,0.3)] uppercase whitespace-nowrap">
               Coordinates Locked
             </div>
           </motion.div>

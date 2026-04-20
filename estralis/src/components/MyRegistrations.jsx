@@ -384,16 +384,16 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                         {/* CLOSE BUTTON */}
                         <button
                             onClick={onClose}
-                            className="absolute top-4 right-4 text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 p-2 rounded-full transition"
+                            className="absolute top-4 right-4 text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 p-2 rounded-full transition z-[100] cursor-pointer"
                         >
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
 
-                        <h2 className="astral-heading text-3xl font-bold mb-2 uppercase tracking-tight">
+                        <h2 className="astral-heading text-xl sm:text-3xl font-bold mb-2 uppercase tracking-tight">
                             Your Registrations
                         </h2>
                         <p className="text-white/60 font-tech mb-8">
-                            Enter the Leader's email address used during registration to find your access pass.
+                            Enter Your email address used during registration to find your access pass.
                         </p>
 
                         {/* SEARCH FORM */}
@@ -403,7 +403,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                                 required
                                 value={searchEmail}
                                 onChange={(e) => setSearchEmail(e.target.value)}
-                                placeholder="name@college.edu"
+                                placeholder="estralis@gmail.com"
                                 className="flex-1 bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition font-tech"
                             />
                             <button
