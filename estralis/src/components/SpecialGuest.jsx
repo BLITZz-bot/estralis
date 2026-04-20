@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RegistrationForm from "./RegistrationForm";
 import { EventModal } from "./Schedule";
 
