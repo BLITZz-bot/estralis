@@ -791,10 +791,15 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                           <div className={`w-12 h-[1px] ${theme.bgSoft}`} />
                         </div>
                         <button
+                          disabled={slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)}
                           onClick={() => onRegister(event)}
-                          className={`w-full max-w-md py-6 ${theme.bg} text-black text-[12px] font-black tracking-[0.4em] uppercase rounded-2xl hover:bg-white transition-all shadow-[0_0_40px_${accentHex}] font-astral`}
+                          className={`w-full max-w-md py-6 ${
+                            slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) 
+                            ? 'bg-red-600 cursor-not-allowed shadow-none hover:bg-red-600 text-white' 
+                            : theme.bg
+                          } text-black text-[12px] font-black tracking-[0.4em] uppercase rounded-2xl hover:bg-white transition-all shadow-[0_0_40px_${accentHex}] font-astral`}
                         >
-                          PROCEED_TO_REGISTRY
+                          {slotInfo && slotInfo.isManualOpen === false ? 'REGISTRATION CLOSED' : (slotInfo && slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : 'PROCEED_TO_REGISTRY')}
                         </button>
                       </div>
                     )}
