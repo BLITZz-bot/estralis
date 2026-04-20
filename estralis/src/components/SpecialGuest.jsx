@@ -20,6 +20,25 @@ export const DJ_EVENT_DATA = {
 const SpecialGuest = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showRegistration, setShowRegistration] = useState(false);
+    const [slotInfo, setSlotInfo] = useState(null);
+
+    useEffect(() => {
+        const fetchSlots = async () => {
+            try {
+                const title = DJ_EVENT_DATA.title.trim().toUpperCase();
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(title)}`);
+                const data = await res.json();
+                if (data.success && data.isLimited) {
+                    setSlotInfo(data);
+                }
+            } catch (err) {
+                console.error("Special Guest slot fetch err:", err);
+            }
+        };
+        fetchSlots();
+        const interval = setInterval(fetchSlots, 30000); // 30s auto-refresh
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <>
@@ -85,6 +104,14 @@ const SpecialGuest = () => {
                                     <span className="text-[10px] uppercase tracking-widest text-white/30 font-black">Reg Fees</span>
                                     <span className="text-4xl font-black text-teal-400 tracking-tighter">₹400</span>
                                 </div>
+                                {slotInfo && (
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-[10px] uppercase tracking-widest text-white/30 font-black">Live Headcount</span>
+                                        <span className={`text-4xl font-black ${slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0 ? 'text-red-500' : 'text-teal-400'} tracking-tighter`}>
+                                            {slotInfo.isManualOpen === false ? 'CLOSED' : (slotInfo.slotsLeft <= 0 ? 'FULL' : `${slotInfo.slotsLeft}`)}
+                                        </span>
+                                    </div>
+                                )}
                             </motion.div>
 
                             {/* Action + Barcode Row */}
@@ -97,9 +124,9 @@ const SpecialGuest = () => {
                             >
                                 <button
                                     onClick={() => setIsModalOpen(true)}
-                                    className="bg-teal-500 text-black px-10 py-5 font-black uppercase text-xs tracking-[0.2em] transform transition hover:scale-105 active:scale-95 shadow-[0_0_30px_#2dd4bf55]"
+                                    className={`${slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'bg-red-600' : 'bg-teal-500'} text-black px-10 py-5 font-black uppercase text-xs tracking-[0.2em] transform transition hover:scale-105 active:scale-95 shadow-[0_0_30px_#2dd4bf55]`}
                                 >
-                                    Register Now
+                                    {slotInfo && slotInfo.isManualOpen === false ? 'REGISTRATION CLOSED' : (slotInfo && slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : 'OPEN SECURE REGISTRY')}
                                 </button>
 
                             </motion.div>
