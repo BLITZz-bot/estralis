@@ -128,7 +128,7 @@ export const eventsDay1 = [
   },
   {
     time: "11:00 AM",
-    title: "FITNESS CHALLENGE",
+    title: "FITNESS CHALLENGE (A)",
     location: "Open Amphitheatre",
     description: "A test of strength and endurance featuring push-up and plank challenges. Participants compete against time to push their physical limits, showcasing stamina, discipline, and determination.",
     category: "Sports",
@@ -152,7 +152,7 @@ export const eventsDay1 = [
   },
   {
     time: "11:00 AM",
-    title: "FITNESS CHALLENGE",
+    title: "FITNESS CHALLENGE (B)",
     location: "Open Amphitheatre",
     description: "A test of strength and endurance featuring push-up and plank challenges. Participants compete against time to push their physical limits, showcasing stamina, discipline, and determination.",
     category: "Sports",
