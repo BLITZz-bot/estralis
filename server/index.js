@@ -1229,7 +1229,7 @@ app.get('/api/events/slots-status', async (req, res) => {
             isLimited: true,
             maxSlots: config.max_slots,
             currentCount: currentCount,
-            isManualOpen: config.is_manual_open !== false, // Default to true if null/undefined
+            isManualOpen: config.is_manual_open === true || config.is_manual_open === 1 || config.is_manual_open === null,
             slotsLeft: Math.max(0, config.max_slots - currentCount)
         });
     } catch (error) {

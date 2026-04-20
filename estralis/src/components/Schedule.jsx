@@ -113,14 +113,14 @@ export const eventsDay1 = [
     minTeamSize: 1,
     maxTeamSize: 1,
     rules: [
-       "Time limit: 60 minutes.",
-       "The theme will be announced in prior(theme by the coordinator).",
-       "Participants must bring their own materials.",
-       "Only one model per participant.",
-       "Judging based on creativity and neatness.",
-       "No pre-drawn designs allowed",
-       "The decision of the judges will be final and binding.",
-       "Carry your college ID cards.",
+      "Time limit: 60 minutes.",
+      "The theme will be announced in prior(theme by the coordinator).",
+      "Participants must bring their own materials.",
+      "Only one model per participant.",
+      "Judging based on creativity and neatness.",
+      "No pre-drawn designs allowed",
+      "The decision of the judges will be final and binding.",
+      "Carry your college ID cards.",
     ],
     coordinators: ["Pranitha - 9845649134"],
     registerLink: "#",
@@ -160,14 +160,14 @@ export const eventsDay1 = [
     minTeamSize: 4,
     maxTeamSize: 4,
     rules: [
-     "The event consists of two rounds: Push-Up Challenge and Plank Challenge",
-     "Participants can take part in one or both rounds",
-     "Time limit for each round: 2 minutes",
-     "Participants must hold plank position for a maximum of 2 minutes",
-     "Elbows should be directly under shoulders Participants are requested to bring their own mat (if required)",
-     "Any misconduct or unfair means will lead to disqualification",
-     "Judges' decision will be final",
-     "Participants must report to the venue at least 30 minutes prior to their scheduled time.",
+      "The event consists of two rounds: Push-Up Challenge and Plank Challenge",
+      "Participants can take part in one or both rounds",
+      "Time limit for each round: 2 minutes",
+      "Participants must hold plank position for a maximum of 2 minutes",
+      "Elbows should be directly under shoulders Participants are requested to bring their own mat (if required)",
+      "Any misconduct or unfair means will lead to disqualification",
+      "Judges' decision will be final",
+      "Participants must report to the venue at least 30 minutes prior to their scheduled time.",
     ],
     coordinators: ["Rittkriti – 8618080973"],
     registerLink: "#",
@@ -210,13 +210,13 @@ export const eventsDay1 = [
     minTeamSize: 1,
     maxTeamSize: 1,
     rules: ["Only vocal sounds are permitted. The use of musical instruments or external devices is strictly prohibited.",
-            "Performances must be appropriate and respectful. Any form of offensive, vulgar, or inappropriate content will lead to disqualification.",
-            "This is a solo performance event; group participation is not allowed.",
-            "Judging will be based on rhythm, creativity, originality, stage presence, and clarity.",
-            "Participants must report to the venue at least 30 minutes prior to their scheduled time.",
-            "Judges' decision will be final.",
-            "Participants are advised to check the event schedule before registering for multiple events. No refunds will be provided for scheduling conflicts.",
-            "Please carry ID card"
+      "Performances must be appropriate and respectful. Any form of offensive, vulgar, or inappropriate content will lead to disqualification.",
+      "This is a solo performance event; group participation is not allowed.",
+      "Judging will be based on rhythm, creativity, originality, stage presence, and clarity.",
+      "Participants must report to the venue at least 30 minutes prior to their scheduled time.",
+      "Judges' decision will be final.",
+      "Participants are advised to check the event schedule before registering for multiple events. No refunds will be provided for scheduling conflicts.",
+      "Please carry ID card"
     ],
     coordinators: ["Manoj – 7760396379"],
     registerLink: "#",
@@ -232,13 +232,13 @@ export const eventsDay1 = [
     minTeamSize: 1,
     maxTeamSize: 1,
     rules: [" Each participant will be allotted a performance time of 4+1 minutes. Exceeding the time limit may result in penalties.",
-            " Only Western dance styles such as Hip-Hop, Freestyle, Contemporary, Jazz, etc., are permitted.",
-            " Participant must submit their music track in advance in the specified format. No changes will be allowed on the spot.",
-            " Use of dangerous or hazardous props (such as fire, glass, sharp objects, etc.) is strictly prohibited.",
-            " Performances must be appropriate and respectful. Any vulgar or offensive content will lead to disqualification.",
-            " Participants must report to the venue at least 30 minutes prior to their scheduled time.",
-            " Carry your college ID cards.",
-            "",],
+      " Only Western dance styles such as Hip-Hop, Freestyle, Contemporary, Jazz, etc., are permitted.",
+      " Participant must submit their music track in advance in the specified format. No changes will be allowed on the spot.",
+      " Use of dangerous or hazardous props (such as fire, glass, sharp objects, etc.) is strictly prohibited.",
+      " Performances must be appropriate and respectful. Any vulgar or offensive content will lead to disqualification.",
+      " Participants must report to the venue at least 30 minutes prior to their scheduled time.",
+      " Carry your college ID cards.",
+      "",],
     coordinators: ["Akhila - 8073557585"],
     registerLink: "#",
     fee: "₹500",
@@ -280,7 +280,7 @@ export const eventsDay1 = [
       "WiFi may be provided; players are advised to keep mobile data backup",
       "No rematches for lag, disconnection, or network issues ",
 
-      ],
+    ],
     coordinators: ["Kishore - 9742726867", "Hari Kumar - 6362965600", "Anas Ansari - 9008892112"],
     registerLink: "#",
     fee: "₹1000",
@@ -298,13 +298,13 @@ export const eventsDay2 = [
     prize: "₹30,000",
     minTeamSize: 8,
     maxTeamSize: 15,
-    rules: [ 
-          "Team size: 6-12 members | Time limit: 5-10 minutes (including entry & exit) | Only western dance styles allowed",
-          "Music must be appropriate (non-offensive) and submitted in advance as per instructions",
-          "Dangerous props, fire, or risky stunts are strictly prohibited | Teams must be ready before their slot",
-          "Exceeding time limit may lead to penalty or disqualification | Any damage to stage/property is team's responsibility",
-          "Judging criteria: Synchronization & coordination, choreography & creativity, energy & expressions",
-          "Teams must report on time for registration and sound check | Carry college ID cards | Judges' decision is final and binding",
+    rules: [
+      "Team size: 6-12 members | Time limit: 5-10 minutes (including entry & exit) | Only western dance styles allowed",
+      "Music must be appropriate (non-offensive) and submitted in advance as per instructions",
+      "Dangerous props, fire, or risky stunts are strictly prohibited | Teams must be ready before their slot",
+      "Exceeding time limit may lead to penalty or disqualification | Any damage to stage/property is team's responsibility",
+      "Judging criteria: Synchronization & coordination, choreography & creativity, energy & expressions",
+      "Teams must report on time for registration and sound check | Carry college ID cards | Judges' decision is final and binding",
     ],
     coordinators: ["Siya - 9886483177"],
     registerLink: "#",
@@ -320,11 +320,11 @@ export const eventsDay2 = [
     minTeamSize: 3,
     maxTeamSize: 8,
     rules: ["Type: Team | Team size: 3–8",
-            "All genres allowed (rock, fusion, indie, etc.) | Live performance only (no lip-sync)",
-            "Time limit: 10–15 min (including setup) | Exceeding time = penalty",
-            "Original composition encouraged | No explicit or inappropriate content",
-            "Equipment: Basic sound provided | Bring your own instruments | Inform in advance for special requirements",
-            "Judging: Musicality & coordination | Stage presence & energy | Creativity & originality | Audience engagement",
+      "All genres allowed (rock, fusion, indie, etc.) | Live performance only (no lip-sync)",
+      "Time limit: 10–15 min (including setup) | Exceeding time = penalty",
+      "Original composition encouraged | No explicit or inappropriate content",
+      "Equipment: Basic sound provided | Bring your own instruments | Inform in advance for special requirements",
+      "Judging: Musicality & coordination | Stage presence & energy | Creativity & originality | Audience engagement",
     ],
     coordinators: ["Charan Kumar – 9019142436"],
     registerLink: "#",
@@ -340,15 +340,15 @@ export const eventsDay2 = [
     minTeamSize: 8,
     maxTeamSize: 15,
     rules: ["Each team must follow a predefined theme",
-            "Team size: 6-12 members",
-            "Time limit: 8-12 minutes",
-            "Music must be submitted before the event",
-            "No dangerous props or fire elements allowed",
-            "Judging based on coordination, creativity, and confidence",
-            "Participants must perform as a team",
-            "No offensive or vulgar content",
-            "Judges' decision will be final",
-            "All teams must report to the venue at least 30 minutes prior to their scheduled time",
+      "Team size: 6-12 members",
+      "Time limit: 8-12 minutes",
+      "Music must be submitted before the event",
+      "No dangerous props or fire elements allowed",
+      "Judging based on coordination, creativity, and confidence",
+      "Participants must perform as a team",
+      "No offensive or vulgar content",
+      "Judges' decision will be final",
+      "All teams must report to the venue at least 30 minutes prior to their scheduled time",
     ],
     coordinators: ["Raksha M – 8867555612"],
     registerLink: "#",
@@ -520,56 +520,56 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
 
 function getThemeForCategory(category) {
   const normalized = category?.toLowerCase();
-  
+
   if (["cultural", "dance", "fashion"].includes(normalized)) {
-    return { 
-      text: "text-cyan-400", 
-      hoverText: "group-hover:text-cyan-400", 
-      borderB: "border-b-cyan-500/10", 
-      bg: "bg-cyan-500", 
-      hoverBg: "hover:bg-cyan-500/10", 
-      borderL: "border-l-cyan-500", 
+    return {
+      text: "text-cyan-400",
+      hoverText: "group-hover:text-cyan-400",
+      borderB: "border-b-cyan-500/10",
+      bg: "bg-cyan-500",
+      hoverBg: "hover:bg-cyan-500/10",
+      borderL: "border-l-cyan-500",
       bgSoft: "bg-cyan-500/10",
-      accent: "cyan-500" 
+      accent: "cyan-500"
     };
   }
-  
+
   if (["fun"].includes(normalized)) {
-    return { 
-      text: "text-fuchsia-400", 
-      hoverText: "group-hover:text-fuchsia-400", 
-      borderB: "border-b-fuchsia-500/10", 
-      bg: "bg-fuchsia-500", 
-      hoverBg: "hover:bg-fuchsia-500/10", 
-      borderL: "border-l-fuchsia-500", 
+    return {
+      text: "text-fuchsia-400",
+      hoverText: "group-hover:text-fuchsia-400",
+      borderB: "border-b-fuchsia-500/10",
+      bg: "bg-fuchsia-500",
+      hoverBg: "hover:bg-fuchsia-500/10",
+      borderL: "border-l-fuchsia-500",
       bgSoft: "bg-fuchsia-500/10",
       accent: "fuchsia-500"
     };
   }
-  
+
   if (["gaming", "tech", "sports"].includes(normalized)) {
-    return { 
-      text: "text-blue-400", 
-      hoverText: "group-hover:text-blue-400", 
-      borderB: "border-b-blue-500/10", 
-      bg: "bg-blue-500", 
-      hoverBg: "hover:bg-blue-500/10", 
-      borderL: "border-l-blue-500", 
+    return {
+      text: "text-blue-400",
+      hoverText: "group-hover:text-blue-400",
+      borderB: "border-b-blue-500/10",
+      bg: "bg-blue-500",
+      hoverBg: "hover:bg-blue-500/10",
+      borderL: "border-l-blue-500",
       bgSoft: "bg-blue-500/10",
       accent: "blue-500"
     };
   }
 
   // Default Teal
-  return { 
-    text: "text-teal-400", 
-    hoverText: "group-hover:text-teal-400", 
-    borderB: "border-b-teal-500/10", 
-    bg: "bg-teal-500", 
-    hoverBg: "hover:bg-teal-500/10", 
-    borderL: "border-l-teal-500", 
+  return {
+    text: "text-teal-400",
+    hoverText: "group-hover:text-teal-400",
+    borderB: "border-b-teal-500/10",
+    bg: "bg-teal-500",
+    hoverBg: "hover:bg-teal-500/10",
+    borderL: "border-l-teal-500",
     bgSoft: "bg-teal-500/10",
-    accent: "teal-500" 
+    accent: "teal-500"
   };
 }
 
@@ -595,12 +595,12 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
       fetchSlots();
     }
   }, [event?.title]);
-  
+
   const theme = overrideTheme || getThemeForCategory(event?.category);
-  const accentHex = theme.accent === "cyan-500" ? "rgba(6,182,212,0.5)" : 
-                    theme.accent === "fuchsia-500" ? "rgba(217,70,239,0.5)" : 
-                    theme.accent === "blue-500" ? "rgba(59,130,246,0.5)" : 
-                    "rgba(45,212,191,0.5)";
+  const accentHex = theme.accent === "cyan-500" ? "rgba(6,182,212,0.5)" :
+    theme.accent === "fuchsia-500" ? "rgba(217,70,239,0.5)" :
+      theme.accent === "blue-500" ? "rgba(59,130,246,0.5)" :
+        "rgba(45,212,191,0.5)";
 
   useEffect(() => {
     setActiveTab("about");
@@ -648,9 +648,9 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
               <span className={`astral-eyebrow ${theme.text} uppercase`}>
                 {cat} SECTOR
               </span>
-              <h3 
+              <h3
                 className="text-xl sm:text-2xl font-black leading-[1.1] uppercase tracking-tighter astral-heading max-w-2xl"
-                style={{ 
+                style={{
                   backgroundImage: `linear-gradient(to bottom, ${accentHex.replace('0.5', '1')}, ${accentHex.replace('0.5', '0.8')})`,
                   filter: `drop-shadow(0 0 20px ${accentHex})`,
                   WebkitTextStroke: `1px ${accentHex.replace('0.5', '0.2')}`
@@ -667,10 +667,10 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                   </div>
                   {slotInfo && (
                     <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3 py-1 shadow-[0_0_20px_rgba(0,0,0,0.3)]">
-                      <motion.div 
+                      <motion.div
                         animate={{ opacity: [0.4, 1, 0.4] }}
                         transition={{ repeat: Infinity, duration: 2 }}
-                        className={`w-1.5 h-1.5 rounded-full ${(slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : (slotInfo.slotsLeft > 20 ? 'bg-teal-400 shadow-[0_0_8px_#2dd4bf]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]')}`} 
+                        className={`w-1.5 h-1.5 rounded-full ${(slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : (slotInfo.slotsLeft > 20 ? 'bg-teal-400 shadow-[0_0_8px_#2dd4bf]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]')}`}
                       />
                       <span className={`text-[10px] sm:text-[11px] font-black tracking-widest uppercase font-astral ${(slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'text-red-500' : (slotInfo.slotsLeft > 20 ? 'text-teal-400' : 'text-red-500')}`}>
                         {slotInfo.isManualOpen === false ? 'REGISTRATION CLOSED' : (slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : `${slotInfo.slotsLeft} SLOTS REMAINING`)}
@@ -726,14 +726,14 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                     </p>
 
                     <div className={`grid grid-cols-1 ${event.prize ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-6`}>
-                      <div 
+                      <div
                         className="p-8 astral-glass-bright flex flex-col items-center text-center group transition-all"
                         style={{ borderColor: `rgba(${accentHex.match(/\d+, \d+, \d+/)}, 0.2)` }}
                       >
                         <span className={`text-[9px] font-black ${theme.text} uppercase tracking-widest mb-3 font-astral`}>Reg Fees</span>
                         <span className={`text-2xl font-black ${theme.text} italic font-astral`}>{event.fee}</span>
                       </div>
-                      <div 
+                      <div
                         className="p-8 astral-glass-bright flex flex-col items-center text-center group transition-all"
                         style={{ borderColor: `rgba(${accentHex.match(/\d+, \d+, \d+/)}, 0.2)` }}
                       >
@@ -741,7 +741,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                         <span className="text-base font-bold text-white uppercase italic font-tech text-center">@{event.location}</span>
                       </div>
                       {event.prize && (
-                        <div 
+                        <div
                           className="p-8 astral-glass-bright flex flex-col items-center text-center group transition-all"
                           style={{ borderColor: `rgba(${accentHex.match(/\d+, \d+, \d+/)}, 0.2)` }}
                         >
@@ -793,11 +793,10 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                         <button
                           disabled={slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)}
                           onClick={() => onRegister(event)}
-                          className={`w-full max-w-md py-6 ${
-                            slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) 
-                            ? 'bg-red-600 cursor-not-allowed shadow-none hover:bg-red-600 text-white' 
-                            : theme.bg
-                          } text-black text-[12px] font-black tracking-[0.4em] uppercase rounded-2xl hover:bg-white transition-all shadow-[0_0_40px_${accentHex}] font-astral`}
+                          className={`w-full max-w-md py-6 ${slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)
+                              ? 'bg-red-600 cursor-not-allowed shadow-none hover:bg-red-600 text-white'
+                              : theme.bg
+                            } text-black text-[12px] font-black tracking-[0.4em] uppercase rounded-2xl hover:bg-white transition-all shadow-[0_0_40px_${accentHex}] font-astral`}
                         >
                           {slotInfo && slotInfo.isManualOpen === false ? 'REGISTRATION CLOSED' : (slotInfo && slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : 'PROCEED_TO_REGISTRY')}
                         </button>
@@ -827,7 +826,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                               <p className={`text-[9px] font-black ${theme.text} opacity-50 tracking-widest uppercase font-astral mt-1`}>Coordinator Access</p>
                             </div>
                             <div className="text-right">
-                              <a 
+                              <a
                                 href={`tel:${phone}`}
                                 className={`${theme.text} font-bold font-tech text-xl hover:brightness-150 transition-all block`}
                               >
