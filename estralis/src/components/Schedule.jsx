@@ -648,7 +648,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                 {cat} SECTOR
               </span>
               <h3 
-                className="text-3xl sm:text-5xl font-black leading-[1] uppercase tracking-tighter astral-heading max-w-2xl"
+                className="text-2xl sm:text-4xl font-black leading-[1.1] uppercase tracking-tighter astral-heading max-w-2xl"
                 style={{ 
                   backgroundImage: `linear-gradient(to bottom, ${accentHex.replace('0.5', '1')}, ${accentHex.replace('0.5', '0.8')})`,
                   filter: `drop-shadow(0 0 20px ${accentHex})`,
