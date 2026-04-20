@@ -126,7 +126,7 @@ const SpecialGuest = () => {
                                     onClick={() => setIsModalOpen(true)}
                                     className={`${slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'bg-red-600' : 'bg-teal-500'} text-black px-10 py-5 font-black uppercase text-xs tracking-[0.2em] transform transition hover:scale-105 active:scale-95 shadow-[0_0_30px_#2dd4bf55]`}
                                 >
-                                    {slotInfo && slotInfo.isManualOpen === false ? 'REGISTRATION CLOSED' : (slotInfo && slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : 'OPEN SECURE REGISTRY')}
+                                    {slotInfo && slotInfo.isManualOpen === false ? 'SOLD OUT' : (slotInfo && slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : 'BUY TICKETS NOW')}
                                 </button>
 
                             </motion.div>

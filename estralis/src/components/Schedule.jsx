@@ -673,7 +673,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                         className={`w-1.5 h-1.5 rounded-full ${(slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : (slotInfo.slotsLeft > 20 ? 'bg-teal-400 shadow-[0_0_8px_#2dd4bf]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]')}`}
                       />
                       <span className={`text-[10px] sm:text-[11px] font-black tracking-widest uppercase font-astral ${(slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'text-red-500' : (slotInfo.slotsLeft > 20 ? 'text-teal-400' : 'text-red-500')}`}>
-                        {slotInfo.isManualOpen === false ? 'REGISTRATION CLOSED' : (slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : `${slotInfo.slotsLeft} SLOTS REMAINING`)}
+                        {slotInfo.isManualOpen === false ? 'SOLD OUT' : (slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : `${slotInfo.slotsLeft} SLOTS REMAINING`)}
                       </span>
                     </div>
                   )}
@@ -798,7 +798,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                               : theme.bg
                             } text-black text-[12px] font-black tracking-[0.4em] uppercase rounded-2xl hover:bg-white transition-all shadow-[0_0_40px_${accentHex}] font-astral`}
                         >
-                          {slotInfo && slotInfo.isManualOpen === false ? 'REGISTRATION CLOSED' : (slotInfo && slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : 'PROCEED_TO_REGISTRY')}
+                          {slotInfo.isManualOpen === false ? 'SOLD OUT' : (slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : 'PROCEED_TO_REGISTRY')}
                         </button>
                       </div>
                     )}
