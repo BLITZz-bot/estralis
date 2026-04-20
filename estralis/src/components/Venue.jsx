@@ -25,7 +25,7 @@ export default function Venue() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-120px" }}
           transition={{ duration: 0.9, ease: "easeOut" }}
-          className="astral-glass p-8 md:p-14 h-full flex flex-col justify-center hover:border-teal-500/40 transition-all duration-500 relative"
+          className="astral-glass p-8 md:p-14 h-full flex flex-col justify-center hover:border-teal-500/40 transition-all duration-500 relative z-10"
         >
           <h3 className="text-2xl font-astral mb-6 text-teal-400 tracking-tight leading-snug">
             GOPALAN COLLEGE OF ENGINEERING <br className="hidden md:block" /> AND MANAGEMENT

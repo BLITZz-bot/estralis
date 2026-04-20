@@ -18,11 +18,11 @@ const TEAM_MEMBERS = [
   { name: "SHREYA B N", role: "EVENT HEAD", image: "/special-guest.png" },
   { name: "HARSHITH", role: "ARTIST HEAD", image: "/special-guest.png" },
   { name: "CHAMPA", role: "ARTIST HEAD", image: "/special-guest.png" },
-  { name: "SIRI", role: "HOSPITALITY HEAD", image: "/special-guest.png" },
   { name: "DHYAN", role: "HOSPITALITY HEAD", image: "/special-guest.png" },
   { name: "VINITH JOYAPPA", role: "LOGISTICS HEAD", image: "/special-guest.png" },
   { name: "AKHILA G", role: "LOGISTICS HEAD", image: "/special-guest.png" },
   { name: "GANESH", role: "VOLUNTEER HEAD", image: "/special-guest.png" },
+  { name: "Rohith Y S", role: "VOLUNTEER HEAD", image: "/special-guest.png" },
   { name: "SRINIVAS", role: "PRODUCTION HEAD", image: "/special-guest.png" },
   { name: "BHARGAV BHAT", role: "PRODUCTION HEAD", image: "/special-guest.png" }
 ];

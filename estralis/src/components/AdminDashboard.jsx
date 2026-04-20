@@ -989,20 +989,31 @@ export default function AdminDashboard({ isOpen, onClose }) {
                         {activeTab === "registrations" ? (
                             <>
                                 {/* COMPACT SUMMARY METRICS */}
-                                <div className="grid grid-cols-3 gap-2 mb-4 relative z-10 px-1">
-                                    <div className="astral-glass p-2 border-teal-500/10 flex flex-col items-center justify-center text-center">
-                                        <p className="text-teal-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">Total</p>
-                                        <h4 className="text-sm sm:text-lg font-black text-white font-mono">{registrations.length}</h4>
-                                    </div>
-                                    <div className="astral-glass p-2 border-cyan-500/10 flex flex-col items-center justify-center text-center">
-                                        <p className="text-cyan-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">Revenue</p>
-                                        <h4 className="text-sm sm:text-lg font-black text-white font-mono">₹{registrations.reduce((acc, reg) => acc + (parseFloat(reg.amount_paid?.toString().replace(/[^\d.]/g, '') || 0)), 0).toLocaleString('en-IN')}</h4>
-                                    </div>
-                                    <div className="astral-glass p-2 border-blue-500/10 flex flex-col items-center justify-center text-center">
-                                        <p className="text-blue-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">Channels</p>
-                                        <h4 className="text-sm sm:text-lg font-black text-white font-mono">{new Set(registrations.map(r => r.event_title)).size}</h4>
-                                    </div>
-                                </div>
+                                {(() => {
+                                    const successfulRegs = registrations.filter(r => r.status === 'verified' || r.status === 'visited');
+                                    const filteredSuccess = filterEvent === "All" 
+                                        ? successfulRegs 
+                                        : successfulRegs.filter(r => r.event_title === filterEvent);
+                                    
+                                    return (
+                                        <div className="grid grid-cols-3 gap-2 mb-4 relative z-10 px-1">
+                                            <div className="astral-glass p-2 border-teal-500/10 flex flex-col items-center justify-center text-center">
+                                                <p className="text-teal-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">Total Reg</p>
+                                                <h4 className="text-sm sm:text-lg font-black text-white font-mono">{successfulRegs.length}</h4>
+                                            </div>
+                                            <div className="astral-glass p-2 border-cyan-500/10 flex flex-col items-center justify-center text-center">
+                                                <p className="text-cyan-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">Revenue</p>
+                                                <h4 className="text-sm sm:text-lg font-black text-white font-mono">₹{filteredSuccess.reduce((acc, reg) => acc + (parseFloat(reg.amount_paid?.toString().replace(/[^\d.]/g, '') || 0)), 0).toLocaleString('en-IN')}</h4>
+                                            </div>
+                                            <div className="astral-glass p-2 border-blue-500/10 flex flex-col items-center justify-center text-center">
+                                                <p className="text-blue-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">
+                                                    {filterEvent === "All" ? "Total Success" : "Event Success"}
+                                                </p>
+                                                <h4 className="text-sm sm:text-lg font-black text-white font-mono">{filteredSuccess.length}</h4>
+                                            </div>
+                                        </div>
+                                    );
+                                })()}
 
                                 {/* COMMAND CENTER (FILTERS & SEARCH) */}
                                 <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-3 relative z-10 px-1">

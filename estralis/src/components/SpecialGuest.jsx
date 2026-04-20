@@ -12,7 +12,7 @@ export const DJ_EVENT_DATA = {
     minTeamSize: 1,
     maxTeamSize: 20,
     rules: ["ID CARD IS MANDATORY"],
-    coordinators: ["Divyashree RM – 7019691887", "Abhishek R - 7019323085"],
+    coordinators: ["STAR IS REVEALED SOON – "],
     registerLink: "#",
     fee: "₹400",
 };
