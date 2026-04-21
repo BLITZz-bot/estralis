@@ -46,6 +46,7 @@ export default function App() {
 
   /* ===== URL Deep-Linking for Pass Downloads ===== */
   const [initialRegEmail, setInitialRegEmail] = useState("");
+  const [autoDownload, setAutoDownload] = useState(false);
   const [isStaffPortal, setIsStaffPortal] = useState(false);
 
   useEffect(() => {
