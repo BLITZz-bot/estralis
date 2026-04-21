@@ -104,14 +104,6 @@ const SpecialGuest = () => {
                                     <span className="text-[10px] uppercase tracking-widest text-white/30 font-black">Reg Fees</span>
                                     <span className="text-4xl font-black text-teal-400 tracking-tighter">₹400</span>
                                 </div>
-                                {slotInfo && (
-                                    <div className="flex flex-col gap-1">
-                                        <span className="text-[10px] uppercase tracking-widest text-white/30 font-black">SLOTS LEFT</span>
-                                        <span className={`text-4xl font-black ${slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0 ? 'text-red-500' : 'text-teal-400'} tracking-tighter`}>
-                                            {slotInfo.isManualOpen === false ? 'CLOSED' : (slotInfo.slotsLeft <= 0 ? 'FULL' : `${slotInfo.slotsLeft}`)}
-                                        </span>
-                                    </div>
-                                )}
                             </motion.div>
 
                             {/* Action + Barcode Row */}

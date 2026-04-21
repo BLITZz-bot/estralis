@@ -665,18 +665,6 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                     <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} animate-pulse`} />
                     <span className="text-[10px] font-bold text-white/50 tracking-widest uppercase font-tech">SQUAD SIZE: {teamText}</span>
                   </div>
-                  {slotInfo && (
-                    <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3 py-1 shadow-[0_0_20px_rgba(0,0,0,0.3)]">
-                      <motion.div
-                        animate={{ opacity: [0.4, 1, 0.4] }}
-                        transition={{ repeat: Infinity, duration: 2 }}
-                        className={`w-1.5 h-1.5 rounded-full ${(slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : (slotInfo.slotsLeft > 20 ? 'bg-teal-400 shadow-[0_0_8px_#2dd4bf]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]')}`}
-                      />
-                      <span className={`text-[10px] sm:text-[11px] font-black tracking-widest uppercase font-astral ${(slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'text-red-500' : (slotInfo.slotsLeft > 20 ? 'text-teal-400' : 'text-red-500')}`}>
-                        {slotInfo.isManualOpen === false ? 'SOLD OUT' : (slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : `${slotInfo.slotsLeft} SLOTS REMAINING`)}
-                      </span>
-                    </div>
-                  )}
                 </div>
                 {event.theme && (
                   <div className="flex items-center gap-2">

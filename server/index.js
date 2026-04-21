@@ -7,6 +7,7 @@ const nodemailer = require('nodemailer');
 const ExcelJS = require('exceljs');
 const dns = require('dns');
 const PDFDocument = require('pdfkit');
+const QRCode = require('qrcode');
 const db = require('./db');
 const Razorpay = require('razorpay');
 const cloudinary = require('cloudinary').v2;
@@ -384,7 +385,17 @@ const EVENT_SCHEDULE = {
 /**
  * Generates a professional PDF pass using pdfkit
  */
-const generatePDFPass = (reg) => {
+const generatePDFPass = async (reg) => {
+    // Generate QR Code Buffer
+    const registrationId = (reg.id || reg._id || "REG_" + Date.now()).toString();
+    const qrBuffer = await QRCode.toBuffer(registrationId, {
+        margin: 1,
+        color: {
+            dark: '#2dd4bf', // Teal to match theme
+            light: '#0f172a' // Slate background
+        }
+    });
+
     return new Promise((resolve, reject) => {
         const mmToPt = 2.8346;
         const width = 180 * mmToPt;
@@ -400,18 +411,7 @@ const generatePDFPass = (reg) => {
         doc.on('end', () => resolve(Buffer.concat(chunks)));
         doc.on('error', (err) => reject(err));
 
-        // Background / Branding
-        doc.rect(0, 0, doc.page.width, doc.page.height).fill('#ffffff');
-
-        // Header Banner
-        doc.rect(0, 0, doc.page.width, 140).fill('#9333ea');
-
-        // Robust Category Normalization (Case-insensitive)
-        const rawCat = reg.category || "Tech";
-        const normalizedCategory = rawCat.trim().charAt(0).toUpperCase() + rawCat.trim().slice(1).toLowerCase();
-
-        console.log(`DEBUG: Generating PDF for ${reg.email} | Event: ${reg.event_title} | Category: [${rawCat}] -> Normalized: [${normalizedCategory}]`);
-
+        // Colors
         const colors = {
             bg: '#020617',
             card: '#0f172a',
@@ -447,21 +447,21 @@ const generatePDFPass = (reg) => {
             pageDoc.fillColor(colors.bg).rect(12 * mmToPt, 12 * mmToPt, 156 * mmToPt, 50 * mmToPt).fill();
             pageDoc.strokeColor(colors.teal).moveTo(12 * mmToPt, 62 * mmToPt).lineTo(168 * mmToPt, 62 * mmToPt).stroke();
 
-            // HEADER Text (Synced with 83mm offset)
+            // HEADER Text
             pageDoc.font('Helvetica-Bold').fontSize(26).fillColor(colors.aqua).opacity(0.4)
                 .text("ESTRALIS 2026", (89 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
             pageDoc.opacity(1).fillColor('#ffffff')
                 .text("ESTRALIS 2026", (89 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
 
-            // SLOGAN (Synced with 70mm manual adjustment)
+            // SLOGAN
             pageDoc.fontSize(8.5).font('Helvetica').fillColor(colors.teal)
                 .text("THE INTERSTELLAR SYMPOSIUM", (89 - 90) * mmToPt, 40.5 * mmToPt, { align: 'center', width: width, characterSpacing: 1.5 * mmToPt });
 
-            // SECURE ID (Synced with 89mm)
+            // SECURE ID
             pageDoc.fontSize(7).fillColor(colors.dim)
                 .text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", (89 - 90) * mmToPt, 50 * mmToPt, { align: 'center', width: width });
 
-            // FOOTER - Synced with RegistrationForm latest text
+            // FOOTER
             pageDoc.fontSize(7).font('Helvetica-Oblique').fillColor(colors.dim)
                 .text("PLEASE SUBMIT THE ACCESS PASS AT THE REGISTERATION DESK", 0, 243 * mmToPt, { align: 'center', width: width });
         };
@@ -475,7 +475,7 @@ const generatePDFPass = (reg) => {
         doc.strokeColor(colors.teal).lineWidth(0.5).roundedRect(130 * mmToPt, startY + 2 * mmToPt, 30 * mmToPt, 10 * mmToPt, 2 * mmToPt).stroke();
         doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("VERIFIED", (145 - 90) * mmToPt, startY + 9 * mmToPt, { width: width, align: 'center' });
 
-        // EVENT TITLE (Dynamic Font Size & Spacing)
+        // EVENT TITLE
         const eventTitle = reg.event_title.toUpperCase();
         const isLongTitle = eventTitle.length > 25;
         const titleFontSize = isLongTitle ? 18 : 32;
@@ -485,7 +485,8 @@ const generatePDFPass = (reg) => {
                 width: width, 
                 characterSpacing: isLongTitle ? 0.1 * mmToPt : 1 * mmToPt 
             });
-        // CATEGORY TAG (Synced with 86mm box / 86mm text - Pushed left as requested)
+
+        // CATEGORY TAG
         const catTextContent = (reg.category || 'TECH').toUpperCase();
         doc.fontSize(8);
         const tagWidthValue = doc.widthOfString(catTextContent) + 10 * mmToPt;
@@ -522,6 +523,11 @@ const generatePDFPass = (reg) => {
         doc.fillColor(colors.teal).fontSize(8).font('Helvetica-Bold').text(reg.pass_type === 'Combo Pass' ? "COMBO_PASS_FEE" : "BASE_FEE", 20 * mmToPt, 232 * mmToPt);
         const feeString = (reg.amount_paid || "0").toString().replace(/₹/g, '').trim();
         doc.fillColor('#ffffff').fontSize(16).font('Helvetica-Bold').text(`Rs. ${feeString}`, 20 * mmToPt, 238 * mmToPt);
+
+        // SECURE QR CODE (Bottom Right)
+        doc.strokeColor(colors.teal).lineWidth(0.5).roundedRect(138 * mmToPt, 218 * mmToPt, 25 * mmToPt, 25 * mmToPt, 3 * mmToPt).stroke();
+        doc.image(qrBuffer, 139 * mmToPt, 219 * mmToPt, { width: 23 * mmToPt, height: 23 * mmToPt });
+        doc.fillColor(colors.dim).fontSize(5).font('Helvetica').text("SCAN TO VERIFY", 138 * mmToPt, 246 * mmToPt, { align: 'center', width: 25 * mmToPt });
 
         // TEAM MEMBERS (Page 2)
         const members = reg.team_members ? (typeof reg.team_members === 'string' ? JSON.parse(reg.team_members) : reg.team_members) : [];
