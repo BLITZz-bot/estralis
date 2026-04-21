@@ -28,19 +28,19 @@ function Counter({ value, duration = 2 }) {
 export default function PrizePool() {
   return (
     <section className="relative py-20 md:py-32 px-6 bg-transparent overflow-hidden group">
-      
-      <SectionBackground 
-        src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80" 
-        alt="Cryptic Bounty Fluid" 
+
+      <SectionBackground
+        src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80"
+        alt="Cryptic Bounty Fluid"
       />
 
       {/* Background Poster Depth */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full opacity-[0.04] pointer-events-none select-none flex justify-center items-center">
-         <h2 className="text-[22vw] md:text-[26vw] font-black tracking-tighter uppercase leading-none text-center text-white">BOUNTY</h2>
+        <h2 className="text-[22vw] md:text-[26vw] font-black tracking-tighter uppercase leading-none text-center text-white">BOUNTY</h2>
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto text-center">
-        
+
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -50,7 +50,7 @@ export default function PrizePool() {
           className="mb-20"
         >
           <span className="astral-eyebrow text-teal-500 mb-6 block">Transmission Est. 404-X</span>
-          <h2 className="astral-heading text-5xl md:text-7xl lg:text-8xl mb-4 uppercase">Prize Pool</h2>
+          <h2 className="astral-heading text-5xl md:text-7xl lg:text-8xl mb-4 uppercase italic tracking-wide" style={{ fontFamily: 'Impact, sans-serif' }}>Prize Pool</h2>
           <div className="saarang-block mx-auto inline-block px-12 py-3 mt-4">
             <p className="saarang-serif italic text-teal-400 text-xl md:text-2xl">The Cumulative Interstellar Pool</p>
           </div>
@@ -69,13 +69,13 @@ export default function PrizePool() {
           <div className="absolute -bottom-10 -right-10 text-teal-500/20 text-4xl opacity-0 group-hover:opacity-100 transition-opacity">/ /</div>
 
           <div className="inline-block relative">
-             <h1 className="saarang-banner-text text-[12vw] md:text-[10vw] lg:text-[8vw] text-white tracking-tighter leading-none drop-shadow-[0_20px_60px_rgba(45,212,191,0.2)]">
-                <Counter value="210000" duration={3} />
-             </h1>
+            <h1 className="saarang-banner-text text-[12vw] md:text-[10vw] lg:text-[8vw] text-white tracking-tighter leading-none drop-shadow-[0_20px_60px_rgba(45,212,191,0.2)]">
+              <Counter value="210000" duration={3} />
+            </h1>
           </div>
 
           <p className="mt-12 text-teal-100/30 text-[10px] md:text-xs tracking-[0.5em] uppercase font-black">
-             Total Rewards to be Claimed &bull; Protocol V.26
+            Total Rewards to be Claimed &bull; Protocol V.26
           </p>
         </motion.div>
 

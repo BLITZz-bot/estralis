@@ -191,7 +191,7 @@ export default function CountdownSciFi() {
         <motion.h2 
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+          className="text-4xl md:text-6xl lg:text-5xl text-white tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] font-cinzel font-bold leading-none"
         >
           COUNTDOWN TO <span className="text-teal-400">LIFT-OFF</span>
         </motion.h2>

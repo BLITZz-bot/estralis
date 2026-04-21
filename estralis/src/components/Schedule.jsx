@@ -477,7 +477,7 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
   const t = themeObj || { text: "text-teal-400", hoverText: "group-hover:text-teal-400", borderB: "border-b-teal-500/10", bg: "bg-teal-500", hoverBg: "hover:bg-teal-500/10", borderL: "border-l-teal-500", bgSoft: "bg-teal-500/10" };
 
   return (
-    <div className={`relative w-full py-32 border-b ${t.borderB} group overflow-hidden`}>
+    <div className={`relative w-full py-12 md:py-24 lg:py-32 border-b ${t.borderB} group overflow-hidden`}>
       <SectionBackground
         src={bgImage}
         alt="Zone Background"
@@ -507,7 +507,7 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
         </div>
 
         {/* Event Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 mt-12 xl:mt-0 w-full">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 md:gap-6 mt-12 xl:mt-0 w-full">
           {events.map((e, i) => (
             <EventCard
               key={i}
@@ -787,8 +787,8 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                           disabled={slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)}
                           onClick={() => onRegister(event)}
                           className={`w-full max-w-md py-6 ${slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)
-                              ? 'bg-red-600 cursor-not-allowed shadow-none hover:bg-red-600 text-white'
-                              : theme.bg
+                            ? 'bg-red-600 cursor-not-allowed shadow-none hover:bg-red-600 text-white'
+                            : theme.bg
                             } text-black text-[12px] font-black tracking-[0.4em] uppercase rounded-2xl hover:bg-white transition-all shadow-[0_0_40px_${accentHex}] font-astral`}
                         >
                           {slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'SOLD OUT' : 'PROCEED_TO_REGISTRY'}
@@ -956,7 +956,7 @@ export default function Schedule({ onModalToggle }) {
     <>
       <section id="events" className="min-h-screen pt-32">
         <div className="px-6 mb-20 text-center">
-          <h2 className="astral-heading text-6xl md:text-8xl lg:text-9xl mb-4">Event Zones</h2>
+          <h2 className="astral-heading text-6xl md:text-9xl lg:text-[11vw] mb-4 italic !tracking-widest leading-none" style={{ fontFamily: 'Impact, sans-serif' }}>Event Zones</h2>
           <p className="saarang-serif italic text-white/30 text-xl lg:text-2xl">Discover the Interstellar Spectrum</p>
         </div>
 
