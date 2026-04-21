@@ -11,6 +11,8 @@ export default function StaffScanner() {
     const [scannedReg, setScannedReg] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [message, setMessage] = useState(null);
+    const [history, setHistory] = useState([]);
+    const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -81,6 +83,32 @@ export default function StaffScanner() {
         }
     };
 
+    const fetchHistory = async () => {
+        if (!isAuthenticated) return;
+        setIsLoadingHistory(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/scanner/history`, {
+                headers: { 'x-staff-password': password }
+            });
+            const result = await res.json();
+            if (result.success) {
+                setHistory(result.data);
+            }
+        } catch (err) {
+            console.error("Failed to fetch history");
+        } finally {
+            setIsLoadingHistory(false);
+        }
+    };
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchHistory();
+            const interval = setInterval(fetchHistory, 15000); // Sync every 15s
+            return () => clearInterval(interval);
+        }
+    }, [isAuthenticated]);
+
     const handleGrantEntry = async () => {
         setIsProcessing(true);
         try {
@@ -93,6 +121,7 @@ export default function StaffScanner() {
             if (result.success) {
                 setMessage({ text: "✅ ENTRY GRANTED", type: "success" });
                 setScannedReg(null);
+                fetchHistory(); // Refresh immediately
                 setTimeout(() => {
                     setMessage(null);
                     setScannerActive(true);
@@ -238,6 +267,44 @@ export default function StaffScanner() {
                             </button>
                         </motion.div>
                     )}
+
+                    {/* History View (Live Entry Signals) */}
+                    <div className="mt-12 space-y-6">
+                        <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                <h3 className="text-[10px] font-black tracking-[0.3em] text-gray-500 uppercase">Granted_Archive ({history.length})</h3>
+                            </div>
+                            {isLoadingHistory && <div className="w-3 h-3 border-2 border-teal-500/30 border-t-teal-500 rounded-full animate-spin" />}
+                        </div>
+
+                        <div className="space-y-3">
+                            {history.length === 0 ? (
+                                <p className="text-center py-10 text-gray-700 font-mono text-[9px] uppercase tracking-widest">Awaiting entry signals...</p>
+                            ) : (
+                                history.slice(0, 10).map((reg) => (
+                                    <motion.div 
+                                        key={reg.id}
+                                        initial={{ x: -10, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 rounded-2xl"
+                                    >
+                                        <div className="min-w-0">
+                                            <p className="text-[11px] font-black uppercase tracking-tight truncate">{reg.full_name}</p>
+                                            <p className="text-[8px] text-gray-500 font-bold uppercase tracking-widest mt-1 truncate">{reg.college}</p>
+                                        </div>
+                                        <div className="text-right flex flex-col items-end gap-1">
+                                            <span className="text-[8px] font-black text-emerald-500/50 uppercase tracking-widest">{reg.event_title}</span>
+                                            <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-500 text-[7px] font-black rounded border border-emerald-500/20">GRANTED</span>
+                                        </div>
+                                    </motion.div>
+                                ))
+                            )}
+                            {history.length > 10 && (
+                                <p className="text-center text-[8px] text-gray-600 font-bold uppercase tracking-[0.2em] mt-4">Showing 10 most recent entries</p>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
                 <div className="mt-auto py-10 opacity-20 pointer-events-none">

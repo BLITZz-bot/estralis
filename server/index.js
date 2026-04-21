@@ -716,6 +716,24 @@ app.post('/api/scanner/checkin', async (req, res) => {
     }
 });
 
+// 3. Get Checked-in History (Restricted)
+app.get('/api/scanner/history', async (req, res) => {
+    try {
+        const password = req.headers['x-staff-password'];
+        if (password !== SCANNER_PASSWORD && password !== 'admin@2026') {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+
+        const result = await db.query(
+            "SELECT id, full_name, college, event_title, team_name, timestamp FROM registrations WHERE status = 'visited' ORDER BY timestamp DESC"
+        );
+        res.status(200).json({ success: true, data: result.rows });
+    } catch (error) {
+        console.error("Scanner history error:", error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 // Admin registrations lookup
 app.get('/api/admin/registrations', async (req, res) => {
     try {
