@@ -47,6 +47,9 @@ const initDB = async () => {
                 email TEXT NOT NULL,
                 phone TEXT NOT NULL,
                 college TEXT NOT NULL,
+                semester TEXT,
+                branch TEXT,
+                linkedin_url TEXT,
                 team_name TEXT,
                 team_members JSONB DEFAULT '[]',
                 event_title TEXT NOT NULL,
@@ -83,6 +86,12 @@ const initDB = async () => {
             VALUES ('ARTIST PERFORMANCE AND DJ NIGHT', 200, TRUE) 
             ON CONFLICT (event_title) DO NOTHING;
         `);
+
+        // Migrations: Add new columns if they don't exist
+        await pool.query(`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS semester TEXT;`);
+        await pool.query(`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS branch TEXT;`);
+        await pool.query(`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS linkedin_url TEXT;`);
+
         console.log('✅ Database Schema Verified/Initialized');
     } catch (err) {
         console.error('❌ Database Initialization Error:', err.message);

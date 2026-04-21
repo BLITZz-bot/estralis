@@ -17,7 +17,11 @@ export default function AdminDashboard({ isOpen, onClose }) {
         full_name: "",
         email: "",
         phone: "",
-        college: ""
+        college: "",
+        semester: "",
+        branch: "",
+        linkedin_url: "",
+        team_members: []
     });
     const [isUpdating, setIsUpdating] = useState(false);
     const [loginError, setLoginError] = useState("");
@@ -648,7 +652,16 @@ export default function AdminDashboard({ isOpen, onClose }) {
             full_name: reg.full_name || "",
             email: reg.email || "",
             phone: reg.phone || "",
-            college: reg.college || ""
+            college: reg.college || "",
+            semester: reg.semester || "",
+            branch: reg.branch || "",
+            linkedin_url: reg.linkedin_url || "",
+            team_members: (() => {
+                try {
+                    const raw = reg.team_members || reg.teamMembers;
+                    return (typeof raw === 'string') ? JSON.parse(raw) : (raw || []);
+                } catch (e) { return []; }
+            })()
         });
         setIsEditModalOpen(true);
     };
@@ -864,6 +877,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 { header: 'Email', key: 'email', width: 30 },
                 { header: 'Phone', key: 'phone', width: 15 },
                 { header: 'College', key: 'college', width: 30 },
+                { header: 'Semester', key: 'semester', width: 15 },
+                { header: 'Branch', key: 'branch', width: 20 },
+                { header: 'LinkedIn', key: 'linkedinUrl', width: 40 },
                 { header: 'UTR Number', key: 'utrNumber', width: 25 },
                 { header: 'Transaction Date', key: 'transactionDate', width: 20 },
                 { header: 'Screenshot Link', key: 'screenshotUrl', width: 50 },
@@ -899,7 +915,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 if (teamCount > 0) {
                     squadDetails = `Total: ${totalParticipants} (Lead + ${teamCount})\n\n`;
                     members.forEach((m, idx) => {
-                        squadDetails += `[MEMBER 0${idx + 2}]: ${m.fullName || 'N/A'}\nEmail: ${m.email || 'N/A'}\nPhone: ${m.phone || 'N/A'}\nCollege: ${m.college || reg.college}\n\n`;
+                        squadDetails += `[MEMBER 0${idx + 2}]: ${m.fullName || 'N/A'}\nEmail: ${m.email || 'N/A'}\nPhone: ${m.phone || 'N/A'}\nCollege: ${m.college || reg.college}\nSem: ${m.semester || 'N/A'}\nBranch: ${m.branch || 'N/A'}\nLinkedIn: ${m.linkedinUrl || 'N/A'}\n\n`;
                     });
                 }
 
@@ -911,6 +927,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
                     email: reg.email,
                     phone: reg.phone,
                     college: reg.college,
+                    semester: reg.semester || "N/A",
+                    branch: reg.branch || "N/A",
+                    linkedinUrl: reg.linkedin_url || "N/A",
                     utrNumber: reg.utr_number || "N/A",
                     transactionDate: reg.transaction_date || "N/A",
                     screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" },
@@ -1124,6 +1143,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Team Name</th>
                                                     <th className="px-6 py-5 text-[10px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Full Name</th>
                                                     <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">College</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Sem / Branch</th>
+                                                    <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">LinkedIn</th>
                                                     <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Email</th>
                                                     <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Phone</th>
                                                     <th className="px-8 py-6 text-[11px] font-black text-teal-400/60 uppercase tracking-widest border-r border-teal-500/10 whitespace-nowrap">Squad Members</th>
@@ -1152,6 +1173,17 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                         </td>
                                                         <td className="px-8 py-8 border-r border-teal-500/10">
                                                             <div className="text-[10px] font-bold text-teal-500/60 uppercase tracking-tight">{reg.college}</div>
+                                                        </td>
+                                                        <td className="px-8 py-8 border-r border-teal-500/10">
+                                                            <div className="text-[10px] font-black text-white uppercase tracking-wider">{reg.semester || 'N/A'}</div>
+                                                            <div className="text-[9px] font-bold text-teal-400/40 mt-1 uppercase tracking-tighter">{reg.branch || 'N/A'}</div>
+                                                        </td>
+                                                        <td className="px-8 py-8 border-r border-teal-500/10 text-center">
+                                                            {reg.linkedin_url && reg.linkedin_url !== 'N/A' ? (
+                                                                <a href={reg.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 transition-colors inline-block">
+                                                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                                                </a>
+                                                            ) : <span className="text-white/10 text-[9px] font-black uppercase">N/A</span>}
                                                         </td>
                                                         <td className="px-8 py-8 border-r border-teal-500/10">
                                                             <a href={`mailto:${reg.email}`} className="text-[10px] font-bold text-cyan-400 hover:underline break-all">{reg.email}</a>
@@ -2091,6 +2123,228 @@ export default function AdminDashboard({ isOpen, onClose }) {
                             </div>
                         ) : null}
                     </motion.div>
+                )}
+
+                {/* --- EDIT REGISTRATION MODAL --- */}
+                {isEditModalOpen && (
+                    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="bg-[#1a1c2e] border border-teal-500/30 rounded-3xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar-thin"
+                        >
+                            <div className="flex items-center justify-between mb-8">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-teal-500/20 rounded-xl flex items-center justify-center text-teal-400">
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white uppercase tracking-wider">Update Registration</h3>
+                                </div>
+                                <button onClick={() => setIsEditModalOpen(false)} className="text-gray-500 hover:text-white transition">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleEditSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Full Name</label>
+                                    <input
+                                        type="text"
+                                        value={editForm.full_name}
+                                        onChange={(e) => setEditForm({ ...editForm, full_name: e.target.value })}
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-teal-500 transition"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Email Address</label>
+                                    <input
+                                        type="email"
+                                        value={editForm.email}
+                                        onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-teal-500 transition"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Phone Number</label>
+                                    <input
+                                        type="text"
+                                        value={editForm.phone}
+                                        onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-teal-500 transition"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">College</label>
+                                    <input
+                                        type="text"
+                                        value={editForm.college}
+                                        onChange={(e) => setEditForm({ ...editForm, college: e.target.value })}
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-teal-500 transition"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Semester</label>
+                                    <input
+                                        type="text"
+                                        value={editForm.semester}
+                                        onChange={(e) => setEditForm({ ...editForm, semester: e.target.value })}
+                                        placeholder="e.g. 4th, 6th"
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-teal-500 transition"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Branch</label>
+                                    <input
+                                        type="text"
+                                        value={editForm.branch}
+                                        onChange={(e) => setEditForm({ ...editForm, branch: e.target.value })}
+                                        placeholder="e.g. CSE, ECE, Degree"
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-teal-500 transition"
+                                    />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">LinkedIn URL (Optional)</label>
+                                    <input
+                                        type="url"
+                                        value={editForm.linkedin_url}
+                                        onChange={(e) => setEditForm({ ...editForm, linkedin_url: e.target.value })}
+                                        placeholder="https://linkedin.com/in/..."
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-teal-500 transition"
+                                    />
+                                </div>
+
+                                {/* --- TEAM MEMBERS EDITOR --- */}
+                                {editForm.team_members && editForm.team_members.length > 0 && (
+                                    <div className="md:col-span-2 space-y-6 pt-4 border-t border-white/10">
+                                        <h4 className="text-xs font-black text-teal-400 uppercase tracking-widest">Squad Members Info</h4>
+                                        <div className="grid grid-cols-1 gap-6">
+                                            {editForm.team_members.map((member, idx) => (
+                                                <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-6 space-y-4">
+                                                    <div className="flex justify-between items-center pb-2 border-b border-white/5">
+                                                        <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Member 0{idx + 2}</span>
+                                                    </div>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                        <div>
+                                                            <label className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Full Name</label>
+                                                            <input
+                                                                type="text"
+                                                                value={member.fullName || ""}
+                                                                onChange={(e) => {
+                                                                    const next = [...editForm.team_members];
+                                                                    next[idx].fullName = e.target.value;
+                                                                    setEditForm({ ...editForm, team_members: next });
+                                                                }}
+                                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-teal-500 transition"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Email</label>
+                                                            <input
+                                                                type="email"
+                                                                value={member.email || ""}
+                                                                onChange={(e) => {
+                                                                    const next = [...editForm.team_members];
+                                                                    next[idx].email = e.target.value;
+                                                                    setEditForm({ ...editForm, team_members: next });
+                                                                }}
+                                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-teal-500 transition"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Phone</label>
+                                                            <input
+                                                                type="text"
+                                                                value={member.phone || ""}
+                                                                onChange={(e) => {
+                                                                    const next = [...editForm.team_members];
+                                                                    next[idx].phone = e.target.value;
+                                                                    setEditForm({ ...editForm, team_members: next });
+                                                                }}
+                                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-teal-500 transition"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">College</label>
+                                                            <input
+                                                                type="text"
+                                                                value={member.college || ""}
+                                                                onChange={(e) => {
+                                                                    const next = [...editForm.team_members];
+                                                                    next[idx].college = e.target.value;
+                                                                    setEditForm({ ...editForm, team_members: next });
+                                                                }}
+                                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-teal-500 transition"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Semester</label>
+                                                            <input
+                                                                type="text"
+                                                                value={member.semester || ""}
+                                                                onChange={(e) => {
+                                                                    const next = [...editForm.team_members];
+                                                                    next[idx].semester = e.target.value;
+                                                                    setEditForm({ ...editForm, team_members: next });
+                                                                }}
+                                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-teal-500 transition"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Branch</label>
+                                                            <input
+                                                                type="text"
+                                                                value={member.branch || ""}
+                                                                onChange={(e) => {
+                                                                    const next = [...editForm.team_members];
+                                                                    next[idx].branch = e.target.value;
+                                                                    setEditForm({ ...editForm, team_members: next });
+                                                                }}
+                                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-teal-500 transition"
+                                                            />
+                                                        </div>
+                                                        <div className="sm:col-span-2">
+                                                            <label className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">LinkedIn URL</label>
+                                                            <input
+                                                                type="url"
+                                                                value={member.linkedinUrl || ""}
+                                                                onChange={(e) => {
+                                                                    const next = [...editForm.team_members];
+                                                                    next[idx].linkedinUrl = e.target.value;
+                                                                    setEditForm({ ...editForm, team_members: next });
+                                                                }}
+                                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-teal-500 transition"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="md:col-span-2 flex gap-4 mt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsEditModalOpen(false)}
+                                        className="flex-1 px-6 py-4 bg-white/5 text-gray-300 rounded-2xl font-bold hover:bg-white/10 transition"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isUpdating}
+                                        className="flex-1 px-6 py-4 bg-teal-600 text-white rounded-2xl font-bold hover:bg-teal-700 transition shadow-lg shadow-teal-500/20 disabled:opacity-50"
+                                    >
+                                        {isUpdating ? 'UPDATING...' : 'SAVE CHANGES'}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
                 )}
 
                 {/* CLEAR CONFIRMATION MODAL */}

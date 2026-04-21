@@ -151,6 +151,9 @@ export default function RegistrationForm({ event, onClose }) {
         email: "",
         phone: "",
         college: "",
+        semester: "",
+        branch: "",
+        linkedinUrl: "",
         teamName: "",
         utrNumber: "",
         transactionDate: new Date().toISOString().split('T')[0],
@@ -216,7 +219,10 @@ export default function RegistrationForm({ event, onClose }) {
         // Initialize with minimum required team members (excluding leader)
         if (event && minTeamSize > 1) {
             const initialCount = Math.max(0, minTeamSize - 1);
-            setTeamMembers(Array.from({ length: initialCount }, () => ({ fullName: "", email: "", phone: "", college: "" })));
+            setTeamMembers(Array.from({ length: initialCount }, () => ({ 
+                fullName: "", email: "", phone: "", college: "", 
+                semester: "", branch: "", linkedinUrl: "" 
+            })));
         } else if (isDJNight) {
             // DJ Night starts with 0 members - single person can register alone
             setTeamMembers([]);
@@ -227,7 +233,10 @@ export default function RegistrationForm({ event, onClose }) {
 
     const addMember = () => {
         if (teamMembers.length + 1 < maxTeamSize) {
-            setTeamMembers([...teamMembers, { fullName: "", email: "", phone: "", college: "" }]);
+            setTeamMembers([...teamMembers, { 
+                fullName: "", email: "", phone: "", college: "", 
+                semester: "", branch: "", linkedinUrl: "" 
+            }]);
         } else {
             alert(`Maximum squad size of ${maxTeamSize} reached.`);
         }
@@ -761,6 +770,18 @@ export default function RegistrationForm({ event, onClose }) {
                                             />
                                         )}
                                     </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">SEMESTER / YEAR</label>
+                                        <input required type="text" name="semester" value={formData.semester} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="e.g. 6th Sem, 2nd Year, PUC" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">BRANCH / STREAM</label>
+                                        <input required type="text" name="branch" value={formData.branch} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="e.g. CSE, BCA, PCMB" />
+                                    </div>
+                                    <div className="space-y-2 md:col-span-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">LINKEDIN URL (OPTIONAL)</label>
+                                        <input type="url" name="linkedinUrl" value={formData.linkedinUrl} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="https://linkedin.com/in/username" />
+                                    </div>
                                 </div>
                             </div>
 
@@ -868,6 +889,30 @@ export default function RegistrationForm({ event, onClose }) {
                                                                     placeholder="Member College" 
                                                                 />
                                                             )}
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">SEMESTER</label>
+                                                            <input required type="text" value={member.semester} onChange={(e) => {
+                                                                const newMembers = [...teamMembers];
+                                                                newMembers[index].semester = e.target.value;
+                                                                setTeamMembers(newMembers);
+                                                            }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="e.g. 6th" />
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">BRANCH</label>
+                                                            <input required type="text" value={member.branch} onChange={(e) => {
+                                                                const newMembers = [...teamMembers];
+                                                                newMembers[index].branch = e.target.value;
+                                                                setTeamMembers(newMembers);
+                                                            }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="e.g. CSE" />
+                                                        </div>
+                                                        <div className="space-y-1.5 md:col-span-2">
+                                                            <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">LINKEDIN (OPTIONAL)</label>
+                                                            <input type="url" value={member.linkedinUrl} onChange={(e) => {
+                                                                const newMembers = [...teamMembers];
+                                                                newMembers[index].linkedinUrl = e.target.value;
+                                                                setTeamMembers(newMembers);
+                                                            }} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold" placeholder="https://linkedin.com/in/..." />
                                                         </div>
                                                     </div>
                                                 </motion.div>

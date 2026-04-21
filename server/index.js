@@ -271,7 +271,8 @@ app.post('/api/register-manual', async (req, res) => {
         const {
             fullName, email, phone, college, teamName, teamMembers,
             eventTitle, category, amountPaid, passType,
-            utrNumber, transactionDate, screenshotUrl
+            utrNumber, transactionDate, screenshotUrl,
+            semester, branch, linkedinUrl
         } = registrationData;
 
         // --- SLOT VALIDATION (DJ NIGHT ONLY FOR NOW) ---
@@ -310,14 +311,18 @@ app.post('/api/register-manual', async (req, res) => {
 
         const result = await db.query(
             `INSERT INTO registrations (
-                full_name, email, phone, college, team_name, team_members, 
+                full_name, email, phone, college, 
+                semester, branch, linkedin_url,
+                team_name, team_members, 
                 event_title, category, amount_paid, pass_type, 
                 utr_number, transaction_date, screenshot_url, status
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
             RETURNING *`,
             [
-                fullName, email.trim().toLowerCase(), phone, college, teamName || null,
-                JSON.stringify(teamMembers || []), eventTitle, category || 'Tech',
+                fullName, email.trim().toLowerCase(), phone, college,
+                semester || 'N/A', branch || 'N/A', linkedinUrl || 'N/A',
+                teamName || null, JSON.stringify(teamMembers || []), 
+                eventTitle, category || 'Tech',
                 amountPaid, passType, utrNumber, transactionDate, screenshotUrl, 'verified'
             ]
         );
