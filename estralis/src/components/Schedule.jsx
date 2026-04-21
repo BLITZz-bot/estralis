@@ -66,7 +66,7 @@ export const eventsDay1 = [
     description: "A digital creativity challenge where participants create short, engaging videos. From concept and shooting to editing and storytelling, this event tests creativity, trend awareness, and presentation skills.",
     category: "Fun",
     prize: "₹9,000",
-    minTeamSize: 2,
+    minTeamSize: 1,
     maxTeamSize: 3,
     rules: [
       "Duration: 30–60 seconds | Vertical video format mandatory",
