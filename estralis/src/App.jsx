@@ -24,6 +24,7 @@ import SectionBackground from "./components/SectionBackground"
 import ProtocolModal from "./components/ProtocolModal"
 import SpecialGuest from "./components/SpecialGuest"
 import Team from "./components/Team"
+import StaffScanner from "./components/StaffScanner"
 import { useState, useEffect } from "react"
 
 export default function App() {
@@ -45,9 +46,17 @@ export default function App() {
 
   /* ===== URL Deep-Linking for Pass Downloads ===== */
   const [initialRegEmail, setInitialRegEmail] = useState("");
-  const [autoDownload, setAutoDownload] = useState(false);
+  const [isStaffPortal, setIsStaffPortal] = useState(false);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    
+    // Check for Staff Portal Mode
+    if (params.get('portal') === 'scanner') {
+      setIsStaffPortal(true);
+      return; // Stop further deep link processing for scanner
+    }
+
     if (params.get('openPass') === 'true' && params.get('email')) {
       const email = params.get('email');
       setInitialRegEmail(email);
@@ -58,6 +67,10 @@ export default function App() {
       window.history.replaceState({}, '', newUrl);
     }
   }, []);
+
+  if (isStaffPortal) {
+    return <StaffScanner />;
+  }
 
   return (
     <>

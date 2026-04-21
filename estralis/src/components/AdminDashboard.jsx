@@ -47,6 +47,10 @@ export default function AdminDashboard({ isOpen, onClose }) {
         if (activeTab === "slots" && isAuthenticated && isSlotsAuth) {
             fetchDjSlots(); // Initial fetch on unlock/tab
             interval = setInterval(fetchDjSlots, 30000); // 30s auto-refresh
+        } else if (activeTab === "scanner" && isAuthenticated) {
+            // Scanner auto-sync: fetch every 15 seconds to show staff scans
+            fetchRegistrations();
+            interval = setInterval(() => fetchRegistrations(), 15000);
         }
         return () => interval && clearInterval(interval);
     }, [activeTab, isAuthenticated, isSlotsAuth]);

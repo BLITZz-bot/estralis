@@ -669,6 +669,53 @@ app.get('/api/registrations/:email', async (req, res) => {
     }
 });
 
+// --- RESTRICTED SCANNER PORTAL APIs (Staff Access) ---
+const SCANNER_PASSWORD = "scan@2026";
+
+// 1. Verify Registration (Minimal Data Leakage)
+app.post('/api/scanner/verify', async (req, res) => {
+    try {
+        const { id, password } = req.body;
+        if (password !== SCANNER_PASSWORD && password !== 'admin@2026') {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+
+        const result = await db.query(
+            'SELECT full_name, event_title, college, team_name, status FROM registrations WHERE id = $1', 
+            [id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'Registration not found' });
+        }
+
+        res.status(200).json({ success: true, data: result.rows[0] });
+    } catch (error) {
+        console.error("Scanner verify error:", error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// 2. Check-in (Status Update)
+app.post('/api/scanner/checkin', async (req, res) => {
+    try {
+        const { id, password } = req.body;
+        if (password !== SCANNER_PASSWORD && password !== 'admin@2026') {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+
+        await db.query(
+            "UPDATE registrations SET status = 'visited' WHERE id = $1",
+            [id]
+        );
+
+        res.status(200).json({ success: true, message: 'Entry granted successfully' });
+    } catch (error) {
+        console.error("Scanner checkin error:", error);
+        res.status(500).json({ success: false, message: 'Failed to update status' });
+    }
+});
+
 // Admin registrations lookup
 app.get('/api/admin/registrations', async (req, res) => {
     try {
