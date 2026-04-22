@@ -583,263 +583,185 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
   const [slotInfo, setSlotInfo] = useState(null);
 
   useEffect(() => {
-    // Only fetch for limited events (DJ Night)
     if (event?.title?.toUpperCase().includes("DJ NIGHT")) {
       const fetchSlots = async () => {
         try {
-          const normalizedTitle = event.title.trim().toUpperCase();
-          const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(normalizedTitle)}`);
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(event.title.trim().toUpperCase())}`);
           const data = await res.json();
-          if (data.success && data.isLimited) {
-            setSlotInfo(data);
-          }
-        } catch (err) {
-          console.error("Slot fetch err:", err);
-        }
+          if (data.success && data.isLimited) setSlotInfo(data);
+        } catch (err) { console.error("Slot fetch err:", err); }
       };
       fetchSlots();
     }
   }, [event?.title]);
 
   const theme = overrideTheme || getThemeForCategory(event?.category);
-  const accentHex = theme.accent === "cyan-500" ? "rgba(6,182,212,0.5)" :
-    theme.accent === "fuchsia-500" ? "rgba(217,70,239,0.5)" :
-      theme.accent === "blue-500" ? "rgba(59,130,246,0.5)" :
-        "rgba(45,212,191,0.5)";
+  const accentColor = theme.text.replace('text-', '');
 
   useEffect(() => {
     setActiveTab("about");
   }, [event]);
 
-  if (!event) return null
-
-  const cat = event.category || "Tech"
-  const teamText = event.minTeamSize === event.maxTeamSize
-    ? `${event.minTeamSize}`
-    : `${event.minTeamSize || "?"} – ${event.maxTeamSize || "?"}`
+  if (!event) return null;
 
   const tabs = [
-    { id: "about", label: "INFO" },
-    { id: "rules", label: "RULES" },
-    { id: "coordinators", label: "CONTACT" },
-  ]
+    { id: "about", label: "Overview" },
+    { id: "rules", label: "The Protocol" },
+    { id: "coordinators", label: "Connect" },
+  ];
 
   return (
     <>
       <motion.div
-        className="fixed inset-0 bg-[#020617]/90 backdrop-blur-2xl flex items-center justify-center z-[100] p-4 sm:p-6"
+        className="fixed inset-0 bg-[#020617]/95 backdrop-blur-3xl flex items-center justify-center z-[100] p-4 overflow-y-auto"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
       >
         <motion.div
-          initial={{ y: 50, opacity: 0, scale: 0.95 }}
+          initial={{ y: 100, opacity: 0, scale: 0.9 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
-          transition={{ type: "spring", damping: 25, stiffness: 200 }}
+          transition={{ type: "spring", damping: 30, stiffness: 100 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-3xl astral-glass flex flex-col max-h-[90vh] overflow-hidden shadow-2xl"
+          className="relative w-full max-w-5xl bg-black/40 border border-white/5 rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] flex flex-col md:flex-row min-h-[70vh] md:h-[80vh]"
         >
-          {/* Header Section */}
-          <div className="relative p-8 sm:p-12 border-b border-white/5">
-            <button
-              onClick={onClose}
-              className="absolute top-6 right-8 text-white/20 hover:text-white transition-colors text-2xl"
-            >
-              ✕
-            </button>
-
-            <div className="space-y-4">
-              <span className={`astral-eyebrow ${theme.text} uppercase`}>
-                {cat} SECTOR
+          {/* 🖼️ Cinematic Left Panel (Visual) */}
+          <div className="w-full md:w-[40%] relative overflow-hidden bg-zinc-900 flex flex-col">
+            <div className="absolute inset-0 z-0">
+              <img 
+                src={event.bgImage || "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80"} 
+                className="w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-1000 scale-110"
+                alt="" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
+            </div>
+            
+            <div className="relative z-20 mt-auto p-12 space-y-4">
+              <span className={`inline-block px-4 py-1 rounded-full border border-${accentColor}/30 text-${accentColor} text-[10px] font-black tracking-[0.3em] uppercase backdrop-blur-md`}>
+                {event.category} SECTOR
               </span>
-              <h3
-                className="text-xl sm:text-2xl font-black leading-[1.1] uppercase tracking-tighter astral-heading max-w-2xl"
-                style={{
-                  backgroundImage: `linear-gradient(to bottom, ${accentHex.replace('0.5', '1')}, ${accentHex.replace('0.5', '0.8')})`,
-                  filter: `drop-shadow(0 0 20px ${accentHex})`,
-                  WebkitTextStroke: `1px ${accentHex.replace('0.5', '0.2')}`
-                }}
-              >
+              <h2 className="text-6xl lg:text-7xl font-black text-white leading-[0.9] italic tracking-tighter" style={{ fontFamily: 'var(--font-abril)' }}>
                 {event.title}
-              </h3>
-
-              <div className="flex flex-wrap gap-6 pt-6">
-                <div className="flex flex-wrap items-center gap-2 sm:gap-6">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} animate-pulse`} />
-                    <span className="text-[10px] font-bold text-white/50 tracking-widest uppercase font-tech">SQUAD SIZE: {teamText}</span>
-                  </div>
-                </div>
-                {event.theme && (
-                  <div className="flex items-center gap-2">
-                    <div className={`w-1.5 h-1.5 rounded-full ${theme.bgSoft}`} />
-                    <span className="text-[10px] font-bold text-white/50 tracking-widest uppercase font-tech">THEME: {event.theme}</span>
-                  </div>
-                )}
-              </div>
+              </h2>
             </div>
           </div>
 
-          {/* Navigation Control */}
-          <div className="flex bg-black/20 border-b border-white/5">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 py-5 text-[10px] font-black tracking-[0.4em] relative transition-all duration-300 font-astral ${activeTab === tab.id ? "text-white" : "text-white/20 hover:text-white/40"
-                  }`}
-              >
-                {tab.label}
-                {activeTab === tab.id && (
-                  <motion.div
-                    layoutId="activeTabUnderline"
-                    className={`absolute bottom-0 left-0 right-0 h-0.5 ${theme.bg} shadow-[0_0_10px_${accentHex}]`}
-                  />
-                )}
+          {/* 📝 Elegant Content Right Panel */}
+          <div className="flex-1 flex flex-col bg-[#050505]/60 backdrop-blur-xl">
+            {/* Header / Tabs */}
+            <div className="p-8 md:p-12 pb-0 flex items-center justify-between">
+              <nav className="flex gap-8">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`relative pb-2 text-[11px] font-black tracking-[0.2em] uppercase transition-all ${
+                      activeTab === tab.id ? "text-white" : "text-white/20 hover:text-white/40"
+                    }`}
+                  >
+                    {tab.label}
+                    {activeTab === tab.id && (
+                      <motion.div layoutId="tabLine" className={`absolute bottom-0 left-0 right-0 h-1 rounded-full bg-${accentColor}`} />
+                    )}
+                  </button>
+                ))}
+              </nav>
+              <button onClick={onClose} className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 transition-all">
+                ✕
               </button>
-            ))}
-          </div>
+            </div>
 
-          {/* Main Content Area */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar p-8 sm:p-12">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="min-h-full"
-              >
-                {activeTab === "about" && (
-                  <div className="space-y-12">
-                    <p className={`saarang-serif text-white/80 text-xl leading-relaxed italic border-l-4 ${theme.borderL} opacity-30 pl-8`}>
-                      "{event.description}"
-                    </p>
+            {/* Scrollable Content */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-8 md:p-12 pt-10">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.4 }}
+                  className="space-y-12"
+                >
+                  {activeTab === "about" && (
+                    <div className="space-y-12">
+                      <p className="saarang-serif text-2xl md:text-3xl text-white/70 leading-relaxed italic border-l-2 border-white/10 pl-8">
+                        {event.description}
+                      </p>
 
-                    <div className={`grid grid-cols-1 ${event.prize ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-6`}>
-                      <div
-                        className="p-8 astral-glass-bright flex flex-col items-center text-center group transition-all"
-                        style={{ borderColor: `rgba(${accentHex.match(/\d+, \d+, \d+/)}, 0.2)` }}
-                      >
-                        <span className={`text-[9px] font-black ${theme.text} uppercase tracking-widest mb-3 font-astral`}>Reg Fees</span>
-                        <span className={`text-2xl font-black ${theme.text} italic font-astral`}>{event.fee}</span>
-                      </div>
-                      <div
-                        className="p-8 astral-glass-bright flex flex-col items-center text-center group transition-all"
-                        style={{ borderColor: `rgba(${accentHex.match(/\d+, \d+, \d+/)}, 0.2)` }}
-                      >
-                        <span className={`text-[9px] font-black ${theme.text} uppercase tracking-widest mb-3 font-astral`}>Location</span>
-                        <span className="text-base font-bold text-white uppercase italic font-tech text-center">@{event.location}</span>
-                      </div>
-                      {event.prize && (
-                        <div
-                          className="p-8 astral-glass-bright flex flex-col items-center text-center group transition-all"
-                          style={{ borderColor: `rgba(${accentHex.match(/\d+, \d+, \d+/)}, 0.2)` }}
-                        >
-                          <span className={`text-[9px] font-black ${theme.text} uppercase tracking-widest mb-3 font-astral`}>Prizes</span>
-                          <span className={`text-xl font-black ${theme.text} italic font-astral`}>{event.prize}</span>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5 border border-white/5 rounded-3xl overflow-hidden">
+                        <div className="bg-black/20 p-8 space-y-1">
+                          <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Investment</span>
+                          <p className={`text-3xl font-black ${theme.text}`}>{event.fee}</p>
                         </div>
-                      )}
+                        <div className="bg-black/20 p-8 space-y-1">
+                          <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Coordinates</span>
+                          <p className="text-xl font-bold text-white italic">{event.location}</p>
+                        </div>
+                        <div className="bg-black/20 p-8 space-y-1">
+                          <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Prize Pool</span>
+                          <p className={`text-3xl font-black ${theme.text}`}>{event.prize || "Glory"}</p>
+                        </div>
+                        <div className="bg-black/20 p-8 space-y-1">
+                          <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Team Size</span>
+                          <p className="text-xl font-bold text-white italic">{event.minTeamSize === event.maxTeamSize ? event.minTeamSize : `${event.minTeamSize}-${event.maxTeamSize}`} Units</p>
+                        </div>
+                      </div>
                     </div>
+                  )}
 
-                    <div className="pt-6 flex justify-center">
-                      <button
-                        onClick={() => setActiveTab("rules")}
-                        className="px-10 py-5 bg-white/5 border border-white/10 rounded-2xl text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-black transition-all font-astral"
-                      >
-                        READ RULES & PROTOCOL →
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === "rules" && (
-                  <div className="space-y-10">
-                    <div className="grid gap-4">
+                  {activeTab === "rules" && (
+                    <div className="space-y-6">
                       {event.rules.map((rule, idx) => (
-                        <motion.div
-                          key={idx}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: idx * 0.05 }}
-                          className={`flex items-start gap-6 p-6 astral-glass-bright border-transparent hover:border-${theme.accent}/20 transition-all group`}
-                        >
-                          <span className={`text-sm font-black ${theme.text} opacity-40 font-astral mt-1`}>
-                            {(idx + 1).toString().padStart(2, '0')}
-                          </span>
-                          <p className="text-sm text-white/70 leading-relaxed font-medium font-tech whitespace-pre-line">
-                            {rule.trim()}
+                        <div key={idx} className="flex gap-6 group">
+                          <span className={`text-[10px] font-black ${theme.text} opacity-30 mt-1`}>{(idx + 1).toString().padStart(2, '0')}</span>
+                          <p className="text-white/60 font-medium text-lg leading-relaxed group-hover:text-white transition-colors">
+                            {rule}
                           </p>
-                        </motion.div>
+                        </div>
                       ))}
                     </div>
+                  )}
 
-                    {isEventOpen && (
-                      <div className="pt-8 flex flex-col items-center gap-4">
-                        <div className={`flex items-center gap-3 ${theme.text} opacity-50 mb-2`}>
-                          <div className={`w-12 h-[1px] ${theme.bgSoft}`} />
-                          <span className="text-[9px] font-black tracking-widest uppercase font-astral">Protocol Complete</span>
-                          <div className={`w-12 h-[1px] ${theme.bgSoft}`} />
-                        </div>
-                        <button
-                          disabled={slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)}
-                          onClick={() => onRegister(event)}
-                          className={`w-full max-w-md py-6 ${slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)
-                            ? 'bg-red-600 cursor-not-allowed shadow-none hover:bg-red-600 text-white'
-                            : theme.bg
-                            } text-black text-[12px] font-black tracking-[0.4em] uppercase rounded-2xl hover:bg-white transition-all shadow-[0_0_40px_${accentHex}] font-astral`}
-                        >
-                          {slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'SOLD OUT' : 'PROCEED_TO_REGISTRY'}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {activeTab === "coordinators" && (
-                  <div className="space-y-6">
-                    <div className="grid gap-4">
+                  {activeTab === "coordinators" && (
+                    <div className="grid grid-cols-1 gap-4">
                       {event.coordinators.map((c, i) => {
-                        // More robust splitting that handles different hyphen types and spaces
                         const parts = c.split(/ [–-] |-| – /);
-                        const name = parts[0]?.trim();
-                        const phone = parts[1]?.trim();
-
                         return (
-                          <motion.div
-                            key={i}
-                            initial={{ opacity: 0, scale: 0.98 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="p-6 astral-glass-bright flex items-center justify-between group"
-                          >
-                            <div>
-                              <p className="text-white font-black tracking-widest uppercase text-xl font-astral">{name}</p>
-                              <p className={`text-[9px] font-black ${theme.text} opacity-50 tracking-widest uppercase font-astral mt-1`}>Coordinator Access</p>
+                          <div key={i} className="flex items-center justify-between p-8 bg-white/5 rounded-3xl group hover:bg-white/10 transition-all border border-transparent hover:border-white/10">
+                            <div className="space-y-1">
+                              <p className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Protocol Liaison</p>
+                              <p className="text-2xl font-black text-white italic" style={{ fontFamily: 'var(--font-abril)' }}>{parts[0]?.trim()}</p>
                             </div>
-                            <div className="text-right">
-                              <a
-                                href={`tel:${phone}`}
-                                className={`${theme.text} font-bold font-tech text-xl hover:brightness-150 transition-all block`}
-                              >
-                                {phone}
-                              </a>
-                              <span className="text-[8px] font-black text-white/20 uppercase tracking-widest font-tech">Secure Line</span>
-                            </div>
-                          </motion.div>
+                            <a href={`tel:${parts[1]?.trim()}`} className={`text-xl font-bold ${theme.text} hover:scale-110 transition-transform`}>
+                              {parts[1]?.trim()}
+                            </a>
+                          </div>
                         );
                       })}
                     </div>
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* CTA Footer */}
+            {activeTab !== "coordinators" && isEventOpen && (
+              <div className="p-12 pt-0">
+                <button
+                  disabled={slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)}
+                  onClick={() => onRegister(event)}
+                  className={`w-full py-6 bg-white text-black text-[12px] font-black tracking-[0.5em] uppercase rounded-full hover:bg-${accentColor} hover:text-white transition-all shadow-[0_20px_40px_-10px_rgba(255,255,255,0.1)]`}
+                >
+                  {slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'SOLD OUT' : 'INITIALIZE REGISTRATION'}
+                </button>
+              </div>
+            )}
           </div>
         </motion.div>
       </motion.div>
     </>
-  )
+  );
 }
 
 export default function Schedule({ onModalToggle }) {
