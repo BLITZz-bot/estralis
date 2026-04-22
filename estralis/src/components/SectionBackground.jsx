@@ -25,7 +25,6 @@ export default function SectionBackground({ src, alt = "Background", activeOpaci
         className={`w-full h-full object-cover mix-blend-screen transition-transform duration-[3s] ease-out will-change-transform
           group-hover:scale-100
           ${isInView ? 'scale-100' : 'scale-105'}
-          ${typeof window !== 'undefined' && window.innerWidth < 768 ? 'transition-none' : ''}
         `}
       />
     </div>
