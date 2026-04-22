@@ -38,12 +38,35 @@ export default function Timeline() {
 
       <div className="relative z-10 px-6 max-w-7xl mx-auto">
         {/* Block Header */}
-        <div className="flex flex-col mb-16 md:mb-24 text-center md:text-left">
-          <span className="astral-eyebrow text-teal-500 mb-2 block uppercase font-astral tracking-[0.5em]">Sequence_Log</span>
-          <h2 className="astral-heading text-5xl sm:text-6xl md:text-9xl lg:text-[11vw] mb-4 italic !tracking-widest leading-none" style={{ fontFamily: 'Impact, sans-serif' }}>
+        {/* Block Header with Smooth Slide Reveal */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+          className="flex flex-col mb-16 md:mb-24 text-center md:text-left"
+        >
+          <motion.span 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="astral-eyebrow text-teal-500 mb-2 block uppercase font-astral tracking-[0.5em]"
+          >
+            Sequence_Log
+          </motion.span>
+          
+          <motion.h2 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="astral-heading text-5xl sm:text-6xl md:text-9xl lg:text-[11vw] mb-4 italic !tracking-widest leading-none" 
+            style={{ fontFamily: 'Impact, sans-serif' }}
+          >
             TIME LINE
-          </h2>
-        </div>
+          </motion.h2>
+        </motion.div>
 
         {/* Tabs */}
         <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-20 relative z-10 border-b border-white/10 pb-6">

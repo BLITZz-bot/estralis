@@ -955,10 +955,35 @@ export default function Schedule({ onModalToggle }) {
   return (
     <>
       <section id="events" className="min-h-screen pt-32">
-        <div className="px-6 mb-20 text-center">
-          <h2 className="astral-heading text-6xl md:text-9xl lg:text-[11vw] mb-4 italic !tracking-widest leading-none" style={{ fontFamily: 'Impact, sans-serif' }}>Event Zones</h2>
-          <p className="saarang-serif italic text-white/30 text-xl lg:text-2xl">Discover the Interstellar Spectrum</p>
-        </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+          className="px-6 mb-20 text-center relative"
+        >
+          {/* Impact Italic Heading with Smooth Slide-and-Fade */}
+          <motion.h2 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="astral-heading text-6xl md:text-9xl lg:text-[11vw] mb-4 italic !tracking-widest leading-none" 
+            style={{ fontFamily: 'Impact, sans-serif' }}
+          >
+            Event Zones
+          </motion.h2>
+
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9, delay: 0.4 }}
+            className="saarang-serif italic text-white/30 text-xl lg:text-2xl"
+          >
+            Discover the Interstellar Spectrum
+          </motion.p>
+        </motion.div>
 
         {/* Zone 1: Cultural */}
         <CategoryZone
