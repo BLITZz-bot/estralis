@@ -56,7 +56,7 @@ const SpecialGuest = () => {
                     <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
                         {/* LEFT COLUMN: TEXT SECTION */}
-                        <div className="flex flex-col space-y-10 order-2 lg:order-1">
+                        <div className="flex flex-col space-y-10 order-1 lg:order-1">
 
                             {/* Heading Group */}
                             <motion.div
@@ -125,7 +125,7 @@ const SpecialGuest = () => {
                         </div>
 
                         {/* RIGHT COLUMN: IMAGE SECTION */}
-                        <div className="relative order-1 lg:order-2 flex justify-center lg:justify-end items-start pt-4 lg:pt-0">
+                        <div className="relative order-2 lg:order-2 flex justify-center lg:justify-end items-start pt-4 lg:pt-0">
 
                             {/* Year Badge */}
                             <div className="absolute top-4 right-3 lg:right-0 z-20 bg-black text-white px-5 py-2 font-black text-[10px] tracking-[0.3em] border-l-4 border-teal-500 shadow-xl">
@@ -138,7 +138,7 @@ const SpecialGuest = () => {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1] }}
-                                className="relative group w-full max-w-[400px]"
+                                className="relative group w-full max-w-[280px] sm:max-w-[400px]"
                             >
                                 {/* Artist Name Reveal */}
                                 <motion.div

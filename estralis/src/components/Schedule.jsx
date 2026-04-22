@@ -586,183 +586,278 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
     if (event?.title?.toUpperCase().includes("DJ NIGHT")) {
       const fetchSlots = async () => {
         try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(event.title.trim().toUpperCase())}`);
+          const normalizedTitle = event.title.trim().toUpperCase();
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(normalizedTitle)}`);
           const data = await res.json();
-          if (data.success && data.isLimited) setSlotInfo(data);
-        } catch (err) { console.error("Slot fetch err:", err); }
+          if (data.success && data.isLimited) {
+            setSlotInfo(data);
+          }
+        } catch (err) {
+          console.error("Slot fetch err:", err);
+        }
       };
       fetchSlots();
     }
   }, [event?.title]);
 
   const theme = overrideTheme || getThemeForCategory(event?.category);
-  const accentColor = theme.text.replace('text-', '');
 
   useEffect(() => {
     setActiveTab("about");
   }, [event]);
 
-  if (!event) return null;
+  if (!event) return null
+
+  const cat = event.category || "Tech"
+  const teamText = event.minTeamSize === event.maxTeamSize
+    ? `${event.minTeamSize}`
+    : `${event.minTeamSize || "?"} – ${event.maxTeamSize || "?"}`
 
   const tabs = [
-    { id: "about", label: "Overview" },
-    { id: "rules", label: "The Protocol" },
-    { id: "coordinators", label: "Connect" },
-  ];
+    { id: "about", label: "Overview", icon: "✧" },
+    { id: "rules", label: "Guidelines", icon: "✦" },
+    { id: "coordinators", label: "Concierge", icon: "◈" },
+  ]
 
   return (
-    <>
+    <motion.div
+      className="fixed inset-0 bg-black/95 backdrop-blur-3xl flex items-center justify-center z-[100] p-0 sm:p-12"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
       <motion.div
-        className="fixed inset-0 bg-[#020617]/95 backdrop-blur-3xl flex items-center justify-center z-[100] p-4 overflow-y-auto"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={onClose}
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", damping: 30, stiffness: 100 }}
+        onClick={(e) => e.stopPropagation()}
+        className={`relative w-full max-w-6xl h-full sm:h-auto sm:max-h-[85vh] bg-[#020617]/80 backdrop-blur-3xl border border-white/10 rounded-none sm:rounded-[40px] overflow-hidden flex flex-col md:flex-row shadow-[0_0_100px_rgba(0,0,0,0.5)]`}
+        style={{ borderColor: `rgba(${theme.accent === 'cyan-500' ? '6, 182, 212' : theme.accent === 'fuchsia-500' ? '217, 70, 239' : '45, 212, 191'}, 0.2)` }}
       >
-        <motion.div
-          initial={{ y: 100, opacity: 0, scale: 0.9 }}
-          animate={{ y: 0, opacity: 1, scale: 1 }}
-          transition={{ type: "spring", damping: 30, stiffness: 100 }}
-          onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-5xl bg-black/40 border border-white/5 rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] flex flex-col md:flex-row min-h-[70vh] md:h-[80vh]"
+        {/* Floating Close Button */}
+        <button
+          onClick={onClose}
+          className={`absolute top-8 right-8 ${theme.text} opacity-60 hover:opacity-100 transition-all z-[60] p-2 hover:bg-white/5 rounded-full`}
         >
-          {/* 🖼️ Cinematic Left Panel (Visual) */}
-          <div className="w-full md:w-[40%] relative overflow-hidden bg-zinc-900 flex flex-col">
-            <div className="absolute inset-0 z-0">
-              <img 
-                src={event.bgImage || "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80"} 
-                className="w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-1000 scale-110"
-                alt="" 
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
-            </div>
-            
-            <div className="relative z-20 mt-auto p-12 space-y-4">
-              <span className={`inline-block px-4 py-1 rounded-full border border-${accentColor}/30 text-${accentColor} text-[10px] font-black tracking-[0.3em] uppercase backdrop-blur-md`}>
-                {event.category} SECTOR
-              </span>
-              <h2 className="text-6xl lg:text-7xl font-black text-white leading-[0.9] italic tracking-tighter" style={{ fontFamily: 'var(--font-abril)' }}>
-                {event.title}
-              </h2>
-            </div>
-          </div>
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
 
-          {/* 📝 Elegant Content Right Panel */}
-          <div className="flex-1 flex flex-col bg-[#050505]/60 backdrop-blur-xl">
-            {/* Header / Tabs */}
-            <div className="p-8 md:p-12 pb-0 flex items-center justify-between">
-              <nav className="flex gap-8">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`relative pb-2 text-[11px] font-black tracking-[0.2em] uppercase transition-all ${
-                      activeTab === tab.id ? "text-white" : "text-white/20 hover:text-white/40"
-                    }`}
-                  >
-                    {tab.label}
-                    {activeTab === tab.id && (
-                      <motion.div layoutId="tabLine" className={`absolute bottom-0 left-0 right-0 h-1 rounded-full bg-${accentColor}`} />
-                    )}
-                  </button>
-                ))}
-              </nav>
-              <button onClick={onClose} className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 transition-all">
-                ✕
-              </button>
-            </div>
+        {/* Border Glow Overlay */}
+        <div className="absolute inset-0 border border-white/5 pointer-events-none rounded-[40px] z-20" />
+        
+        {/* Colour Grading Background Elements */}
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+          <div className={`absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full blur-[150px] opacity-20 ${theme.bgSoft}`} />
+          <div className={`absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full blur-[120px] opacity-15 ${theme.bgSoft}`} />
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")` }} />
+        </div>
 
-            {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-8 md:p-12 pt-10">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTab}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.4 }}
-                  className="space-y-12"
-                >
-                  {activeTab === "about" && (
-                    <div className="space-y-12">
-                      <p className="saarang-serif text-2xl md:text-3xl text-white/70 leading-relaxed italic border-l-2 border-white/10 pl-8">
-                        {event.description}
-                      </p>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5 border border-white/5 rounded-3xl overflow-hidden">
-                        <div className="bg-black/20 p-8 space-y-1">
-                          <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Investment</span>
-                          <p className={`text-3xl font-black ${theme.text}`}>{event.fee}</p>
-                        </div>
-                        <div className="bg-black/20 p-8 space-y-1">
-                          <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Coordinates</span>
-                          <p className="text-xl font-bold text-white italic">{event.location}</p>
-                        </div>
-                        <div className="bg-black/20 p-8 space-y-1">
-                          <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Prize Pool</span>
-                          <p className={`text-3xl font-black ${theme.text}`}>{event.prize || "Glory"}</p>
-                        </div>
-                        <div className="bg-black/20 p-8 space-y-1">
-                          <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Team Size</span>
-                          <p className="text-xl font-bold text-white italic">{event.minTeamSize === event.maxTeamSize ? event.minTeamSize : `${event.minTeamSize}-${event.maxTeamSize}`} Units</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {activeTab === "rules" && (
-                    <div className="space-y-6">
-                      {event.rules.map((rule, idx) => (
-                        <div key={idx} className="flex gap-6 group">
-                          <span className={`text-[10px] font-black ${theme.text} opacity-30 mt-1`}>{(idx + 1).toString().padStart(2, '0')}</span>
-                          <p className="text-white/60 font-medium text-lg leading-relaxed group-hover:text-white transition-colors">
-                            {rule}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {activeTab === "coordinators" && (
-                    <div className="grid grid-cols-1 gap-4">
-                      {event.coordinators.map((c, i) => {
-                        const parts = c.split(/ [–-] |-| – /);
-                        return (
-                          <div key={i} className="flex items-center justify-between p-8 bg-white/5 rounded-3xl group hover:bg-white/10 transition-all border border-transparent hover:border-white/10">
-                            <div className="space-y-1">
-                              <p className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Protocol Liaison</p>
-                              <p className="text-2xl font-black text-white italic" style={{ fontFamily: 'var(--font-abril)' }}>{parts[0]?.trim()}</p>
-                            </div>
-                            <a href={`tel:${parts[1]?.trim()}`} className={`text-xl font-bold ${theme.text} hover:scale-110 transition-transform`}>
-                              {parts[1]?.trim()}
-                            </a>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            {/* CTA Footer */}
-            {activeTab !== "coordinators" && isEventOpen && (
-              <div className="p-12 pt-0">
-                <button
-                  disabled={slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)}
-                  onClick={() => onRegister(event)}
-                  className={`w-full py-6 bg-white text-black text-[12px] font-black tracking-[0.5em] uppercase rounded-full hover:bg-${accentColor} hover:text-white transition-all shadow-[0_20px_40px_-10px_rgba(255,255,255,0.1)]`}
-                >
-                  {slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'SOLD OUT' : 'INITIALIZE REGISTRATION'}
-                </button>
+        {/* Left Sidebar - Navigation & Title (Desktop) */}
+        <div className={`w-full md:w-[450px] bg-black/40 border-b md:border-b-0 md:border-r border-white/10 flex flex-col p-8 sm:p-14 lg:p-16 justify-between relative z-10`}
+             style={{ backdropFilter: 'blur(40px)' }}>
+          <div>
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <div className={`w-8 h-[1px] ${theme.bg}`} />
+                <span className={`text-[10px] font-black tracking-[0.5em] uppercase ${theme.text}`}>
+                  {cat}
+                </span>
               </div>
-            )}
+              
+              <h3 className={`text-3xl sm:text-4xl lg:text-5xl saarang-serif italic leading-[1.2] pr-10 mb-4 bg-gradient-to-br from-white via-white/90 to-${theme.accent.split('-')[0]}-300 bg-clip-text text-transparent`}>
+                {event.title}
+              </h3>
+            </div>
           </div>
-        </motion.div>
+
+          <div className="hidden md:flex flex-col gap-6 mt-12">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-4 text-left transition-all duration-500 ${
+                  activeTab === tab.id ? theme.text : "text-white/20 hover:text-white/40"
+                }`}
+              >
+                <span className="text-lg">{tab.icon}</span>
+                <span className={`text-[11px] font-black tracking-[0.4em] uppercase ${
+                  activeTab === tab.id ? "translate-x-2" : ""
+                } transition-transform`}>
+                  {tab.label}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile Tab Icons */}
+          <div className="flex md:hidden justify-around mt-8 pt-6 border-t border-white/5">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex flex-col items-center gap-1 transition-all ${
+                  activeTab === tab.id ? theme.text : "text-white/20"
+                }`}
+              >
+                <span className="text-lg">{tab.icon}</span>
+                <span className="text-[8px] font-black tracking-widest uppercase">{tab.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Content Area */}
+        <div className="flex-1 bg-transparent overflow-y-auto custom-scrollbar p-8 sm:p-16 lg:p-24 relative z-10">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="min-h-full flex flex-col"
+            >
+              {activeTab === "about" && (
+                <div className="space-y-16">
+                  {/* Elegant Quote Description */}
+                  <div className="relative py-8">
+                    <span className={`absolute -top-6 -left-10 text-8xl ${theme.text} opacity-10 saarang-serif pointer-events-none`}>“</span>
+                    <p className="saarang-serif text-white/80 text-lg sm:text-xl lg:text-2xl leading-[1.8] italic relative z-10 max-w-4xl">
+                      {event.description}
+                    </p>
+                  </div>
+
+                  {/* Minimalist Info Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 pt-8">
+                    <div className="space-y-3">
+                      <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Investment</p>
+                      <p className="text-3xl saarang-serif text-white italic">{event.fee}</p>
+                    </div>
+                    <div className="space-y-3">
+                      <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Venue</p>
+                      <p className="text-xl font-bold text-white uppercase tracking-tight">@{event.location}</p>
+                    </div>
+                    {event.prize && (
+                      <div className="space-y-3">
+                        <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Reward</p>
+                        <p className={`text-3xl saarang-serif italic ${theme.text}`}>{event.prize}</p>
+                      </div>
+                    )}
+                    <div className="space-y-3">
+                      <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Registry</p>
+                      <p className="text-xl font-bold text-white uppercase tracking-tight">{teamText} Members</p>
+                    </div>
+                  </div>
+
+                  <div className="pt-12 border-t border-white/5 flex flex-col sm:flex-row gap-8 items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-3 h-3 rounded-full ${theme.bg} animate-pulse shadow-[0_0_15px_${theme.bg}]`} />
+                      <span className="text-[10px] font-bold text-white/40 tracking-[0.3em] uppercase">Registration Live</span>
+                    </div>
+                    <button
+                      onClick={() => setActiveTab("rules")}
+                      className="px-12 py-5 bg-white text-black font-black text-[10px] uppercase tracking-[0.4em] rounded-full hover:bg-white/90 transition-all active:scale-95"
+                    >
+                      Read Protocol
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "rules" && (
+                <div className="space-y-12">
+                  <div className="flex items-center gap-6">
+                    <h4 className="text-3xl saarang-serif text-white italic">Event Protocol</h4>
+                    <div className="flex-1 h-[1px] bg-white/10" />
+                  </div>
+                  
+                  <div className="grid gap-8">
+                    {event.rules.map((rule, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="flex gap-8 group"
+                      >
+                        <span className={`text-2xl saarang-serif ${theme.text} opacity-60 group-hover:opacity-100 transition-opacity italic`}>
+                          {(idx + 1).toString().padStart(2, '0')}
+                        </span>
+                        <p className="text-base text-white/70 leading-loose tracking-wide pt-1">
+                          {rule.trim()}
+                        </p>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {isEventOpen && (
+                    <div className="pt-16">
+                      <button
+                        disabled={slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)}
+                        onClick={() => onRegister(event)}
+                        className={`w-full py-8 ${
+                          slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)
+                            ? 'bg-red-600/20 text-red-500 border border-red-500/30'
+                            : 'bg-white text-black hover:invert'
+                        } text-[11px] font-black tracking-[0.5em] uppercase rounded-full transition-all duration-700 active:scale-95 shadow-2xl`}
+                      >
+                        {slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'SOLD OUT' : 'Confirm Registry'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {activeTab === "coordinators" && (
+                <div className="space-y-12">
+                  <div className="flex items-center gap-6">
+                    <h4 className="text-3xl saarang-serif text-white italic">Support Concierge</h4>
+                    <div className="flex-1 h-[1px] bg-white/10" />
+                  </div>
+
+                  <div className="grid gap-6">
+                    {event.coordinators.map((c, i) => {
+                      const parts = c.split(/ [–-] |-| – /);
+                      const name = parts[0]?.trim();
+                      const phone = parts[1]?.trim();
+
+                      return (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, scale: 0.98 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="p-10 border border-white/5 rounded-[30px] flex flex-col sm:flex-row items-center justify-between group hover:bg-white/5 transition-all duration-500"
+                        >
+                          <div className="text-center sm:text-left mb-6 sm:mb-0">
+                            <p className="text-white font-bold tracking-widest uppercase text-2xl mb-1">{name}</p>
+                            <p className="text-[10px] font-black text-white/20 tracking-[0.4em] uppercase">Coordinator Access</p>
+                          </div>
+                          <div className="text-center sm:text-right">
+                            <a
+                              href={`tel:${phone}`}
+                              className="text-white text-2xl font-bold font-tech hover:text-white/60 transition-all block mb-1"
+                            >
+                              {phone}
+                            </a>
+                            <span className="text-[9px] font-black text-white/10 uppercase tracking-widest">Secure Transmission</span>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </motion.div>
-    </>
+    </motion.div>
   );
 }
+
 
 export default function Schedule({ onModalToggle }) {
   const [selectedEvent, setSelectedEvent] = useState(null)

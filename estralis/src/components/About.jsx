@@ -45,11 +45,11 @@ export default function About({ onOpenProtocol }) {
           className="w-full md:w-2/3"
         >
           <div className="astral-glass p-8 md:p-14 hover:border-teal-500/40 transition-all duration-500 relative group">
-            <p className="text-white/80 text-sm md:text-base font-marker tracking-wide leading-loose mb-10">
+            <p className="text-white/80 text-sm md:text-base saarang-serif tracking-wide leading-loose mb-10">
               This fest marks a grand revival of our college’s cultural spirit after an eight-year hiatus. It is envisioned as a vibrant celebration that brings together talent, creativity, and innovation through a diverse array of competitive and engaging events.
             </p>
 
-            <p className="text-white/80 text-sm md:text-base font-marker tracking-wide leading-loose mb-12">
+            <p className="text-white/80 text-sm md:text-base saarang-serif tracking-wide leading-loose mb-12">
               The fest provides an inspiring platform for students to showcase their abilities, collaborate with peers, and celebrate excellence, fostering a sense of unity and cultural enthusiasm across the campus.
             </p>
 
