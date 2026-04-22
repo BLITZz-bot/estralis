@@ -771,7 +771,7 @@ app.get('/api/scanner/history', async (req, res) => {
 app.get('/api/admin/registrations', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -787,7 +787,7 @@ app.get('/api/admin/registrations', async (req, res) => {
 app.delete('/api/admin/registrations/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -804,7 +804,7 @@ app.delete('/api/admin/registrations/:id', async (req, res) => {
 app.patch('/api/admin/registrations/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -834,7 +834,7 @@ app.patch('/api/admin/registrations/:id', async (req, res) => {
 app.delete('/api/admin/registrations-all', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -856,7 +856,7 @@ app.delete('/api/admin/registrations-all', async (req, res) => {
 app.delete('/api/admin/registrations/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -889,7 +889,7 @@ app.get('/api/events/status', async (req, res) => {
 app.post('/api/admin/events/toggle', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -914,7 +914,7 @@ app.post('/api/admin/events/toggle', async (req, res) => {
 app.post('/api/admin/resend-confirmation/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -947,7 +947,7 @@ app.post('/api/admin/resend-all-confirmations', async (req, res) => {
     console.log("--- Bulk Resend Confirmation Emails Request ---");
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1004,7 +1004,7 @@ app.get('/api/colleges', async (req, res) => {
 app.post('/api/admin/colleges', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1036,7 +1036,7 @@ app.post('/api/admin/colleges', async (req, res) => {
 app.delete('/api/admin/colleges/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1061,7 +1061,7 @@ app.post('/api/admin/send-report', async (req, res) => {
     console.log("--- New Email Report Request Received ---");
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1198,7 +1198,7 @@ app.get('/api/theme/status', async (req, res) => {
 app.post('/api/admin/theme/update', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1254,7 +1254,7 @@ app.post('/api/theme/verify', async (req, res) => {
 app.post('/api/admin/send-event-mail', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1351,7 +1351,7 @@ app.get('/api/events/slots-status', async (req, res) => {
 app.post('/api/admin/events/slots-update', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== ADMIN_PASSWORD) return res.status(401).json({ success: false, message: 'Unauthorized' });
+        if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) return res.status(401).json({ success: false, message: 'Unauthorized' });
 
         const { eventTitle, maxSlots, isManualOpen } = req.body;
         if (!eventTitle) return res.status(400).json({ success: false, message: 'eventTitle required' });
