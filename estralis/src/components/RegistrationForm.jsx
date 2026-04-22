@@ -975,8 +975,8 @@ export default function RegistrationForm({ event, onClose }) {
 
                                 <div className="space-y-6 text-left border-y border-white/10 py-8">
                                     <div className="flex justify-between items-center text-teal-400 font-black text-[10px] tracking-widest uppercase mb-4">
-                                        <span>Step 1: Scan & Pay</span>
-                                        <span>Step 2: Enter Details</span>
+                                        <span>Step 1: Scan & Pay (take the screenshot)</span>
+                                        <span>Step 2: Enter Details correctly</span>
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
