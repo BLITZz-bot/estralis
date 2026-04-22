@@ -121,7 +121,7 @@ export default function CountdownSciFi() {
       <div
         className="w-[72px] h-[82px] sm:w-[88px] sm:h-[96px] md:w-[110px] md:h-[120px]
           bg-slate-900/40
-          backdrop-blur-md md:backdrop-blur-xl
+          backdrop-blur-xl
           border-l-4 border-l-teal-500 border-r border-y border-white/5
           shadow-[0_20px_50px_rgba(0,0,0,0.5)]
           flex flex-col items-center justify-center group transition-all hover:bg-teal-500/10"
@@ -140,7 +140,7 @@ export default function CountdownSciFi() {
       <div
         className="w-[72px] h-[82px] sm:w-[88px] sm:h-[96px] md:w-[110px] md:h-[120px]
           bg-slate-900/40
-          backdrop-blur-md md:backdrop-blur-xl
+          backdrop-blur-xl
           border-l-4 border-l-cyan-500 border-r border-y border-white/5
           shadow-[0_20px_50px_rgba(0,0,0,0.5)]
           flex flex-col items-center justify-center overflow-hidden group transition-all hover:bg-cyan-500/10"
@@ -223,7 +223,7 @@ export default function CountdownSciFi() {
               mt-2 flex items-center justify-center gap-3 sm:gap-4
               px-6 py-4 sm:px-10 sm:py-5
               rounded-xl sm:rounded-2xl
-              bg-black/40 backdrop-blur-md md:backdrop-blur-xl 
+              bg-black/40 backdrop-blur-xl 
               border-x-[4px] border-y border-y-white/5
               shadow-lg relative z-10 mx-auto overflow-hidden group
               ${ringColor}
