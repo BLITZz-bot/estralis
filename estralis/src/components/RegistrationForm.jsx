@@ -264,8 +264,8 @@ export default function RegistrationForm({ event, onClose }) {
         const { name, value, type, files } = e.target;
         if (type === 'file') {
             const file = files[0];
-            if (file && file.size > 500 * 1024) {
-                alert("FILE SIZE EXCEEDED: Screenshot must be less than 500KB. Please compress your image or take a smaller screenshot.");
+            if (file && file.size > 1024 * 1024) {
+                alert("FILE SIZE EXCEEDED: Screenshot must be less than 1MB. Please compress your image or take a smaller screenshot.");
                 e.target.value = ""; // Clear input
                 setFormData(prev => ({ ...prev, [name]: null }));
                 return;
@@ -991,12 +991,12 @@ export default function RegistrationForm({ event, onClose }) {
                                     </div>
 
                                     <div className="space-y-1.5">
-                                        <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">Payment Proof (Screenshot)</label>
+                                        <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">Payment Proof (Screenshot showing UTR Number)</label>
                                         <div className="relative">
                                             <input required type="file" name="screenshot" accept="image/*" onChange={handleChange} className="hidden" id="screenshot-upload" />
                                             <label htmlFor="screenshot-upload" className="flex items-center justify-between w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 cursor-pointer hover:bg-white/10 transition-all">
                                                 <span className="text-sm font-bold text-white/60 truncate max-w-[200px]">
-                                                    {formData.screenshot ? formData.screenshot.name : "Choose Image"}
+                                                    {formData.screenshot ? formData.screenshot.name : "Choose Image < 1MB"}
                                                 </span>
                                                 <span className="text-[10px] font-black text-teal-400 uppercase tracking-widest border border-teal-500/30 px-3 py-1 rounded-lg">Browse</span>
                                             </label>
