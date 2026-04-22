@@ -21,9 +21,9 @@ export default function SectionBackground({ src, alt = "Background", activeOpaci
       <motion.img
         src={src}
         alt={alt}
-        initial={{ scale: 1.03 }}
-        animate={{ scale: isInView ? 1 : 1.03 }}
-        transition={{ duration: 3, ease: "easeOut" }}
+        initial={{ scale: 1.05 }}
+        animate={{ scale: isInView ? 1 : 1.07 }}
+        transition={{ duration: 2, ease: "easeOut" }}
         className="w-full h-full object-cover mix-blend-screen will-change-transform"
       />
     </div>
