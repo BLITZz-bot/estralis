@@ -214,10 +214,11 @@ app.post('/api/staff/login', (req, res) => {
 
 app.post('/api/admin/secondary-login', (req, res) => {
     const { password } = req.body;
-    if (password === SECONDARY_PASSWORD) {
+    // Allow both the specific secondary password AND the main admin password
+    if (password === SECONDARY_PASSWORD || password === ADMIN_PASSWORD) {
         res.json({ success: true });
     } else {
-        res.status(401).json({ success: false, message: 'Invalid Secondary Password' });
+        res.status(401).json({ success: false, message: 'Invalid Password' });
     }
 });
 
