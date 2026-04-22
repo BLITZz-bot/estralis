@@ -181,7 +181,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/secondary-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: managePassInput })
@@ -203,7 +203,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/secondary-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: emailPassInput })
@@ -225,7 +225,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/secondary-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: collegesPassInput })
@@ -248,7 +248,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/secondary-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: controlsPassInput })
@@ -270,7 +270,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/secondary-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: slotsPassInput })
@@ -416,7 +416,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/secondary-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: themePassInput })
@@ -438,7 +438,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/secondary-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: mailerPassInput })
@@ -628,7 +628,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         setResending(true);
         setResendError("");
         try {
-            const loginRes = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+            const loginRes = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/secondary-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: resendPassword })
@@ -673,7 +673,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         setClearing(true);
         setClearError("");
         try {
-            const loginRes = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+            const loginRes = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/secondary-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: clearPassword })
@@ -2662,7 +2662,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         onClick={async () => {
                                             setLoading(true);
                                             try {
-                                                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+                                                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/secondary-login`, {
                                                     method: 'POST',
                                                     headers: { 'Content-Type': 'application/json' },
                                                     body: JSON.stringify({ password: mailerConfirmPassword })

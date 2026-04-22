@@ -62,6 +62,7 @@ const GMAIL_REFRESH_TOKEN = (process.env.GMAIL_REFRESH_TOKEN || "").trim();
 // Security Configuration
 const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || "admin@2026").trim();
 const STAFF_PASSWORD = (process.env.STAFF_PASSWORD || "scan@2026").trim();
+const SECONDARY_PASSWORD = (process.env.SECONDARY_PASSWORD || "bharatha2111").trim();
 
 // --- GMAIL API (HTTPS) CONFIGURATION (Port 443 - Definitive Fix for Render Timeouts) ---
 // We no longer use SMTP (Port 587/465) because cloud firewalls often block them.
@@ -208,6 +209,15 @@ app.post('/api/staff/login', (req, res) => {
         res.json({ success: true });
     } else {
         res.status(401).json({ success: false, message: 'Invalid Staff Password' });
+    }
+});
+
+app.post('/api/admin/secondary-login', (req, res) => {
+    const { password } = req.body;
+    if (password === SECONDARY_PASSWORD) {
+        res.json({ success: true });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid Secondary Password' });
     }
 });
 
