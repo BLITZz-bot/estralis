@@ -124,7 +124,8 @@ export default function CountdownSciFi() {
           backdrop-blur-xl
           border-l-4 border-l-teal-500 border-r border-y border-white/5
           shadow-[0_20px_50px_rgba(0,0,0,0.5)]
-          flex flex-col items-center justify-center group transition-all hover:bg-teal-500/10"
+          flex flex-col items-center justify-center group transition-all hover:bg-teal-500/10
+          [will-change:transform,opacity]"
       >
         <span className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter text-white leading-none font-astral group-hover:text-teal-400 transition-colors">
           {String(v).padStart(2, "0")}
@@ -143,7 +144,8 @@ export default function CountdownSciFi() {
           backdrop-blur-xl
           border-l-4 border-l-cyan-500 border-r border-y border-white/5
           shadow-[0_20px_50px_rgba(0,0,0,0.5)]
-          flex flex-col items-center justify-center overflow-hidden group transition-all hover:bg-cyan-500/10"
+          flex flex-col items-center justify-center overflow-hidden group transition-all hover:bg-cyan-500/10
+          [will-change:transform,opacity]"
       >
         <AnimatePresence mode="popLayout">
           <motion.span
@@ -227,6 +229,7 @@ export default function CountdownSciFi() {
               border-x-[4px] border-y border-y-white/5
               shadow-lg relative z-10 mx-auto overflow-hidden group
               ${ringColor}
+              [will-change:transform,opacity]
             `}
           >
             <motion.div

@@ -13,11 +13,12 @@ function Counter({ value, duration = 2 }) {
       const end = parseInt(value)
       const frames = duration * 60
       const increment = Math.ceil(end / frames)
+      const intervalTime = typeof window !== 'undefined' && window.innerWidth < 768 ? 32 : 16
       const timer = setInterval(() => {
         start += increment
         if (start >= end) { setCount(end); clearInterval(timer) }
         else setCount(start)
-      }, 16)
+      }, intervalTime)
       return () => clearInterval(timer)
     }
   }, [value, duration, isInView])
@@ -27,7 +28,7 @@ function Counter({ value, duration = 2 }) {
 
 export default function PrizePool() {
   return (
-    <section className="relative py-20 md:py-32 px-6 bg-transparent overflow-hidden group">
+    <section className="relative py-20 md:py-32 px-6 bg-transparent overflow-hidden group [will-change:transform]">
 
       <SectionBackground
         src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80"
@@ -36,7 +37,7 @@ export default function PrizePool() {
 
       {/* Background Poster Depth */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full opacity-[0.04] pointer-events-none select-none flex justify-center items-center">
-        <h2 className="text-[22vw] md:text-[26vw] font-black tracking-tighter uppercase leading-none text-center text-white">BOUNTY</h2>
+        <h2 className="text-[22vw] md:text-[26vw] font-black tracking-tighter uppercase leading-none text-center text-white will-change-transform">BOUNTY</h2>
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto text-center">
