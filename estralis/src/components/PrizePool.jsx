@@ -33,6 +33,7 @@ export default function PrizePool() {
       <SectionBackground
         src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80"
         alt="Cryptic Bounty Fluid"
+        activeOpacity="opacity-70 md:opacity-50"
       />
 
       {/* Background Poster Depth */}

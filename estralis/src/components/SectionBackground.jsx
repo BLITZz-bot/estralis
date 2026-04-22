@@ -8,9 +8,10 @@ export default function SectionBackground({ src, alt = "Background", activeOpaci
   const isInView = useInView(ref, { margin: "-30% 0px -30% 0px", amount: 0.1 });
 
   return (
-    <div
+    <div 
       ref={ref}
-      className={`absolute inset-0 z-0 pointer-events-none transition-all duration-1000
+      className={`absolute inset-0 z-0 pointer-events-none transition-all
+        ${typeof window !== 'undefined' && window.innerWidth < 768 ? 'duration-500' : 'duration-1000'}
         group-hover:grayscale-0 group-hover:opacity-40 md:group-hover:opacity-60
         ${isInView ? `grayscale-0 ${activeOpacity}` : 'grayscale opacity-10 md:opacity-20'}
       `}
