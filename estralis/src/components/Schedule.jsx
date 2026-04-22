@@ -734,7 +734,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 pt-8">
                     <div className="space-y-3">
                       <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Investment</p>
-                      <p className="text-3xl saarang-serif text-white italic">{event.fee}</p>
+                        <p className={`text-3xl saarang-serif ${theme.text} italic`}>{event.fee}</p>
                     </div>
                     <div className="space-y-3">
                       <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Venue</p>
@@ -746,10 +746,12 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                         <p className={`text-3xl saarang-serif italic ${theme.text}`}>{event.prize}</p>
                       </div>
                     )}
-                    <div className="space-y-3">
-                      <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Registry</p>
-                      <p className="text-xl font-bold text-white uppercase tracking-tight">{teamText} Members</p>
-                    </div>
+                    {!(event.title.toUpperCase().includes("DJ NIGHT")) && (
+                      <div className="space-y-3">
+                        <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Registry</p>
+                        <p className="text-xl font-bold text-white uppercase tracking-tight">{teamText} Members</p>
+                      </div>
+                    )}
                   </div>
 
                   <div className="pt-12 border-t border-white/5 flex flex-col sm:flex-row gap-8 items-center justify-between">
@@ -838,7 +840,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                           <div className="text-center sm:text-right">
                             <a
                               href={`tel:${phone}`}
-                              className="text-white text-2xl font-bold font-tech hover:text-white/60 transition-all block mb-1"
+                                className={`text-2xl font-bold font-tech ${theme.text} hover:opacity-60 transition-all block mb-1`}
                             >
                               {phone}
                             </a>

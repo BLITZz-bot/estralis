@@ -53,10 +53,10 @@ const SpecialGuest = () => {
 
                 <div className="container mx-auto px-6 max-w-7xl relative z-10">
                     {/* 2-Column Grid Layout - Increased Gap to push image right */}
-                    <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                    <div className="grid lg:grid-cols-2 gap-8 lg:gap-24 items-center">
 
                         {/* LEFT COLUMN: TEXT SECTION */}
-                        <div className="flex flex-col space-y-10 order-1 lg:order-1">
+                        <div className="flex flex-col space-y-6 order-1 lg:order-1">
 
                             {/* Heading Group */}
                             <motion.div
@@ -92,40 +92,42 @@ const SpecialGuest = () => {
                                 Prepare for the most electrifying night of the festival. Join thousands of fans as the galaxy's finest artist takes the main stage for a journey through rhythm and light.
                             </motion.p>
 
-                            {/* Stats Row */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.8, delay: 0.4 }}
-                                className="flex flex-wrap gap-12 pt-8"
-                            >
-                                <div className="flex flex-col gap-1 border-r border-white/10 pr-12">
-                                    <span className="text-[10px] uppercase tracking-widest text-white/30 font-black">Reg Fees</span>
-                                    <span className="text-4xl font-black text-teal-400 tracking-tighter">₹400</span>
-                                </div>
-                            </motion.div>
-
-                            {/* Action + Barcode Row */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.8, delay: 0.6 }}
-                                className="flex items-center gap-12 pt-8"
-                            >
-                                <button
-                                    onClick={() => setIsModalOpen(true)}
-                                    className={`${slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'bg-red-600' : 'bg-teal-500'} text-black px-10 py-5 font-black uppercase text-xs tracking-[0.2em] transform transition hover:scale-105 active:scale-95 shadow-[0_0_30px_#2dd4bf55]`}
+                            {/* Desktop Stats & Action (Original Position) */}
+                            <div className="hidden lg:flex flex-col space-y-6">
+                                {/* Price */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.8, delay: 0.4 }}
+                                    className="flex flex-wrap gap-12 pt-8"
                                 >
-                                    {slotInfo && slotInfo.isManualOpen === false ? 'SOLD OUT' : (slotInfo && slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : 'BUY TICKETS NOW')}
-                                </button>
+                                    <div className="flex flex-col gap-1 border-r border-white/10 pr-12">
+                                        <span className="text-[10px] uppercase tracking-widest text-white/30 font-black">Reg Fees</span>
+                                        <span className="text-4xl font-black text-teal-400 tracking-tighter">₹400</span>
+                                    </div>
+                                </motion.div>
 
-                            </motion.div>
+                                {/* Action Button */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.8, delay: 0.6 }}
+                                    className="flex items-center gap-12 pt-8"
+                                >
+                                    <button
+                                        onClick={() => setIsModalOpen(true)}
+                                        className={`${slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'bg-red-600' : 'bg-teal-500'} text-black px-10 py-5 font-black uppercase text-xs tracking-[0.2em] transform transition hover:scale-105 active:scale-95 shadow-[0_0_30px_#2dd4bf55]`}
+                                    >
+                                        {slotInfo && slotInfo.isManualOpen === false ? 'SOLD OUT' : (slotInfo && slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : 'BUY TICKETS NOW')}
+                                    </button>
+                                </motion.div>
+                            </div>
                         </div>
 
                         {/* RIGHT COLUMN: IMAGE SECTION */}
-                        <div className="relative order-2 lg:order-2 flex justify-center lg:justify-end items-start pt-4 lg:pt-0">
+                        <div className="relative order-2 lg:order-2 flex flex-col items-center lg:items-end pt-4 lg:pt-0">
 
                             {/* Year Badge */}
                             <div className="absolute top-4 right-3 lg:right-0 z-20 bg-black text-white px-5 py-2 font-black text-[10px] tracking-[0.3em] border-l-4 border-teal-500 shadow-xl">
@@ -138,7 +140,7 @@ const SpecialGuest = () => {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1] }}
-                                className="relative group w-full max-w-[280px] sm:max-w-[400px]"
+                                className="relative group w-full max-w-[240px] sm:max-w-[400px]"
                             >
                                 {/* Artist Name Reveal */}
                                 <motion.div
@@ -155,7 +157,7 @@ const SpecialGuest = () => {
                                         Featuring
                                     </span>
                                     <h4
-                                        className="text-white text-2xl md:text-4xl font-black uppercase tracking-tighter leading-none"
+                                        className="text-white text-2xl md:text-4xl font-black uppercase tracking-tighter leading-none whitespace-nowrap"
                                         style={{ fontFamily: "'Orbitron', sans-serif" }}
                                     >
                                         CHANDAN <span className="text-teal-400">SHETTY</span>
@@ -174,6 +176,37 @@ const SpecialGuest = () => {
 
                                 </div>
                             </motion.div>
+
+                            {/* Mobile Stats Row & Action (Visible only on Mobile) */}
+                            <div className="flex lg:hidden flex-row items-center justify-between w-full max-w-[280px] sm:max-w-[400px] gap-6 pt-8 border-t border-white/5 mt-4">
+                                {/* Price */}
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.8, delay: 0.4 }}
+                                    className="flex flex-col gap-1"
+                                >
+                                    <span className="text-[10px] uppercase tracking-widest text-white/30 font-black">Reg Fees</span>
+                                    <span className="text-4xl font-black text-teal-400 tracking-tighter">₹400</span>
+                                </motion.div>
+
+                                {/* Action Button */}
+                                <motion.div
+                                    initial={{ opacity: 0, x: 20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.8, delay: 0.6 }}
+                                    className="flex-1"
+                                >
+                                    <button
+                                        onClick={() => setIsModalOpen(true)}
+                                        className={`w-full ${slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'bg-red-600' : 'bg-teal-500'} text-black px-6 py-4 font-black uppercase text-[10px] tracking-[0.2em] transform transition hover:scale-105 active:scale-95 shadow-[0_0_30px_#2dd4bf55]`}
+                                    >
+                                        {slotInfo && slotInfo.isManualOpen === false ? 'SOLD OUT' : (slotInfo && slotInfo.slotsLeft <= 0 ? 'SOLD OUT' : 'BUY TICKETS NOW')}
+                                    </button>
+                                </motion.div>
+                            </div>
                         </div>
 
                     </div>
