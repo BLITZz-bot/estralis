@@ -628,6 +628,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         setResending(true);
         setResendError("");
         try {
+            // 1. Verify Secondary Password
             const loginRes = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/secondary-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -639,6 +640,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 return;
             }
 
+            // 2. Check for confirmation
             if (!resendConfirm) {
                 setResendConfirm(true);
                 setResendError("");
@@ -646,9 +648,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 return;
             }
 
-        setResending(true);
-        setResendError("");
-        try {
+            // 3. Perform the Action
             const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/resend-all-confirmations`, {
                 method: 'POST',
                 headers: { 'x-admin-password': resendPassword }
@@ -673,6 +673,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         setClearing(true);
         setClearError("");
         try {
+            // 1. Verify Secondary Password
             const loginRes = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/secondary-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -684,6 +685,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 return;
             }
 
+            // 2. Check for confirmation
             if (!clearConfirm) {
                 setClearConfirm(true);
                 setClearError("");
@@ -691,9 +693,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 return;
             }
 
-        setClearing(true);
-        setClearError("");
-        try {
+            // 3. Perform the Action
             const url = deleteTargetId
                 ? `${import.meta.env.VITE_API_URL}/api/admin/registrations/${deleteTargetId}`
                 : `${import.meta.env.VITE_API_URL}/api/admin/registrations-all`;
@@ -710,7 +710,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 setClearConfirm(false);
                 setDeleteTargetId(null);
                 setDeleteTargetName("");
-                fetchRegistrations(); // Refresh data
+                fetchRegistrations();
             } else {
                 setClearError(data.message || "Action Failed");
             }
