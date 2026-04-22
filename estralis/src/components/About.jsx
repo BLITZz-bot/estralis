@@ -3,12 +3,8 @@ import SectionBackground from "./SectionBackground"
 
 export default function About({ onOpenProtocol }) {
   return (
-    <motion.section
+    <section
       id="about"
-      initial={{ opacity: 0, y: 80 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.9, ease: "easeOut" }}
       className="relative py-24 md:py-32 px-6 overflow-hidden group"
     >
 
@@ -71,6 +67,6 @@ export default function About({ onOpenProtocol }) {
         </motion.div>
 
       </div>
-    </motion.section>
+    </section>
   )
 }
