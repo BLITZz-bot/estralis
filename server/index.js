@@ -59,6 +59,10 @@ const GMAIL_CLIENT_ID = (process.env.GMAIL_CLIENT_ID || "").trim();
 const GMAIL_CLIENT_SECRET = (process.env.GMAIL_CLIENT_SECRET || "").trim();
 const GMAIL_REFRESH_TOKEN = (process.env.GMAIL_REFRESH_TOKEN || "").trim();
 
+// Security Configuration
+const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || "admin@2026").trim();
+const STAFF_PASSWORD = (process.env.STAFF_PASSWORD || "scan@2026").trim();
+
 // --- GMAIL API (HTTPS) CONFIGURATION (Port 443 - Definitive Fix for Render Timeouts) ---
 // We no longer use SMTP (Port 587/465) because cloud firewalls often block them.
 // High-tech solution using standard HTTPS web traffic.
@@ -188,6 +192,25 @@ console.log(`📁 Persistent screenshot storage initialized at: ${path.join(__di
 // --- DIAGNOSTICS & CORE ROUTES (TOP PRIORITY) ---
 app.get('/api/ping', (req, res) => res.json({ status: 'online', time: new Date().toISOString() }));
 
+// Secure Login Routes
+app.post('/api/admin/login', (req, res) => {
+    const { password } = req.body;
+    if (password === ADMIN_PASSWORD) {
+        res.json({ success: true });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid Admin Password' });
+    }
+});
+
+app.post('/api/staff/login', (req, res) => {
+    const { password } = req.body;
+    if (password === STAFF_PASSWORD || password === ADMIN_PASSWORD) {
+        res.json({ success: true });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid Staff Password' });
+    }
+});
+
 app.get('/api/admin/test-email', async (req, res) => {
     console.log("--- GMail OAuth2 Test Request ---");
     try {
@@ -215,7 +238,7 @@ app.get('/api/admin/test-email', async (req, res) => {
 // Diagnostic Route to read error logs in production
 app.get('/api/admin/debug-mail', (req, res) => {
     const password = req.headers['x-admin-password'];
-    if (password !== 'admin@2026') return res.status(401).json({ success: false });
+    if (password !== ADMIN_PASSWORD) return res.status(401).json({ success: false });
 
     const logPath = path.join(__dirname, 'email_errors.log');
     if (fs.existsSync(logPath)) {
@@ -670,13 +693,12 @@ app.get('/api/registrations/:email', async (req, res) => {
 });
 
 // --- RESTRICTED SCANNER PORTAL APIs (Staff Access) ---
-const SCANNER_PASSWORD = "scan@2026";
 
 // 1. Verify Registration (Minimal Data Leakage)
 app.post('/api/scanner/verify', async (req, res) => {
     try {
         const { id, password } = req.body;
-        if (password !== SCANNER_PASSWORD && password !== 'admin@2026') {
+        if (password !== STAFF_PASSWORD && password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -700,7 +722,7 @@ app.post('/api/scanner/verify', async (req, res) => {
 app.post('/api/scanner/checkin', async (req, res) => {
     try {
         const { id, password } = req.body;
-        if (password !== SCANNER_PASSWORD && password !== 'admin@2026') {
+        if (password !== STAFF_PASSWORD && password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -720,7 +742,7 @@ app.post('/api/scanner/checkin', async (req, res) => {
 app.get('/api/scanner/history', async (req, res) => {
     try {
         const password = req.headers['x-staff-password'];
-        if (password !== SCANNER_PASSWORD && password !== 'admin@2026') {
+        if (password !== STAFF_PASSWORD && password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -738,7 +760,7 @@ app.get('/api/scanner/history', async (req, res) => {
 app.get('/api/admin/registrations', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -754,7 +776,7 @@ app.get('/api/admin/registrations', async (req, res) => {
 app.delete('/api/admin/registrations/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -771,7 +793,7 @@ app.delete('/api/admin/registrations/:id', async (req, res) => {
 app.patch('/api/admin/registrations/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -801,7 +823,7 @@ app.patch('/api/admin/registrations/:id', async (req, res) => {
 app.delete('/api/admin/registrations-all', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -823,7 +845,7 @@ app.delete('/api/admin/registrations-all', async (req, res) => {
 app.delete('/api/admin/registrations/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -856,7 +878,7 @@ app.get('/api/events/status', async (req, res) => {
 app.post('/api/admin/events/toggle', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -881,7 +903,7 @@ app.post('/api/admin/events/toggle', async (req, res) => {
 app.post('/api/admin/resend-confirmation/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -914,7 +936,7 @@ app.post('/api/admin/resend-all-confirmations', async (req, res) => {
     console.log("--- Bulk Resend Confirmation Emails Request ---");
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -971,7 +993,7 @@ app.get('/api/colleges', async (req, res) => {
 app.post('/api/admin/colleges', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1003,7 +1025,7 @@ app.post('/api/admin/colleges', async (req, res) => {
 app.delete('/api/admin/colleges/:id', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1028,7 +1050,7 @@ app.post('/api/admin/send-report', async (req, res) => {
     console.log("--- New Email Report Request Received ---");
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1165,7 +1187,7 @@ app.get('/api/theme/status', async (req, res) => {
 app.post('/api/admin/theme/update', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1221,7 +1243,7 @@ app.post('/api/theme/verify', async (req, res) => {
 app.post('/api/admin/send-event-mail', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') {
+        if (password !== ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
@@ -1318,7 +1340,7 @@ app.get('/api/events/slots-status', async (req, res) => {
 app.post('/api/admin/events/slots-update', async (req, res) => {
     try {
         const password = req.headers['x-admin-password'];
-        if (password !== 'admin@2026') return res.status(401).json({ success: false, message: 'Unauthorized' });
+        if (password !== ADMIN_PASSWORD) return res.status(401).json({ success: false, message: 'Unauthorized' });
 
         const { eventTitle, maxSlots, isManualOpen } = req.body;
         if (!eventTitle) return res.status(400).json({ success: false, message: 'eventTitle required' });

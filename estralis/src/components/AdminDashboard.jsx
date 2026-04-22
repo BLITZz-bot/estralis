@@ -150,69 +150,142 @@ export default function AdminDashboard({ isOpen, onClose }) {
         });
     };
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        if (password === "admin@2026") {
-            setIsAuthenticated(true);
-            setLoginError("");
-            fetchRegistrations(password); // Automatically load data instantly on successful login
-            fetchEventStatuses(); // Load event toggles
-            fetchThemeConfig(); // Load theme config
-            fetchDjSlots(); // Load DJ slots
-        } else {
-            setLoginError("Invalid Admin Password");
+        setLoading(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setIsAuthenticated(true);
+                setLoginError("");
+                fetchRegistrations(password);
+                fetchEventStatuses();
+                fetchThemeConfig();
+                fetchDjSlots();
+            } else {
+                setLoginError(data.message || "Invalid Admin Password");
+            }
+        } catch (err) {
+            setLoginError("Server Connection Error");
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleManageAuth = (e) => {
+    const handleManageAuth = async (e) => {
         e.preventDefault();
-        if (managePassInput === "bharatha2111") {
-            setIsManageAuth(true);
-            setManageAuthErr("");
-        } else {
-            setManageAuthErr("Incorrect Password");
+        setLoading(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: managePassInput })
+            });
+            if (res.ok) {
+                setIsManageAuth(true);
+                setManageAuthErr("");
+            } else {
+                setManageAuthErr("Incorrect Password");
+            }
+        } catch (err) {
+            setManageAuthErr("Connection Error");
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleEmailAuth = (e) => {
+    const handleEmailAuth = async (e) => {
         e.preventDefault();
-        if (emailPassInput === "bharatha2111") {
-            setIsEmailAuth(true);
-            setEmailAuthErr("");
-        } else {
-            setEmailAuthErr("Incorrect Password");
+        setLoading(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: emailPassInput })
+            });
+            if (res.ok) {
+                setIsEmailAuth(true);
+                setEmailAuthErr("");
+            } else {
+                setEmailAuthErr("Incorrect Password");
+            }
+        } catch (err) {
+            setEmailAuthErr("Connection Error");
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleCollegesAuth = (e) => {
+    const handleCollegesAuth = async (e) => {
         e.preventDefault();
-        if (collegesPassInput === "bharatha2111") {
-            setIsCollegesAuth(true);
-            setCollegesAuthErr("");
-            fetchColleges(); // Load initial list when unlocked
-        } else {
-            setCollegesAuthErr("Incorrect Password");
+        setLoading(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: collegesPassInput })
+            });
+            if (res.ok) {
+                setIsCollegesAuth(true);
+                setCollegesAuthErr("");
+                fetchColleges();
+            } else {
+                setCollegesAuthErr("Incorrect Password");
+            }
+        } catch (err) {
+            setCollegesAuthErr("Connection Error");
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleControlsAuth = (e) => {
+    const handleControlsAuth = async (e) => {
         e.preventDefault();
-        if (controlsPassInput === "bharatha2111") {
-            setIsControlsAuth(true);
-            setControlsAuthErr("");
-        } else {
-            setControlsAuthErr("Incorrect Password");
+        setLoading(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: controlsPassInput })
+            });
+            if (res.ok) {
+                setIsControlsAuth(true);
+                setControlsAuthErr("");
+            } else {
+                setControlsAuthErr("Incorrect Password");
+            }
+        } catch (err) {
+            setControlsAuthErr("Connection Error");
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleSlotsAuth = (e) => {
+    const handleSlotsAuth = async (e) => {
         e.preventDefault();
-        if (slotsPassInput === "bharatha2111") {
-            setIsSlotsAuth(true);
-            setSlotsAuthErr("");
-            fetchDjSlots();
-        } else {
-            setSlotsAuthErr("Incorrect Password");
+        setLoading(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: slotsPassInput })
+            });
+            if (res.ok) {
+                setIsSlotsAuth(true);
+                setSlotsAuthErr("");
+                fetchDjSlots();
+            } else {
+                setSlotsAuthErr("Incorrect Password");
+            }
+        } catch (err) {
+            setSlotsAuthErr("Connection Error");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -339,23 +412,47 @@ export default function AdminDashboard({ isOpen, onClose }) {
         );
     };
 
-    const handleThemeAuth = (e) => {
+    const handleThemeAuth = async (e) => {
         e.preventDefault();
-        if (themePassInput === "bharatha2111") {
-            setIsThemeAuth(true);
-            setThemeAuthErr("");
-        } else {
-            setThemeAuthErr("Incorrect Password");
+        setLoading(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: themePassInput })
+            });
+            if (res.ok) {
+                setIsThemeAuth(true);
+                setThemeAuthErr("");
+            } else {
+                setThemeAuthErr("Incorrect Password");
+            }
+        } catch (err) {
+            setThemeAuthErr("Connection Error");
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleMailerAuth = (e) => {
+    const handleMailerAuth = async (e) => {
         e.preventDefault();
-        if (mailerPassInput === "bharatha2111") {
-            setIsMailerAuth(true);
-            setMailerAuthErr("");
-        } else {
-            setMailerAuthErr("Incorrect Password");
+        setLoading(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: mailerPassInput })
+            });
+            if (res.ok) {
+                setIsMailerAuth(true);
+                setMailerAuthErr("");
+            } else {
+                setMailerAuthErr("Incorrect Password");
+            }
+        } catch (err) {
+            setMailerAuthErr("Connection Error");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -528,15 +625,26 @@ export default function AdminDashboard({ isOpen, onClose }) {
     };
 
     const resendAllConfirmations = async () => {
-        if (resendPassword !== "admin@2026") {
-            setResendError("Incorrect password");
-            return;
-        }
-        if (!resendConfirm) {
-            setResendConfirm(true);
-            setResendError("");
-            return;
-        }
+        setResending(true);
+        setResendError("");
+        try {
+            const loginRes = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: resendPassword })
+            });
+            if (!loginRes.ok) {
+                setResendError("Incorrect password");
+                setResending(false);
+                return;
+            }
+
+            if (!resendConfirm) {
+                setResendConfirm(true);
+                setResendError("");
+                setResending(false);
+                return;
+            }
 
         setResending(true);
         setResendError("");
@@ -562,15 +670,26 @@ export default function AdminDashboard({ isOpen, onClose }) {
     };
 
     const handleClearRegistrations = async () => {
-        if (clearPassword !== "admin@2026") {
-            setClearError("Incorrect password");
-            return;
-        }
-        if (!clearConfirm) {
-            setClearConfirm(true);
-            setClearError("");
-            return;
-        }
+        setClearing(true);
+        setClearError("");
+        try {
+            const loginRes = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: clearPassword })
+            });
+            if (!loginRes.ok) {
+                setClearError("Incorrect password");
+                setClearing(false);
+                return;
+            }
+
+            if (!clearConfirm) {
+                setClearConfirm(true);
+                setClearError("");
+                setClearing(false);
+                return;
+            }
 
         setClearing(true);
         setClearError("");
@@ -2540,12 +2659,24 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         Cancel
                                     </button>
                                     <button
-                                        onClick={() => {
-                                            if (mailerConfirmPassword === "admin@2026") {
-                                                setIsMailerConfirmOpen(false);
-                                                sendEventMail('all');
-                                            } else {
-                                                setMailerConfirmError("Incorrect admin password.");
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            try {
+                                                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({ password: mailerConfirmPassword })
+                                                });
+                                                if (res.ok) {
+                                                    setIsMailerConfirmOpen(false);
+                                                    sendEventMail('all');
+                                                } else {
+                                                    setMailerConfirmError("Incorrect admin password.");
+                                                }
+                                            } catch (err) {
+                                                setMailerConfirmError("Connection Error");
+                                            } finally {
+                                                setLoading(false);
                                             }
                                         }}
                                         disabled={mailerSending}

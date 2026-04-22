@@ -14,14 +14,23 @@ export default function StaffScanner() {
     const [history, setHistory] = useState([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        // Staff Password or Admin Password both work here for convenience
-        if (password === "scan@2026" || password === "admin@2026") {
-            setIsAuthenticated(true);
-            setLoginError("");
-        } else {
-            setLoginError("Invalid Portal Key");
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/staff/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setIsAuthenticated(true);
+                setLoginError("");
+            } else {
+                setLoginError(data.message || "Invalid Portal Key");
+            }
+        } catch (err) {
+            setLoginError("Server Connection Error");
         }
     };
 
