@@ -125,7 +125,7 @@ function CollegeSelect({ value, onChange, colleges, placeholder, inputClassName 
                         ) : (
                             <div className="px-5 py-4 text-center">
                                 <p className="text-red-400 text-xs font-black uppercase tracking-widest">College Not Available</p>
-                                <p className="text-white/30 text-[10px] mt-1">Contact admin to add your college</p>
+                                <p className="text-teal-400/60 text-[10px] mt-1 font-bold tracking-widest uppercase">Contact admin to add your college</p>
                             </div>
                         )}
                     </motion.div>
