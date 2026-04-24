@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion"
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, memo } from "react"
 // import StarBackground from "./StarBackground"
 import RegistrationForm from "./RegistrationForm"
 import SectionBackground from "./SectionBackground"
@@ -64,7 +64,7 @@ export const eventsDay1 = [
     maxTeamSize: 1,
     rules: ["Each participant will be allotted a performance time of 4+1 minutes. Exceeding the time limit may result in penalties.",
       "Only Western dance styles such as Hip-Hop, Freestyle, Contemporary, Jazz, etc., are permitted.",
-      "Participant must submit their music track in advance in the MP3 and MP4 format. No changes will be allowed on the spot.",
+      "Participant must submit their music track in advance in the MP3 and  format. No changes will be allowed on the spot.",
       "Use of dangerous or hazardous props (such as fire, glass, sharp objects, etc.) is strictly prohibited.",
       "Performances must be appropriate and respectful. Any vulgar or offensive content will lead to disqualification.",
       "Participants must report to the venue at least 30 minutes prior to their scheduled time.",
@@ -391,7 +391,7 @@ const cardVariants = {
   show: { opacity: 1, y: 0 },
 }
 
-function EventCard({ title, fee, category, onClick, isOpen, t, time }) {
+const EventCard = memo(({ title, fee, category, onClick, isOpen, t, time }) => {
   const theme = t || { text: "text-teal-400", hoverText: "group-hover:text-teal-400", bg: "bg-teal-500", hoverBg: "hover:bg-teal-500/10", borderL: "border-l-teal-500", bgSoft: "bg-teal-500/10" };
 
   return (
@@ -433,7 +433,7 @@ function EventCard({ title, fee, category, onClick, isOpen, t, time }) {
       </div>
     </motion.div>
   )
-}
+})
 
 function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bgImage, themeObj }) {
   const t = themeObj || { text: "text-teal-400", hoverText: "group-hover:text-teal-400", borderB: "border-b-teal-500/10", bg: "bg-teal-500", hoverBg: "hover:bg-teal-500/10", borderL: "border-l-teal-500", bgSoft: "bg-teal-500/10" };

@@ -1,7 +1,7 @@
-import { useRef } from 'react';
+import { useRef, memo } from 'react';
 import { useInView, motion } from 'framer-motion';
 
-export default function SectionBackground({ src, alt = "Background", activeOpacity = "opacity-40 md:opacity-50" }) {
+const SectionBackground = memo(({ src, alt = "Background", activeOpacity = "opacity-40 md:opacity-50" }) => {
   const ref = useRef(null);
 
   // Tracks exactly when this background is within the middle 40% of the viewport (mobile + desktop)
@@ -21,6 +21,7 @@ export default function SectionBackground({ src, alt = "Background", activeOpaci
       <motion.img
         src={src}
         alt={alt}
+        loading="lazy"
         initial={{ scale: 1.05 }}
         animate={{ scale: isInView ? 1 : 1.07 }}
         transition={{ duration: 2, ease: "easeOut" }}
@@ -28,4 +29,6 @@ export default function SectionBackground({ src, alt = "Background", activeOpaci
       />
     </div>
   );
-}
+});
+
+export default SectionBackground;
