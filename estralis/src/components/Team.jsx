@@ -13,7 +13,7 @@ const TEAM_MEMBERS = [
   { name: "THANISHA", role: "FINANCE / SPONSORSHIP HEAD", image: "/thanisha.png" },
   { name: "VINITH JOYAPPA", role: "FINANCE / SPONSORSHIP HEAD", image: "/vineeth.png" },
   { name: "LIKITH D T", role: "MARKETING HEAD", image: "/likith.png" },
-  { name: "MALLIKARJUN GOUDA", role: "MARKETING HEAD", image: "/malli.png" },
+  { name: "MALLIKARJUN GOUDA", role: "MARKETING HEAD", image: "/mallii.png" },
 
   // THIRD ROW & OTHERS
   { name: "SURESH PATIL", role: "EVENT HEAD", image: "/special-guest.png" },

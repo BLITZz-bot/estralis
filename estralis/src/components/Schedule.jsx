@@ -693,7 +693,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                   </div>
 
                   {/* Minimalist Info Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 pt-8">
+                  <div className={`grid grid-cols-1 sm:grid-cols-2 ${event.prize ? 'lg:grid-cols-4' : 'lg:grid-cols-3'} gap-12 pt-8`}>
                     <div className="space-y-3">
                       <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Schedule</p>
                       <p className={`text-xl font-bold text-white uppercase tracking-tight`}>
@@ -708,10 +708,12 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                       <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Venue</p>
                       <p className="text-xl font-bold text-white uppercase tracking-tight">@{event.location}</p>
                     </div>
-                    <div className="space-y-3">
-                      <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Reward</p>
-                      <p className={`text-xl font-bold ${theme.text} uppercase tracking-tight`}>{event.prize || "Recognition"}</p>
-                    </div>
+                    {event.prize && (
+                      <div className="space-y-3">
+                        <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Reward</p>
+                        <p className={`text-xl font-bold ${theme.text} uppercase tracking-tight`}>{event.prize}</p>
+                      </div>
+                    )}
                   </div>
 
                   <div className="pt-12 border-t border-white/5 flex flex-col sm:flex-row gap-8 items-center justify-between">
