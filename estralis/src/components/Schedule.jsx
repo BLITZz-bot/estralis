@@ -369,21 +369,7 @@ export const eventsDay2 = [
     registerLink: "#",
     fee: "FREE",
   },
-  {
-    date: "May 15",
-    time: "07:30 PM - 09:00 PM",
-    title: "DJ NIGHT",
-    location: "Main Stage",
-    description: "The ultimate cosmic celebration! Dance through the galaxies as our DJ spins the hottest tracks to close out the festival in style.",
-    category: "Fun",
-    prize: "Participation",
-    minTeamSize: 1,
-    maxTeamSize: 20,
-    rules: ["ID CARD IS MANDATORY", "Follow all safety instructions on the dance floor."],
-    coordinators: ["Core Team"],
-    registerLink: "#",
-    fee: "₹400",
-  },
+ 
 ]
 
 function getCategoryStyles(category) {
