@@ -2,29 +2,30 @@ import { motion } from "framer-motion"
 import SectionBackground from "./SectionBackground"
 
 const TEAM_MEMBERS = [
-  { name: "AKASH SHARMA", role: "ORGANIZER", image: "/special-guest.png" },
-  { name: "VYSHNAVI D", role: "ORGANIZER", image: "/special-guest.png" },
-  { name: "SHIVAPRASAD", role: "CO-ORGANIZER", image: "/special-guest.png" },
-  { name: "DIVYA CHACHADI", role: "CO-ORGANIZER", image: "/special-guest.png" },
-  
+  { name: "AKASH SHARMA", role: "ORGANIZER", image: "/akash.png" },
+  { name: "VYSHNAVI D", role: "ORGANIZER", image: "/vyshnavi.png" },
+  { name: "SHIVAPRASAD", role: "CO-ORGANIZER", image: "/shivu.png" },
+  { name: "DIVYA CHACHADI", role: "CO-ORGANIZER", image: "/divya.png" },
+
   // SECOND ROW (Featured)
-  { name: "M M BHARATH", role: "TECH HEAD", image: "/special-guest.png" },
-  { name: "THANISHA", role: "FINANCE / SPONSORSHIP HEAD", image: "/special-guest.png" },
-  { name: "LIKITH D T", role: "MARKETING HEAD", image: "/special-guest.png" },
-  { name: "MALLIKARJUN GOUDA", role: "MARKETING HEAD", image: "/special-guest.png" },
-  
+  { name: "M M BHARATH", role: "TECH HEAD", image: "/bharath.png" },
+  { name: "YESHWANTH", role: "TECH HEAD", image: "/yesh.png" },
+  { name: "THANISHA", role: "FINANCE / SPONSORSHIP HEAD", image: "/thanisha.png" },
+  { name: "VINITH JOYAPPA", role: "FINANCE / SPONSORSHIP HEAD", image: "/vineeth.png" },
+  { name: "LIKITH D T", role: "MARKETING HEAD", image: "/likith.png" },
+  { name: "MALLIKARJUN GOUDA", role: "MARKETING HEAD", image: "/malli.png" },
+
   // THIRD ROW & OTHERS
   { name: "SURESH PATIL", role: "EVENT HEAD", image: "/special-guest.png" },
-  { name: "SHREYA B N", role: "EVENT HEAD", image: "/special-guest.png" },
+  { name: "SHREYA B N", role: "EVENT HEAD", image: "/2.png" },
   { name: "HARSHITH", role: "ARTIST HEAD", image: "/special-guest.png" },
-  { name: "CHAMPA", role: "ARTIST HEAD", image: "/special-guest.png" },
-  { name: "DHYAN", role: "HOSPITALITY HEAD", image: "/special-guest.png" },
-  { name: "VINITH JOYAPPA", role: "LOGISTICS HEAD", image: "/special-guest.png" },
-  { name: "AKHILA G", role: "LOGISTICS HEAD", image: "/special-guest.png" },
-  { name: "GANESH", role: "VOLUNTEER HEAD", image: "/special-guest.png" },
-  { name: "Rohith Y S", role: "VOLUNTEER HEAD", image: "/special-guest.png" },
-  { name: "SRINIVAS", role: "PRODUCTION HEAD", image: "/special-guest.png" },
-  { name: "BHARGAV BHAT", role: "PRODUCTION HEAD", image: "/special-guest.png" }
+  { name: "CHAMPA", role: "ARTIST HEAD", image: "/champa.png" },
+  { name: "DHYAN", role: "HOSPITALITY HEAD", image: "/dhyan.png" },
+  { name: "AKHILA G", role: "DESIGN HEAD", image: "/akhila.png" },
+  { name: "GANESH", role: "VOLUNTEER HEAD", image: "/ganesh.png" },
+  { name: "Rohith Y S", role: "VOLUNTEER HEAD", image: "/rohith.png" },
+  { name: "SRINIVAS", role: "PRODUCTION HEAD", image: "/seena.png" },
+  { name: "BHARGAV BHAT", role: "PRODUCTION HEAD", image: "/bharagv.png" }
 ];
 
 export default function Team() {
@@ -43,7 +44,7 @@ export default function Team() {
       />
 
       <div className="relative max-w-7xl mx-auto">
-        
+
         {/* ================= CENTERED HEADER ================= */}
         <div className="text-center mb-16 md:mb-24">
           <motion.span
@@ -64,7 +65,7 @@ export default function Team() {
           >
             THE <span className="text-teal-400">TEAM</span>
           </motion.h2>
-          <motion.div 
+          <motion.div
             initial={{ width: 0 }}
             whileInView={{ width: "150px" }}
             viewport={{ once: true }}
@@ -80,15 +81,15 @@ export default function Team() {
           ))}
         </div>
 
-        <motion.div 
-           initial={{ opacity: 0 }}
-           whileInView={{ opacity: 1 }}
-           viewport={{ once: true }}
-           className="mt-20 md:mt-32 pt-10 border-t border-white/5 text-center"
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-20 md:mt-32 pt-10 border-t border-white/5 text-center"
         >
-           <p className="text-teal-400/30 text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] font-astral">
-             Signals Integrity Confirmed // Command Access ONLY
-           </p>
+          <p className="text-teal-400/30 text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] font-astral">
+            Signals Integrity Confirmed // Command Access ONLY
+          </p>
         </motion.div>
       </div>
     </motion.section>
@@ -98,27 +99,27 @@ export default function Team() {
 function TeamMemberCard({ member, idx }) {
   return (
     <motion.div
-      initial={{ 
-        opacity: 0, 
-        rotateX: -90, 
+      initial={{
+        opacity: 0,
+        rotateX: -90,
         y: 100,
-        z: -100 
+        z: -100
       }}
-      whileInView={{ 
-        opacity: 1, 
-        rotateX: 0, 
+      whileInView={{
+        opacity: 1,
+        rotateX: 0,
         y: 0,
-        z: 0 
+        z: 0
       }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ 
+      transition={{
         type: "spring",
         damping: 15,
         stiffness: 70,
         delay: idx * 0.05,
         duration: 0.8
       }}
-      whileHover={{ 
+      whileHover={{
         scale: 1.05,
         y: -10,
         transition: { duration: 0.2 }

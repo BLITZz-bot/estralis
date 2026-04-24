@@ -38,31 +38,47 @@ const IconTrophy = () => (
 
 export const eventsDay1 = [
   {
-    time: "10:30 AM - 12:30 PM",
-    title: "CLASSICAL GROUP",
+    date: "May 14",
+    time: "09:00 AM - 10:00 AM",
+    title: "INAUGURATION",
     location: "Amphitheatre",
-    description: "A graceful group dance event that celebrates traditional dance forms and cultural storytelling. Teams perform synchronized routines with expressive gestures, rhythm, and elegance, reflecting the richness of classical art forms.",
-    category: "Dance",
-    prize: "₹30,000",
-    minTeamSize: 2,
-    maxTeamSize: 15,
-    rules: ["Each team will be allotted a performance time of 8+2 minutes. Exceeding the time limit may result in penalties.",
-      "Only Indian classical dance forms such as Bharatanatyam, Kathak, Kuchipudi, Mohiniyattam, Odissi, etc., are permitted. Fusion with non-classical styles is not allowed.",
-      "Performances must be appropriate and respectful. Any vulgar or offensive content will lead to disqualification.",
-      "Teams must submit their music track in advance in the MP3 OR MP4 format. No changes will be allowed on the spot.",
-      "Use of props is allowed, but participants must manage them without causing delays or hazards.",
-      "All teams must report to the venue at least 30 minutes prior to their scheduled time.",
-      "Judging based on expressions (Abhinaya), technique, and grace.",
-      "Carry your college ID cards.",
-    ],
-    coordinators: ["Arsha - 9538622342", "Jyothi - 9008111237"],
+    description: "The grand opening ceremony of ESTRALIS. Join us for the official kickoff of our cultural festival with traditional lighting of the lamp and inaugural performances.",
+    category: "Ceremony",
+    prize: "",
+    minTeamSize: 0,
+    maxTeamSize: 0,
+    rules: ["Join the ceremony on time.", "Open for all students and guests."],
+    coordinators: ["Core Team"],
     registerLink: "#",
-    fee: "₹1,500",
+    fee: "FREE",
   },
   {
-    time: "10:30 AM - 04:00 PM",
+    date: "May 14",
+    time: "10:30 AM - 12:00 PM",
+    title: "WESTERN SOLO",
+    location: "Amphitheatre",
+    description: "An individual dance competition focusing on western styles such as hip-hop, contemporary, jazz, or freestyle. Participants must showcase technique, expression, and strong stage presence while delivering a powerful and engaging solo performance.",
+    category: "Dance",
+    prize: "₹8,000",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    rules: ["Each participant will be allotted a performance time of 4+1 minutes. Exceeding the time limit may result in penalties.",
+      "Only Western dance styles such as Hip-Hop, Freestyle, Contemporary, Jazz, etc., are permitted.",
+      "Participant must submit their music track in advance in the MP3 and MP4 format. No changes will be allowed on the spot.",
+      "Use of dangerous or hazardous props (such as fire, glass, sharp objects, etc.) is strictly prohibited.",
+      "Performances must be appropriate and respectful. Any vulgar or offensive content will lead to disqualification.",
+      "Participants must report to the venue at least 30 minutes prior to their scheduled time.",
+      "Carry your college ID cards.",
+    ],
+    coordinators: ["Ramya Victoria - 7204210703", "Ritkriti - 8618080973"],
+    registerLink: "#",
+    fee: "₹500",
+  },
+  {
+    date: "May 14",
+    time: "10:30 AM - 06:00 PM",
     title: "REELS MAKING",
-    location: "Online",
+    location: "1ST Floor Class Room",
     description: "A digital creativity challenge where participants create short, engaging videos. From concept and shooting to editing and storytelling, this event tests creativity, trend awareness, and presentation skills.",
     category: "Fun",
     prize: "₹9,000",
@@ -82,13 +98,13 @@ export const eventsDay1 = [
     fee: "₹500"
   },
   {
+    date: "May 14",
     time: "11:00 AM - 01:00 PM",
     title: "TREASURE HUNT",
     location: "GCEM Campus",
     description: "An adventurous team-based game where participants solve clues and complete challenges to find the final treasure. It encourages logical thinking, teamwork, and quick decision-making under time pressure.",
     category: "Fun",
     prize: "₹10,000",
-    // comboPass: "₹450 (HIGHLIGHT REEL + SHOT CUT)",
     minTeamSize: 5,
     maxTeamSize: 5,
     rules: ["Each team must consist of exactly 5 members.",
@@ -106,6 +122,7 @@ export const eventsDay1 = [
     fee: "₹500",
   },
   {
+    date: "May 14",
     time: "11:00 AM - 01:00 PM",
     title: "FACE PAINTING",
     location: "Amphitheatre",
@@ -128,127 +145,10 @@ export const eventsDay1 = [
     fee: "₹200",
   },
   {
-    time: "11:00 AM - 02:00 PM",
-    title: "FITNESS CHALLENGE (A)",
-    location: "Open Amphitheatre",
-    description: "A test of strength and endurance featuring push-up and plank challenges. Participants compete against time to push their physical limits, showcasing stamina, discipline, and determination.",
-    category: "Sports",
-    prize: "₹11,000",
-    minTeamSize: 4,
-    maxTeamSize: 4,
-    rules: ["The event consists of two rounds: Push-Up Challenge and Plank Challenge",
-      "Participants can take part in one or both rounds",
-      "Time limit for each round: 2 minutes",
-      "Maximum number of push-ups in 2 minutes will be counted",
-      "Only proper form push-ups will be considered",
-      "Arms must be fully extended and chest close to the ground",
-      "Knees touching the ground will end the attempt",
-      "Participants are requested to bring their own mat (if required)",
-      "Any misconduct or unfair means will lead to disqualification",
-      "Carry your college ID cards.",
-    ],
-    coordinators: ["Dheeraj - 9741095149", "Shivayogi D S - 7760333829"],
-    registerLink: "#",
-    fee: "₹500",
-  },
-  {
-    time: "11:00 AM - 02:00 PM",
-    title: "FITNESS CHALLENGE (B)",
-    location: "Open Amphitheatre",
-    description: "A test of strength and endurance featuring push-up and plank challenges. Participants compete against time to push their physical limits, showcasing stamina, discipline, and determination.",
-    category: "Sports",
-    prize: "₹11,000",
-    minTeamSize: 4,
-    maxTeamSize: 4,
-    rules: ["The event consists of two rounds: Push-Up Challenge and Plank Challenge",
-      "Participants can take part in one or both rounds",
-      "Time limit for each round: 2 minutes",
-      "Participants must hold plank position for a maximum of 2 minutes",
-      "Elbows should be directly under shoulders",
-      "Participants are requested to bring their own mat (if required)",
-      "Any misconduct or unfair means will lead to disqualification",
-      "Judges' decision will be final",
-      "Participants must report to the venue at least 30 minutes prior to their scheduled time.",
-    ],
-    coordinators: ["Vinay - 9380661129", "Vinayaka - 8431536379"],
-    registerLink: "#",
-    fee: "₹500",
-  },
-  // {
-  //   time: "11:00 AM",
-  //   title: "FACE PAINTING",
-  //   location: "LAB 5, Ground Floor, GCEM Campus",
-  //   description: "An artistic challenge where participants showcase their creativity by painting vibrant and imaginative designs on the face. Focus on detail, color coordination, and originality.",
-  //   category: "Art",
-  //   prize: "₹6,000",
-  //   minTeamSize: 1,
-  //   maxTeamSize: 1,
-  //   rules: ["1. Participants must be currently enrolled in their college.",
-  //     "2.  Participants must bring a valid college ID card.",
-  //     "3.  Participants must bring their laptops with all necessary software pre-installed",
-  //     "4.  Computers will be provided to participants who are not able to bring their laptops(only limited computers available). ",
-  //     "5.  Internet access will be provided at the venue.",
-  //     "6.  The theme of the poster will be announced at the start of the competition.",
-  //     "7.  Specific instructions will be provided before the start of the event. ",
-  //     "8.  Please check the schedule for overlapping events before registering for multiple events.",
-  //     "9.  If you have registered for overlapping events, MANAGEMENT is not responsible, no refund will be initiated.10. The participants from Gopalan Group of Institutions should contact the respective event coordinators before registering.",
-  //     "11. Report to the coordinator 30 minutes before the event starts.",
-  //     "12. Participants of other events will get a complimentary audience pass for VINTARA (Fashion Show).",
-
-
-  //   ],
-  //   coordinators: ["Nithelan Jayakumar – 8904572607", "Bushra M – 8310084375"],
-  //   registerLink: "#",
-  //   fee: "₹200",
-  // },
-  {
-    time: "01:30 PM - 02:30 PM",
-    title: "BEAT BOXING",
-    location: "Amphitheatre",
-    description: "A high-energy vocal percussion battle where participants create beats, rhythms, and musical effects using only their voice. This event challenges creativity, breath control, and rhythm sense as performers showcase unique sound patterns and freestyle skills. Stage presence and crowd engagement play a key role in standing out.",
-    category: "Fun",
-    prize: "₹8,000",
-    minTeamSize: 1,
-    maxTeamSize: 1,
-    rules: ["Only vocal sounds are permitted. The use of musical instruments or external devices is strictly prohibited.",
-      "Performances must be appropriate and respectful. Any form of offensive, vulgar, or inappropriate content will lead to disqualification.",
-      "This is a solo performance event; group participation is not allowed.",
-      "Judging will be based on rhythm, creativity, originality, stage presence, and clarity.",
-      "Participants must report to the venue at least 30 minutes before their scheduled time.",
-      "The judges' decision will be final.",
-      "Participants are advised to check the event schedule before registering for multiple events. No refunds will be provided for scheduling conflicts.",
-      "Carry your college ID cards.",
-    ],
-    coordinators: ["Manoj N - 7760396379", "Yeshwanth - 8884359993"],
-    registerLink: "#",
-    fee: "₹300",
-  },
-  {
-    time: "12:30 PM - 01:30 PM",
-    title: "WESTERN SOLO",
-    location: "Amphitheatre",
-    description: "An individual dance competition focusing on western styles such as hip-hop, contemporary, jazz, or freestyle. Participants must showcase technique, expression, and strong stage presence while delivering a powerful and engaging solo performance.",
-    category: "Dance",
-    prize: "₹8,000",
-    minTeamSize: 1,
-    maxTeamSize: 1,
-    rules: ["Each participant will be allotted a performance time of 4+1 minutes. Exceeding the time limit may result in penalties.",
-      "Only Western dance styles such as Hip-Hop, Freestyle, Contemporary, Jazz, etc., are permitted.",
-      "Participant must submit their music track in advance in the MP3 and MP4 format. No changes will be allowed on the spot.",
-      "Use of dangerous or hazardous props (such as fire, glass, sharp objects, etc.) is strictly prohibited.",
-      "Performances must be appropriate and respectful. Any vulgar or offensive content will lead to disqualification.",
-      "Participants must report to the venue at least 30 minutes prior to their scheduled time.",
-      "Carry your college ID cards.",
-    ],
-    coordinators: ["Ramya Victoria - 7204210703", "Ritkriti - 8618080973"],
-    registerLink: "#",
-    fee: "₹500",
-    // theme: "OPEN THEME"
-  },
-  {
+    date: "May 14",
     time: "12:00 PM - 03:00 PM",
     title: "BGMI",
-    location: "6th floor Seminar hall",
+    location: "1ST Floor Classroom",
     description: "A competitive gaming event where players battle in BGMI matches to prove their strategy and survival skills. Team coordination, quick reflexes, and tactical gameplay are essential to secure victory.",
     category: "Gaming",
     prize: "₹15,000",
@@ -282,13 +182,56 @@ export const eventsDay1 = [
     coordinators: ["Kishore - 9742726861", "Hari Kumar - 6362965600", "Anas Ansari - 9008892112"],
     registerLink: "#",
     fee: "₹1000",
-    // theme: "OPEN THEME"
   },
-]
-
-export const eventsDay2 = [
   {
-    time: "02:30 PM - 04:00 PM",
+    date: "May 14",
+    time: "12:30 PM - 02:30 PM",
+    title: "CLASSICAL GROUP",
+    location: "Amphitheatre",
+    description: "A graceful group dance event that celebrates traditional dance forms and cultural storytelling. Teams perform synchronized routines with expressive gestures, rhythm, and elegance, reflecting the richness of classical art forms.",
+    category: "Dance",
+    prize: "₹30,000",
+    minTeamSize: 2,
+    maxTeamSize: 15,
+    rules: ["Each team will be allotted a performance time of 8+2 minutes. Exceeding the time limit may result in penalties.",
+      "Only Indian classical dance forms such as Bharatanatyam, Kathak, Kuchipudi, Mohiniyattam, Odissi, etc., are permitted. Fusion with non-classical styles is not allowed.",
+      "Performances must be appropriate and respectful. Any vulgar or offensive content will lead to disqualification.",
+      "Teams must submit their music track in advance in the MP3 OR MP4 format. No changes will be allowed on the spot.",
+      "Use of props is allowed, but participants must manage them without causing delays or hazards.",
+      "All teams must report to the venue at least 30 minutes prior to their scheduled time.",
+      "Judging based on expressions (Abhinaya), technique, and grace.",
+      "Carry your college ID cards.",
+    ],
+    coordinators: ["Arsha - 9538622342", "Jyothi - 9008111237"],
+    registerLink: "#",
+    fee: "₹1,500",
+  },
+  {
+    date: "May 14",
+    time: "02:30 PM - 03:30 PM",
+    title: "BEAT BOXING",
+    location: "Amphitheatre",
+    description: "A high-energy vocal percussion battle where participants create beats, rhythms, and musical effects using only their voice. This event challenges creativity, breath control, and rhythm sense as performers showcase unique sound patterns and freestyle skills. Stage presence and crowd engagement play a key role in standing out.",
+    category: "Cultural",
+    prize: "₹8,000",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    rules: ["Only vocal sounds are permitted. The use of musical instruments or external devices is strictly prohibited.",
+      "Performances must be appropriate and respectful. Any form of offensive, vulgar, or inappropriate content will lead to disqualification.",
+      "This is a solo performance event; group participation is not allowed.",
+      "Judging will be based on rhythm, creativity, originality, stage presence, and clarity.",
+      "Participants must report to the venue at least 30 minutes before their scheduled time.",
+      "The judges' decision will be final.",
+      "Participants are advised to check the event schedule before registering for multiple events. No refunds will be provided for scheduling conflicts.",
+      "Carry your college ID cards.",
+    ],
+    coordinators: ["Manoj N - 7760396379", "Yeshwanth - 8884359993"],
+    registerLink: "#",
+    fee: "₹300",
+  },
+  {
+    date: "May 14",
+    time: "03:30 PM - 05:00 PM",
     title: "WESTERN GROUP",
     location: "Amphitheatre",
     description: "A dynamic group dance competition where teams perform energetic western routines. Coordination, formations, creativity, and synchronization are key as groups deliver impactful and entertaining performances.",
@@ -313,12 +256,16 @@ export const eventsDay2 = [
     registerLink: "#",
     fee: "₹2,500"
   },
+]
+
+export const eventsDay2 = [
   {
+    date: "May 15",
     time: "10:00 AM - 12:00 PM",
     title: "BATTLE OF BANDS",
     location: "Amphitheatre",
     description: "A thrilling live music competition where bands perform to showcase their musical talent and coordination. Whether it’s original compositions or covers, bands are judged on rhythm, harmony, stage presence, and connection with the audience.",
-    category: "Fun",
+    category: "Cultural",
     prize: "₹30,000",
     minTeamSize: 3,
     maxTeamSize: 8,
@@ -335,8 +282,56 @@ export const eventsDay2 = [
     fee: "₹2,500"
   },
   {
-    time: "01:00 PM - 03:00 PM",
-    title: "FASHION SHOW",
+    date: "May 15",
+    time: "11:00 AM - 02:00 PM",
+    title: "FITNESS CHALLENGE(A)",
+    location: "Open Amphitheatre",
+    description: "A test of upper body strength. Participants compete to perform the maximum number of proper form push-ups within a set time limit, showcasing stamina and discipline.",
+    category: "Sports",
+    prize: "₹5,500",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    rules: [
+      "Maximum number of proper form push-ups in 2 minutes.",
+      "Arms must be fully extended at the top and chest close to the ground at the bottom.",
+      "Proper form must be maintained throughout the attempt.",
+      "Knees touching the ground will end the attempt.",
+      "Any misconduct or unfair means will lead to disqualification.",
+      "Carry your college ID cards.",
+      "The judges' decision is final.",
+    ],
+    coordinators: ["Dheeraj - 9741095149"],
+    registerLink: "#",
+    fee: "₹150",
+  },
+  {
+    date: "May 15",
+    time: "11:00 AM - 02:00 PM",
+    title: "FITNESS CHALLENGE(B)",
+    location: "Open Amphitheatre",
+    description: "A test of core stability and endurance. Participants compete to maintain a proper elbow plank position for the longest possible duration.",
+    category: "Sports",
+    prize: "₹5,500",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    rules: [
+      "Longest duration maintained in a proper elbow plank position wins.",
+      "Proper form: back straight, body parallel to ground, weight on forearms and toes.",
+      "Knees or any other body part touching the ground ends the attempt.",
+      "Timer starts when the participant is in the correct position.",
+      "Participants are requested to bring their own mat (if required).",
+      "Any misconduct or unfair means will lead to disqualification.",
+      "Carry your college ID cards.",
+      "The judges' decision is final.",
+    ],
+    coordinators: ["Shivayogi D S - 7760333829"],
+    registerLink: "#",
+    fee: "₹150",
+  },
+  {
+    date: "May 15",
+    time: "12:00 PM - 03:00 PM",
+    title: "FASHION WALK",
     location: "Amphitheatre",
     description: "A visually captivating runway event where teams present a predefined theme through style, choreography, and attitude. From costume design to expressions, every element contributes to storytelling on stage. It’s a perfect blend of fashion, creativity, and confidence.",
     category: "Fashion",
@@ -359,60 +354,51 @@ export const eventsDay2 = [
     registerLink: "#",
     fee: "₹3,000",
   },
-
-  // {
-  //   time: "06:00 PM",
-  //   title: "ARTIST PERFORMANCE AND DJ NIGHT",
-  //   location: "Main stage, GCEM Campus",
-  //   description: "Step into the spotlight and let your passion ignite the stage, where every move tells a story and every rhythm captivates the soul. Witness an electrifying showcase of talent, energy, and grace, as dancers compete to turn dreams into motion.",
-  //   category: "Fun",
-  //   prize: "₹300",
-  //   minTeamSize: 2,
-  //   maxTeamSize: 15,
-  //   rules: ["*Duration: 6-8 minutes per team for their performance*",
-  //     "All participants should arrive at the venue 1 hour prior to the event.",
-  //     "1. Music",
-  //     "• Teams must submit their music tracks in MP3 format via Google Drive/email by 07/03/2026.",
-  //     "• File name format: College/Group Name.mp3",
-  //     "• Backup copies of music tracks should be brought on USB drive.",
-  //     "• Music should be appropriate and not contain any explicit content.",
-  //     ".",
-  //     "2. Choreography",
-  //     "• All dance forms are allowed (Classical, Hip-hop, Semi-classical, Folk,Contemporary).",
-  //     "• Choreography should be original or legally permissible.",
-  //     ".",
-  //     "3. Costumes",
-  //     "• Costumes should be appropriate and respectful of cultural sensitivities.",
-  //     "• Any form of obscenity will result in disqualification.",
-  //     ".",
-  //     "4. Props",
-  //     "• Props are allowed but must be handled by participants themselves.",
-  //     "• Dangerous/Problematic props (fire, sharp objects,powders etc) are prohibited.",
-  //     ".",
-  //     // "• There will be 2 prizes if more than 8 registrations; otherwise, only 1 prize",
-  //     "5. Note",
-  //     "• Please check the schedule for overlapping events before registering multiple events",
-  //     "• If registered for overlapping events, MANAGEMENT is not responsible and no refund will be initiated.The participants from Gopalan Group of Institutions should contact the respective event coordinators before registering",
-  //     "• Arrive at the venue and report to the coordinators 1 hour before the event starts",
-  //     ".",
-  //     "CODE OF CONDUCT",
-  //     "• Participants are expected to maintain decorum and sportsmanship.",
-  //     "• Any form of misbehavior or disrespect towards organizers, judges, or fellow will lead to disqualification.",
-  //     "• Vulgar language, inappropriate gestures, and offensive content are strictly prohibited.",
-  //     "• If technical issues occur, participants may be allowed to restart (subject to judges approval).",
-  //     "• The decision of the judges is final and binding.",
-  //     "• Performances are judged based on choreography, synchronization,expression, creativity, and overall impact.",
-  //     ".",
-  //     "SAFETY",
-  //     "•Participants should ensure their performance is safe and does not pose any risk to themselves or the audience",
-  //     "13.Participants of other events will get a complimentary audience pass for VINTARA (Fashion Show).",
-
-  //   ],
-  //   coordinators: ["Divyashree RM – 7019691887", "Abhishek R - 7019323085"],
-  //   registerLink: "#",
-  //   fee: "₹700",
-  // },
-
+  {
+    date: "May 15",
+    time: "03:00 PM - 04:00 PM",
+    title: "PRIZE DISTRIBUTION",
+    location: "Amphitheatre",
+    description: "The grand finale ceremony where winners across all categories are honored. Join us to celebrate the talent and hard work of all participants.",
+    category: "Ceremony",
+    prize: "",
+    minTeamSize: 0,
+    maxTeamSize: 0,
+    rules: ["All winners must be present at the venue.", "Open for all students and guests."],
+    coordinators: ["Core Team"],
+    registerLink: "#",
+    fee: "FREE",
+  },
+  {
+    date: "May 15",
+    time: "06:00 PM - 07:30 PM",
+    title: "ARTIST PERFORMANCE",
+    location: "Main Stage",
+    description: "Prepare for an electrifying night as our special guest artist takes the stage! Experience the energy and rhythm that will define ESTRALIS 2026.",
+    category: "Cultural",
+    prize: "Recognition",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    rules: ["ID CARD IS MANDATORY", "Maintain decorum during the performance."],
+    coordinators: ["Core Team"],
+    registerLink: "#",
+    fee: "₹700",
+  },
+  {
+    date: "May 15",
+    time: "07:30 PM - 09:00 PM",
+    title: "DJ NIGHT",
+    location: "Main Stage",
+    description: "The ultimate cosmic celebration! Dance through the galaxies as our DJ spins the hottest tracks to close out the festival in style.",
+    category: "Fun",
+    prize: "Participation",
+    minTeamSize: 1,
+    maxTeamSize: 20,
+    rules: ["ID CARD IS MANDATORY", "Follow all safety instructions on the dance floor."],
+    coordinators: ["Core Team"],
+    registerLink: "#",
+    fee: "₹400",
+  },
 ]
 
 function getCategoryStyles(category) {
@@ -434,7 +420,7 @@ const cardVariants = {
   show: { opacity: 1, y: 0 },
 }
 
-function EventCard({ title, fee, category, onClick, isOpen, t }) {
+function EventCard({ title, fee, category, onClick, isOpen, t, time }) {
   const theme = t || { text: "text-teal-400", hoverText: "group-hover:text-teal-400", bg: "bg-teal-500", hoverBg: "hover:bg-teal-500/10", borderL: "border-l-teal-500", bgSoft: "bg-teal-500/10" };
 
   return (
@@ -449,10 +435,15 @@ function EventCard({ title, fee, category, onClick, isOpen, t }) {
       </div>
 
       <div>
-        <div className="flex items-center gap-2 mb-6">
-          <div className={`w-2 h-2 rounded-full ${isOpen ? 'bg-emerald-400' : 'bg-red-500'} animate-pulse`} />
-          <span className="text-[10px] font-black tracking-[0.3em] uppercase text-white/40">
-            {isOpen ? 'Incoming Signal' : 'Transmission Offline'}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${isOpen ? 'bg-emerald-400' : 'bg-red-500'} animate-pulse`} />
+            <span className="text-[10px] font-black tracking-[0.3em] uppercase text-white/40">
+              {isOpen ? 'Incoming Signal' : 'Transmission Offline'}
+            </span>
+          </div>
+          <span className="text-[10px] font-black tracking-[0.3em] uppercase text-white/60">
+            {time.split(" - ")[0]}
           </span>
         </div>
 
@@ -731,27 +722,25 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                   </div>
 
                   {/* Minimalist Info Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 pt-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 pt-8">
+                    <div className="space-y-3">
+                      <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Schedule</p>
+                      <p className={`text-xl font-bold text-white uppercase tracking-tight`}>
+                        {event.date} // {event.time.split(" - ")[0]}
+                      </p>
+                    </div>
                     <div className="space-y-3">
                       <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Investment</p>
-                        <p className={`text-3xl saarang-serif ${theme.text} italic`}>{event.fee}</p>
+                      <p className={`text-xl font-bold ${theme.text} uppercase tracking-tight`}>{event.fee}</p>
                     </div>
                     <div className="space-y-3">
                       <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Venue</p>
                       <p className="text-xl font-bold text-white uppercase tracking-tight">@{event.location}</p>
                     </div>
-                    {event.prize && (
-                      <div className="space-y-3">
-                        <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Reward</p>
-                        <p className={`text-3xl saarang-serif italic ${theme.text}`}>{event.prize}</p>
-                      </div>
-                    )}
-                    {!(event.title.toUpperCase().includes("DJ NIGHT")) && (
-                      <div className="space-y-3">
-                        <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Registry</p>
-                        <p className="text-xl font-bold text-white uppercase tracking-tight">{teamText} Members</p>
-                      </div>
-                    )}
+                    <div className="space-y-3">
+                      <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Reward</p>
+                      <p className={`text-xl font-bold ${theme.text} uppercase tracking-tight`}>{event.prize || "Recognition"}</p>
+                    </div>
                   </div>
 
                   <div className="pt-12 border-t border-white/5 flex flex-col sm:flex-row gap-8 items-center justify-between">

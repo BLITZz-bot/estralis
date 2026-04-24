@@ -127,19 +127,22 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
 
             // Official Event Schedule for PDF Data
             const EVENT_SCHEDULE = {
-                "CLASSICAL GROUP": { location: "Amphitheatre", time: "12:00 PM" },
-                "REELS MAKING": { location: "1st Floor", time: "10:00 AM" },
-                "TREASURE HUNT": { location: "410 Room, 4th Floor, GCEM Campus", time: "11:00 AM" },
-                "FACE PAINTING": { location: "Main Quadrangle", time: "11:00 AM" },
-                "FITNESS CHALLENGE": { location: "Room 405, 406 & 407, 4th Floor", time: "11:00 AM" },
-                "POSTER DESIGNING": { location: "LAB 5, Ground Floor", time: "11:00 AM" },
-                "BEAT BOXING": { location: "LAB 3, 4th Floor, GCEM Campus", time: "11:30 PM" },
+                "INAUGURATION": { location: "Amphitheatre", time: "09:00 AM" },
+                "CLASSICAL GROUP": { location: "Amphitheatre", time: "12:30 PM" },
+                "REELS MAKING": { location: "1ST Floor Class Room", time: "10:30 AM" },
+                "TREASURE HUNT": { location: "GCEM Campus", time: "11:00 AM" },
+                "FACE PAINTING": { location: "Amphitheatre", time: "11:00 AM" },
+                "FITNESS CHALLENGE(A)": { location: "Open Amphitheatre", time: "11:00 AM" },
+                "FITNESS CHALLENGE(B)": { location: "Open Amphitheatre", time: "12:30 PM" },
+                "BEAT BOXING": { location: "Amphitheatre", time: "02:30 PM" },
                 "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
-                "BGMI": { location: "1st Floor, GCEM Campus", time: "12:00 PM" },
-                "WESTERN GROUP": { location: "Main stage, GCEM Campus", time: "09:30 AM" },
-                "BATTLE OF BANDS": { location: "Main stage, GCEM Campus", time: "11:00 AM" },
-                "FASHION SHOW": { location: "Main stage, GCEM Campus", time: "01:00 PM" },
-                "ARTIST PERFORMANCE AND DJ NIGHT": { location: "Main stage, GCEM Campus", time: "06:00 PM" }
+                "BGMI": { location: "1ST Floor Classroom", time: "12:00 PM" },
+                "WESTERN GROUP": { location: "Amphitheatre", time: "03:30 PM" },
+                "BATTLE OF BANDS": { location: "Amphitheatre", time: "10:00 AM" },
+                "FASHION WALK": { location: "Amphitheatre", time: "12:00 PM" },
+                "PRIZE DISTRIBUTION": { location: "Amphitheatre", time: "03:00 PM" },
+                "ARTIST PERFORMANCE": { location: "Main Stage", time: "06:00 PM" },
+                "DJ NIGHT": { location: "Main Stage", time: "07:30 PM" }
             };
 
             const drawTicketBase = (pageDoc) => {
