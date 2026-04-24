@@ -253,6 +253,21 @@ export default function StaffScanner() {
                                     <p className="font-bold text-xs truncate">{scannedReg.team_name || "Solo"}</p>
                                 </div>
                             </div>
+                            
+                            {/* Squad Members List */}
+                            {scannedReg.team_members && (typeof scannedReg.team_members === 'string' ? JSON.parse(scannedReg.team_members) : scannedReg.team_members).length > 0 && (
+                                <div className="space-y-3 text-left border-t border-white/5 pt-6">
+                                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Squad Members</p>
+                                    <div className="grid grid-cols-1 gap-2">
+                                        {(typeof scannedReg.team_members === 'string' ? JSON.parse(scannedReg.team_members) : scannedReg.team_members).map((member, i) => (
+                                            <div key={i} className="px-4 py-3 bg-white/5 rounded-xl border border-white/5 flex items-center justify-between">
+                                                <span className="text-xs font-bold text-white/80">{member.fullName || member.full_name}</span>
+                                                <span className="text-[9px] font-bold text-teal-500/40 uppercase">Member</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
 
                             {scannedReg.status === 'visited' ? (
                                 <div className="py-5 bg-amber-500/20 border border-amber-500/30 rounded-2xl text-amber-500 font-black text-sm tracking-widest uppercase">

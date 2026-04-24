@@ -714,7 +714,7 @@ app.post('/api/scanner/verify', async (req, res) => {
         }
 
         const result = await db.query(
-            'SELECT full_name, event_title, college, team_name, status FROM registrations WHERE id = $1', 
+            'SELECT full_name, event_title, college, team_name, team_members, status FROM registrations WHERE id = $1', 
             [id]
         );
 
