@@ -94,6 +94,7 @@ export const eventsDay1 = [
       "Participants get 24 hours to shoot & create the reel | Must be fully edited before submission.",
       "Reel must be submitted before deadline | Late submissions will not be accepted.",
       "Carry your college ID cards.",
+      "For team-based events, all registered members must be present at the venue simultaneously for registration and verification.",
       "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
       "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued."
     ],
