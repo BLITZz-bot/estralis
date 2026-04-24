@@ -17,7 +17,7 @@ import Timeline from "./components/Timeline"
 // import CornerLogos from "./components/Cornerlogos"
 import MyRegistrations from "./components/MyRegistrations"
 import AdminDashboard from "./components/AdminDashboard"
-import FixedWatermark from "./components/FixedWatermark"
+// import FixedWatermark from "./components/FixedWatermark"
 import PrizePool from "./components/PrizePool"
 import ThemeRevealModal from "./components/ThemeRevealModal"
 import SectionBackground from "./components/SectionBackground"
@@ -139,7 +139,7 @@ export default function App() {
         {/* <CornerLogos
           hide={isRegistrationsOpen || isAdminOpen || isScheduleModalOpen}
         /> */}
-        <FixedWatermark />
+        {/* <FixedWatermark /> */}
 
         <ScrollProgress />
 

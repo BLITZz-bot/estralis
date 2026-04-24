@@ -6,28 +6,24 @@ const TEAM_MEMBERS = [
   { name: "VYSHNAVI D", role: "ORGANIZER", image: "/vyshnavi.png" },
   { name: "SHIVAPRASAD", role: "CO-ORGANIZER", image: "/shivu.png" },
   { name: "DIVYA CHACHADI", role: "CO-ORGANIZER", image: "/divya.png" },
-
-  // SECOND ROW (Featured)
-  { name: "M M BHARATH", role: "TECH HEAD", image: "/bharath.png" },
-  { name: "YESHWANTH", role: "TECH HEAD", image: "/yesh.png" },
   { name: "THANISHA", role: "FINANCE / SPONSORSHIP HEAD", image: "/thanisha.png" },
   { name: "VINITH JOYAPPA", role: "FINANCE / SPONSORSHIP HEAD", image: "/vineeth.png" },
-  { name: "LIKITH D T", role: "MARKETING HEAD", image: "/likith.png" },
   { name: "MALLIKARJUN GOUDA", role: "MARKETING HEAD", image: "/mallii.png" },
-
-  // THIRD ROW & OTHERS
+  { name: "LIKITH D T", role: "MARKETING HEAD", image: "/likith.png" },
   { name: "SURESH PATIL", role: "EVENT HEAD", image: "/suri.png" },
   { name: "SHREYA B N", role: "EVENT HEAD", image: "/2.png" },
-  { name: "HARSHITH", role: "ARTIST HEAD", image: "/special-guest.png" },
+  { name: "BHARGAV BHAT", role: "PRODUCTION HEAD", image: "/bharagv.png" },
+  { name: "SRINIVAS", role: "PRODUCTION HEAD", image: "/seena.png" },
+  { name: "AKHILA G", role: "DESIGN HEAD", image: "/akhila.png" },
+  { name: "Siri", role: "DESIGN HEAD", image: "/siri.png" },
+  { name: "M M BHARATH", role: "TECH HEAD", image: "/bharath.png" },
+  { name: "YESHWANTH", role: "TECH HEAD", image: "/yesh.png" },
+  { name: "HARSHITH", role: "ARTIST HEAD", image: "/error.png" },
   { name: "CHAMPA", role: "ARTIST HEAD", image: "/champa.png" },
   { name: "DHYAN", role: "HOSPITALITY HEAD", image: "/dhyan.png" },
   { name: "V Vyshnavi", role: "HOSPITALITY HEAD", image: "/3.png" },
-  { name: "AKHILA G", role: "DESIGN HEAD", image: "/akhila.png" },
-  { name: "Siri", role: "DESIGN HEAD", image: "/siri.png" },
   { name: "GANESH", role: "VOLUNTEER HEAD", image: "/ganesh.png" },
   { name: "Rohith Y S", role: "VOLUNTEER HEAD", image: "/rohith.png" },
-  { name: "SRINIVAS", role: "PRODUCTION HEAD", image: "/seena.png" },
-  { name: "BHARGAV BHAT", role: "PRODUCTION HEAD", image: "/bharagv.png" },
 ];
 
 export default function Team() {

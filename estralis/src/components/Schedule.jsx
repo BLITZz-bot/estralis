@@ -47,7 +47,7 @@ export const eventsDay1 = [
     prize: "",
     minTeamSize: 0,
     maxTeamSize: 0,
-    rules: ["Join the ceremony on time.", "Open for all students and guests."],
+    rules: ["Join the ceremony on time.", "Open for all students and guests.", "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.", "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued."],
     coordinators: ["Core Team"],
     registerLink: "#",
     fee: "FREE",
@@ -64,11 +64,13 @@ export const eventsDay1 = [
     maxTeamSize: 1,
     rules: ["Each participant will be allotted a performance time of 4+1 minutes. Exceeding the time limit may result in penalties.",
       "Only Western dance styles such as Hip-Hop, Freestyle, Contemporary, Jazz, etc., are permitted.",
-      "Participant must submit their music track in advance in the MP3 and  format. No changes will be allowed on the spot.",
+      "Participants must submit their performance tracks (MP3 format) and optional background visuals (MP4 format) at least 48 hours prior to the event. No on-site modifications or submissions will be permitted.",
       "Use of dangerous or hazardous props (such as fire, glass, sharp objects, etc.) is strictly prohibited.",
       "Performances must be appropriate and respectful. Any vulgar or offensive content will lead to disqualification.",
       "Participants must report to the venue at least 30 minutes prior to their scheduled time.",
       "Carry your college ID cards.",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
     ],
     coordinators: ["Ramya Victoria - 7204210703", "Ritvriti - 8618080973"],
     registerLink: "#",
@@ -91,9 +93,11 @@ export const eventsDay1 = [
       "Judging based on creativity, engagement, editing & presentation.",
       "Participants get 24 hours to shoot & create the reel | Must be fully edited before submission.",
       "Reel must be submitted before deadline | Late submissions will not be accepted.",
-      "Carry your college ID cards."
+      "Carry your college ID cards.",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued."
     ],
-    coordinators: ["Rupashree – 9741095149","VARUN - 8095981524"],
+    coordinators: ["Rupashree – 9741095149", "VARUN - 8095981524"],
     registerLink: "#",
     fee: "₹500"
   },
@@ -116,6 +120,8 @@ export const eventsDay1 = [
       "The decision of the organizers/judges will be final and binding.",
       "All teams must report to the venue at least 30 minutes prior to their scheduled time.",
       "Carry your college ID cards.",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
     ],
     coordinators: ["Ujwala - 81973881052", "Vishaka - 8431217851"],
     registerLink: "#",
@@ -139,6 +145,8 @@ export const eventsDay1 = [
       "No pre-drawn designs allowed.",
       "The decision of the judges will be final and binding.",
       "Carry your college ID cards.",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
     ],
     coordinators: ["Pranitha - 9845649134", "Anusha - 6362254473"],
     registerLink: "#",
@@ -178,6 +186,8 @@ export const eventsDay1 = [
       "Points will be calculated across all matches Network Rules:",
       "WiFi may be provided; players are advised to keep mobile data backup.",
       "No rematches for lag, disconnection, or network issues.",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
     ],
     coordinators: ["Kishore - 9742726861", "Hari Kumar - 6362965600", "Anas Ansari - 9008892112"],
     registerLink: "#",
@@ -196,11 +206,13 @@ export const eventsDay1 = [
     rules: ["Each team will be allotted a performance time of 8+2 minutes. Exceeding the time limit may result in penalties.",
       "Only Indian classical dance forms such as Bharatanatyam, Kathak, Kuchipudi, Mohiniyattam, Odissi, etc., are permitted. Fusion with non-classical styles is not allowed.",
       "Performances must be appropriate and respectful. Any vulgar or offensive content will lead to disqualification.",
-      "Teams must submit their music track in advance in the MP3 OR MP4 format. No changes will be allowed on the spot.",
+      "Participants must submit their performance tracks (MP3 format) and optional background visuals (MP4 format) at least 48 hours prior to the event. No on-site modifications or submissions will be permitted.",
       "Use of props is allowed, but participants must manage them without causing delays or hazards.",
       "All teams must report to the venue at least 30 minutes prior to their scheduled time.",
       "Judging based on expressions (Abhinaya), technique, and grace.",
       "Carry your college ID cards.",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
     ],
     coordinators: ["Harsha - 9538622342", "Jyothi - 9008111237"],
     registerLink: "#",
@@ -224,6 +236,8 @@ export const eventsDay1 = [
       "The judges' decision will be final.",
       "Participants are advised to check the event schedule before registering for multiple events. No refunds will be provided for scheduling conflicts.",
       "Carry your college ID cards.",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
     ],
     coordinators: ["Manoj N - 7760396379", "Sirisha - 7019176616"],
     registerLink: "#",
@@ -242,7 +256,7 @@ export const eventsDay1 = [
     rules: ["Team size: 6 - 12 members.",
       "Time limit: 5 - 10 minutes (including entry & exit).",
       "Only western dance styles allowed.",
-      "Music must be appropriate (non-offensive) and submitted in advance as per instructions.",
+      "Participants must submit their performance tracks (MP3 format) and optional background visuals (MP4 format) at least 48 hours prior to the event. No on-site modifications or submissions will be permitted.",
       "Dangerous props, fire, or risky stunts are strictly prohibited.",
       "Teams must be ready before their slot.",
       "Exceeding time limit may lead to penalty or disqualification.",
@@ -251,6 +265,8 @@ export const eventsDay1 = [
       "Teams must report on time for registration and sound check.",
       "Carry college ID cards.",
       "The judges’ decision is final and binding.",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
     ],
     coordinators: ["Sijan - 9886483177", "Shruthi - 6282173819"],
     registerLink: "#",
@@ -276,6 +292,8 @@ export const eventsDay2 = [
       "Original composition encouraged | No explicit or inappropriate content",
       "Equipment: Basic sound provided | Bring your own instruments | Inform in advance for special requirements",
       "Judging: Musicality & coordination | Stage presence & energy | Creativity & originality | Audience engagement",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
     ],
     coordinators: ["Rovin - 9019142436", "Shivaraj - 6360236878"],
     registerLink: "#",
@@ -299,6 +317,8 @@ export const eventsDay2 = [
       "Any misconduct or unfair means will lead to disqualification.",
       "Carry your college ID cards.",
       "The judges' decision is final.",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
     ],
     coordinators: ["Dheeraj - 9741095149"],
     registerLink: "#",
@@ -323,6 +343,8 @@ export const eventsDay2 = [
       "Any misconduct or unfair means will lead to disqualification.",
       "Carry your college ID cards.",
       "The judges' decision is final.",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
     ],
     coordinators: ["Shivayogi D S - 7760333829"],
     registerLink: "#",
@@ -341,7 +363,7 @@ export const eventsDay2 = [
     rules: ["Each team must follow a predefined theme.",
       "Team size: 6 - 12 members.",
       "Time limit: 8 - 12 minutes.",
-      "Music must be submitted before the event.",
+      "Participants must submit their performance tracks (MP3 format) and optional background visuals (MP4 format) at least 48 hours prior to the event. No on-site modifications or submissions will be permitted.",
       "No dangerous props or fire elements allowed.",
       "Carry your college ID cards.",
       "Judging based on coordination, creativity, and confidence.",
@@ -349,6 +371,8 @@ export const eventsDay2 = [
       "No offensive or vulgar content.",
       "Judges' decision will be final.",
       "All teams must report to the venue at least 30 minutes prior to their scheduled time.",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
     ],
     coordinators: ["Raksha - 8867555612", "Deepthi - 8867839042"],
     registerLink: "#",
@@ -364,12 +388,12 @@ export const eventsDay2 = [
     prize: "",
     minTeamSize: 0,
     maxTeamSize: 0,
-    rules: ["All winners must be present at the venue.", "Open for all students and guests."],
+    rules: ["All winners must be present at the venue.", "Open for all students and guests.", "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.", "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued."],
     coordinators: ["Core Team"],
     registerLink: "#",
     fee: "FREE",
   },
- 
+
 ]
 
 function getCategoryStyles(category) {
@@ -609,7 +633,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
 
         {/* Border Glow Overlay */}
         <div className="absolute inset-0 border border-white/5 pointer-events-none rounded-[40px] z-20" />
-        
+
         {/* Colour Grading Background Elements */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
           <div className={`absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full blur-[150px] opacity-20 ${theme.bgSoft}`} />
@@ -619,7 +643,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
 
         {/* Left Sidebar - Navigation & Title (Desktop) */}
         <div className={`w-full md:w-[450px] bg-black/40 border-b md:border-b-0 md:border-r border-white/10 flex flex-col p-8 sm:p-14 lg:p-16 justify-between relative z-10`}
-             style={{ backdropFilter: 'blur(40px)' }}>
+          style={{ backdropFilter: 'blur(40px)' }}>
           <div>
             <div className="space-y-6">
               <div className="flex items-center gap-3">
@@ -628,7 +652,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                   {cat}
                 </span>
               </div>
-              
+
               <h3 className={`text-3xl sm:text-4xl lg:text-5xl saarang-serif italic leading-[1.2] pr-10 mb-4 bg-gradient-to-br from-white via-white/90 to-${theme.accent.split('-')[0]}-300 bg-clip-text text-transparent`}>
                 {event.title}
               </h3>
@@ -640,14 +664,12 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-4 text-left transition-all duration-500 ${
-                  activeTab === tab.id ? theme.text : "text-white/20 hover:text-white/40"
-                }`}
+                className={`flex items-center gap-4 text-left transition-all duration-500 ${activeTab === tab.id ? theme.text : "text-white/20 hover:text-white/40"
+                  }`}
               >
                 <span className="text-lg">{tab.icon}</span>
-                <span className={`text-[11px] font-black tracking-[0.4em] uppercase ${
-                  activeTab === tab.id ? "translate-x-2" : ""
-                } transition-transform`}>
+                <span className={`text-[11px] font-black tracking-[0.4em] uppercase ${activeTab === tab.id ? "translate-x-2" : ""
+                  } transition-transform`}>
                   {tab.label}
                 </span>
               </button>
@@ -660,9 +682,8 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex flex-col items-center gap-1 transition-all ${
-                  activeTab === tab.id ? theme.text : "text-white/20"
-                }`}
+                className={`flex flex-col items-center gap-1 transition-all ${activeTab === tab.id ? theme.text : "text-white/20"
+                  }`}
               >
                 <span className="text-lg">{tab.icon}</span>
                 <span className="text-[8px] font-black tracking-widest uppercase">{tab.label}</span>
@@ -693,23 +714,23 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                   </div>
 
                   {/* Minimalist Info Grid */}
-                  <div className={`grid grid-cols-1 sm:grid-cols-2 ${event.prize ? 'lg:grid-cols-4' : 'lg:grid-cols-3'} gap-12 pt-8`}>
-                    <div className="space-y-3">
+                  <div className="flex flex-wrap gap-x-12 gap-y-10 pt-8">
+                    <div className="space-y-3 min-w-[150px]">
                       <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Schedule</p>
                       <p className={`text-xl font-bold text-white uppercase tracking-tight`}>
                         {event.date} // {event.time.split(" - ")[0]}
                       </p>
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-3 min-w-[120px]">
                       <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Investment</p>
                       <p className={`text-xl font-bold ${theme.text} uppercase tracking-tight`}>{event.fee}</p>
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-3 min-w-[180px] max-w-full">
                       <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Venue</p>
-                      <p className="text-xl font-bold text-white uppercase tracking-tight">@{event.location}</p>
+                      <p className="text-xl font-bold text-white uppercase tracking-tight break-words">@{event.location}</p>
                     </div>
                     {event.prize && (
-                      <div className="space-y-3">
+                      <div className="space-y-3 min-w-[120px]">
                         <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Reward</p>
                         <p className={`text-xl font-bold ${theme.text} uppercase tracking-tight`}>{event.prize}</p>
                       </div>
@@ -737,7 +758,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                     <h4 className="text-3xl saarang-serif text-white italic">Event Protocol</h4>
                     <div className="flex-1 h-[1px] bg-white/10" />
                   </div>
-                  
+
                   <div className="grid gap-8">
                     {event.rules.map((rule, idx) => (
                       <motion.div
@@ -762,11 +783,10 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                       <button
                         disabled={slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)}
                         onClick={() => onRegister(event)}
-                        className={`w-full py-8 ${
-                          slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)
+                        className={`w-full py-8 ${slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0)
                             ? 'bg-red-600/20 text-red-500 border border-red-500/30'
                             : 'bg-white text-black hover:invert'
-                        } text-[11px] font-black tracking-[0.5em] uppercase rounded-full transition-all duration-700 active:scale-95 shadow-2xl`}
+                          } text-[11px] font-black tracking-[0.5em] uppercase rounded-full transition-all duration-700 active:scale-95 shadow-2xl`}
                       >
                         {slotInfo && (slotInfo.isManualOpen === false || slotInfo.slotsLeft <= 0) ? 'SOLD OUT' : 'Confirm Registry'}
                       </button>
@@ -802,7 +822,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                           <div className="text-center sm:text-right">
                             <a
                               href={`tel:${phone}`}
-                                className={`text-2xl font-bold font-tech ${theme.text} hover:opacity-60 transition-all block mb-1`}
+                              className={`text-2xl font-bold font-tech ${theme.text} hover:opacity-60 transition-all block mb-1`}
                             >
                               {phone}
                             </a>
@@ -936,7 +956,7 @@ export default function Schedule({ onModalToggle }) {
   return (
     <>
       <section id="events" className="min-h-screen pt-32">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -944,18 +964,18 @@ export default function Schedule({ onModalToggle }) {
           className="px-6 mb-20 text-center relative"
         >
           {/* Impact Italic Heading with Smooth Slide-and-Fade */}
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="astral-heading text-6xl md:text-9xl lg:text-[11vw] mb-4 italic !tracking-widest leading-none" 
+            className="astral-heading text-6xl md:text-9xl lg:text-[11vw] mb-4 italic !tracking-widest leading-none"
             style={{ fontFamily: 'Impact, sans-serif' }}
           >
             Event Zones
           </motion.h2>
 
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

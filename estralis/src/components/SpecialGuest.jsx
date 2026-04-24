@@ -11,8 +11,12 @@ export const DJ_EVENT_DATA = {
     category: "Fun",
     minTeamSize: 1,
     maxTeamSize: 20,
-    rules: ["ID CARD IS MANDATORY"],
-    coordinators: ["STAR IS REVEALED SOON – "],
+    rules: ["ID card is mandatory",
+        "The Ticket should be booked online.",
+        "Physical tickets will be issued at the venue on the day of the event.",
+        "For any queries please reach out to our Co-ordinator"
+    ],
+    coordinators: ["ADMIN – "],
     registerLink: "#",
     fee: "₹400",
 };
