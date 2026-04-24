@@ -16,7 +16,7 @@ const TEAM_MEMBERS = [
   { name: "MALLIKARJUN GOUDA", role: "MARKETING HEAD", image: "/mallii.png" },
 
   // THIRD ROW & OTHERS
-  { name: "SURESH PATIL", role: "EVENT HEAD", image: "/special-guest.png" },
+  { name: "SURESH PATIL", role: "EVENT HEAD", image: "/suri.png" },
   { name: "SHREYA B N", role: "EVENT HEAD", image: "/2.png" },
   { name: "HARSHITH", role: "ARTIST HEAD", image: "/special-guest.png" },
   { name: "CHAMPA", role: "ARTIST HEAD", image: "/champa.png" },
@@ -26,7 +26,7 @@ const TEAM_MEMBERS = [
   { name: "GANESH", role: "VOLUNTEER HEAD", image: "/ganesh.png" },
   { name: "Rohith Y S", role: "VOLUNTEER HEAD", image: "/rohith.png" },
   { name: "SRINIVAS", role: "PRODUCTION HEAD", image: "/seena.png" },
-  { name: "BHARGAV BHAT", role: "PRODUCTION HEAD", image: "/bharagv.png" }
+  { name: "BHARGAV BHAT", role: "PRODUCTION HEAD", image: "/bharagv.png" },
 ];
 
 export default function Team() {
