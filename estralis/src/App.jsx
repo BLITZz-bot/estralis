@@ -1,42 +1,31 @@
 import { motion, useScroll, useTransform } from "framer-motion"
-import { useState, useEffect, lazy, Suspense } from "react"
 
 import Navbar from "./components/Navbar"
+import Schedule from "./components/Schedule"
+import Venue from "./components/Venue"
 import Footer from "./components/Footer"
 import ParticlesBg from "./components/ParticlesBg"
+import About from "./components/About"
 import ScrollProgress from "./components/ScrollProgress"
 import CursorGlow from "./components/CursorGlow"
 import Section from "./components/Section"
+import FestivalHero from "./components/FestivalHero"
 import HeroVideo from "./components/HeroVideo"
+import CountdownSciFi from "./components/CountdownSciFi"
 import StarBackground from "./components/StarBackground"
+import Timeline from "./components/Timeline"
+// import CornerLogos from "./components/Cornerlogos"
+import MyRegistrations from "./components/MyRegistrations"
+import AdminDashboard from "./components/AdminDashboard"
 import FixedWatermark from "./components/FixedWatermark"
+import PrizePool from "./components/PrizePool"
+import ThemeRevealModal from "./components/ThemeRevealModal"
 import SectionBackground from "./components/SectionBackground"
-
-// Lazy-loaded components
-const Schedule = lazy(() => import("./components/Schedule"))
-const Venue = lazy(() => import("./components/Venue"))
-const About = lazy(() => import("./components/About"))
-const FestivalHero = lazy(() => import("./components/FestivalHero"))
-const CountdownSciFi = lazy(() => import("./components/CountdownSciFi"))
-const Timeline = lazy(() => import("./components/Timeline"))
-const MyRegistrations = lazy(() => import("./components/MyRegistrations"))
-const AdminDashboard = lazy(() => import("./components/AdminDashboard"))
-const PrizePool = lazy(() => import("./components/PrizePool"))
-const ThemeRevealModal = lazy(() => import("./components/ThemeRevealModal"))
-const ProtocolModal = lazy(() => import("./components/ProtocolModal"))
-const SpecialGuest = lazy(() => import("./components/SpecialGuest"))
-const Team = lazy(() => import("./components/Team"))
-const StaffScanner = lazy(() => import("./components/StaffScanner"))
-
-// Loading Fallback
-const LoadingScreen = () => (
-  <div className="fixed inset-0 z-[100] bg-[#020617] flex items-center justify-center">
-    <div className="flex flex-col items-center gap-4">
-      <div className="w-16 h-16 border-t-2 border-teal-500 rounded-full animate-spin shadow-[0_0_20px_#2dd4bf]" />
-      <p className="text-teal-400 font-black tracking-[0.5em] uppercase text-[10px] animate-pulse">Syncing_Estralis_Archive</p>
-    </div>
-  </div>
-);
+import ProtocolModal from "./components/ProtocolModal"
+import SpecialGuest from "./components/SpecialGuest"
+import Team from "./components/Team"
+import StaffScanner from "./components/StaffScanner"
+import { useState, useEffect } from "react"
 
 export default function App() {
   const [isRegistrationsOpen, setIsRegistrationsOpen] = useState(false);
@@ -87,157 +76,156 @@ export default function App() {
   return (
     <>
       <div className="noise-overlay" />
-      <Suspense fallback={<LoadingScreen />}>
-        <div className="min-h-screen overflow-x-hidden bg-[#020617] text-white">
-          {/* ================= GLOBAL BACKGROUNDS ================= */}
-          {/* Deep space base */}
-          <div className="fixed inset-0 pointer-events-none -z-20" style={{ background: "linear-gradient(160deg, #020617 0%, #050a1f 40%, #010412 100%)" }} />
 
-          {/* Stars */}
-          <StarBackground />
+      <div className="min-h-screen overflow-x-hidden bg-[#020617] text-white">
+        {/* ================= GLOBAL BACKGROUNDS ================= */}
+        {/* Deep space base */}
+        <div className="fixed inset-0 pointer-events-none -z-20" style={{ background: "linear-gradient(160deg, #020617 0%, #050a1f 40%, #010412 100%)" }} />
 
-          {/* Teal upper-left bleed */}
-          <div className="fixed top-0 left-0 w-[800px] h-[800px] pointer-events-none -z-10 translate-z-0"
-            style={{ background: "radial-gradient(ellipse at top left, rgba(45,212,191,0.05) 0%, transparent 65%)" }} />
+        {/* Stars */}
+        <StarBackground />
 
-          {/* Cool Aqua upper-right bleed */}
-          <div className="fixed top-0 right-0 w-[600px] h-[600px] pointer-events-none -z-10 translate-z-0"
-            style={{ background: "radial-gradient(ellipse at top right, rgba(8,145,178,0.06) 0%, transparent 65%)" }} />
+        {/* Teal upper-left bleed */}
+        <div className="fixed top-0 left-0 w-[800px] h-[800px] pointer-events-none -z-10 translate-z-0"
+          style={{ background: "radial-gradient(ellipse at top left, rgba(45,212,191,0.05) 0%, transparent 65%)" }} />
 
-          {/* Astral center mid-page glow */}
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] pointer-events-none -z-10 translate-z-0"
-            style={{ background: "radial-gradient(ellipse, rgba(45,212,191,0.03) 0%, transparent 70%)" }} />
+        {/* Cool Aqua upper-right bleed */}
+        <div className="fixed top-0 right-0 w-[600px] h-[600px] pointer-events-none -z-10 translate-z-0"
+          style={{ background: "radial-gradient(ellipse at top right, rgba(8,145,178,0.06) 0%, transparent 65%)" }} />
 
-          {/* Teal bottom-right */}
-          <div className="fixed bottom-0 right-0 w-[500px] h-[500px] pointer-events-none -z-10 translate-z-0"
-            style={{ background: "radial-gradient(ellipse at bottom right, rgba(8,145,178,0.04) 0%, transparent 65%)" }} />
+        {/* Astral center mid-page glow */}
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] pointer-events-none -z-10 translate-z-0"
+          style={{ background: "radial-gradient(ellipse, rgba(45,212,191,0.03) 0%, transparent 70%)" }} />
 
-          {/* Parallax Astral lights */}
-          <motion.div
-            style={{ y: ySlow, background: "radial-gradient(circle, rgba(45,212,191,0.04) 0%, transparent 70%)" }}
-            className="fixed top-1/4 left-[10%] w-[500px] h-[500px] rounded-full pointer-events-none -z-10 translate-z-0"
-          />
-          <motion.div
-            style={{ y: yFast, background: "radial-gradient(circle, rgba(8,145,178,0.03) 0%, transparent 65%)" }}
-            className="fixed top-1/3 right-[10%] w-[400px] h-[400px] rounded-full pointer-events-none -z-10 translate-z-0"
-          />
+        {/* Teal bottom-right */}
+        <div className="fixed bottom-0 right-0 w-[500px] h-[500px] pointer-events-none -z-10 translate-z-0"
+          style={{ background: "radial-gradient(ellipse at bottom right, rgba(8,145,178,0.04) 0%, transparent 65%)" }} />
 
-          <CursorGlow />
+        {/* Parallax Astral lights */}
+        <motion.div
+          style={{ y: ySlow, background: "radial-gradient(circle, rgba(45,212,191,0.04) 0%, transparent 70%)" }}
+          className="fixed top-1/4 left-[10%] w-[500px] h-[500px] rounded-full pointer-events-none -z-10 translate-z-0"
+        />
+        <motion.div
+          style={{ y: yFast, background: "radial-gradient(circle, rgba(8,145,178,0.03) 0%, transparent 65%)" }}
+          className="fixed top-1/3 right-[10%] w-[400px] h-[400px] rounded-full pointer-events-none -z-10 translate-z-0"
+        />
 
-          <Navbar
-            onOpenRegistrations={() => setIsRegistrationsOpen(true)}
-            onOpenAdmin={() => setIsAdminOpen(true)}
-            onOpenThemeReveal={() => setIsThemeRevealOpen(true)}
-          />
+        <CursorGlow />
 
-          <MyRegistrations
-            isOpen={isRegistrationsOpen}
-            onClose={() => { setIsRegistrationsOpen(false); setInitialRegEmail(""); setAutoDownload(false); }}
-            initialEmail={initialRegEmail}
-            autoDownload={autoDownload}
-          />
-          <AdminDashboard isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
-          <ThemeRevealModal isOpen={isThemeRevealOpen} onClose={() => setIsThemeRevealOpen(false)} />
-          <ProtocolModal
-            isOpen={isProtocolModalOpen}
-            onClose={() => setIsProtocolModalOpen(false)}
-            onAccept={() => {
-              setIsProtocolAccepted(true);
-              document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          />
+        <Navbar
+          onOpenRegistrations={() => setIsRegistrationsOpen(true)}
+          onOpenAdmin={() => setIsAdminOpen(true)}
+          onOpenThemeReveal={() => setIsThemeRevealOpen(true)}
+        />
 
-          {/* <CornerLogos
-            hide={isRegistrationsOpen || isAdminOpen || isScheduleModalOpen}
-          /> */}
-          <FixedWatermark />
+        <MyRegistrations
+          isOpen={isRegistrationsOpen}
+          onClose={() => { setIsRegistrationsOpen(false); setInitialRegEmail(""); setAutoDownload(false); }}
+          initialEmail={initialRegEmail}
+          autoDownload={autoDownload}
+        />
+        <AdminDashboard isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
+        <ThemeRevealModal isOpen={isThemeRevealOpen} onClose={() => setIsThemeRevealOpen(false)} />
+        <ProtocolModal
+          isOpen={isProtocolModalOpen}
+          onClose={() => setIsProtocolModalOpen(false)}
+          onAccept={() => {
+            setIsProtocolAccepted(true);
+            document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+        />
 
-          <ScrollProgress />
+        {/* <CornerLogos
+          hide={isRegistrationsOpen || isAdminOpen || isScheduleModalOpen}
+        /> */}
+        <FixedWatermark />
 
-          {/* ================= VIDEO HERO ================= */}
-          <section className="relative h-screen w-full overflow-hidden">
-            <HeroVideo />
+        <ScrollProgress />
 
-            {/* Optional center scroll hint */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/70 text-sm animate-bounce">
-              Scroll ↓
-            </div>
-          </section>
+        {/* ================= VIDEO HERO ================= */}
+        <section className="relative h-screen w-full overflow-hidden">
+          <HeroVideo />
 
-
-          {/* ================= HERO (Branding) ================= */}
-          <Section id="home">
-            <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
-              <FestivalHero />
-
-            </section>
-          </Section>
-
-          {/* ================= COUNTDOWN (Next Page) ================= */}
-          <Section id="countdown">
-            <section className="relative min-h-screen flex flex-col items-center justify-center py-20 px-6 overflow-hidden group">
-
-              <SectionBackground
-                src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80"
-                alt="Tech Earth Background"
-                activeOpacity="opacity-70 md:opacity-50"
-              />
-
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1 }}
-                className="w-full flex flex-col items-center"
-              >
-                <CountdownSciFi />
-
-                <div className="mt-16">
-                  <a
-                    href="#events"
-                    className="px-12 py-5 rounded-2xl bg-teal-500 text-black font-black tracking-[0.3em] uppercase shadow-[0_0_30px_rgba(45,212,191,0.4)] hover:shadow-[0_0_50px_rgba(45,212,191,0.7)] hover:bg-white hover:scale-105 transition-all duration-300 transform active:scale-95 flex items-center justify-center"
-                  >
-                    Explore_Archive
-                  </a>
-                </div>
-              </motion.div>
-            </section>
-          </Section>
-
-          <PrizePool />
-
-          {/* ================= ABOUT ================= */}
-          <Section id="about">
-            <About onOpenProtocol={() => setIsProtocolModalOpen(true)} />
-          </Section>
-
-          {/* ================= EVENTS ================= */}
-          <Section id="events">
-            <Schedule onModalToggle={setIsScheduleModalOpen} />
-          </Section>
-
-          <SpecialGuest />
-
-          <div className="py-20 text-center astral-glass mx-6 mt-10 border-teal-500/10">
-            <p className="astral-eyebrow text-teal-400">Archive Transmission End</p>
-            <h3 className="saarang-serif text-3xl mt-4 italic text-white/40">More signals to be decoded soon.</h3>
+          {/* Optional center scroll hint */}
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/70 text-sm animate-bounce">
+            Scroll ↓
           </div>
+        </section>
 
-          <Timeline />
 
-          {/* ================= VENUE ================= */}
-          <Section id="venue">
-            <Venue />
-          </Section>
+        {/* ================= HERO (Branding) ================= */}
+        <Section id="home">
+          <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
+            <FestivalHero />
 
-          <Section id="team">
-            <Team />
-          </Section>
+          </section>
+        </Section>
 
-          {/* ================= FOOTER ================= */}
-          <Footer />
+        {/* ================= COUNTDOWN (Next Page) ================= */}
+        <Section id="countdown">
+          <section className="relative min-h-screen flex flex-col items-center justify-center py-20 px-6 overflow-hidden group">
+
+            <SectionBackground
+              src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80"
+              alt="Tech Earth Background"
+              activeOpacity="opacity-70 md:opacity-50"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              className="w-full flex flex-col items-center"
+            >
+              <CountdownSciFi />
+
+              <div className="mt-16">
+                <a
+                  href="#events"
+                  className="px-12 py-5 rounded-2xl bg-teal-500 text-black font-black tracking-[0.3em] uppercase shadow-[0_0_30px_rgba(45,212,191,0.4)] hover:shadow-[0_0_50px_rgba(45,212,191,0.7)] hover:bg-white hover:scale-105 transition-all duration-300 transform active:scale-95 flex items-center justify-center"
+                >
+                  Explore_Archive
+                </a>
+              </div>
+            </motion.div>
+          </section>
+        </Section>
+
+        <PrizePool />
+
+        {/* ================= ABOUT ================= */}
+        <Section id="about">
+          <About onOpenProtocol={() => setIsProtocolModalOpen(true)} />
+        </Section>
+
+        {/* ================= EVENTS ================= */}
+        <Section id="events">
+          <Schedule onModalToggle={setIsScheduleModalOpen} />
+        </Section>
+
+        <SpecialGuest />
+
+        <div className="py-20 text-center astral-glass mx-6 mt-10 border-teal-500/10">
+          <p className="astral-eyebrow text-teal-400">Archive Transmission End</p>
+          <h3 className="saarang-serif text-3xl mt-4 italic text-white/40">More signals to be decoded soon.</h3>
         </div>
-      </Suspense>
+
+        <Timeline />
+
+        {/* ================= VENUE ================= */}
+        <Section id="venue">
+          <Venue />
+        </Section>
+
+        <Section id="team">
+          <Team />
+        </Section>
+
+        {/* ================= FOOTER ================= */}
+        <Footer />
+      </div>
     </>
   )
 }

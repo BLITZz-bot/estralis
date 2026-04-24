@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion"
-import { useRef, useState, useEffect, memo } from "react"
+import { useRef, useState, useEffect } from "react"
 // import StarBackground from "./StarBackground"
 import RegistrationForm from "./RegistrationForm"
 import SectionBackground from "./SectionBackground"
@@ -391,7 +391,7 @@ const cardVariants = {
   show: { opacity: 1, y: 0 },
 }
 
-const EventCard = memo(({ title, fee, category, onClick, isOpen, t, time }) => {
+function EventCard({ title, fee, category, onClick, isOpen, t, time }) {
   const theme = t || { text: "text-teal-400", hoverText: "group-hover:text-teal-400", bg: "bg-teal-500", hoverBg: "hover:bg-teal-500/10", borderL: "border-l-teal-500", bgSoft: "bg-teal-500/10" };
 
   return (
@@ -433,7 +433,7 @@ const EventCard = memo(({ title, fee, category, onClick, isOpen, t, time }) => {
       </div>
     </motion.div>
   )
-})
+}
 
 function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bgImage, themeObj }) {
   const t = themeObj || { text: "text-teal-400", hoverText: "group-hover:text-teal-400", borderB: "border-b-teal-500/10", bg: "bg-teal-500", hoverBg: "hover:bg-teal-500/10", borderL: "border-l-teal-500", bgSoft: "bg-teal-500/10" };

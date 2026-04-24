@@ -134,7 +134,6 @@ function TeamMemberCard({ member, idx }) {
           <img
             src={member.image}
             alt={member.name}
-            loading="lazy"
             className="w-full h-full object-cover transition-all duration-700"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60" />
