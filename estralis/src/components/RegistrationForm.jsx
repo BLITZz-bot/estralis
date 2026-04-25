@@ -199,7 +199,7 @@ export default function RegistrationForm({ event, onClose }) {
                     const hostCollege = "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT";
                     let fetchedList = data.data.map(c => c.name.toUpperCase());
                     
-                    // Force include GCEM if not present in DB
+                    // Force include GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT if not present in DB
                     if (!fetchedList.includes(hostCollege)) {
                         fetchedList.push(hostCollege);
                     }
@@ -308,7 +308,7 @@ export default function RegistrationForm({ event, onClose }) {
             return;
         }
         if (isSoldOut) {
-            const categoryName = isGCEM ? "GCEM" : "OTHER COLLEGE";
+            const categoryName = isGCEM ? "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT" : "OTHER COLLEGE";
             alert(`SOLD OUT: Only ${relevantSlotsLeft} seats left for ${categoryName} category, but you are trying to register ${currentSquadSize} people.`);
             return;
         }
@@ -463,7 +463,7 @@ export default function RegistrationForm({ event, onClose }) {
                 "INAUGURATION": { location: "Amphitheatre", time: "09:00 AM" },
                 "CLASSICAL GROUP": { location: "Amphitheatre", time: "12:30 PM" },
                 "REELS MAKING": { location: "1ST Floor Class Room", time: "10:30 AM" },
-                "TREASURE HUNT": { location: "GCEM Campus", time: "11:00 AM" },
+                "TREASURE HUNT": { location: "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT Campus", time: "11:00 AM" },
                 "FACE PAINTING": { location: "Amphitheatre", time: "11:00 AM" },
                 "FITNESS CHALLENGE(A)": { location: "Open Amphitheatre", time: "11:00 AM" },
                 "FITNESS CHALLENGE(B)": { location: "Open Amphitheatre", time: "12:30 PM" },
@@ -595,7 +595,7 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setTextColor(255, 255, 255);
             const schedule = EVENT_SCHEDULE[event.title.toUpperCase()] || { location: "TBA", time: "TBA" };
             if (event.title.toUpperCase().includes("DJ NIGHT")) {
-                schedule.location = "Main stage, GCEM Campus";
+                schedule.location = "Main stage, GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT Campus";
                 schedule.time = "06:00 PM";
             }
             const venueLines = doc.splitTextToSize(schedule.location, 60);

@@ -164,7 +164,7 @@ export default function FestivalHero() {
         >
           <div className="flex flex-col items-center md:items-end w-full md:w-1/2 md:pr-12 md:border-r border-teal-500/30 pb-4 md:pb-0 mb-4 md:mb-0 md:text-right text-center">
             <span className="text-teal-400 font-bold text-[15px] tracking-[0.25em] uppercase">Coordinates</span>
-            <span className="text-white/50 font-mono text-[13px] uppercase tracking-[0.15em] mt-1">GCEM CAMPUS, BENGALURU</span>
+            <span className="text-white/50 font-mono text-[13px] uppercase tracking-[0.15em] mt-1">GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT Campus, BENGALURU</span>
           </div>
 
           <div className="flex flex-col items-center md:items-start w-full md:w-1/2 md:pl-12 text-center md:text-left">

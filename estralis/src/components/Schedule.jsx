@@ -106,7 +106,7 @@ export const eventsDay1 = [
     date: "May 14",
     time: "11:00 AM - 01:00 PM",
     title: "TREASURE HUNT",
-    location: "GCEM Campus",
+    location: "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT Campus",
     description: "An adventurous team-based game where participants solve clues and complete challenges to find the final treasure. It encourages logical thinking, teamwork, and quick decision-making under time pressure.",
     category: "Fun",
     prize: "₹10,000",
