@@ -171,10 +171,14 @@ export default function RegistrationForm({ event, onClose }) {
     const isTeamEvent = maxTeamSize > 1;
 
     const isDJNight = event?.title?.toUpperCase().includes("DJ NIGHT");
-    const isGCEM = formData.college.trim().toUpperCase() === "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT";
-    const djPerPersonFee = isGCEM ? 200 : 400;
-    const currentSquadSize = 1 + teamMembers.length;
-    const totalDJFee = isDJNight ? `₹${djPerPersonFee * currentSquadSize}` : null;
+    const hostCollege = "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT";
+    const getFeeForCollege = (clg) => (clg || "").trim().toUpperCase() === hostCollege ? 200 : 400;
+
+    const leaderFee = getFeeForCollege(formData.college);
+    const friendsTotalFee = teamMembers.reduce((acc, m) => acc + getFeeForCollege(m.college), 0);
+    const totalDJFeeValue = leaderFee + friendsTotalFee;
+
+    const totalDJFee = isDJNight ? `₹${totalDJFeeValue}` : null;
     const displayFee = isDJNight ? totalDJFee : standardFeeString;
 
     const isManuallyClosed = slotInfo && slotInfo.isManualOpen === false;
@@ -812,8 +816,8 @@ export default function RegistrationForm({ event, onClose }) {
 
                                     {isDJNight && (
                                         <div className="flex items-center justify-between p-4 rounded-xl bg-teal-500/5 border border-teal-500/10">
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-teal-400/60 font-astral">PRICE PER PERSON</span>
-                                            <span className="text-lg font-black text-teal-400">₹{djPerPersonFee}</span>
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-teal-400/60 font-astral">YOUR INDIVIDUAL FEE</span>
+                                            <span className="text-lg font-black text-teal-400">₹{leaderFee}</span>
                                         </div>
                                     )}
 
@@ -933,7 +937,7 @@ export default function RegistrationForm({ event, onClose }) {
 
                                     {isDJNight && teamMembers.length > 0 && (
                                         <div className="flex justify-between items-center p-4 rounded-xl bg-teal-500/10 border border-teal-500/20">
-                                            <span className="text-[11px] font-black uppercase tracking-widest text-white font-astral">TOTAL ({1 + teamMembers.length} × ₹{djPerPersonFee})</span>
+                                            <span className="text-[11px] font-black uppercase tracking-widest text-white font-astral">TOTAL FOR SQUAD ({1 + teamMembers.length} MEMBERS)</span>
                                             <span className="text-2xl font-black text-teal-400 italic glow-teal">{totalDJFee}</span>
                                         </div>
                                     )}

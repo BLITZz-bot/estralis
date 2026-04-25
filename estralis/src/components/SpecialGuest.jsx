@@ -15,6 +15,7 @@ export const DJ_EVENT_DATA = {
         "The Ticket should be booked online.",
         "Physical tickets will be issued at the venue on the day of the event.",
         "GCEM students contact the co-ordinator before booking the ticket.",
+        "No refund is initiated for any circumstances.",
         "For any queries please reach out to our Co-ordinator"
     ],
     coordinators: ["AKASH – 9187645802"],
