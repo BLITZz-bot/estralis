@@ -171,7 +171,8 @@ export default function RegistrationForm({ event, onClose }) {
     const isTeamEvent = maxTeamSize > 1;
 
     const isDJNight = event?.title?.toUpperCase().includes("DJ NIGHT");
-    const djPerPersonFee = 400;
+    const isGCEM = formData.college.trim().toUpperCase() === "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT";
+    const djPerPersonFee = isGCEM ? 200 : 400;
     const currentSquadSize = 1 + teamMembers.length;
     const totalDJFee = isDJNight ? `₹${djPerPersonFee * currentSquadSize}` : null;
     const displayFee = isDJNight ? totalDJFee : standardFeeString;
@@ -186,7 +187,15 @@ export default function RegistrationForm({ event, onClose }) {
                 const res = await fetch(`${import.meta.env.VITE_API_URL}/api/colleges`);
                 const data = await res.json();
                 if (data.success) {
-                    setCollegeList(data.data.map(c => c.name));
+                    const hostCollege = "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT";
+                    let fetchedList = data.data.map(c => c.name.toUpperCase());
+                    
+                    // Force include GCEM if not present in DB
+                    if (!fetchedList.includes(hostCollege)) {
+                        fetchedList.push(hostCollege);
+                    }
+                    
+                    setCollegeList(fetchedList);
                 }
             } catch (err) {
                 console.error("Failed to fetch colleges", err);

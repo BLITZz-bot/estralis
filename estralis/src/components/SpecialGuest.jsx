@@ -14,9 +14,10 @@ export const DJ_EVENT_DATA = {
     rules: ["ID card is mandatory",
         "The Ticket should be booked online.",
         "Physical tickets will be issued at the venue on the day of the event.",
+        "GCEM students contact the co-ordinator before booking the ticket.",
         "For any queries please reach out to our Co-ordinator"
     ],
-    coordinators: ["ADMIN – "],
+    coordinators: ["AKASH – 9187645802"],
     registerLink: "#",
     fee: "₹400",
 };

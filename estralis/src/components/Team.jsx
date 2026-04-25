@@ -18,7 +18,7 @@ const TEAM_MEMBERS = [
   { name: "Siri", role: "DESIGN HEAD", image: "/siri.png" },
   { name: "M M BHARATH", role: "TECH HEAD", image: "/bharath.png" },
   { name: "YESHWANTH", role: "TECH HEAD", image: "/yesh.png" },
-  { name: "HARSHITH", role: "ARTIST HEAD", image: "/error.png" },
+  { name: "HARSHITH", role: "ARTIST HEAD", image: "/harshith.png" },
   { name: "CHAMPA", role: "ARTIST HEAD", image: "/champa.png" },
   { name: "DHYAN", role: "HOSPITALITY HEAD", image: "/dhyan.png" },
   { name: "V Vyshnavi", role: "HOSPITALITY HEAD", image: "/3.png" },
