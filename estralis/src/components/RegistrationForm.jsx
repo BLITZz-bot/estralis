@@ -178,6 +178,7 @@ export default function RegistrationForm({ event, onClose }) {
     const friendsTotalFee = teamMembers.reduce((acc, m) => acc + getFeeForCollege(m.college), 0);
     const totalDJFeeValue = leaderFee + friendsTotalFee;
 
+    const currentSquadSize = 1 + teamMembers.length;
     const totalDJFee = isDJNight ? `₹${totalDJFeeValue}` : null;
     const displayFee = isDJNight ? totalDJFee : standardFeeString;
 
