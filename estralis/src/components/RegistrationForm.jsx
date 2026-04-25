@@ -183,7 +183,11 @@ export default function RegistrationForm({ event, onClose }) {
     const displayFee = isDJNight ? totalDJFee : standardFeeString;
 
     const isManuallyClosed = slotInfo && slotInfo.isManualOpen === false;
-    const isSoldOut = isDJNight && slotInfo && slotInfo.slotsLeft < currentSquadSize;
+    
+    // Check relevant slots based on college
+    const isGCEM = formData.college.trim().toUpperCase() === hostCollege;
+    const relevantSlotsLeft = isGCEM ? (slotInfo?.gcemSlotsLeft ?? slotInfo?.slotsLeft) : (slotInfo?.otherSlotsLeft ?? slotInfo?.slotsLeft);
+    const isSoldOut = isDJNight && slotInfo && (relevantSlotsLeft < currentSquadSize);
 
     // Fetch allowed colleges
     useEffect(() => {
@@ -304,7 +308,8 @@ export default function RegistrationForm({ event, onClose }) {
             return;
         }
         if (isSoldOut) {
-            alert(`SOLD OUT: Only ${slotInfo.slotsLeft} seats left, but you are trying to register ${currentSquadSize} people.`);
+            const categoryName = isGCEM ? "GCEM" : "OTHER COLLEGE";
+            alert(`SOLD OUT: Only ${relevantSlotsLeft} seats left for ${categoryName} category, but you are trying to register ${currentSquadSize} people.`);
             return;
         }
 
