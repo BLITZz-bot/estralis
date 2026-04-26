@@ -47,7 +47,10 @@ const storage = new CloudinaryStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 500 * 1024 } // 500KB max to match frontend validation
+});
 
 // Trim config values
 const SENDER_EMAIL = (process.env.SENDER_EMAIL || "").trim();
@@ -383,20 +386,29 @@ app.post('/api/register-manual', async (req, res) => {
 });
 
 // 4. Screenshot Upload Endpoint
-app.post('/api/upload-screenshot', upload.single('screenshot'), (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ success: false, message: 'No file uploaded' });
+app.post('/api/upload-screenshot', (req, res) => {
+    upload.single('screenshot')(req, res, (err) => {
+        if (err) {
+            console.error("Multer/Cloudinary Upload Error:", err);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Upload failed: ' + err.message 
+            });
         }
-        res.status(200).json({
-            success: true,
-            imageUrl: req.file.path,
-            publicId: req.file.filename
-        });
-    } catch (error) {
-        console.error("Upload Error:", error);
-        res.status(500).json({ success: false, message: 'Upload failed' });
-    }
+        try {
+            if (!req.file) {
+                return res.status(400).json({ success: false, message: 'No file uploaded' });
+            }
+            res.status(200).json({
+                success: true,
+                imageUrl: req.file.path,
+                publicId: req.file.filename
+            });
+        } catch (error) {
+            console.error("Upload Route Error:", error);
+            res.status(500).json({ success: false, message: 'Upload failed' });
+        }
+    });
 });
 
 // Official Event Schedule for PDF Data
