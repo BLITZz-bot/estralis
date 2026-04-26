@@ -47,7 +47,10 @@ const storage = new CloudinaryStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 1024 * 1024 } // 1MB Limit
+});
 
 // Trim config values
 const SENDER_EMAIL = (process.env.SENDER_EMAIL || "").trim();
