@@ -282,8 +282,8 @@ export default function RegistrationForm({ event, onClose }) {
         const { name, value, type, files } = e.target;
         if (type === 'file') {
             const file = files[0];
-            if (file && file.size > 500 * 1024) {
-                alert("FILE SIZE EXCEEDED: Screenshot must be less than 500KB. Please compress your image or take a smaller screenshot.");
+            if (file && file.size > 1024 * 1024) {
+                alert("FILE SIZE EXCEEDED: Screenshot must be less than 1MB. Please compress your image or take a smaller screenshot.");
                 e.target.value = ""; // Clear input
                 setFormData(prev => ({ ...prev, [name]: null }));
                 return;
