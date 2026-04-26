@@ -37,6 +37,14 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+// Diagnostic: Check Cloudinary Config on startup
+if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+    console.warn("⚠️ CLOUDINARY WARNING: One or more environment variables are MISSING.");
+    console.warn("Uploads will likely fail. Please check Render Environment Variables.");
+} else {
+    console.log("✅ Cloudinary Config: Detected");
+}
+
 // Multer Storage Configuration for Cloudinary
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
