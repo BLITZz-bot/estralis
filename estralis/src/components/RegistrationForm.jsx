@@ -141,7 +141,7 @@ export default function RegistrationForm({ event, onClose }) {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isDownloading, setIsDownloading] = useState(false)
     const [registrationId, setRegistrationId] = useState("")
-    const [luckyDrawNumber, setLuckyDrawNumber] = useState("")
+    const [luckyDrawNumber, setLuckyDrawNumber] = useState(null)
     const [utrError, setUtrError] = useState("")
     const [teamMembers, setTeamMembers] = useState([])
     const [passType, setPassType] = useState('standard') // 'standard' or 'combo'
@@ -408,15 +408,16 @@ export default function RegistrationForm({ event, onClose }) {
             if (result.success) {
                 // The server returns the ID inside 'data.id' as seen in debug logs
                 const finalId = result.data?.id || result.registrationId || result.id || result._id || "";
-                const ldn = result.data?.luckyDrawNumber || "";
                 
                 if (finalId) {
                     setRegistrationId(finalId);
-                    if (ldn) setLuckyDrawNumber(ldn);
+                    if (result.data?.luckyDrawNumber) {
+                        setLuckyDrawNumber(result.data.luckyDrawNumber);
+                    }
                     setStep(3);
                 } else {
                     console.error("No ID returned from server", result);
-                    if (ldn) setLuckyDrawNumber(ldn);
+                    // Fallback to avoid blocking the user, but log the error
                     setStep(3);
                 }
             } else {
@@ -575,19 +576,21 @@ export default function RegistrationForm({ event, onClose }) {
             doc.text(eventTitle, 85, startY + (isLongTitle ? 33 : 35), { align: "center", charSpace: isLongTitle ? 0.1 : 1 });
 
             // LUCKY DRAW NUMBER (Bumper Offer Only)
-            if (event.title.toUpperCase() === 'BUMPER LUCKY DRAW' || luckyDrawNumber) {
+            const isLuckyDraw = eventTitle === 'BUMPER LUCKY DRAW' || luckyDrawNumber;
+            if (isLuckyDraw) {
                 const ldn = luckyDrawNumber || "001";
+                doc.setTextColor(...colors.teal);
                 doc.setFont("courier", "bold");
                 doc.setFontSize(14);
-                doc.setTextColor(...colors.teal);
-                doc.text(`TICKET NO: ${ldn}`, 85, startY + (isLongTitle ? 40 : 42), { align: "center" });
+                doc.text(`TICKET NO: ${ldn}`, 85, startY + (isLongTitle ? 43 : 45), { align: "center" });
             }
 
             // CATEGORY TAG (Cyan Text, No Box)
             const catText = (event.category || "TECH").toUpperCase();
             doc.setFontSize(8);
+            doc.setFont("helvetica", "bold");
             doc.setTextColor(...colors.teal);
-            doc.text(catText, 85, startY + 45.5, { align: "center", charSpace: 2 });
+            doc.text(catText, 85, startY + (isLuckyDraw ? 52.5 : 45.5), { align: "center", charSpace: 2 });
 
             // LOGISTICS (Location & Time)
             doc.setFillColor(30, 41, 59, 40);

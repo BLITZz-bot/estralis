@@ -365,6 +365,8 @@ app.post('/api/register-manual', async (req, res) => {
             ]
         );
 
+        const newRegistration = result.rows[0];
+
         // --- LUCKY DRAW SEQUENCE NUMBER ---
         let luckyDrawNumber = null;
         if (eventTitle === 'BUMPER LUCKY DRAW') {
