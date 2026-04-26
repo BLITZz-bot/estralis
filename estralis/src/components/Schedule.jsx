@@ -403,7 +403,7 @@ export const eventsDay2 = [
     minTeamSize: 6,
     maxTeamSize: 15,
     rules: ["Everyone should come at 8.30 for venue and the registration will be 8.30 to 9.30",
-      "Each team must follow a predefined theme.",
+      "Theme : Open theme.",
       "Team size: 6 - 15 members.",
       "Time limit: 8 - 15 minutes.",
       "Participants must submit their performance tracks (MP3 format) and optional background visuals (MP4 format) at least 48 hours prior to the event. No on-site modifications or submissions will be permitted.",
