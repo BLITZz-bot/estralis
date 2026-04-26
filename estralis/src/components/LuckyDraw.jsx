@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import RegistrationForm from "./RegistrationForm";
 
-const LUCKY_DRAW_EVENT = {
+export const LUCKY_DRAW_EVENT = {
     title: "BUMPER LUCKY DRAW",
     category: "SPECIAL",
     fee: "₹100",

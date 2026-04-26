@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import jsPDF from "jspdf";
 import { eventsDay1, eventsDay2 } from "./Schedule";
 import { DJ_EVENT_DATA } from "./SpecialGuest";
+import { LUCKY_DRAW_EVENT } from "./LuckyDraw";
 import QRCode from 'qrcode'
 
 export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDownload }) {
@@ -11,7 +12,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
     const [error, setError] = useState("");
     const [results, setResults] = useState([]);
 
-    const allEvents = [...eventsDay1, ...eventsDay2, DJ_EVENT_DATA];
+    const allEvents = [...eventsDay1, ...eventsDay2, DJ_EVENT_DATA, LUCKY_DRAW_EVENT];
 
     useEffect(() => {
         if (isOpen) {
@@ -142,7 +143,8 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                 "FASHION WALK": { location: "Amphitheatre", time: "12:00 PM" },
                 "PRIZE DISTRIBUTION": { location: "Amphitheatre", time: "03:00 PM" },
                 "ARTIST PERFORMANCE": { location: "Main Stage", time: "06:00 PM" },
-                "DJ NIGHT": { location: "Main Stage", time: "07:30 PM" }
+                "DJ NIGHT": { location: "Main Stage", time: "07:30 PM" },
+                "BUMPER LUCKY DRAW": { location: "GCEM Campus", time: "FULL DAY" }
             };
 
             const drawTicketBase = (pageDoc) => {
@@ -239,14 +241,26 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.setTextColor(255, 255, 255);
             doc.text(eventTitle, 85, startY + (isLongTitle ? 33 : 35), { align: "center", charSpace: isLongTitle ? 0.1 : 1 });
 
+            // LUCKY DRAW NUMBER (Bumper Offer Only)
+            const luckyDrawNum = registration.lucky_draw_number || registration.luckyDrawNumber;
+            const isLuckyDraw = eventTitle === 'BUMPER LUCKY DRAW' || luckyDrawNum;
+            if (isLuckyDraw) {
+                const ldn = luckyDrawNum || "001";
+                doc.setTextColor(...colors.teal);
+                doc.setFont("courier", "bold");
+                doc.setFontSize(14);
+                doc.text(`TICKET NO: ${ldn}`, 85, startY + (isLongTitle ? 43 : 45), { align: "center" });
+            }
+
             // CATEGORY TAG (Refined to 86mm)
             doc.setFillColor(...colors.teal);
             const catText = (registration.category || "TECH").toUpperCase();
             const tagWidth = doc.getTextWidth(catText) + 10;
-            doc.roundedRect(86 - (tagWidth / 2), startY + 40, tagWidth, 8, 4, 4, 'F');
+            doc.roundedRect(86 - (tagWidth / 2), startY + (isLuckyDraw ? 50 : 40), tagWidth, 8, 4, 4, 'F');
             doc.setFontSize(8);
+            doc.setFont("helvetica", "bold");
             doc.setTextColor(...colors.bg);
-            doc.text(catText, 84, startY + 45.5, { align: "center", charSpace: 2 });
+            doc.text(catText, 84, startY + (isLuckyDraw ? 55.5 : 45.5), { align: "center", charSpace: 2 });
 
             // LOGISTICS (Location & Time)
             doc.setFillColor(30, 41, 59, 40);
