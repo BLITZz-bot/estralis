@@ -376,6 +376,7 @@ export default function RegistrationForm({ event, onClose }) {
 
             const uploadRes = await fetch(`${import.meta.env.VITE_API_URL}/api/upload-screenshot`, {
                 method: 'POST',
+                mode: 'cors',
                 body: uploadFormData
             });
 
