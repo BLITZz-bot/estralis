@@ -15,7 +15,7 @@ const LUCKY_DRAW_EVENT = {
         "The decision of the organizing committee will be final and binding.",
         "Tickets are non-refundable and non-transferable."
     ],
-    coordinators: ["Vinay - 9380661129", "Dheeraj - 9686508926"],
+    coordinators: ["Akash - 9187645802"],
     date: "May 15",
     time: "03:00 PM",
     location: "Main Stage",
