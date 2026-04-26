@@ -182,6 +182,7 @@ console.log(`📁 Persistent screenshot storage initialized at: ${path.join(__di
 
 // --- DIAGNOSTICS & CORE ROUTES (TOP PRIORITY) ---
 app.get('/api/ping', (req, res) => res.json({ status: 'online', time: new Date().toISOString() }));
+app.post('/api/post-test', (req, res) => res.json({ success: true, message: 'POST communication active' }));
 
 // Secure Login Routes
 app.post('/api/admin/login', (req, res) => {
