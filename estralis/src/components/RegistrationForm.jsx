@@ -141,6 +141,7 @@ export default function RegistrationForm({ event, onClose }) {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isDownloading, setIsDownloading] = useState(false)
     const [registrationId, setRegistrationId] = useState("")
+    const [luckyDrawNumber, setLuckyDrawNumber] = useState("")
     const [utrError, setUtrError] = useState("")
     const [teamMembers, setTeamMembers] = useState([])
     const [passType, setPassType] = useState('standard') // 'standard' or 'combo'
@@ -407,13 +408,15 @@ export default function RegistrationForm({ event, onClose }) {
             if (result.success) {
                 // The server returns the ID inside 'data.id' as seen in debug logs
                 const finalId = result.data?.id || result.registrationId || result.id || result._id || "";
+                const ldn = result.data?.luckyDrawNumber || "";
                 
                 if (finalId) {
                     setRegistrationId(finalId);
+                    if (ldn) setLuckyDrawNumber(ldn);
                     setStep(3);
                 } else {
                     console.error("No ID returned from server", result);
-                    // Fallback to avoid blocking the user, but log the error
+                    if (ldn) setLuckyDrawNumber(ldn);
                     setStep(3);
                 }
             } else {
@@ -570,6 +573,15 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setFontSize(titleFontSize);
             doc.setTextColor(255, 255, 255);
             doc.text(eventTitle, 85, startY + (isLongTitle ? 33 : 35), { align: "center", charSpace: isLongTitle ? 0.1 : 1 });
+
+            // LUCKY DRAW NUMBER (Bumper Offer Only)
+            if (event.title.toUpperCase() === 'BUMPER LUCKY DRAW' || luckyDrawNumber) {
+                const ldn = luckyDrawNumber || "001";
+                doc.setFont("courier", "bold");
+                doc.setFontSize(14);
+                doc.setTextColor(...colors.teal);
+                doc.text(`TICKET NO: ${ldn}`, 85, startY + (isLongTitle ? 40 : 42), { align: "center" });
+            }
 
             // CATEGORY TAG (Cyan Text, No Box)
             const catText = (event.category || "TECH").toUpperCase();

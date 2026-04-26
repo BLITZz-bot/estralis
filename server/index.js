@@ -365,18 +365,31 @@ app.post('/api/register-manual', async (req, res) => {
             ]
         );
 
-        const newRegistration = result.rows[0];
+        // --- LUCKY DRAW SEQUENCE NUMBER ---
+        let luckyDrawNumber = null;
+        if (eventTitle === 'BUMPER LUCKY DRAW') {
+            const sequenceRes = await db.query(
+                `SELECT COUNT(*) as count FROM registrations WHERE event_title = $1`,
+                ['BUMPER LUCKY DRAW']
+            );
+            luckyDrawNumber = parseInt(sequenceRes.rows[0].count).toString().padStart(3, '0');
+        }
+        // ----------------------------------
+
         console.log(`✅ Manual Registration Saved (PostgreSQL) for ${eventTitle} by ${fullName}`);
 
         // Trigger confirmation email in background
-        sendConfirmationEmail(newRegistration).catch(err => {
+        sendConfirmationEmail({ ...newRegistration, luckyDrawNumber }).catch(err => {
             console.error("Background email error:", err);
         });
 
         res.status(201).json({
             success: true,
             message: 'Registration submitted successfully. Pending verification.',
-            data: newRegistration
+            data: {
+                ...newRegistration,
+                luckyDrawNumber
+            }
         });
 
     } catch (error) {
@@ -531,6 +544,13 @@ const generatePDFPass = async (reg) => {
                 width: width, 
                 characterSpacing: isLongTitle ? 0.1 * mmToPt : 1 * mmToPt 
             });
+
+        // LUCKY DRAW NUMBER (Bumper Offer Only)
+        if (reg.event_title === 'BUMPER LUCKY DRAW' || reg.luckyDrawNumber) {
+            const ldn = reg.luckyDrawNumber || (reg.lucky_draw_number) || "001";
+            doc.fillColor(colors.teal).fontSize(14).font('Courier-Bold')
+                .text(`TICKET NO: ${ldn}`, (89 - 90) * mmToPt, startY + (isLongTitle ? 38 : 42) * mmToPt, { align: 'center', width: width });
+        }
 
         // CATEGORY TAG
         const catTextContent = (reg.category || 'TECH').toUpperCase();
