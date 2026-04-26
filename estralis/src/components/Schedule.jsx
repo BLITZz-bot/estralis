@@ -220,7 +220,7 @@ export const eventsDay1 = [
     ],
     coordinators: ["Arsha - 9538622342", "Jyothi - 9008111237"],
     registerLink: "#",
-    fee: "₹1,500",
+    fee: "₹2,500",
   },
   {
     date: "May 14",
@@ -328,7 +328,7 @@ export const eventsDay2 = [
     ],
     coordinators: ["Dheeraj - 9741095149"],
     registerLink: "#",
-    fee: "₹150",
+    fee: "₹500",
   },
   {
     date: "May 15",
@@ -354,7 +354,7 @@ export const eventsDay2 = [
     ],
     coordinators: ["Shivayogi D S - 7760333829"],
     registerLink: "#",
-    fee: "₹150",
+    fee: "₹500",
   },
   {
     date: "May 15",
@@ -740,6 +740,12 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                       <div className="space-y-3 min-w-[120px]">
                         <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Reward</p>
                         <p className={`text-xl font-bold ${theme.text} uppercase tracking-tight`}>{event.prize}</p>
+                      </div>
+                    )}
+                    {(event.minTeamSize > 0 || event.maxTeamSize > 0) && !event.title?.toUpperCase().includes("DJ NIGHT") && !event.title?.toUpperCase().includes("ARTIST PERFORMANCE") && (
+                      <div className="space-y-3 min-w-[120px]">
+                        <p className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">Squad Size</p>
+                        <p className={`text-xl font-bold text-white uppercase tracking-tight`}>{teamText}</p>
                       </div>
                     )}
                   </div>
