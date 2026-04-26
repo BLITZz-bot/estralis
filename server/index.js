@@ -535,9 +535,7 @@ const generatePDFPass = async (reg) => {
         // CATEGORY TAG
         const catTextContent = (reg.category || 'TECH').toUpperCase();
         doc.fontSize(8);
-        const tagWidthValue = doc.widthOfString(catTextContent) + 10 * mmToPt;
-        doc.fillColor(colors.teal).roundedRect((86 * mmToPt) - (tagWidthValue / 2), startY + 40 * mmToPt, tagWidthValue, 8 * mmToPt, 4 * mmToPt).fill();
-        doc.fillColor(colors.bg).text(catTextContent, (86 - 90) * mmToPt, startY + 42.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
+        doc.fillColor(colors.teal).text(catTextContent, (86 - 90) * mmToPt, startY + 42.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
 
         // LOGISTICS
         const schedule = EVENT_SCHEDULE[reg.event_title.toUpperCase()] || { location: "TBA", time: "TBA" };

@@ -571,14 +571,11 @@ export default function RegistrationForm({ event, onClose }) {
             doc.setTextColor(255, 255, 255);
             doc.text(eventTitle, 85, startY + (isLongTitle ? 33 : 35), { align: "center", charSpace: isLongTitle ? 0.1 : 1 });
 
-            // CATEGORY TAG (Refined to 86mm)
-            doc.setFillColor(...colors.teal);
+            // CATEGORY TAG (Cyan Text, No Box)
             const catText = (event.category || "TECH").toUpperCase();
-            const tagWidth = doc.getTextWidth(catText) + 10;
-            doc.roundedRect(86 - (tagWidth / 2), startY + 40, tagWidth, 8, 4, 4, 'F');
             doc.setFontSize(8);
-            doc.setTextColor(...colors.bg);
-            doc.text(catText, 84, startY + 45.5, { align: "center", charSpace: 2 });
+            doc.setTextColor(...colors.teal);
+            doc.text(catText, 85, startY + 45.5, { align: "center", charSpace: 2 });
 
             // LOGISTICS (Location & Time)
             doc.setFillColor(30, 41, 59, 40);
