@@ -9,8 +9,7 @@ const LUCKY_DRAW_EVENT = {
     description: "Stand a chance to win massive prizes in the Estralis 2026 Bumper Lucky Draw. One ticket, multiple possibilities. Don't miss out on the grandest opportunity of the festival!",
     rules: [
         "Each ticket is valid for a single entry into the lucky draw.",
-        "Multiple tickets can be purchased using different email addresses.",
-        "The draw will be conducted live on the main stage during the closing ceremony.",
+        "The draw will be conducted live on the venue",
         "Winners must be present at the venue or reachable via the provided phone number to claim the prize.",
         "The decision of the organizing committee will be final and binding.",
         "Tickets are non-refundable and non-transferable."
@@ -18,7 +17,7 @@ const LUCKY_DRAW_EVENT = {
     coordinators: ["Akash - 9187645802"],
     date: "May 14th & 15th",
     time: "FULL DAY",
-    location: "Main Stage",
+    location: "GCEM CAMPUS",
     minTeamSize: 1,
     maxTeamSize: 1
 };
