@@ -337,12 +337,12 @@ export const eventsDay2 = [
   },
   {
     date: "May 15",
-    time: "11:00 AM - 02:00 PM",
-    title: "FITNESS CHALLENGE(A)",
+    time: "11:00 AM - 12:30 PM",
+    title: "FITNESS CHALLENGE - Push-ups",
     location: "Open Amphitheatre",
     description: "A test of upper body strength. Participants compete to perform the maximum number of proper form push-ups within a set time limit, showcasing stamina and discipline.",
     category: "Sports",
-    prize: "₹5,500",
+    prize: "₹11,000",
     minTeamSize: 1,
     maxTeamSize: 1,
     rules: [
@@ -365,12 +365,12 @@ export const eventsDay2 = [
   },
   {
     date: "May 15",
-    time: "11:00 AM - 02:00 PM",
-    title: "FITNESS CHALLENGE(B)",
+    time: "12:30 PM - 02:00 PM",
+    title: "FITNESS CHALLENGE - Plank",
     location: "Open Amphitheatre",
     description: "A test of core stability and endurance. Participants compete to maintain a proper elbow plank position for the longest possible duration.",
     category: "Sports",
-    prize: "₹5,500",
+    prize: "₹11,000",
     minTeamSize: 1,
     maxTeamSize: 1,
     rules: [
