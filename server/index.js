@@ -548,16 +548,17 @@ const generatePDFPass = async (reg) => {
             });
 
         // LUCKY DRAW NUMBER (Bumper Offer Only)
-        if (reg.event_title === 'BUMPER LUCKY DRAW' || reg.luckyDrawNumber) {
+        const isLuckyDraw = reg.event_title === 'BUMPER LUCKY DRAW' || reg.luckyDrawNumber;
+        if (isLuckyDraw) {
             const ldn = reg.luckyDrawNumber || (reg.lucky_draw_number) || "001";
             doc.fillColor(colors.teal).fontSize(14).font('Courier-Bold')
                 .text(`TICKET NO: ${ldn}`, (89 - 90) * mmToPt, startY + (isLongTitle ? 38 : 42) * mmToPt, { align: 'center', width: width });
         }
 
-        // CATEGORY TAG
+        // CATEGORY TAG (Cyan Text, No Box)
         const catTextContent = (reg.category || 'TECH').toUpperCase();
-        doc.fontSize(8);
-        doc.fillColor(colors.teal).text(catTextContent, (86 - 90) * mmToPt, startY + 42.5 * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
+        doc.fontSize(8).font('Helvetica-Bold');
+        doc.fillColor(colors.teal).text(catTextContent, (89 - 90) * mmToPt, startY + (isLuckyDraw ? 52.5 : 45.5) * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
 
         // LOGISTICS
         const schedule = EVENT_SCHEDULE[reg.event_title.toUpperCase()] || { location: "TBA", time: "TBA" };

@@ -252,15 +252,12 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                 doc.text(`TICKET NO: ${ldn}`, 85, startY + (isLongTitle ? 43 : 45), { align: "center" });
             }
 
-            // CATEGORY TAG (Refined to 86mm)
-            doc.setFillColor(...colors.teal);
+            // CATEGORY TAG (Cyan Text, No Box)
             const catText = (registration.category || "TECH").toUpperCase();
-            const tagWidth = doc.getTextWidth(catText) + 10;
-            doc.roundedRect(86 - (tagWidth / 2), startY + (isLuckyDraw ? 50 : 40), tagWidth, 8, 4, 4, 'F');
             doc.setFontSize(8);
             doc.setFont("helvetica", "bold");
-            doc.setTextColor(...colors.bg);
-            doc.text(catText, 84, startY + (isLuckyDraw ? 55.5 : 45.5), { align: "center", charSpace: 2 });
+            doc.setTextColor(...colors.teal);
+            doc.text(catText, 85, startY + (isLuckyDraw ? 52.5 : 45.5), { align: "center", charSpace: 2 });
 
             // LOGISTICS (Location & Time)
             doc.setFillColor(30, 41, 59, 40);
