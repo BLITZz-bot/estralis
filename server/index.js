@@ -165,32 +165,16 @@ const allowedOrigins = process.env.FRONTEND_URL
 
 console.log("✅ Allowed CORS Origins:", allowedOrigins);
 
+// Permissive CORS for troubleshooting
 app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin) return callback(null, true);
-
-        const cleanOrigin = origin.replace(/\/$/, "");
-
-        // Allow common local origins
-        if (cleanOrigin.startsWith('http://localhost:') || 
-            cleanOrigin.startsWith('http://127.0.0.1:') ||
-            cleanOrigin.startsWith('https://localhost:') ||
-            cleanOrigin.startsWith('https://127.0.0.1:')) {
-            return callback(null, true);
-        }
-
-        // Allow any Vercel subdomain or the defined FRONTEND_URL
-        if (!process.env.FRONTEND_URL ||
-            allowedOrigins.includes(cleanOrigin) ||
-            cleanOrigin.endsWith('.vercel.app')) {
-            callback(null, true);
-        } else {
-            console.warn(`❌ CORS Blocked: ${origin}`);
-            callback(null, true); // Allow anyway for now to fix user's issue
-        }
-    },
-    credentials: true
+    origin: true, // Allow all origins
+    credentials: true,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-password', 'x-staff-password']
 }));
+
+// Handle preflight
+app.options('*', cors());
 app.use(express.json());
 
 // Persistent Storage Confirmation
