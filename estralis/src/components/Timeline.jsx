@@ -4,9 +4,9 @@ import SectionBackground from "./SectionBackground"
 
 const timelineData = {
   "MAY 14": [
-    { time: "09:30 AM – 10:30 AM", title: "INAUGURATION", type: "Ceremony" },
+    { time: "09:00 AM – 10:00 AM", title: "INAUGURATION", type: "Ceremony" },
     { time: "10:30 AM – 12:00 PM", title: "WESTERN SOLO", type: "Cultural" },
-    { time: "10:30 AM – 06:00 PM", title: "REELS MAKING", type: "Fun" },
+    { time: "10:30 AM (14th) – 11:00 AM (15th)", title: "REELS MAKING", type: "Fun" },
     { time: "11:00 AM – 01:00 PM", title: "TREASURE HUNT", type: "Fun" },
     { time: "11:00 AM – 01:00 PM", title: "FACE PAINTING", type: "Fun" },
     { time: "12:00 PM – 03:00 PM", title: "BGMI", type: "Gaming" },
@@ -16,8 +16,8 @@ const timelineData = {
   ],
   "MAY 15": [
     { time: "10:00 AM – 12:00 PM", title: "BATTLE OF BANDS", type: "Cultural" },
-    { time: "11:00 AM – 12:30 PM", title: "FITNESS CHALLENGE- Push-ups", type: "Sports" },
-    { time: "12:30 PM – 02:00 PM", title: "FITNESS CHALLENGE- Plank", type: "Sports" },
+    { time: "11:00 AM – 02:00 PM", title: "FITNESS CHALLENGE(A)", type: "Sports" },
+    { time: "11:00 AM – 02:00 PM", title: "FITNESS CHALLENGE(B)", type: "Sports" },
     { time: "12:00 PM – 03:00 PM", title: "FASHION WALK", type: "Cultural" },
     { time: "03:00 PM – 04:00 PM", title: "PRIZE DISTRIBUTION", type: "Ceremony" },
     { time: "06:00 PM – (onwards)", title: "ARTIST PERFORMANCE & DJ NIGHT", type: "Cultural & Fun" },
