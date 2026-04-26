@@ -16,8 +16,8 @@ const LUCKY_DRAW_EVENT = {
         "Tickets are non-refundable and non-transferable."
     ],
     coordinators: ["Akash - 9187645802"],
-    date: "May 15",
-    time: "03:00 PM",
+    date: "May 14th & 15th",
+    time: "FULL DAY",
     location: "Main Stage",
     minTeamSize: 1,
     maxTeamSize: 1
