@@ -319,11 +319,11 @@ export const eventsDay2 = [
   {
     date: "May 15",
     time: "11:00 AM - 02:00 PM",
-    title: "FITNESS CHALLENGE(A)",
+    title: "FITNESS CHALLENGE - PushUps",
     location: "Open Amphitheatre",
     description: "A test of upper body strength. Participants compete to perform the maximum number of proper form push-ups within a set time limit, showcasing stamina and discipline.",
     category: "Sports",
-    prize: "₹5,500",
+    prize: "₹11,000",
     minTeamSize: 1,
     maxTeamSize: 1,
     rules: [
@@ -345,11 +345,11 @@ export const eventsDay2 = [
   {
     date: "May 15",
     time: "11:00 AM - 02:00 PM",
-    title: "FITNESS CHALLENGE(B)",
+    title: "FITNESS CHALLENGE - Plank",
     location: "Open Amphitheatre",
     description: "A test of core stability and endurance. Participants compete to maintain a proper elbow plank position for the longest possible duration.",
     category: "Sports",
-    prize: "₹5,500",
+    prize: "₹11,000",
     minTeamSize: 1,
     maxTeamSize: 1,
     rules: [
@@ -415,6 +415,29 @@ export const eventsDay2 = [
     fee: "FREE",
   },
 
+]
+
+export const specialEvents = [
+  {
+    title: "BUMPER LUCKY DRAW",
+    category: "SPECIAL",
+    fee: "₹100",
+    description: "Stand a chance to win massive prizes in the Estralis 2026 Bumper Lucky Draw. One ticket, multiple possibilities. Don't miss out on the grandest opportunity of the festival!",
+    rules: [
+      "Each ticket is valid for a single entry into the lucky draw.",
+      "Multiple tickets can be purchased using different email addresses.",
+      "The draw will be conducted live on the main stage during the closing ceremony.",
+      "Winners must be present at the venue or reachable via the provided phone number to claim the prize.",
+      "The decision of the organizing committee will be final and binding.",
+      "Tickets are non-refundable and non-transferable."
+    ],
+    coordinators: ["Vinay - 9380661129", "Dheeraj - 9686508926"],
+    date: "May 15",
+    time: "03:00 PM",
+    location: "Main Stage",
+    minTeamSize: 1,
+    maxTeamSize: 1
+  }
 ]
 
 function getCategoryStyles(category) {
