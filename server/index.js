@@ -37,14 +37,6 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Diagnostic: Check Cloudinary Config on startup
-if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
-    console.warn("⚠️ CLOUDINARY WARNING: One or more environment variables are MISSING.");
-    console.warn("Uploads will likely fail. Please check Render Environment Variables.");
-} else {
-    console.log("✅ Cloudinary Config: Detected");
-}
-
 // Multer Storage Configuration for Cloudinary
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
@@ -55,10 +47,7 @@ const storage = new CloudinaryStorage({
     }
 });
 
-const upload = multer({ 
-    storage: storage,
-    limits: { fileSize: 1024 * 1024 } // 1MB Limit
-});
+const upload = multer({ storage: storage });
 
 // Trim config values
 const SENDER_EMAIL = (process.env.SENDER_EMAIL || "").trim();
@@ -173,25 +162,29 @@ const allowedOrigins = process.env.FRONTEND_URL
 
 console.log("✅ Allowed CORS Origins:", allowedOrigins);
 
-// Permissive CORS for troubleshooting
 app.use(cors({
-    origin: true,
-    credentials: true,
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-password', 'x-staff-password']
-}));
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
 
-// Manual CORS Fallback for extra safety (Vercel to Render compatibility)
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-admin-password, x-staff-password');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    next();
-});
+        const cleanOrigin = origin.replace(/\/$/, "");
+
+        // Allow all localhost for easier development
+        if (cleanOrigin.startsWith('http://localhost:')) {
+            return callback(null, true);
+        }
+
+        // Allow any Vercel subdomain or the defined FRONTEND_URL
+        if (!process.env.FRONTEND_URL ||
+            allowedOrigins.includes(cleanOrigin) ||
+            cleanOrigin.endsWith('.vercel.app')) {
+            callback(null, true);
+        } else {
+            console.warn(`❌ CORS Blocked: ${origin}. Not in: ${allowedOrigins}`);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
 app.use(express.json());
 
 // Persistent Storage Confirmation
@@ -199,7 +192,6 @@ console.log(`📁 Persistent screenshot storage initialized at: ${path.join(__di
 
 // --- DIAGNOSTICS & CORE ROUTES (TOP PRIORITY) ---
 app.get('/api/ping', (req, res) => res.json({ status: 'online', time: new Date().toISOString() }));
-app.post('/api/post-test', (req, res) => res.json({ success: true, message: 'POST communication active' }));
 
 // Secure Login Routes
 app.post('/api/admin/login', (req, res) => {
@@ -391,19 +383,7 @@ app.post('/api/register-manual', async (req, res) => {
 });
 
 // 4. Screenshot Upload Endpoint
-app.post('/api/upload-screenshot', (req, res, next) => {
-    upload.single('screenshot')(req, res, (err) => {
-        if (err) {
-            console.error("Multer/Cloudinary Error:", err);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'Upload failed at middleware', 
-                error: err.message 
-            });
-        }
-        next();
-    });
-}, (req, res) => {
+app.post('/api/upload-screenshot', upload.single('screenshot'), (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ success: false, message: 'No file uploaded' });
@@ -414,8 +394,8 @@ app.post('/api/upload-screenshot', (req, res, next) => {
             publicId: req.file.filename
         });
     } catch (error) {
-        console.error("Upload Route Error:", error);
-        res.status(500).json({ success: false, message: 'Upload route failed' });
+        console.error("Upload Error:", error);
+        res.status(500).json({ success: false, message: 'Upload failed' });
     }
 });
 

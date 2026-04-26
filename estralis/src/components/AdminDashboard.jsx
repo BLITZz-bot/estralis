@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
-import { eventsDay1, eventsDay2, specialEvents } from './Schedule';
+import { eventsDay1, eventsDay2 } from './Schedule';
 import { Html5Qrcode } from "html5-qrcode";
 
 
@@ -1425,7 +1425,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         <h3 className="text-xl font-bold text-white mb-6">Event Registrations Control</h3>
                                         <p className="text-gray-400 text-sm mb-8">Use this section to control the registration status of events.</p>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                            {[...eventsDay1, ...eventsDay2, ...specialEvents].map(eventObj => {
+                                            {[...eventsDay1, ...eventsDay2].map(eventObj => {
                                                 const ev = eventObj.title;
                                                 const statusObj = eventStatuses.find(s => s.title === ev);
                                                 const isOpen = statusObj ? statusObj.isOpen : true; // default true

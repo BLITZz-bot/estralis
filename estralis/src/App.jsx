@@ -25,7 +25,6 @@ import ProtocolModal from "./components/ProtocolModal"
 import SpecialGuest from "./components/SpecialGuest"
 import Team from "./components/Team"
 import StaffScanner from "./components/StaffScanner"
-import LuckyDraw from "./components/LuckyDraw"
 import { useState, useEffect } from "react"
 
 export default function App() {
@@ -49,7 +48,6 @@ export default function App() {
   const [initialRegEmail, setInitialRegEmail] = useState("");
   const [autoDownload, setAutoDownload] = useState(false);
   const [isStaffPortal, setIsStaffPortal] = useState(false);
-  const [isLuckyDrawPortal, setIsLuckyDrawPortal] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -58,11 +56,6 @@ export default function App() {
     if (params.get('portal') === 'scanner') {
       setIsStaffPortal(true);
       return; // Stop further deep link processing for scanner
-    }
-
-    if (params.get('portal') === 'luckydraw') {
-      setIsLuckyDrawPortal(true);
-      return;
     }
 
     if (params.get('openPass') === 'true' && params.get('email')) {
@@ -78,10 +71,6 @@ export default function App() {
 
   if (isStaffPortal) {
     return <StaffScanner />;
-  }
-
-  if (isLuckyDrawPortal) {
-    return <LuckyDraw />;
   }
 
   return (

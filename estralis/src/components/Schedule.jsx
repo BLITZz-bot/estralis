@@ -39,7 +39,7 @@ const IconTrophy = () => (
 export const eventsDay1 = [
   {
     date: "May 14",
-    time: "09:30 AM - 10:30 AM",
+    time: "09:00 AM - 10:00 AM",
     title: "INAUGURATION",
     location: "Amphitheatre",
     description: "The grand opening ceremony of ESTRALIS. Join us for the official kickoff of our cultural festival with traditional lighting of the lamp and inaugural performances.",
@@ -114,7 +114,7 @@ export const eventsDay1 = [
     description: "An adventurous team-based game where participants solve clues and complete challenges to find the final treasure. It encourages logical thinking, teamwork, and quick decision-making under time pressure.",
     category: "Fun",
     prize: "₹10,000",
-    minTeamSize: 1,
+    minTeamSize: 5,
     maxTeamSize: 5,
     rules: ["Each team must consist of exactly 5 members.",
       "All clues must be solved and followed in the given sequence.",
@@ -218,6 +218,7 @@ export const eventsDay1 = [
       "Performances must be appropriate and respectful. Any vulgar or offensive content will lead to disqualification.",
       "Participants must submit their performance tracks (MP3 format) and optional background visuals (MP4 format) at least 48 hours prior to the event. No on-site modifications or submissions will be permitted.",
       "Use of props is allowed, but participants must manage them without causing delays or hazards.",
+      "All teams must report to the venue at least 30 minutes prior to their scheduled time.",
       "Judging based on expressions (Abhinaya), technique, and grace.",
       "For team-based events, all registered members must be present at the venue simultaneously for registration and verification.",
       "Carry your college ID cards.",
@@ -318,11 +319,11 @@ export const eventsDay2 = [
   {
     date: "May 15",
     time: "11:00 AM - 02:00 PM",
-    title: "FITNESS CHALLENGE - PushUps",
+    title: "FITNESS CHALLENGE(A)",
     location: "Open Amphitheatre",
     description: "A test of upper body strength. Participants compete to perform the maximum number of proper form push-ups within a set time limit, showcasing stamina and discipline.",
     category: "Sports",
-    prize: "₹11,000",
+    prize: "₹5,500",
     minTeamSize: 1,
     maxTeamSize: 1,
     rules: [
@@ -344,11 +345,11 @@ export const eventsDay2 = [
   {
     date: "May 15",
     time: "11:00 AM - 02:00 PM",
-    title: "FITNESS CHALLENGE - Plank",
+    title: "FITNESS CHALLENGE(B)",
     location: "Open Amphitheatre",
     description: "A test of core stability and endurance. Participants compete to maintain a proper elbow plank position for the longest possible duration.",
     category: "Sports",
-    prize: "₹11,000",
+    prize: "₹5,500",
     minTeamSize: 1,
     maxTeamSize: 1,
     rules: [
@@ -377,10 +378,10 @@ export const eventsDay2 = [
     category: "Fashion",
     prize: "₹45,000",
     minTeamSize: 6,
-    maxTeamSize: 15,
+    maxTeamSize: 12,
     rules: ["Each team must follow a predefined theme.",
-      "Team size: 6 - 15 members.",
-      "Time limit: 8 - 15 minutes.",
+      "Team size: 6 - 12 members.",
+      "Time limit: 8 - 12 minutes.",
       "Participants must submit their performance tracks (MP3 format) and optional background visuals (MP4 format) at least 48 hours prior to the event. No on-site modifications or submissions will be permitted.",
       "No dangerous props or fire elements allowed.",
       "Carry your college ID cards.",
@@ -414,29 +415,6 @@ export const eventsDay2 = [
     fee: "FREE",
   },
 
-]
-
-export const specialEvents = [
-  {
-    title: "BUMPER LUCKY DRAW",
-    category: "SPECIAL",
-    fee: "₹100",
-    description: "Stand a chance to win massive prizes in the Estralis 2026 Bumper Lucky Draw. One ticket, multiple possibilities. Don't miss out on the grandest opportunity of the festival!",
-    rules: [
-      "Each ticket is valid for a single entry into the lucky draw.",
-      "Multiple tickets can be purchased using different email addresses.",
-      "The draw will be conducted live on the main stage during the closing ceremony.",
-      "Winners must be present at the venue or reachable via the provided phone number to claim the prize.",
-      "The decision of the organizing committee will be final and binding.",
-      "Tickets are non-refundable and non-transferable."
-    ],
-    coordinators: ["Vinay - 9380661129", "Dheeraj - 9686508926"],
-    date: "May 15",
-    time: "03:00 PM",
-    location: "Main Stage",
-    minTeamSize: 1,
-    maxTeamSize: 1
-  }
 ]
 
 function getCategoryStyles(category) {
