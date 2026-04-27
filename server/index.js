@@ -703,8 +703,6 @@ const generatePDFPass = async (reg) => {
 const sendConfirmationEmail = async (reg) => {
     console.log(`📤 Attempting to send confirmation email to: ${reg.email}...`);
     try {
-        // Generate PDF Buffer
-        const pdfBuffer = await generatePDFPass(reg);
         // Get primary frontend URL for deep linking
         const primaryFrontend = process.env.FRONTEND_URL
             ? process.env.FRONTEND_URL.split(',')[0].trim().replace(/\/$/, "")
@@ -747,10 +745,10 @@ const sendConfirmationEmail = async (reg) => {
                         </div>
 
                         <div style="text-align: center; margin: 40px 0;">
-                            <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;">Official Invitation Attached Below</p>
+                            <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;">Your Official Access Pass is Ready</p>
                             <a href="${downloadUrl}" 
                                style="background: #2dd4bf; color: #020617; padding: 20px 40px; border-radius: 12px; font-weight: 900; text-decoration: none; display: inline-block; font-size: 14px; text-transform: uppercase; letter-spacing: 0.2em; box-shadow: 0 0 30px rgba(45, 212, 191, 0.3);">
-                               Download Pass Mirror
+                               Download Access Pass
                             </a>
                         </div>
 
@@ -764,14 +762,7 @@ const sendConfirmationEmail = async (reg) => {
                         </div>
                     </div>
                 </div>
-            `,
-            attachments: [
-                {
-                    filename: `Estralis_Pass_${reg.full_name.replace(/\s+/g, '_')}.pdf`,
-                    content: pdfBuffer,
-                    contentType: 'application/pdf'
-                }
-            ]
+            `
         };
 
         await sendEmailViaAPI(mailOptions);
