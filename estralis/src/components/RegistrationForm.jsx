@@ -469,9 +469,9 @@ export default function RegistrationForm({ event, onClose }) {
                 "REELS MAKING": { location: "1ST Floor Class Room", time: "10:30 AM" },
                 "TREASURE HUNT": { location: "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT Campus", time: "11:00 AM" },
                 "FACE PAINTING": { location: "Amphitheatre", time: "11:00 AM" },
-                "FITNESS CHALLENGE(A)": { location: "Open Amphitheatre", time: "11:00 AM" },
-                "FITNESS CHALLENGE(B)": { location: "Open Amphitheatre", time: "12:30 PM" },
-                "BEAT BOXING": { location: "Amphitheatre", time: "02:30 PM" },
+                "FITNESS CHALLENGE - Push-ups": { location: "Open Amphitheatre", time: "May 14, 11:00 AM - 02:00 PM" },
+                "FITNESS CHALLENGE - Plank": { location: "Open Amphitheatre", time: "May 14, 11:00 AM - 02:00 PM" },
+                "BEAT BOXING": { location: "GIS auditorium", time: "May 15, 11:00 AM - 12:30 PM" },
                 "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
                 "BGMI": { location: "1ST Floor Classroom", time: "12:00 PM" },
                 "WESTERN GROUP": { location: "Amphitheatre", time: "03:30 PM" },
@@ -817,6 +817,61 @@ export default function RegistrationForm({ event, onClose }) {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* --- SLOT COUNTDOWN DISPLAY (DJ NIGHT ONLY) --- */}
+                            {isDJNight && slotInfo && (
+                                <motion.div 
+                                    initial={{ opacity: 0, y: -20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="p-8 astral-glass border-teal-500/30 overflow-hidden relative group"
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-r from-teal-500/5 via-transparent to-teal-500/5" />
+                                    <div className="relative z-10 flex flex-col items-center">
+                                        <div className="flex justify-between w-full mb-6">
+                                            <span className="text-[10px] font-black text-teal-400 uppercase tracking-[0.4em] font-tech">
+                                                TICKET COUNTDOWN // {isGCEM ? "GOPALAN EXCLUSIVE" : "EXTERNAL SECTOR"}
+                                            </span>
+                                            <div className="flex items-center gap-2">
+                                                <div className={`w-2 h-2 rounded-full ${relevantSlotsLeft > 0 ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
+                                                <span className="text-[9px] font-black text-white/50 uppercase tracking-widest font-tech">
+                                                    LIVE FEED
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex items-center gap-10">
+                                            <div className="flex flex-col items-center">
+                                                <span className={`text-7xl font-black italic tracking-tighter transition-colors font-tech ${relevantSlotsLeft <= 10 ? 'text-red-500' : 'text-white'}`} style={{ textShadow: relevantSlotsLeft <= 10 ? '0 0 20px rgba(239,68,68,0.5)' : '0 0 20px rgba(255,255,255,0.2)' }}>
+                                                    {relevantSlotsLeft}
+                                                </span>
+                                                <span className="text-[9px] font-bold text-white/30 uppercase tracking-[0.3em] mt-1">Slots Remaining</span>
+                                            </div>
+                                            
+                                            <div className="h-16 w-px bg-white/10" />
+                                            
+                                            <div className="text-left space-y-2">
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`text-[11px] font-black uppercase tracking-widest ${relevantSlotsLeft > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                                                        {relevantSlotsLeft > 0 ? 'STATUS: NOMINAL' : 'STATUS: CRITICAL'}
+                                                    </span>
+                                                </div>
+                                                <p className="text-[10px] font-medium text-white/40 leading-relaxed max-w-[180px] font-tech">
+                                                    Coordinates locked. Secure your sector access before depletion.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* Progress Bar */}
+                                        <div className="w-full h-1.5 bg-white/5 rounded-full mt-8 overflow-hidden">
+                                            <motion.div 
+                                                initial={{ width: 0 }}
+                                                animate={{ width: `${Math.min(100, (relevantSlotsLeft / (isGCEM ? (slotInfo.gcemMaxSlots || 600) : (slotInfo.otherMaxSlots || 200))) * 100)}%` }}
+                                                className={`h-full ${relevantSlotsLeft <= 10 ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.6)]' : 'bg-teal-500 shadow-[0_0_15px_rgba(45,212,191,0.6)]'}`}
+                                            />
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
 
                             {/* Team Section */}
                             {(isTeamEvent || isDJNight) && (

@@ -324,24 +324,70 @@ app.post('/api/register-manual', async (req, res) => {
                     return res.status(403).json({ success: false, message: 'REGISTRATION CLOSED: This event is currently offline.' });
                 }
 
-                // Calculate current total headcount
-                // Sum (1 for leader + length of team_members array)
-                const countRes = await db.query(
-                    `SELECT COALESCE(SUM(1 + jsonb_array_length(team_members)), 0) as total 
-                     FROM registrations WHERE event_title = $1`, 
+                // Calculate current split headcount
+                const registrationsRes = await db.query(
+                    `SELECT college, team_members FROM registrations WHERE UPPER(TRIM(event_title)) = UPPER(TRIM($1))`,
                     [eventTitle]
                 );
-                const currentHeadcount = parseInt(countRes.rows[0].total);
-                
-                // Calculate incoming squad size
-                const incomingSquadSize = 1 + (teamMembers ? teamMembers.length : 0);
 
-                if (currentHeadcount + incomingSquadSize > slotConfig.max_slots) {
-                    const remaining = slotConfig.max_slots - currentHeadcount;
+                const hostCollege = "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT";
+                let currentGcem = 0;
+                let currentOther = 0;
+
+                registrationsRes.rows.forEach(reg => {
+                    if (reg.college.trim().toUpperCase() === hostCollege) currentGcem++;
+                    else currentOther++;
+                    let members = [];
+                    try {
+                        const rawMembers = reg.team_members;
+                        members = (typeof rawMembers === 'string') ? JSON.parse(rawMembers) : (rawMembers || []);
+                    } catch (e) {
+                        members = [];
+                    }
+
+                    members.forEach(m => {
+                        if ((m.college || "").trim().toUpperCase() === hostCollege) currentGcem++;
+                        else currentOther++;
+                    });
+                });
+
+                // Calculate incoming squad distribution
+                let incomingGcem = 0;
+                let incomingOther = 0;
+
+                if (college.trim().toUpperCase() === hostCollege) incomingGcem++;
+                else incomingOther++;
+
+                const members = Array.isArray(teamMembers) ? teamMembers : [];
+                members.forEach(m => {
+                    if ((m.college || "").trim().toUpperCase() === hostCollege) incomingGcem++;
+                    else incomingOther++;
+                });
+
+                // Check quotas
+                const gcemMax = slotConfig.gcem_max_slots || 600;
+                const otherMax = slotConfig.other_max_slots || 200;
+
+                if (currentGcem + incomingGcem > gcemMax) {
+                    const remaining = gcemMax - currentGcem;
                     return res.status(403).json({ 
                         success: false, 
-                        message: `SOLD OUT: Only ${remaining < 0 ? 0 : remaining} seats left, but you are trying to register ${incomingSquadSize} people.` 
+                        message: `GCEM SLOTS FULL: Only ${Math.max(0, remaining)} Gopalan slots left. You have ${incomingGcem} GCEM students in your squad.` 
                     });
+                }
+
+                if (currentOther + incomingOther > otherMax) {
+                    const remaining = otherMax - currentOther;
+                    return res.status(403).json({ 
+                        success: false, 
+                        message: `OTHER COLLEGE SLOTS FULL: Only ${Math.max(0, remaining)} slots left for non-Gopalan colleges. You have ${incomingOther} non-Gcem students in your squad.` 
+                    });
+                }
+
+                // Overall check (backup)
+                const totalMax = gcemMax + otherMax;
+                if (currentGcem + currentOther + incomingGcem + incomingOther > totalMax) {
+                    return res.status(403).json({ success: false, message: 'TOTAL CAPACITY REACHED: No more slots available.' });
                 }
             }
         }
@@ -432,9 +478,11 @@ const EVENT_SCHEDULE = {
     "REELS MAKING": { location: "Online", time: "10:00 AM" },
     "TREASURE HUNT": { location: "GCEM Campus", time: "11:00 AM" },
     "FACE PAINTING": { location: "Amphitheatre", time: "11:00 AM" },
-    "FITNESS CHALLENGE": { location: "Open Amphitheatre", time: "11:00 AM" },
+    "FITNESS CHALLENGE - Push-ups": { location: "Open Amphitheatre", time: "May 14, 11:00 AM - 02:00 PM" },
+    "FITNESS CHALLENGE - Plank": { location: "Open Amphitheatre", time: "May 14, 11:00 AM - 02:00 PM" },
+    "FITNESS CHALLENGE": { location: "Open Amphitheatre", time: "May 14, 11:00 AM - 02:00 PM" },
     "POSTER DESIGNING": { location: "LAB 5, Ground Floor", time: "11:00 AM" },
-    "BEAT BOXING": { location: "Amphitheatre", time: "11:30 PM" },
+    "BEAT BOXING": { location: "GIS auditorium", time: "May 15, 11:00 AM - 12:30 PM" },
     "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
     "BGMI": { location: "6th floor Seminar hall", time: "12:00 PM" },
     "WESTERN GROUP": { location: "Amphitheatre", time: "09:30 AM" },
@@ -527,6 +575,75 @@ const generatePDFPass = async (reg) => {
                 .text("PLEASE SUBMIT THE ACCESS PASS AT THE REGISTERATION DESK", 0, 243 * mmToPt, { align: 'center', width: width });
         };
 
+        // Official Event Schedule (Matches Frontend)
+        const EVENT_SCHEDULE = {
+            "INAUGURATION": { location: "Amphitheatre", time: "09:00 AM" },
+            "CLASSICAL GROUP": { location: "Amphitheatre", time: "12:30 PM" },
+            "REELS MAKING": { location: "1ST Floor Class Room", time: "10:30 AM" },
+            "TREASURE HUNT": { location: "GCEM Campus", time: "11:00 AM" },
+            "FACE PAINTING": { location: "Amphitheatre", time: "11:00 AM" },
+            "FITNESS CHALLENGE - Push-ups": { location: "Open Amphitheatre", time: "May 14, 11:00 AM - 02:00 PM" },
+            "FITNESS CHALLENGE - Plank": { location: "Open Amphitheatre", time: "May 14, 11:00 AM - 02:00 PM" },
+            "FITNESS CHALLENGE": { location: "Open Amphitheatre", time: "May 14, 11:00 AM - 02:00 PM" },
+            "POSTER DESIGNING": { location: "LAB 5, Ground Floor", time: "11:00 AM" },
+            "BEAT BOXING": { location: "GIS auditorium", time: "May 15, 11:00 AM - 12:30 PM" },
+            "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
+            "BGMI": { location: "6th floor Seminar hall", time: "12:00 PM" },
+            "WESTERN GROUP": { location: "Amphitheatre", time: "09:30 AM" },
+            "BATTLE OF BANDS": { location: "Amphitheatre", time: "10:00 AM" },
+            "FASHION WALK": { location: "Amphitheatre", time: "12:00 PM" },
+            "PRIZE DISTRIBUTION": { location: "Amphitheatre", time: "03:00 PM" },
+            "ARTIST PERFORMANCE": { location: "Main Stage", time: "06:00 PM" },
+            "DJ NIGHT": { location: "Main Stage", time: "07:30 PM" },
+            "BUMPER LUCKY DRAW": { location: "GCEM Campus", time: "FULL DAY" }
+        };
+
+        const drawTicketBase = (pageDoc) => {
+            // 1. OUTER SPACE BACKGROUND
+            pageDoc.rect(0, 0, width, height).fill(colors.bg);
+
+            // 2. TECH HUD ACCENTS
+            pageDoc.strokeColor(colors.teal).lineWidth(0.5);
+            // Top Left
+            pageDoc.moveTo(10 * mmToPt, 10 * mmToPt).lineTo(25 * mmToPt, 10 * mmToPt);
+            pageDoc.moveTo(10 * mmToPt, 10 * mmToPt).lineTo(10 * mmToPt, 25 * mmToPt).stroke();
+            // Top Right
+            pageDoc.moveTo(155 * mmToPt, 10 * mmToPt).lineTo(170 * mmToPt, 10 * mmToPt);
+            pageDoc.moveTo(170 * mmToPt, 10 * mmToPt).lineTo(170 * mmToPt, 25 * mmToPt).stroke();
+            // Bottom Left
+            pageDoc.moveTo(10 * mmToPt, 250 * mmToPt).lineTo(25 * mmToPt, 250 * mmToPt);
+            pageDoc.moveTo(10 * mmToPt, 250 * mmToPt).lineTo(10 * mmToPt, 235 * mmToPt).stroke();
+            // Bottom Right
+            pageDoc.moveTo(155 * mmToPt, 250 * mmToPt).lineTo(170 * mmToPt, 250 * mmToPt);
+            pageDoc.moveTo(170 * mmToPt, 250 * mmToPt).lineTo(170 * mmToPt, 235 * mmToPt).stroke();
+
+            // 3. MAIN CARD
+            pageDoc.fillColor(colors.card).roundedRect(12 * mmToPt, 12 * mmToPt, 156 * mmToPt, 236 * mmToPt, 10 * mmToPt).fill();
+            pageDoc.strokeColor('rgba(45, 212, 191, 0.2)').roundedRect(12 * mmToPt, 12 * mmToPt, 156 * mmToPt, 236 * mmToPt, 10 * mmToPt).stroke();
+
+            // 4. HEADER SECTION
+            pageDoc.fillColor(colors.bg).rect(12 * mmToPt, 12 * mmToPt, 156 * mmToPt, 50 * mmToPt).fill();
+            pageDoc.strokeColor(colors.teal).moveTo(12 * mmToPt, 62 * mmToPt).lineTo(168 * mmToPt, 62 * mmToPt).stroke();
+
+            // HEADER Text (Centered around 82.5 to match frontend)
+            pageDoc.font('Helvetica-Bold').fontSize(26).fillColor(colors.aqua).opacity(0.4)
+                .text("ESTRALIS 2026", (82.5 - 90) * mmToPt, 35 * mmToPt, { align: 'center', width: 180 * mmToPt, characterSpacing: 1 });
+            pageDoc.opacity(1).fillColor('#ffffff')
+                .text("ESTRALIS 2026", (82.5 - 90) * mmToPt, 35 * mmToPt, { align: 'center', width: 180 * mmToPt, characterSpacing: 1 });
+
+            // SLOGAN
+            pageDoc.fontSize(8).font('Helvetica').fillColor(colors.teal)
+                .text("THE INTERSTELLAR SYMPOSIUM", (69.5 - 90) * mmToPt, 43 * mmToPt, { align: 'center', width: 180 * mmToPt, characterSpacing: 1.5 });
+
+            // SECURE ID
+            pageDoc.fontSize(7).fillColor(colors.dim)
+                .text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", (88 - 90) * mmToPt, 50 * mmToPt, { align: 'center', width: 180 * mmToPt });
+
+            // FOOTER
+            pageDoc.fontSize(6).font('Helvetica-Oblique').fillColor(colors.dim)
+                .text("PLEASE SUBMIT THE ACCESS PASS AT THE REGISTERATION DESK", 0, 243 * mmToPt, { align: 'center', width: width });
+        };
+
         drawTicketBase(doc);
         const startY = 80 * mmToPt;
         doc.fillColor(colors.teal).font('Helvetica-Bold').fontSize(8).text("TRANSACTION_ID //", 20 * mmToPt, startY);
@@ -534,17 +651,17 @@ const generatePDFPass = async (reg) => {
 
         // VERIFIED Badge
         doc.strokeColor(colors.teal).lineWidth(0.5).roundedRect(130 * mmToPt, startY + 2 * mmToPt, 30 * mmToPt, 10 * mmToPt, 2 * mmToPt).stroke();
-        doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("VERIFIED", (145 - 90) * mmToPt, startY + 9 * mmToPt, { width: width, align: 'center' });
+        doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("VERIFIED", (145 - 90) * mmToPt, startY + 9 * mmToPt, { width: 180 * mmToPt, align: 'center' });
 
         // EVENT TITLE
         const eventTitle = reg.event_title.toUpperCase();
         const isLongTitle = eventTitle.length > 25;
         const titleFontSize = isLongTitle ? 18 : 32;
         doc.fillColor('#ffffff').fontSize(titleFontSize).font('Helvetica-Bold')
-            .text(eventTitle, (89 - 90) * mmToPt, startY + (isLongTitle ? 24 : 26) * mmToPt, { 
+            .text(eventTitle, (85 - 90) * mmToPt, startY + (isLongTitle ? 33 : 35) * mmToPt, { 
                 align: 'center', 
-                width: width, 
-                characterSpacing: isLongTitle ? 0.1 * mmToPt : 1 * mmToPt 
+                width: 180 * mmToPt, 
+                characterSpacing: isLongTitle ? 0.1 : 1 
             });
 
         // LUCKY DRAW NUMBER (Bumper Offer Only)
@@ -552,16 +669,20 @@ const generatePDFPass = async (reg) => {
         if (isLuckyDraw) {
             const ldn = reg.luckyDrawNumber || (reg.lucky_draw_number) || "001";
             doc.fillColor(colors.teal).fontSize(14).font('Courier-Bold')
-                .text(`TICKET NO: ${ldn}`, (89 - 90) * mmToPt, startY + (isLongTitle ? 38 : 42) * mmToPt, { align: 'center', width: width });
+                .text(`TICKET NO: ${ldn}`, (85 - 90) * mmToPt, startY + (isLongTitle ? 43 : 45) * mmToPt, { align: 'center', width: 180 * mmToPt });
         }
 
         // CATEGORY TAG (Cyan Text, No Box)
         const catTextContent = (reg.category || 'TECH').toUpperCase();
         doc.fontSize(8).font('Helvetica-Bold');
-        doc.fillColor(colors.teal).text(catTextContent, (89 - 90) * mmToPt, startY + (isLuckyDraw ? 52.5 : 45.5) * mmToPt, { align: 'center', width: width, characterSpacing: 2 * mmToPt });
+        doc.fillColor(colors.teal).text(catTextContent, (85 - 90) * mmToPt, startY + (isLuckyDraw ? 52.5 : 45.5) * mmToPt, { align: 'center', width: 180 * mmToPt, characterSpacing: 2 });
 
         // LOGISTICS
         const schedule = EVENT_SCHEDULE[reg.event_title.toUpperCase()] || { location: "TBA", time: "TBA" };
+        if (reg.event_title.toUpperCase().includes("DJ NIGHT")) {
+            schedule.location = "Main stage, GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT Campus";
+            schedule.time = "06:00 PM";
+        }
         doc.fillColor('rgba(30, 41, 59, 0.4)').roundedRect(20 * mmToPt, startY + 55 * mmToPt, 140 * mmToPt, 30 * mmToPt, 5 * mmToPt).fill();
         doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("LOCATION", 30 * mmToPt, startY + 65 * mmToPt);
         doc.fillColor(colors.teal).fontSize(9).font('Helvetica-Bold').text("TIME", 100 * mmToPt, startY + 65 * mmToPt);
@@ -589,7 +710,7 @@ const generatePDFPass = async (reg) => {
         // FEE SECTION
         doc.fillColor(colors.teal).fontSize(8).font('Helvetica-Bold').text(reg.pass_type === 'Combo Pass' ? "COMBO_PASS_FEE" : "BASE_FEE", 20 * mmToPt, 232 * mmToPt);
         const feeString = (reg.amount_paid || "0").toString().replace(/₹/g, '').trim();
-        doc.fillColor('#ffffff').fontSize(16).font('Helvetica-Bold').text(`Rs. ${feeString}`, 20 * mmToPt, 238 * mmToPt);
+        doc.fillColor('#ffffff').fontSize(16).font('Helvetica-Bold').text(`Rs. ${feeString}`, 20 * mmToPt, 240 * mmToPt);
 
         // SECURE QR CODE (Bottom Right)
         doc.strokeColor(colors.teal).lineWidth(0.5).roundedRect(138 * mmToPt, 218 * mmToPt, 25 * mmToPt, 25 * mmToPt, 3 * mmToPt).stroke();
@@ -602,18 +723,21 @@ const generatePDFPass = async (reg) => {
             doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } });
             drawTicketBase(doc);
             let teamY = 80 * mmToPt;
-            doc.fillColor(colors.teal).fontSize(10).font('Helvetica-Bold').text("TEAM MEMBERS //", 20 * mmToPt, teamY);
+            doc.fillColor('#ffffff').fontSize(16).font('Helvetica-Bold').text(reg.team_name ? `SQUAD: ${reg.team_name.toUpperCase()}` : "SQUAD MEMBERS", (90 - 90) * mmToPt, teamY, { align: 'center', width: 180 * mmToPt });
+            teamY += 10 * mmToPt;
+            doc.strokeColor(colors.teal).moveTo(40 * mmToPt, teamY).lineTo(140 * mmToPt, teamY).stroke();
             teamY += 15 * mmToPt;
 
             members.forEach((m, i) => {
-                if (teamY > 210 * mmToPt) { 
+                if (teamY > 220 * mmToPt) { 
                     doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } }); 
                     drawTicketBase(doc); 
                     teamY = 80 * mmToPt; 
                 }
-                doc.fillColor('#ffffff').fontSize(12).font('Helvetica-Bold').text((m.fullName || m.full_name || "MEMBER").toUpperCase(), 30 * mmToPt, teamY);
+                doc.fillColor(colors.teal).fontSize(12).font('Helvetica-Bold').text(`${String(i + 2).padStart(2, '0')} //`, 25 * mmToPt, teamY);
+                doc.fillColor('#ffffff').text((m.fullName || m.full_name || "MEMBER").toUpperCase(), 40 * mmToPt, teamY);
                 teamY += 6 * mmToPt;
-                doc.fillColor(colors.dim).fontSize(9).font('Helvetica').text(`${m.email || ""} | ${m.phone || ""}`, 30 * mmToPt, teamY);
+                doc.fillColor(colors.dim).fontSize(9).font('Helvetica').text(`${m.email || m.email} | ${m.phone || m.phone}`, 40 * mmToPt, teamY);
                 teamY += 12 * mmToPt;
             });
         }
@@ -1358,21 +1482,61 @@ app.get('/api/events/slots-status', async (req, res) => {
             return res.status(200).json({ success: true, isLimited: false });
         }
 
-        // Get Current Headcount
-        const countRes = await db.query(
-            `SELECT COALESCE(SUM(1 + jsonb_array_length(team_members)), 0) as total 
-             FROM registrations WHERE UPPER(TRIM(event_title)) = $1`, 
+        // Get Current Headcount (Split by College)
+        const registrationsRes = await db.query(
+            `SELECT college, team_members FROM registrations WHERE UPPER(TRIM(event_title)) = $1`,
             [normalizedTitle]
         );
-        const currentCount = parseInt(countRes.rows[0].total);
+
+        const hostCollege = "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT";
+        let gcemCount = 0;
+        let otherCount = 0;
+
+        registrationsRes.rows.forEach(reg => {
+            // Count leader
+            if (reg.college.trim().toUpperCase() === hostCollege) {
+                gcemCount++;
+            } else {
+                otherCount++;
+            }
+
+            // Count members
+            let members = [];
+            try {
+                const rawMembers = reg.team_members;
+                members = (typeof rawMembers === 'string') ? JSON.parse(rawMembers) : (rawMembers || []);
+            } catch (e) {
+                members = [];
+            }
+
+            members.forEach(m => {
+                if ((m.college || "").trim().toUpperCase() === hostCollege) {
+                    gcemCount++;
+                } else {
+                    otherCount++;
+                }
+            });
+        });
+
+        const totalCount = gcemCount + otherCount;
+
+        const gcemMax = config.gcem_max_slots || 600;
+        const otherMax = config.other_max_slots || 200;
+        const totalMax = gcemMax + otherMax;
 
         res.status(200).json({
             success: true,
             isLimited: true,
-            maxSlots: config.max_slots,
-            currentCount: currentCount,
+            maxSlots: totalMax,
+            gcemMaxSlots: gcemMax,
+            otherMaxSlots: otherMax,
+            currentCount: totalCount,
+            gcemCount: gcemCount,
+            otherCount: otherCount,
             isManualOpen: config.is_manual_open === true || config.is_manual_open === 1 || config.is_manual_open === null,
-            slotsLeft: Math.max(0, config.max_slots - currentCount)
+            slotsLeft: Math.max(0, totalMax - totalCount),
+            gcemSlotsLeft: Math.max(0, gcemMax - gcemCount),
+            otherSlotsLeft: Math.max(0, otherMax - otherCount)
         });
     } catch (error) {
         console.error("Slots fetch error:", error);
@@ -1386,19 +1550,21 @@ app.post('/api/admin/events/slots-update', async (req, res) => {
         const password = req.headers['x-admin-password'];
         if (password !== ADMIN_PASSWORD && password !== SECONDARY_PASSWORD) return res.status(401).json({ success: false, message: 'Unauthorized' });
 
-        const { eventTitle, maxSlots, isManualOpen } = req.body;
+        const { eventTitle, maxSlots, gcemMaxSlots, otherMaxSlots, isManualOpen } = req.body;
         if (!eventTitle) return res.status(400).json({ success: false, message: 'eventTitle required' });
 
         const normalizedTitle = eventTitle.trim().toUpperCase();
 
         const result = await db.query(
-            `INSERT INTO event_slots (event_title, max_slots, is_manual_open) 
-             VALUES ($1, $2, $3) 
+            `INSERT INTO event_slots (event_title, max_slots, gcem_max_slots, other_max_slots, is_manual_open) 
+             VALUES ($1, $2, $3, $4, $5) 
              ON CONFLICT (event_title) DO UPDATE 
-             SET max_slots = COALESCE($2, event_slots.max_slots), 
-                 is_manual_open = COALESCE($3, event_slots.is_manual_open)
+             SET max_slots = COALESCE($2, event_slots.max_slots),
+                 gcem_max_slots = COALESCE($3, event_slots.gcem_max_slots),
+                 other_max_slots = COALESCE($4, event_slots.other_max_slots),
+                 is_manual_open = COALESCE($5, event_slots.is_manual_open)
              RETURNING *`,
-            [normalizedTitle, maxSlots, isManualOpen]
+            [normalizedTitle, maxSlots, gcemMaxSlots, otherMaxSlots, isManualOpen]
         );
 
         res.status(200).json({ success: true, data: result.rows[0], message: 'Slot configuration updated' });

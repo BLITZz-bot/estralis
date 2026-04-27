@@ -35,6 +35,8 @@ const initDB = async () => {
             CREATE TABLE IF NOT EXISTS event_slots (
                 event_title TEXT PRIMARY KEY,
                 max_slots INTEGER DEFAULT 200,
+                gcem_max_slots INTEGER DEFAULT 600,
+                other_max_slots INTEGER DEFAULT 200,
                 is_manual_open BOOLEAN DEFAULT TRUE
             );
         `);
@@ -91,6 +93,10 @@ const initDB = async () => {
         await pool.query(`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS semester TEXT;`);
         await pool.query(`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS branch TEXT;`);
         await pool.query(`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS linkedin_url TEXT;`);
+        
+        // Event Slots Split Migration
+        await pool.query(`ALTER TABLE event_slots ADD COLUMN IF NOT EXISTS gcem_max_slots INTEGER DEFAULT 600;`);
+        await pool.query(`ALTER TABLE event_slots ADD COLUMN IF NOT EXISTS other_max_slots INTEGER DEFAULT 200;`);
 
         console.log('✅ Database Schema Verified/Initialized');
     } catch (err) {
