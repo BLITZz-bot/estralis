@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import jsPDF from "jspdf";
 import { eventsDay1, eventsDay2 } from "./Schedule";
-import { DJ_EVENT_DATA } from "./SpecialGuest";
+import { DJ_EVENT_DATA } from "../data/djEventData";
 import { LUCKY_DRAW_EVENT } from "./LuckyDraw";
 import QRCode from 'qrcode'
 

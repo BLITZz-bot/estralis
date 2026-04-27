@@ -3,25 +3,7 @@ import { useState, useEffect } from "react";
 import RegistrationForm from "./RegistrationForm";
 import { EventModal } from "./Schedule";
 
-export const DJ_EVENT_DATA = {
-    time: "06:00 PM",
-    title: "ARTIST PERFORMANCE AND DJ NIGHT",
-    location: "Main stage, GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT Campus",
-    description: "Step into the spotlight and let your passion ignite the stage, where every move tells a story and every rhythm captivates the soul. Witness an electrifying showcase of talent, energy, and grace, as dancers compete to turn dreams into motion.",
-    category: "Fun",
-    minTeamSize: 1,
-    maxTeamSize: 20,
-    rules: ["ID card is mandatory",
-        "The Ticket should be booked online.",
-        "Physical tickets will be issued at the venue on the day of the event.",
-        "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT students contact the co-ordinator before booking the ticket.",
-        "No refund is initiated for any circumstances.",
-        "For any queries please reach out to our Co-ordinator"
-    ],
-    coordinators: ["AKASH – 9187645802"],
-    registerLink: "#",
-    fee: "₹400",
-};
+import { DJ_EVENT_DATA } from "../data/djEventData";
 
 const SpecialGuest = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -140,14 +122,14 @@ const SpecialGuest = () => {
                                 2026
                             </div>
 
-                            <div className="flex flex-row items-end gap-3 sm:gap-8 w-full justify-center lg:justify-end mt-16">
+                            <div className="flex flex-col sm:flex-row items-center sm:items-end gap-16 sm:gap-8 w-full justify-center lg:justify-end mt-20 sm:mt-16">
                                 {/* Main Image Container */}
                                 <motion.div
                                     initial={{ opacity: 0, x: 100 }}
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1] }}
-                                    className="relative group w-1/2 max-w-[180px] sm:max-w-[320px]"
+                                    className="relative group w-full sm:w-1/2 max-w-[280px] sm:max-w-[320px]"
                                 >
                                     {/* Artist Name Reveal */}
                                     <motion.div
@@ -190,7 +172,7 @@ const SpecialGuest = () => {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
-                                    className="relative group w-1/2 max-w-[180px] sm:max-w-[320px]"
+                                    className="relative group w-full sm:w-1/2 max-w-[280px] sm:max-w-[320px]"
                                 >
                                     {/* Artist Name Reveal */}
                                     <motion.div
@@ -217,7 +199,7 @@ const SpecialGuest = () => {
                                     <div className="relative aspect-[3/4] overflow-hidden bg-[#0a0a0a] shadow-2xl">
                                         <div className="absolute inset-0 bg-teal-500/5 mix-blend-color" />
                                         <img
-                                            src="/naman.png"
+                                            src="/nama.png"
                                             alt="Naman"
                                             className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
                                         />
