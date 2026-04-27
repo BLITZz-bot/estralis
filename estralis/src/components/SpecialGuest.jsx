@@ -99,7 +99,7 @@ const SpecialGuest = () => {
                             </motion.p>
 
                             {/* Desktop Stats & Action (Original Position) */}
-                            <div className="hidden lg:flex flex-col space-y-6">
+                            <div className="hidden lg:flex flex-row items-center gap-12">
                                 {/* Price */}
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
@@ -140,48 +140,90 @@ const SpecialGuest = () => {
                                 2026
                             </div>
 
-                            {/* Main Image Container */}
-                            <motion.div
-                                initial={{ opacity: 0, x: 100 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1] }}
-                                className="relative group w-full max-w-[240px] sm:max-w-[400px]"
-                            >
-                                {/* Artist Name Reveal */}
+                            <div className="flex flex-row items-end gap-3 sm:gap-8 w-full justify-center lg:justify-end mt-16">
+                                {/* Main Image Container */}
                                 <motion.div
-                                    initial={{ opacity: 0, x: 50 }}
+                                    initial={{ opacity: 0, x: 100 }}
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                                    className="absolute -top-16 left-0 z-20"
+                                    transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1] }}
+                                    className="relative group w-1/2 max-w-[180px] sm:max-w-[320px]"
                                 >
-                                    <span
-                                        className="block text-teal-400 text-xl md:text-2xl mb-[-8px] ml-1"
-                                        style={{ fontFamily: "'Playball', cursive" }}
+                                    {/* Artist Name Reveal */}
+                                    <motion.div
+                                        initial={{ opacity: 0, x: 50 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                                        className="absolute -top-12 left-0 z-20 w-full px-1"
                                     >
-                                        Featuring
-                                    </span>
-                                    <h4
-                                        className="text-white text-2xl md:text-4xl font-black uppercase tracking-tighter leading-none whitespace-nowrap"
-                                        style={{ fontFamily: "'Orbitron', sans-serif" }}
-                                    >
-                                        CHANDAN <span className="text-teal-400">SHETTY</span>
-                                    </h4>
+                                        <span
+                                            className="block text-teal-400 text-sm md:text-lg mb-[-4px]"
+                                            style={{ fontFamily: "'Playball', cursive" }}
+                                        >
+                                            Featuring
+                                        </span>
+                                        <h4
+                                            className="text-white text-lg md:text-2xl font-black uppercase tracking-tighter leading-tight"
+                                            style={{ fontFamily: "'Orbitron', sans-serif" }}
+                                        >
+                                            CHANDAN <span className="text-teal-400">SHETTY</span>
+                                        </h4>
+                                    </motion.div>
+
+                                    <div className="relative aspect-[3/4] overflow-hidden bg-[#0a0a0a] shadow-2xl">
+                                        {/* Secondary Glow background */}
+                                        <div className="absolute inset-0 bg-teal-500/5 mix-blend-color" />
+
+                                        <img
+                                            src="/art.png"
+                                            alt="Face of Estralis"
+                                            className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
+                                        />
+
+                                    </div>
                                 </motion.div>
 
-                                <div className="relative aspect-[3/4] lg:h-[65vh] overflow-hidden bg-[#0a0a0a] shadow-2xl">
-                                    {/* Secondary Glow background */}
-                                    <div className="absolute inset-0 bg-teal-500/5 mix-blend-color" />
+                                {/* Naman Image Section */}
+                                <motion.div
+                                    initial={{ opacity: 0, x: 100 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
+                                    className="relative group w-1/2 max-w-[180px] sm:max-w-[320px]"
+                                >
+                                    {/* Artist Name Reveal */}
+                                    <motion.div
+                                        initial={{ opacity: 0, x: 50 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 1, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                                        className="absolute -top-12 left-0 z-20 w-full px-1"
+                                    >
+                                        <span
+                                            className="block text-teal-400 text-sm md:text-lg mb-[-4px]"
+                                            style={{ fontFamily: "'Playball', cursive" }}
+                                        >
+                                            DJ BY
+                                        </span>
+                                        <h4
+                                            className="text-white text-lg md:text-2xl font-black uppercase tracking-tighter leading-tight"
+                                            style={{ fontFamily: "'Orbitron', sans-serif" }}
+                                        >
+                                            NAUMAN <span className="text-teal-400"></span>
+                                        </h4>
+                                    </motion.div>
 
-                                    <img
-                                        src="/art.png"
-                                        alt="Face of Estralis"
-                                        className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
-                                    />
-
-                                </div>
-                            </motion.div>
+                                    <div className="relative aspect-[3/4] overflow-hidden bg-[#0a0a0a] shadow-2xl">
+                                        <div className="absolute inset-0 bg-teal-500/5 mix-blend-color" />
+                                        <img
+                                            src="/naman.png"
+                                            alt="Naman"
+                                            className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
+                                        />
+                                    </div>
+                                </motion.div>
+                            </div>
 
                             {/* Mobile Stats Row & Action (Visible only on Mobile) */}
                             <div className="flex lg:hidden flex-row items-center justify-between w-full max-w-[280px] sm:max-w-[400px] gap-6 pt-8 border-t border-white/5 mt-4">
