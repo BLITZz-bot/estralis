@@ -9,7 +9,7 @@ export const DJ_EVENT_DATA = {
     rules: ["ID card is mandatory",
         "The Ticket should be booked online.",
         "Physical tickets will be issued at the venue on the day of the event.",
-        "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT students contact the co-ordinator before booking the ticket.",
+        "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT students contact the co-ordinator before booking the ticket and should not purchace the ticket for other college students.",
         "No refund is initiated for any circumstances.",
         "For any queries please reach out to our Co-ordinator"
     ],
