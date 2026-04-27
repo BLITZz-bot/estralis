@@ -529,52 +529,6 @@ const generatePDFPass = async (reg) => {
             dim: '#94a3b8'
         };
 
-        const drawTicketBase = (pageDoc) => {
-            // 1. OUTER SPACE BACKGROUND
-            pageDoc.rect(0, 0, width, height).fill(colors.bg);
-
-            // 2. TECH HUD ACCENTS
-            pageDoc.strokeColor(colors.teal).lineWidth(0.5);
-            // Top Left
-            pageDoc.moveTo(10 * mmToPt, 10 * mmToPt).lineTo(25 * mmToPt, 10 * mmToPt);
-            pageDoc.moveTo(10 * mmToPt, 10 * mmToPt).lineTo(10 * mmToPt, 25 * mmToPt).stroke();
-            // Top Right
-            pageDoc.moveTo(155 * mmToPt, 10 * mmToPt).lineTo(170 * mmToPt, 10 * mmToPt);
-            pageDoc.moveTo(170 * mmToPt, 10 * mmToPt).lineTo(170 * mmToPt, 25 * mmToPt).stroke();
-            // Bottom Left
-            pageDoc.moveTo(10 * mmToPt, 250 * mmToPt).lineTo(25 * mmToPt, 250 * mmToPt);
-            pageDoc.moveTo(10 * mmToPt, 250 * mmToPt).lineTo(10 * mmToPt, 235 * mmToPt).stroke();
-            // Bottom Right
-            pageDoc.moveTo(155 * mmToPt, 250 * mmToPt).lineTo(170 * mmToPt, 250 * mmToPt);
-            pageDoc.moveTo(170 * mmToPt, 250 * mmToPt).lineTo(170 * mmToPt, 235 * mmToPt).stroke();
-
-            // 3. MAIN CARD
-            pageDoc.fillColor(colors.card).roundedRect(12 * mmToPt, 12 * mmToPt, 156 * mmToPt, 236 * mmToPt, 10 * mmToPt).fill();
-            pageDoc.strokeColor('rgba(45, 212, 191, 0.2)').roundedRect(12 * mmToPt, 12 * mmToPt, 156 * mmToPt, 236 * mmToPt, 10 * mmToPt).stroke();
-
-            // 4. HEADER SECTION
-            pageDoc.fillColor(colors.bg).rect(12 * mmToPt, 12 * mmToPt, 156 * mmToPt, 50 * mmToPt).fill();
-            pageDoc.strokeColor(colors.teal).moveTo(12 * mmToPt, 62 * mmToPt).lineTo(168 * mmToPt, 62 * mmToPt).stroke();
-
-            // HEADER Text
-            pageDoc.font('Helvetica-Bold').fontSize(26).fillColor(colors.aqua).opacity(0.4)
-                .text("ESTRALIS 2026", (89 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
-            pageDoc.opacity(1).fillColor('#ffffff')
-                .text("ESTRALIS 2026", (89 - 90) * mmToPt, 28 * mmToPt, { align: 'center', width: width, characterSpacing: 1 * mmToPt });
-
-            // SLOGAN
-            pageDoc.fontSize(8.5).font('Helvetica').fillColor(colors.teal)
-                .text("THE INTERSTELLAR SYMPOSIUM", (89 - 90) * mmToPt, 40.5 * mmToPt, { align: 'center', width: width, characterSpacing: 1.5 * mmToPt });
-
-            // SECURE ID
-            pageDoc.fontSize(7).fillColor(colors.dim)
-                .text("OFFICIAL SECTOR ADMISSION PASS // SECURE_ID: 2026-AST-R", (89 - 90) * mmToPt, 50 * mmToPt, { align: 'center', width: width });
-
-            // FOOTER
-            pageDoc.fontSize(7).font('Helvetica-Oblique').fillColor(colors.dim)
-                .text("PLEASE SUBMIT THE ACCESS PASS AT THE REGISTERATION DESK", 0, 243 * mmToPt, { align: 'center', width: width });
-        };
-
         // Official Event Schedule (Matches Frontend)
         const EVENT_SCHEDULE = {
             "INAUGURATION": { location: "Amphitheatre", time: "09:00 AM" },
