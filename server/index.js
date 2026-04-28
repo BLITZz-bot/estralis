@@ -10,6 +10,7 @@ const PDFDocument = require('pdfkit');
 const QRCode = require('qrcode');
 const db = require('./db');
 const Razorpay = require('razorpay');
+const bcrypt = require('bcryptjs');
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
@@ -197,28 +198,35 @@ console.log(`📁 Persistent screenshot storage initialized at: ${path.join(__di
 app.get('/api/ping', (req, res) => res.json({ status: 'online', time: new Date().toISOString() }));
 
 // Secure Login Routes
-app.post('/api/admin/login', (req, res) => {
+app.post('/api/admin/login', async (req, res) => {
     const { password } = req.body;
-    if (password === ADMIN_PASSWORD) {
+    const isMatch = await bcrypt.compare(password, ADMIN_PASSWORD);
+    if (isMatch) {
         res.json({ success: true });
     } else {
         res.status(401).json({ success: false, message: 'Invalid Admin Password' });
     }
 });
 
-app.post('/api/staff/login', (req, res) => {
+app.post('/api/staff/login', async (req, res) => {
     const { password } = req.body;
-    if (password === STAFF_PASSWORD || password === ADMIN_PASSWORD) {
+    const isStaffMatch = await bcrypt.compare(password, STAFF_PASSWORD);
+    const isAdminMatch = await bcrypt.compare(password, ADMIN_PASSWORD);
+    
+    if (isStaffMatch || isAdminMatch) {
         res.json({ success: true });
     } else {
         res.status(401).json({ success: false, message: 'Invalid Staff Password' });
     }
 });
 
-app.post('/api/admin/secondary-login', (req, res) => {
+app.post('/api/admin/secondary-login', async (req, res) => {
     const { password } = req.body;
+    const isSecondaryMatch = await bcrypt.compare(password, SECONDARY_PASSWORD);
+    const isAdminMatch = await bcrypt.compare(password, ADMIN_PASSWORD);
+
     // Allow both the specific secondary password AND the main admin password
-    if (password === SECONDARY_PASSWORD || password === ADMIN_PASSWORD) {
+    if (isSecondaryMatch || isAdminMatch) {
         res.json({ success: true });
     } else {
         res.status(401).json({ success: false, message: 'Invalid Password' });
