@@ -327,7 +327,9 @@ export default function AdminDashboard({ isOpen, onClose }) {
     async function fetchDjSlots() {
         try {
             const normalizedTitle = "ARTIST PERFORMANCE AND DJ NIGHT".trim().toUpperCase();
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(normalizedTitle)}`);
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events/slots-status?eventTitle=${encodeURIComponent(normalizedTitle)}`, {
+                headers: { 'x-admin-password': password }
+            });
             const data = await res.json();
             if (data.success) setDjSlots(data);
         } catch (err) {
