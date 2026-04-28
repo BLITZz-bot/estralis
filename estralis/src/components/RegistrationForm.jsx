@@ -479,7 +479,8 @@ export default function RegistrationForm({ event, onClose }) {
                 "FASHION WALK": { location: "Amphitheatre", time: "12:00 PM" },
                 "PRIZE DISTRIBUTION": { location: "Amphitheatre", time: "03:00 PM" },
                 "ARTIST PERFORMANCE": { location: "Main Stage", time: "06:00 PM" },
-                "DJ NIGHT": { location: "Main Stage", time: "07:30 PM" }
+                "DJ NIGHT": { location: "Main Stage", time: "07:30 PM" },
+                "BUMPER LUCKY DRAW": { location: "GCEM Campus", time: "FULL DAY" }
             };
 
             const drawTicketBase = (pageDoc) => {

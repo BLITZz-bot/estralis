@@ -273,6 +273,10 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
             doc.setFontSize(10);
             doc.setTextColor(255, 255, 255);
             const schedule = EVENT_SCHEDULE[registration.event_title.toUpperCase()] || { location: "TBA", time: "TBA" };
+            if (registration.event_title.toUpperCase().includes("DJ NIGHT")) {
+                schedule.location = "Main stage, GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT Campus";
+                schedule.time = "06:00 PM";
+            }
             const venueLines = doc.splitTextToSize(schedule.location, 60);
             doc.text(venueLines, 30, startY + 72);
             doc.text(schedule.time, 100, startY + 72);
