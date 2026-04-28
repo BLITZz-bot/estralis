@@ -48,7 +48,7 @@ const storage = new CloudinaryStorage({
     }
 });
 
-const upload = multer({ 
+const upload = multer({
     storage: storage,
     limits: { fileSize: 1024 * 1024 } // 1MB max to match frontend validation
 });
@@ -238,7 +238,7 @@ app.post('/api/staff/login', async (req, res) => {
     const { password } = req.body;
     const isStaffMatch = await bcrypt.compare(password, STAFF_PASSWORD);
     const isAdminMatch = await bcrypt.compare(password, ADMIN_PASSWORD);
-    
+
     if (isStaffMatch || isAdminMatch) {
         res.json({ success: true });
     } else {
@@ -404,17 +404,17 @@ app.post('/api/register-manual', async (req, res) => {
 
                 if (currentGcem + incomingGcem > gcemMax) {
                     const remaining = gcemMax - currentGcem;
-                    return res.status(403).json({ 
-                        success: false, 
-                        message: `GCEM SLOTS FULL: Only ${Math.max(0, remaining)} Gopalan slots left. You have ${incomingGcem} GCEM students in your squad.` 
+                    return res.status(403).json({
+                        success: false,
+                        message: `GCEM SLOTS FULL: Only ${Math.max(0, remaining)} Gopalan slots left. You have ${incomingGcem} GCEM students in your squad.`
                     });
                 }
 
                 if (currentOther + incomingOther > otherMax) {
                     const remaining = otherMax - currentOther;
-                    return res.status(403).json({ 
-                        success: false, 
-                        message: `OTHER COLLEGE SLOTS FULL: Only ${Math.max(0, remaining)} slots left for non-Gopalan colleges. You have ${incomingOther} non-Gcem students in your squad.` 
+                    return res.status(403).json({
+                        success: false,
+                        message: `OTHER COLLEGE SLOTS FULL: Only ${Math.max(0, remaining)} slots left for non-Gopalan colleges. You have ${incomingOther} non-Gcem students in your squad.`
                     });
                 }
 
@@ -439,7 +439,7 @@ app.post('/api/register-manual', async (req, res) => {
             [
                 fullName, email.trim().toLowerCase(), phone, college,
                 semester || 'N/A', branch || 'N/A', linkedinUrl || 'N/A',
-                teamName || null, JSON.stringify(teamMembers || []), 
+                teamName || null, JSON.stringify(teamMembers || []),
                 eventTitle, category || 'Tech',
                 amountPaid, passType, utrNumber, transactionDate, screenshotUrl, 'verified'
             ]
@@ -485,9 +485,9 @@ app.post('/api/upload-screenshot', (req, res) => {
     upload.single('screenshot')(req, res, (err) => {
         if (err) {
             console.error("Multer/Cloudinary Upload Error:", err);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'Upload failed: ' + err.message 
+            return res.status(500).json({
+                success: false,
+                message: 'Upload failed: ' + err.message
             });
         }
         try {
@@ -646,10 +646,10 @@ const generatePDFPass = async (reg) => {
         const isLongTitle = eventTitle.length > 25;
         const titleFontSize = isLongTitle ? 18 : 32;
         doc.fillColor('#ffffff').fontSize(titleFontSize).font('Helvetica-Bold')
-            .text(eventTitle, (85 - 90) * mmToPt, startY + (isLongTitle ? 33 : 35) * mmToPt, { 
-                align: 'center', 
-                width: 180 * mmToPt, 
-                characterSpacing: isLongTitle ? 0.1 : 1 
+            .text(eventTitle, (85 - 90) * mmToPt, startY + (isLongTitle ? 33 : 35) * mmToPt, {
+                align: 'center',
+                width: 180 * mmToPt,
+                characterSpacing: isLongTitle ? 0.1 : 1
             });
 
         // LUCKY DRAW NUMBER (Bumper Offer Only)
@@ -717,10 +717,10 @@ const generatePDFPass = async (reg) => {
             teamY += 15 * mmToPt;
 
             members.forEach((m, i) => {
-                if (teamY > 220 * mmToPt) { 
-                    doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } }); 
-                    drawTicketBase(doc); 
-                    teamY = 80 * mmToPt; 
+                if (teamY > 220 * mmToPt) {
+                    doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } });
+                    drawTicketBase(doc);
+                    teamY = 80 * mmToPt;
                 }
                 doc.fillColor(colors.teal).fontSize(12).font('Helvetica-Bold').text(`${String(i + 2).padStart(2, '0')} //`, 25 * mmToPt, teamY);
                 doc.fillColor('#ffffff').text((m.fullName || m.full_name || "MEMBER").toUpperCase(), 40 * mmToPt, teamY);
@@ -850,7 +850,7 @@ app.post('/api/scanner/verify', async (req, res) => {
         }
 
         const result = await db.query(
-            'SELECT full_name, event_title, college, team_name, team_members, status FROM registrations WHERE id = $1', 
+            'SELECT full_name, event_title, college, team_name, team_members, status FROM registrations WHERE id = $1',
             [id]
         );
 
@@ -1506,16 +1506,8 @@ app.get('/api/events/slots-status', async (req, res) => {
         res.status(200).json({
             success: true,
             isLimited: true,
-            maxSlots: totalMax,
-            gcemMaxSlots: gcemMax,
-            otherMaxSlots: otherMax,
-            currentCount: totalCount,
-            gcemCount: gcemCount,
-            otherCount: otherCount,
             isManualOpen: config.is_manual_open === true || config.is_manual_open === 1 || config.is_manual_open === null,
-            slotsLeft: Math.max(0, totalMax - totalCount),
-            gcemSlotsLeft: Math.max(0, gcemMax - gcemCount),
-            otherSlotsLeft: Math.max(0, otherMax - otherCount)
+            slotsLeft: Math.max(0, totalMax - totalCount) > 0 ? 1 : 0
         });
     } catch (error) {
         console.error("Slots fetch error:", error);
