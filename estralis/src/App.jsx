@@ -24,6 +24,7 @@ import SectionBackground from "./components/SectionBackground"
 import ProtocolModal from "./components/ProtocolModal"
 import SpecialGuest from "./components/SpecialGuest"
 // import Team from "./components/Team"
+import TeamPortal from "./components/TeamPortal"
 import StaffScanner from "./components/StaffScanner"
 import LuckyDraw from "./components/LuckyDraw"
 import { useState, useEffect } from "react"
@@ -50,6 +51,7 @@ export default function App() {
   const [autoDownload, setAutoDownload] = useState(false);
   const [isStaffPortal, setIsStaffPortal] = useState(false);
   const [isLuckyDrawPortal, setIsLuckyDrawPortal] = useState(false);
+  const [isTeamPortal, setIsTeamPortal] = useState(false);
 
   useEffect(() => {
     // Detect iPhone/iOS
@@ -75,6 +77,12 @@ export default function App() {
       return;
     }
 
+    // Check for Team Portal Mode
+    if (params.get('portal') === 'team') {
+      setIsTeamPortal(true);
+      return;
+    }
+
     if (params.get('openPass') === 'true' && params.get('email')) {
       const email = params.get('email');
       setInitialRegEmail(email);
@@ -92,6 +100,10 @@ export default function App() {
 
   if (isLuckyDrawPortal) {
     return <LuckyDraw />;
+  }
+
+  if (isTeamPortal) {
+    return <TeamPortal />;
   }
 
   return (
@@ -240,9 +252,42 @@ export default function App() {
           <Venue />
         </Section>
 
-        {/* <Section id="team">
-          <Team />
-        </Section> */}
+        {/* ================= TEAM PORTAL TRIGGER ================= */}
+        <Section id="team-portal">
+          <section className="relative py-24 px-6 overflow-hidden">
+            <div className="max-w-4xl mx-auto text-center space-y-10">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <span className="text-[10px] font-black tracking-[0.5em] text-teal-500 uppercase mb-4 block">Core Command Personnel</span>
+                <h2 className="astral-heading text-4xl md:text-7xl uppercase mb-8">Meet Our <span className="text-teal-400">Team</span></h2>
+                <p className="text-white/40 saarang-serif italic text-lg max-w-2xl mx-auto leading-relaxed">
+                  The architects behind the interstellar symposium. Access the personnel database to view the command matrix.
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="pt-6"
+              >
+                <a 
+                  href="?portal=team"
+                  className="inline-flex items-center gap-4 px-12 py-6 rounded-2xl bg-white/5 border border-white/10 text-white font-black tracking-[0.3em] uppercase hover:bg-teal-500 hover:text-black hover:border-teal-400 hover:shadow-[0_0_50px_rgba(45,212,191,0.4)] transition-all duration-500 group"
+                >
+                  Access_Team_Database
+                  <svg className="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M13 7l5 5-5 5M6 7l5 5-5 5" />
+                  </svg>
+                </a>
+              </motion.div>
+            </div>
+          </section>
+        </Section>
 
         {/* ================= FOOTER ================= */}
         <Footer />

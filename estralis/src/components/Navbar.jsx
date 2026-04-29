@@ -131,11 +131,11 @@ export default function Navbar({ onOpenRegistrations, onOpenAdmin, onOpenThemeRe
             animate={open ? "show" : "hidden"}
             className="flex flex-col flex-1 gap-4 text-sm"
           >
-            {['Home', 'About', 'Events', 'DJ Tickets', 'Venue'].map((item) => (
+            {['Home', 'About', 'Events', 'DJ Tickets', 'Venue', 'Team'].map((item) => (
               <motion.a
                 key={item}
                 variants={itemVariants}
-                href={item === 'DJ Tickets' ? '#special-guest' : `#${item.toLowerCase()}`}
+                href={item === 'DJ Tickets' ? '#special-guest' : item === 'Team' ? '?portal=team' : `#${item.toLowerCase()}`}
                 onClick={() => setOpen(false)}
                 className="group relative px-4 py-3 rounded-xl overflow-hidden transition-all"
               >
@@ -195,7 +195,7 @@ export default function Navbar({ onOpenRegistrations, onOpenAdmin, onOpenThemeRe
             {['Home', 'About', 'Events', 'DJ Tickets', 'Venue', 'Team'].map(item => (
               <a 
                 key={item} 
-                href={item === 'DJ Tickets' ? '#special-guest' : `#${item.toLowerCase()}`}
+                href={item === 'DJ Tickets' ? '#special-guest' : item === 'Team' ? '?portal=team' : `#${item.toLowerCase()}`}
                 className="relative text-[9px] font-black text-teal-100/40 hover:text-teal-400 transition-all group py-1 uppercase tracking-[0.4em] flex items-center gap-2"
               >
                 <span className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2 transition-all duration-300 font-mono text-teal-500">{" >>>"}</span>
