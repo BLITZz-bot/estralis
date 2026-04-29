@@ -231,7 +231,7 @@ export default function ThemeRevealModal({ isOpen, onClose }) {
     // Handle back button
     useEffect(() => {
         if (!isOpen) return;
-        window.history.pushState({ modal: "themeReveal" }, "", window.location.href);
+        window.history.pushState({ modal: "themeReveal" }, "");
         const handlePop = (e) => {
             if (!e.state || e.state.modal !== "themeReveal") handleClose();
         };

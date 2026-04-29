@@ -24,7 +24,7 @@ const SpecialGuest = () => {
             }
         };
         fetchSlots();
-        const interval = setInterval(fetchSlots, 60000); // 60s auto-refresh (reduced from 30s for mobile)
+        const interval = setInterval(fetchSlots, 30000); // 30s auto-refresh
         return () => clearInterval(interval);
     }, []);
 
@@ -34,9 +34,9 @@ const SpecialGuest = () => {
                 id="special-guest"
                 className="relative min-h-screen py-20 flex flex-col items-center justify-center overflow-hidden bg-[#020617]"
             >
+                {/* Background Texture/Aura */}
                 <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
-                    {/* blur-[150px] is too expensive on mobile GPU - only shown on desktop */}
-                    <div className="hidden md:block absolute top-1/2 left-0 w-full h-[500px] bg-teal-500/10 blur-[150px] -translate-y-1/2" />
+                    <div className="absolute top-1/2 left-0 w-full h-[500px] bg-teal-500/10 blur-[150px] -translate-y-1/2" />
                 </div>
 
                 <div className="container mx-auto px-6 max-w-7xl relative z-10">
@@ -128,7 +128,7 @@ const SpecialGuest = () => {
                                     initial={{ opacity: 0, x: 100 }}
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 4.5, ease: [0.22, 1, 0.36, 1] }}
+                                    transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1] }}
                                     className="relative group w-full sm:w-1/2 max-w-[280px] sm:max-w-[320px]"
                                 >
                                     {/* Artist Name Reveal */}
@@ -154,15 +154,13 @@ const SpecialGuest = () => {
                                     </motion.div>
 
                                     <div className="relative aspect-[3/4] overflow-hidden bg-[#0a0a0a] shadow-2xl">
-                                        {/* mix-blend-color forces GPU layer - only on desktop */}
-                                        <div className="hidden md:block absolute inset-0 bg-teal-500/5 mix-blend-color" />
+                                        {/* Secondary Glow background */}
+                                        <div className="absolute inset-0 bg-teal-500/5 mix-blend-color" />
 
                                         <img
                                             src="/art.webp"
                                             alt="Face of Estralis"
-                                            loading="lazy"
-                                            decoding="async"
-                                            className="w-full h-full object-cover object-top"
+                                            className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
                                         />
 
                                     </div>
@@ -173,7 +171,7 @@ const SpecialGuest = () => {
                                     initial={{ opacity: 0, x: 100 }}
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 4.5, ease: [0.22, 1, 0.36, 1], delay: typeof window !== 'undefined' && window.innerWidth < 768 ? 0.2 : 0.5 }}
+                                    transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
                                     className="relative group w-full sm:w-1/2 max-w-[280px] sm:max-w-[320px]"
                                 >
                                     {/* Artist Name Reveal */}
@@ -199,13 +197,11 @@ const SpecialGuest = () => {
                                     </motion.div>
 
                                     <div className="relative aspect-[3/4] overflow-hidden bg-[#0a0a0a] shadow-2xl">
-                                        <div className="hidden md:block absolute inset-0 bg-teal-500/5 mix-blend-color" />
+                                        <div className="absolute inset-0 bg-teal-500/5 mix-blend-color" />
                                         <img
                                             src="/nama.webp"
                                             alt="Naman"
-                                            loading="lazy"
-                                            decoding="async"
-                                            className="w-full h-full object-cover object-top"
+                                            className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
                                         />
                                     </div>
                                 </motion.div>

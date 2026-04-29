@@ -36,18 +36,12 @@
   font-family: var(--font-marker);
 }
 
-html {
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
-}
-
 body {
   font-family: var(--font-tech);
   background-color: var(--color-space) !important;
   color: var(--color-starlight);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  overscroll-behavior: none;
 }
 
 /* 💠 ASTRAL GLASS - Celestial Panels */
@@ -59,11 +53,8 @@ body {
   border: 1px solid rgba(45, 212, 191, 0.1);
   /* Teal border */
   border-radius: 1.5rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  contain: layout style paint;
 }
 
 .astral-glass-bright {
@@ -180,30 +171,19 @@ button {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
-
-  .team-card-glass {
-    background: rgba(15, 23, 42, 0.95); /* Solid slate-950/95 */
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: 1px solid rgba(45, 212, 191, 0.15);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    contain: layout style paint;
-  }
 }
 
-/* 🍏 IPHONE SPECIFIC CRASH PREVENTION */
-.is-iphone * {
-  /* Disable heavy blurs that crash iOS Safari on scroll */
+/* 📱 IPHONE SPECIFIC CRASH PREVENTION */
+/* We only disable backdrop-blur as it's the primary cause of GPU memory crashes on iOS Safari */
+.is-iphone .astral-glass,
+.is-iphone .astral-glass-bright,
+.is-iphone [class*="backdrop-blur"],
+.is-iphone [style*="backdrop-filter"],
+.is-iphone [style*="backdropFilter"] {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-}
-
-.is-iphone .astral-glass, 
-.is-iphone .astral-glass-bright,
-.is-iphone [class*="backdrop-blur"] {
-  /* Replace blur with solid-ish backgrounds for iPhone */
-  background-color: rgba(2, 6, 23, 0.9) !important;
+  background-color: rgba(2, 6, 23, 0.92) !important;
+  border: 1px solid rgba(45, 212, 191, 0.15) !important;
 }
 
 @keyframes shimmer {
