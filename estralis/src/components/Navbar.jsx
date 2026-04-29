@@ -131,7 +131,7 @@ export default function Navbar({ onOpenRegistrations, onOpenAdmin, onOpenThemeRe
             animate={open ? "show" : "hidden"}
             className="flex flex-col flex-1 gap-4 text-sm"
           >
-            {['Home', 'About', 'Events', 'DJ Tickets', 'Venue', 'Team'].map((item) => (
+            {['Home', 'About', 'Events', 'DJ Tickets', 'Venue'].map((item) => (
               <motion.a
                 key={item}
                 variants={itemVariants}
