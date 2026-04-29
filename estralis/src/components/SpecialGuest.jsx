@@ -158,8 +158,10 @@ const SpecialGuest = () => {
                                         <div className="absolute inset-0 bg-teal-500/5 mix-blend-color" />
 
                                         <img
-                                            src="/art.png"
+                                            src="/art.webp"
                                             alt="Face of Estralis"
+                                            loading="lazy"
+                                            decoding="async"
                                             className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
                                         />
 
@@ -199,8 +201,10 @@ const SpecialGuest = () => {
                                     <div className="relative aspect-[3/4] overflow-hidden bg-[#0a0a0a] shadow-2xl">
                                         <div className="absolute inset-0 bg-teal-500/5 mix-blend-color" />
                                         <img
-                                            src="/nama.png"
+                                            src="/nama.webp"
                                             alt="Naman"
+                                            loading="lazy"
+                                            decoding="async"
                                             className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
                                         />
                                     </div>

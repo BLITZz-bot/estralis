@@ -2,7 +2,7 @@ import { motion } from "framer-motion"
 
 export default function StarBackground() {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-  const stars = Array.from({ length: isMobile ? 40 : 120 })
+  const stars = Array.from({ length: isMobile ? 25 : 120 })
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden transform-gpu">

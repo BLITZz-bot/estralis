@@ -21,6 +21,8 @@ export default function SectionBackground({ src, alt = "Background", activeOpaci
       <motion.img
         src={src}
         alt={alt}
+        loading="lazy"
+        decoding="async"
         initial={{ scale: 1.05 }}
         animate={{ scale: isInView ? 1 : 1.07 }}
         transition={{ duration: 2, ease: "easeOut" }}

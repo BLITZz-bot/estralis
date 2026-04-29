@@ -2,28 +2,28 @@ import { motion } from "framer-motion"
 import SectionBackground from "./SectionBackground"
 
 const TEAM_MEMBERS = [
-  { name: "AKASH SHARMA", role: "ORGANIZER", image: "/akash.png" },
-  { name: "VYSHNAVI D", role: "ORGANIZER", image: "/vyshnavi.png" },
-  { name: "SHIVAPRASAD", role: "CO-ORGANIZER", image: "/shivu.png" },
-  { name: "DIVYA CHACHADI", role: "CO-ORGANIZER", image: "/divya.png" },
-  { name: "THANISHA", role: "FINANCE / SPONSORSHIP HEAD", image: "/thanisha.png" },
-  { name: "VINITH JOYAPPA", role: "FINANCE / SPONSORSHIP HEAD", image: "/vineeth.png" },
-  { name: "MALLIKARJUN GOUDA", role: "MARKETING HEAD", image: "/mallii.png" },
-  { name: "LIKITH D T", role: "MARKETING HEAD", image: "/likith.png" },
-  { name: "SURESH PATIL", role: "EVENT HEAD", image: "/suri.png" },
-  { name: "SHREYA B N", role: "EVENT HEAD", image: "/2.png" },
-  { name: "BHARGAV BHAT", role: "PRODUCTION HEAD", image: "/bharagv.png" },
-  { name: "SRINIVAS", role: "PRODUCTION HEAD", image: "/seena.png" },
-  { name: "AKHILA G", role: "DESIGN HEAD", image: "/akhila.png" },
-  { name: "Siri", role: "DESIGN HEAD", image: "/siri.png" },
-  { name: "M M BHARATH", role: "TECH HEAD", image: "/bharath.png" },
-  { name: "YESHWANTH", role: "TECH HEAD", image: "/yesh.png" },
-  { name: "HARSHITH", role: "ARTIST HEAD", image: "/har.png" },
-  { name: "CHAMPA", role: "ARTIST HEAD", image: "/champa.png" },
-  { name: "DHYAN", role: "HOSPITALITY HEAD", image: "/dhyan.png" },
-  { name: "V Vyshnavi", role: "HOSPITALITY HEAD", image: "/3.png" },
-  { name: "GANESH", role: "VOLUNTEER HEAD", image: "/ganesh.png" },
-  { name: "Rohith Y S", role: "VOLUNTEER HEAD", image: "/rohith.png" },
+  { name: "AKASH SHARMA", role: "ORGANIZER", image: "/akash.webp" },
+  { name: "VYSHNAVI D", role: "ORGANIZER", image: "/vyshnavi.webp" },
+  { name: "SHIVAPRASAD", role: "CO-ORGANIZER", image: "/shivu.webp" },
+  { name: "DIVYA CHACHADI", role: "CO-ORGANIZER", image: "/divya.webp" },
+  { name: "THANISHA", role: "FINANCE / SPONSORSHIP HEAD", image: "/thanisha.webp" },
+  { name: "VINITH JOYAPPA", role: "FINANCE / SPONSORSHIP HEAD", image: "/vineeth.webp" },
+  { name: "MALLIKARJUN GOUDA", role: "MARKETING HEAD", image: "/mallii.webp" },
+  { name: "LIKITH D T", role: "MARKETING HEAD", image: "/likith.webp" },
+  { name: "SURESH PATIL", role: "EVENT HEAD", image: "/suri.webp" },
+  { name: "SHREYA B N", role: "EVENT HEAD", image: "/2.webp" },
+  { name: "BHARGAV BHAT", role: "PRODUCTION HEAD", image: "/bharagv.webp" },
+  { name: "SRINIVAS", role: "PRODUCTION HEAD", image: "/seena.png" }, // Failed conversion, keeping png
+  { name: "AKHILA G", role: "DESIGN HEAD", image: "/akhila.webp" },
+  { name: "Siri", role: "DESIGN HEAD", image: "/siri.webp" },
+  { name: "M M BHARATH", role: "TECH HEAD", image: "/bharath.webp" },
+  { name: "YESHWANTH", role: "TECH HEAD", image: "/yesh.webp" },
+  { name: "HARSHITH", role: "ARTIST HEAD", image: "/har.webp" },
+  { name: "CHAMPA", role: "ARTIST HEAD", image: "/champa.webp" },
+  { name: "DHYAN", role: "HOSPITALITY HEAD", image: "/dhyan.webp" },
+  { name: "V Vyshnavi", role: "HOSPITALITY HEAD", image: "/3.webp" },
+  { name: "GANESH", role: "VOLUNTEER HEAD", image: "/ganesh.webp" },
+  { name: "Rohith Y S", role: "VOLUNTEER HEAD", image: "/rohith.webp" },
 ];
 
 export default function Team() {
@@ -138,6 +138,8 @@ function TeamMemberCard({ member, idx }) {
           <img
             src={member.image}
             alt={member.name}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover transition-all duration-700"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60" />
