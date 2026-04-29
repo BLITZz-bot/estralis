@@ -12,7 +12,8 @@ fs.readdirSync(publicDir).forEach(file => {
         console.log(`Converting ${file} to WebP...`);
         
         sharp(inputPath)
-            .webp({ quality: 85 }) // High quality but much smaller file size
+            .resize({ width: 1000, withoutEnlargement: true }) // Limit pixels for GPU memory
+            .webp({ quality: 60 }) // Lower quality for even smaller file sizes
             .toFile(outputPath)
             .then(() => console.log(`Successfully created ${outputPath}`))
             .catch(err => console.error(`Error converting ${file}:`, err));
