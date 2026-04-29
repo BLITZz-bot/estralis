@@ -177,6 +177,13 @@ button {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
+
+  .team-card-glass {
+    background: rgba(15, 23, 42, 0.95); /* Solid slate-950/95 */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(45, 212, 191, 0.15);
+  }
 }
 
 @keyframes shimmer {

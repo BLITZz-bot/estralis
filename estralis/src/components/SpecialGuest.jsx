@@ -128,7 +128,7 @@ const SpecialGuest = () => {
                                     initial={{ opacity: 0, x: 100 }}
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1] }}
+                                    transition={{ duration: typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 4.5, ease: [0.22, 1, 0.36, 1] }}
                                     className="relative group w-full sm:w-1/2 max-w-[280px] sm:max-w-[320px]"
                                 >
                                     {/* Artist Name Reveal */}
@@ -171,7 +171,7 @@ const SpecialGuest = () => {
                                     initial={{ opacity: 0, x: 100 }}
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
+                                    transition={{ duration: typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 4.5, ease: [0.22, 1, 0.36, 1], delay: typeof window !== 'undefined' && window.innerWidth < 768 ? 0.2 : 0.5 }}
                                     className="relative group w-full sm:w-1/2 max-w-[280px] sm:max-w-[320px]"
                                 >
                                     {/* Artist Name Reveal */}

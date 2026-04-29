@@ -95,38 +95,46 @@ export default function Team() {
 }
 
 function TeamMemberCard({ member, idx }) {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   return (
     <motion.div
-      initial={{
+      initial={isMobile ? {
+        opacity: 0,
+        y: 40
+      } : {
         opacity: 0,
         rotateX: -90,
         y: 100,
         z: -100
       }}
-      whileInView={{
+      whileInView={isMobile ? {
+        opacity: 1,
+        y: 0
+      } : {
         opacity: 1,
         rotateX: 0,
         y: 0,
         z: 0
       }}
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, margin: isMobile ? "-20px" : "-50px" }}
       transition={{
-        type: "spring",
+        type: isMobile ? "tween" : "spring",
         damping: 15,
         stiffness: 70,
-        delay: idx * 0.05,
-        duration: 0.8
+        delay: isMobile ? 0 : idx * 0.05,
+        duration: isMobile ? 0.4 : 0.8
       }}
-      whileHover={{
+      whileHover={isMobile ? {} : {
         scale: 1.05,
         y: -10,
         transition: { duration: 0.2 }
       }}
       className="group relative"
-      style={{ transformStyle: "preserve-3d" }}
+      style={isMobile ? {} : { transformStyle: "preserve-3d" }}
     >
-      <div className="astral-glass p-1 rounded-2xl md:rounded-[2.5rem] overflow-hidden transition-all duration-500 group-hover:border-teal-400/50 group-hover:shadow-[0_0_80px_rgba(45,212,191,0.3)] bg-slate-950/40">
-        <div className="relative h-40 md:h-64 overflow-hidden rounded-xl md:rounded-[2.2rem] m-1" style={{ transform: "translateZ(30px)" }}>
+      <div className={`p-1 rounded-2xl md:rounded-[2.5rem] overflow-hidden transition-all duration-500 group-hover:border-teal-400/50 group-hover:shadow-[0_0_80px_rgba(45,212,191,0.3)] ${isMobile ? 'team-card-glass' : 'astral-glass bg-slate-950/40'}`}>
+        <div className="relative h-40 md:h-64 overflow-hidden rounded-xl md:rounded-[2.2rem] m-1" style={isMobile ? {} : { transform: "translateZ(30px)" }}>
           <img
             src={member.image}
             alt={member.name}
@@ -135,7 +143,7 @@ function TeamMemberCard({ member, idx }) {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60" />
         </div>
 
-        <div className="p-4 md:p-8 text-center pt-4 md:pt-6" style={{ transform: "translateZ(60px)" }}>
+        <div className="p-4 md:p-8 text-center pt-4 md:pt-6" style={isMobile ? {} : { transform: "translateZ(60px)" }}>
           <h3 className="text-xs md:text-lg font-black text-white tracking-widest uppercase mb-1">
             {member.name}
           </h3>
