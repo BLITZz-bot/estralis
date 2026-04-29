@@ -59,11 +59,12 @@ body {
   border: 1px solid rgba(45, 212, 191, 0.1);
   /* Teal border */
   border-radius: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); /* Reduced for mobile performance */
   transform: translateZ(0);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   will-change: transform, opacity;
+  contain: layout style paint;
 }
 
 .astral-glass-bright {
@@ -188,6 +189,7 @@ button {
     border: 1px solid rgba(45, 212, 191, 0.15);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    contain: layout style paint;
   }
 }
 

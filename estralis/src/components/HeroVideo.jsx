@@ -10,7 +10,7 @@ export default function HeroVideo() {
         loop
         muted
         playsInline
-        preload="auto"
+        preload="none" /* Prevent loading desktop video on mobile */
         // poster="/enry.png"
         className="
           hidden md:block
@@ -60,6 +60,7 @@ export default function HeroVideo() {
         loop
         muted
         playsInline
+        preload="auto" /* Mobile video is priority on mobile */
         className="md:hidden absolute inset-0 w-full h-full object-cover pointer-events-none"
       >
         <source src="/hero2.mp4" type="video/mp4" />
