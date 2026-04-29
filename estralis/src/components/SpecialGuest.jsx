@@ -162,7 +162,7 @@ const SpecialGuest = () => {
                                             alt="Face of Estralis"
                                             loading="lazy"
                                             decoding="async"
-                                            className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
+                                            className="w-full h-full object-cover object-top"
                                         />
 
                                     </div>
@@ -205,7 +205,7 @@ const SpecialGuest = () => {
                                             alt="Naman"
                                             loading="lazy"
                                             decoding="async"
-                                            className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
+                                            className="w-full h-full object-cover object-top"
                                         />
                                     </div>
                                 </motion.div>
