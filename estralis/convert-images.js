@@ -12,8 +12,8 @@ fs.readdirSync(publicDir).forEach(file => {
         console.log(`Converting ${file} to WebP...`);
         
         sharp(inputPath)
-            .resize({ width: 1000, withoutEnlargement: true }) // Limit pixels for GPU memory
-            .webp({ quality: 60 }) // Lower quality for even smaller file sizes
+            .resize({ width: 800, withoutEnlargement: true }) // Limit pixels for GPU memory
+            .webp({ quality: 40 }) // Very low quality for fastest possible load on iPhone
             .toFile(outputPath)
             .then(() => console.log(`Successfully created ${outputPath}`))
             .catch(err => console.error(`Error converting ${file}:`, err));
