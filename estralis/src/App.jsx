@@ -38,6 +38,9 @@ export default function App() {
   const [isProtocolAccepted, setIsProtocolAccepted] = useState(false);
 
 
+  /* ===== 🍏 iPhone Optimization Check ===== */
+  const isIPhone = typeof window !== 'undefined' && /iPhone|iPad|iPod/i.test(window.navigator.userAgent);
+
   /* ===== Scroll Parallax ===== */
   const { scrollY } = useScroll()
 
@@ -89,7 +92,7 @@ export default function App() {
     <>
       <div className="noise-overlay" />
 
-      <div className="min-h-screen overflow-x-hidden bg-[#020617] text-white">
+      <div className={`min-h-screen overflow-x-hidden bg-[#020617] text-white ${isIPhone ? 'is-iphone' : ''}`}>
         {/* ================= GLOBAL BACKGROUNDS ================= */}
         {/* Deep space base */}
         <div className="fixed inset-0 pointer-events-none -z-20" style={{ background: "linear-gradient(160deg, #020617 0%, #050a1f 40%, #010412 100%)" }} />

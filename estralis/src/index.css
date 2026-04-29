@@ -192,6 +192,20 @@ button {
   }
 }
 
+/* 🍏 IPHONE SPECIFIC CRASH PREVENTION */
+.is-iphone * {
+  /* Disable heavy blurs that crash iOS Safari on scroll */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.is-iphone .astral-glass, 
+.is-iphone .astral-glass-bright,
+.is-iphone [class*="backdrop-blur"] {
+  /* Replace blur with solid-ish backgrounds for iPhone */
+  background-color: rgba(2, 6, 23, 0.9) !important;
+}
+
 @keyframes shimmer {
   0% {
     transform: translateX(-100%) skewX(-12deg);
