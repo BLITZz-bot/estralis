@@ -24,7 +24,7 @@ const SpecialGuest = () => {
             }
         };
         fetchSlots();
-        const interval = setInterval(fetchSlots, 30000); // 30s auto-refresh
+        const interval = setInterval(fetchSlots, 60000); // 60s auto-refresh (reduced from 30s for mobile)
         return () => clearInterval(interval);
     }, []);
 
