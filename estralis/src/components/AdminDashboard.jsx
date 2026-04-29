@@ -821,7 +821,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
     // Reset password on close and handle back button
     useEffect(() => {
         if (isOpen) {
-            window.history.pushState({ modal: "admin" }, "");
+            window.history.pushState({ modal: "admin" }, "", window.location.href);
             const handlePopState = (e) => {
                 if (!e.state || e.state.modal !== "admin") {
                     onClose();

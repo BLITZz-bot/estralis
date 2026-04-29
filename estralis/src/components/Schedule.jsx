@@ -916,11 +916,11 @@ export default function Schedule({ onModalToggle }) {
 
       if (showRegistration) {
         if (!currentState || currentState.modal !== "registration") {
-          window.history.pushState({ modal: "registration" }, "");
+          window.history.pushState({ modal: "registration" }, "", window.location.href);
         }
       } else {
         if (!currentState || (currentState.modal !== "event" && currentState.modal !== "registration")) {
-          window.history.pushState({ modal: "event" }, "");
+          window.history.pushState({ modal: "event" }, "", window.location.href);
         }
       }
 

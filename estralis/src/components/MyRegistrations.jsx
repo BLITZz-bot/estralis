@@ -16,7 +16,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
 
     useEffect(() => {
         if (isOpen) {
-            window.history.pushState({ modal: "registrations" }, "");
+            window.history.pushState({ modal: "registrations" }, "", window.location.href);
             const handlePopState = (e) => {
                 if (!e.state || e.state.modal !== "registrations") {
                     onClose();
