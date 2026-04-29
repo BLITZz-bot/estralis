@@ -8,7 +8,7 @@ export default function SectionBackground({ src, alt = "Background", activeOpaci
   const isInView = useInView(ref, { margin: "-20% 0px -20% 0px", amount: 0.1 });
 
   return (
-    <div 
+    <div
       ref={ref}
       className={`absolute inset-0 z-0 pointer-events-none transition-all duration-1000
         group-hover:grayscale-0 group-hover:opacity-40 md:group-hover:opacity-60

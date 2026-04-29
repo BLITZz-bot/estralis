@@ -34,10 +34,10 @@ const SpecialGuest = () => {
                 id="special-guest"
                 className="relative min-h-screen py-20 flex flex-col items-center justify-center overflow-hidden bg-[#020617]"
             >
-                {/* Background Texture/Aura */}
-                <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
-                    <div className="absolute top-1/2 left-0 w-full h-[500px] bg-teal-500/10 blur-[150px] -translate-y-1/2" />
-                </div>
+                {/* Background Texture/Aura - Optimized with radial-gradient instead of expensive blur */}
+                <div className="absolute inset-0 z-0 pointer-events-none opacity-20"
+                    style={{ background: "radial-gradient(circle at center, rgba(45,212,191,0.15) 0%, transparent 70%)" }}
+                />
 
                 <div className="container mx-auto px-6 max-w-7xl relative z-10">
                     {/* 2-Column Grid Layout - Increased Gap to push image right */}
@@ -48,11 +48,11 @@ const SpecialGuest = () => {
 
                             {/* Heading Group */}
                             <motion.div
-                                initial={{ opacity: 0, x: -100 }}
+                                initial={{ opacity: 0, x: -60 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
-                                className="relative"
+                                transition={{ duration: 1.2, ease: "easeOut" }}
+                                className="relative will-change-transform"
                             >
                                 <span
                                     className="block text-teal-400 text-4xl md:text-5xl lg:text-4xl mb-[-10px] ml-1"
@@ -125,11 +125,11 @@ const SpecialGuest = () => {
                             <div className="flex flex-col sm:flex-row items-center sm:items-end gap-16 sm:gap-8 w-full justify-center lg:justify-end mt-20 sm:mt-16">
                                 {/* Main Image Container */}
                                 <motion.div
-                                    initial={{ opacity: 0, x: 100 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
+                                    initial={{ opacity: 0, y: 40 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1] }}
-                                    className="relative group w-full sm:w-1/2 max-w-[280px] sm:max-w-[320px]"
+                                    transition={{ duration: 1.2, ease: "easeOut" }}
+                                    className="relative group w-full sm:w-1/2 max-w-[280px] sm:max-w-[320px] will-change-transform transform-gpu"
                                 >
                                     {/* Artist Name Reveal */}
                                     <motion.div
@@ -160,7 +160,7 @@ const SpecialGuest = () => {
                                         <img
                                             src="/art.webp"
                                             alt="Face of Estralis"
-                                            className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
+                                            className="w-full h-full object-cover object-top transition-transform duration-[1.5s] group-hover:scale-105 will-change-transform transform-gpu"
                                         />
 
                                     </div>
@@ -168,11 +168,11 @@ const SpecialGuest = () => {
 
                                 {/* Naman Image Section */}
                                 <motion.div
-                                    initial={{ opacity: 0, x: 100 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
+                                    initial={{ opacity: 0, y: 40 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 4.5, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
-                                    className="relative group w-full sm:w-1/2 max-w-[280px] sm:max-w-[320px]"
+                                    transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
+                                    className="relative group w-full sm:w-1/2 max-w-[280px] sm:max-w-[320px] will-change-transform transform-gpu"
                                 >
                                     {/* Artist Name Reveal */}
                                     <motion.div

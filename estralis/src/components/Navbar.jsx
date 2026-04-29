@@ -192,7 +192,7 @@ export default function Navbar({ onOpenRegistrations, onOpenAdmin, onOpenThemeRe
           </div>
 
           <div className="hidden md:flex items-center gap-8">
-            {['Home', 'About', 'Events', 'DJ Tickets', 'Venue', 'Team'].map(item => (
+            {['Home', 'About', 'Events', 'DJ Tickets', 'Venue'].map(item => (
               <a 
                 key={item} 
                 href={item === 'DJ Tickets' ? '#special-guest' : `#${item.toLowerCase()}`}
