@@ -23,7 +23,6 @@ import ThemeRevealModal from "./components/ThemeRevealModal"
 import SectionBackground from "./components/SectionBackground"
 import ProtocolModal from "./components/ProtocolModal"
 import SpecialGuest from "./components/SpecialGuest"
-import Team from "./components/Team"
 import StaffScanner from "./components/StaffScanner"
 import LuckyDraw from "./components/LuckyDraw"
 import { useState, useEffect } from "react"
@@ -226,13 +225,8 @@ export default function App() {
 
         <Timeline />
 
-        {/* ================= VENUE ================= */}
         <Section id="venue">
           <Venue />
-        </Section>
-
-        <Section id="team">
-          <Team />
         </Section>
 
         {/* ================= FOOTER ================= */}
