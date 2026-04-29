@@ -24,7 +24,6 @@ import SectionBackground from "./components/SectionBackground"
 import ProtocolModal from "./components/ProtocolModal"
 import SpecialGuest from "./components/SpecialGuest"
 // import Team from "./components/Team"
-import TeamPortal from "./components/TeamPortal"
 import StaffScanner from "./components/StaffScanner"
 import LuckyDraw from "./components/LuckyDraw"
 import { useState, useEffect } from "react"
@@ -51,7 +50,6 @@ export default function App() {
   const [autoDownload, setAutoDownload] = useState(false);
   const [isStaffPortal, setIsStaffPortal] = useState(false);
   const [isLuckyDrawPortal, setIsLuckyDrawPortal] = useState(false);
-  const [isTeamPortal, setIsTeamPortal] = useState(false);
 
   useEffect(() => {
     // Detect iPhone/iOS
@@ -77,12 +75,6 @@ export default function App() {
       return;
     }
 
-    // Check for Team Portal Mode
-    if (params.get('portal') === 'team') {
-      setIsTeamPortal(true);
-      return;
-    }
-
     if (params.get('openPass') === 'true' && params.get('email')) {
       const email = params.get('email');
       setInitialRegEmail(email);
@@ -100,10 +92,6 @@ export default function App() {
 
   if (isLuckyDrawPortal) {
     return <LuckyDraw />;
-  }
-
-  if (isTeamPortal) {
-    return <TeamPortal />;
   }
 
   return (
@@ -252,63 +240,9 @@ export default function App() {
           <Venue />
         </Section>
 
-        {/* ================= TEAM PORTAL TRIGGER ================= */}
-        <Section id="team-portal">
-          <section className="relative py-32 px-6 overflow-hidden">
-            {/* Background elements */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-teal-500/5 blur-[120px] pointer-events-none" />
-            
-            <div className="max-w-4xl mx-auto relative">
-              {/* Futuristic Frame Corners */}
-              <div className="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-teal-500/20" />
-              <div className="absolute -bottom-10 -right-10 w-20 h-20 border-b-2 border-r-2 border-teal-500/20" />
-
-              <div className="astral-glass p-12 md:p-20 text-center space-y-10 bg-slate-950/20 border-white/5 backdrop-blur-sm">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="flex items-center justify-center gap-4 mb-6">
-                    <div className="h-px w-8 bg-teal-500/30" />
-                    <span className="text-[10px] font-black tracking-[0.5em] text-teal-400 uppercase">Core_Command_Personnel</span>
-                    <div className="h-px w-8 bg-teal-500/30" />
-                  </div>
-                  
-                  <h2 className="astral-heading text-5xl md:text-8xl uppercase mb-8 leading-none">
-                    Meet The <span className="text-teal-400">Architects</span>
-                  </h2>
-                  <p className="text-white/50 saarang-serif italic text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-                    The visionaries behind the interstellar symposium. Access the encrypted personnel database to view the command matrix.
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 }}
-                  className="pt-8"
-                >
-                  <a 
-                    href="?portal=team"
-                    className="inline-flex items-center gap-6 px-16 py-7 rounded-2xl bg-teal-500 text-black font-black tracking-[0.4em] uppercase shadow-[0_0_50px_rgba(45,212,191,0.3)] hover:shadow-[0_0_80px_rgba(45,212,191,0.6)] hover:bg-white hover:scale-105 transition-all duration-500 group"
-                  >
-                    REVEAL_TEAM_MATRIX
-                    <svg className="w-6 h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M13 7l5 5-5 5M6 7l5 5-5 5" />
-                    </svg>
-                  </a>
-                  <div className="mt-8 flex justify-center items-center gap-8 text-[8px] font-bold text-white/20 tracking-[0.3em] uppercase">
-                    <span>Integrity_Verified</span>
-                    <div className="w-1 h-1 rounded-full bg-teal-500/30" />
-                    <span>Access_Confirmed</span>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-          </section>
-        </Section>
+        {/* <Section id="team">
+          <Team />
+        </Section> */}
 
         {/* ================= FOOTER ================= */}
         <Footer />
