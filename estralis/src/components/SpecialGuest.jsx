@@ -34,9 +34,9 @@ const SpecialGuest = () => {
                 id="special-guest"
                 className="relative min-h-screen py-20 flex flex-col items-center justify-center overflow-hidden bg-[#020617]"
             >
-                {/* Background Texture/Aura */}
                 <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
-                    <div className="absolute top-1/2 left-0 w-full h-[500px] bg-teal-500/10 blur-[150px] -translate-y-1/2" />
+                    {/* blur-[150px] is too expensive on mobile GPU - only shown on desktop */}
+                    <div className="hidden md:block absolute top-1/2 left-0 w-full h-[500px] bg-teal-500/10 blur-[150px] -translate-y-1/2" />
                 </div>
 
                 <div className="container mx-auto px-6 max-w-7xl relative z-10">
@@ -154,8 +154,8 @@ const SpecialGuest = () => {
                                     </motion.div>
 
                                     <div className="relative aspect-[3/4] overflow-hidden bg-[#0a0a0a] shadow-2xl">
-                                        {/* Secondary Glow background */}
-                                        <div className="absolute inset-0 bg-teal-500/5 mix-blend-color" />
+                                        {/* mix-blend-color forces GPU layer - only on desktop */}
+                                        <div className="hidden md:block absolute inset-0 bg-teal-500/5 mix-blend-color" />
 
                                         <img
                                             src="/art.webp"
@@ -199,7 +199,7 @@ const SpecialGuest = () => {
                                     </motion.div>
 
                                     <div className="relative aspect-[3/4] overflow-hidden bg-[#0a0a0a] shadow-2xl">
-                                        <div className="absolute inset-0 bg-teal-500/5 mix-blend-color" />
+                                        <div className="hidden md:block absolute inset-0 bg-teal-500/5 mix-blend-color" />
                                         <img
                                             src="/nama.webp"
                                             alt="Naman"

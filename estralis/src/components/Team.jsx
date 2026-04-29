@@ -27,6 +27,7 @@ const TEAM_MEMBERS = [
 ];
 
 export default function Team() {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   return (
     <motion.section
       id="team"
@@ -73,7 +74,7 @@ export default function Team() {
         </div>
 
         {/* ================= GRID ================= */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-12" style={{ perspective: "2000px" }}>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-12" style={isMobile ? {} : { perspective: "2000px" }}>
           {TEAM_MEMBERS.map((member, idx) => (
             <TeamMemberCard key={member.name} member={member} idx={idx} />
           ))}
@@ -133,14 +134,14 @@ function TeamMemberCard({ member, idx }) {
       className="group relative"
       style={isMobile ? {} : { transformStyle: "preserve-3d" }}
     >
-      <div className={`p-1 rounded-2xl md:rounded-[2.5rem] overflow-hidden transition-all duration-500 group-hover:border-teal-400/50 group-hover:shadow-[0_0_80px_rgba(45,212,191,0.3)] ${isMobile ? 'team-card-glass' : 'astral-glass bg-slate-950/40'}`}>
+      <div className={`p-1 rounded-2xl md:rounded-[2.5rem] overflow-hidden ${isMobile ? '' : 'transition-all duration-500 group-hover:border-teal-400/50 group-hover:shadow-[0_0_80px_rgba(45,212,191,0.3)]'} ${isMobile ? 'team-card-glass' : 'astral-glass bg-slate-950/40'}`}>
         <div className="relative h-40 md:h-64 overflow-hidden rounded-xl md:rounded-[2.2rem] m-1" style={isMobile ? {} : { transform: "translateZ(30px)" }}>
           <img
             src={member.image}
             alt={member.name}
             loading="lazy"
             decoding="async"
-            className="w-full h-full object-cover transition-all duration-700"
+            className={`w-full h-full object-cover ${isMobile ? '' : 'transition-all duration-700'}`}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60" />
         </div>
