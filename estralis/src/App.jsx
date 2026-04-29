@@ -106,21 +106,21 @@ export default function App() {
           style={{ background: "radial-gradient(ellipse at top right, rgba(8,145,178,0.06) 0%, transparent 65%)" }} />
 
         {/* Astral center mid-page glow */}
-        <div className="hidden md:block fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] pointer-events-none -z-10 translate-z-0"
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] pointer-events-none -z-10 translate-z-0"
           style={{ background: "radial-gradient(ellipse, rgba(45,212,191,0.03) 0%, transparent 70%)" }} />
 
         {/* Teal bottom-right */}
-        <div className="hidden md:block fixed bottom-0 right-0 w-[500px] h-[500px] pointer-events-none -z-10 translate-z-0"
+        <div className="fixed bottom-0 right-0 w-[500px] h-[500px] pointer-events-none -z-10 translate-z-0"
           style={{ background: "radial-gradient(ellipse at bottom right, rgba(8,145,178,0.04) 0%, transparent 65%)" }} />
 
         {/* Parallax Astral lights */}
         <motion.div
           style={{ y: ySlow, background: "radial-gradient(circle, rgba(45,212,191,0.04) 0%, transparent 70%)" }}
-          className="hidden md:block fixed top-1/4 left-[10%] w-[500px] h-[500px] rounded-full pointer-events-none -z-10 translate-z-0"
+          className="fixed top-1/4 left-[10%] w-[500px] h-[500px] rounded-full pointer-events-none -z-10 translate-z-0"
         />
         <motion.div
           style={{ y: yFast, background: "radial-gradient(circle, rgba(8,145,178,0.03) 0%, transparent 65%)" }}
-          className="hidden md:block fixed top-1/3 right-[10%] w-[400px] h-[400px] rounded-full pointer-events-none -z-10 translate-z-0"
+          className="fixed top-1/3 right-[10%] w-[400px] h-[400px] rounded-full pointer-events-none -z-10 translate-z-0"
         />
 
         <CursorGlow />

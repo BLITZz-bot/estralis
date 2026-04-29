@@ -42,7 +42,7 @@ export default function FestivalHero() {
               x: { repeat: Infinity, duration: 4, ease: "easeInOut" },
               y: { repeat: Infinity, duration: 4, ease: "easeInOut" }
             }}
-            className="hidden md:block saarang-banner-text text-cyan-500/60 absolute text-[13vw] sm:text-[12vw] leading-normal pb-4 tracking-tight blur-[8px] z-0"
+            className="saarang-banner-text text-cyan-500/60 absolute text-[13vw] sm:text-[12vw] leading-normal pb-4 tracking-tight blur-[8px] z-0"
             style={{ transform: 'scaleY(1.4)', transformOrigin: 'bottom' }}
           >
             ESTRALIS
@@ -56,7 +56,7 @@ export default function FestivalHero() {
               x: { repeat: Infinity, duration: 3, ease: "easeInOut" },
               y: { repeat: Infinity, duration: 3, ease: "easeInOut" }
             }}
-            className="hidden md:block saarang-banner-text text-fuchsia-500/60 absolute text-[13vw] sm:text-[12vw] leading-normal pb-4 tracking-tight blur-[8px] z-0"
+            className="saarang-banner-text text-fuchsia-500/60 absolute text-[13vw] sm:text-[12vw] leading-normal pb-4 tracking-tight blur-[8px] z-0"
             style={{ transform: 'scaleY(1.4)', transformOrigin: 'bottom' }}
           >
             ESTRALIS
