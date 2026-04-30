@@ -23,7 +23,7 @@ import ThemeRevealModal from "./components/ThemeRevealModal"
 import SectionBackground from "./components/SectionBackground"
 import ProtocolModal from "./components/ProtocolModal"
 import SpecialGuest from "./components/SpecialGuest"
-// import Team from "./components/Team"
+import Team from "./components/Team"
 import StaffScanner from "./components/StaffScanner"
 import LuckyDraw from "./components/LuckyDraw"
 import { useState, useEffect } from "react"
@@ -240,9 +240,9 @@ export default function App() {
           <Venue />
         </Section>
 
-        {/* <Section id="team">
+        <Section id="team">
           <Team />
-        </Section> */}
+        </Section>
 
         {/* ================= FOOTER ================= */}
         <Footer />

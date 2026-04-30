@@ -525,7 +525,7 @@ function CategoryZone({ title, subtitle, events, onEventClick, eventStatuses, bg
             whileInView={{
               opacity: 1,
               filter: "brightness(1.5) blur(0px)",
-              textShadow: ["0 0 0px rgba(45,212,191,0)", "0 0 20px rgba(45,212,191,0.5)", "0 0 0px rgba(45,212,191,0)"]
+              textShadow: ["0 0 0px rgba(45,212,191,0)", "0 0 30px rgba(45,212,191,0.6)", "0 0 0px rgba(45,212,191,0)"]
             }}
             viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
