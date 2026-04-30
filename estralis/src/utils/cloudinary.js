@@ -15,5 +15,5 @@ export const getOptimizedImage = (imageUrl, width = 'auto') => {
 
   if (absoluteUrl.includes('res.cloudinary.com')) return absoluteUrl;
 
-  return `https://res.cloudinary.com/${cloudName}/image/fetch/f_auto,q_100/${absoluteUrl}`;
+  return `https://res.cloudinary.com/${cloudName}/image/fetch/f_auto,q_100/${encodeURIComponent(absoluteUrl)}`;
 };
