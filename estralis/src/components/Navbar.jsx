@@ -131,7 +131,7 @@ export default function Navbar({ onOpenRegistrations, onOpenAdmin, onOpenThemeRe
             animate={open ? "show" : "hidden"}
             className="flex flex-col flex-1 gap-4 text-sm"
           >
-            {['Home', 'About', 'Events', 'Team', 'DJ Tickets', 'Venue'].map((item) => (
+            {['Home', 'About', 'Events', 'DJ Tickets', 'Venue'].map((item) => (
               <motion.a
                 key={item}
                 variants={itemVariants}
@@ -192,7 +192,7 @@ export default function Navbar({ onOpenRegistrations, onOpenAdmin, onOpenThemeRe
           </div>
 
           <div className="hidden md:flex items-center gap-8">
-            {['Home', 'About', 'Events', 'Team', 'DJ Tickets', 'Venue'].map(item => (
+            {['Home', 'About', 'Events', 'DJ Tickets', 'Venue'].map(item => (
               <a 
                 key={item} 
                 href={item === 'DJ Tickets' ? '#special-guest' : `#${item.toLowerCase()}`}

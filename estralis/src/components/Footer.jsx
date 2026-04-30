@@ -72,13 +72,8 @@ export default function Footer() {
           <div>
             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40 mb-6">Contact_Freq</h4>
             <div className="space-y-4">
-              <div className="flex items-center gap-4 text-teal-300 mb-2">
-                <div className="w-8 h-8 rounded-full border border-teal-500/30 overflow-hidden shrink-0">
-                  <img src="/har.png" alt="Bharath" className="w-full h-full object-cover" />
-                </div>
-                <div className="text-[12px] font-black tracking-[0.2em] uppercase">
-                  Bharath
-                </div>
+              <div className="text-[12px] font-black tracking-[0.2em] uppercase text-teal-300 mb-2">
+                Bharath
               </div>
               <a href="mailto:bharatha9483@gmail.com" className="block group">
                 <span className="text-[9px] text-teal-400/40 block mb-1">Inbound_Mail</span>
@@ -110,21 +105,9 @@ export default function Footer() {
         <div className="relative" ref={popupRef}>
           <button
             onClick={() => setShowLinks(!showLinks)}
-            className="flex items-center gap-3 group"
+            className="saarang-serif text-2xl text-teal-400/60 hover:text-teal-400 hover:glow-teal transition-all italic tracking-tight cursor-pointer"
           >
-            <div className="relative">
-              <motion.div 
-                animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute inset-[-4px] rounded-full border border-teal-500/50 blur-[2px]" 
-              />
-              <div className="relative w-10 h-10 rounded-full border-2 border-teal-500/20 overflow-hidden group-hover:border-teal-400 transition-all shadow-[0_0_15px_rgba(45,212,191,0.2)]">
-                <img src="/har.png" alt="Developer" className="w-full h-full object-cover" />
-              </div>
-            </div>
-            <span className="saarang-serif text-2xl text-teal-400/60 group-hover:text-teal-400 group-hover:glow-teal transition-all italic tracking-tight cursor-pointer">
-              Bharath
-            </span>
+            Bharath
           </button>
 
           <AnimatePresence>
