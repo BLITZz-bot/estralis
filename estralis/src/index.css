@@ -174,16 +174,12 @@ button {
 }
 
 /* 📱 IPHONE SPECIFIC CRASH PREVENTION */
-/* We only disable backdrop-blur as it's the primary cause of GPU memory crashes on iOS Safari */
+/* We previously disabled some effects, but now we rely on Cloudinary image optimization to provide performance headroom */
 .is-iphone .astral-glass,
-.is-iphone .astral-glass-bright,
-.is-iphone [class*="backdrop-blur"],
-.is-iphone [style*="backdrop-filter"],
-.is-iphone [style*="backdropFilter"] {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  background-color: rgba(2, 6, 23, 0.92) !important;
-  border: 1px solid rgba(45, 212, 191, 0.15) !important;
+.is-iphone .astral-glass-bright {
+  /* Restored original glass effect */
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
 }
 
 @keyframes shimmer {

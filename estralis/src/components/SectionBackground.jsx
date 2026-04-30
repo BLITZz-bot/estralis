@@ -1,11 +1,15 @@
 import { useRef } from 'react';
 import { useInView, motion } from 'framer-motion';
+import { getOptimizedImage } from '../utils/cloudinary';
 
 export default function SectionBackground({ src, alt = "Background", activeOpacity = "opacity-40 md:opacity-50" }) {
   const ref = useRef(null);
 
   // Tracks exactly when this background is within the middle 40% of the viewport (mobile + desktop)
   const isInView = useInView(ref, { margin: "-20% 0px -20% 0px", amount: 0.1 });
+
+  // Optimize image for mobile or desktop
+  const optimizedSrc = getOptimizedImage(src, typeof window !== 'undefined' && window.innerWidth < 768 ? 1000 : 2000);
 
   return (
     <div
@@ -19,7 +23,7 @@ export default function SectionBackground({ src, alt = "Background", activeOpaci
       <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/90 via-transparent to-[#020617]/90 z-10" />
 
       <motion.img
-        src={src}
+        src={optimizedSrc}
         alt={alt}
         initial={{ scale: 1.05 }}
         animate={{ scale: isInView ? 1 : 1.07 }}

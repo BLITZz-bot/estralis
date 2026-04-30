@@ -4,6 +4,7 @@ import RegistrationForm from "./RegistrationForm";
 import { EventModal } from "./Schedule";
 
 import { DJ_EVENT_DATA } from "../data/djEventData";
+import { getOptimizedImage } from '../utils/cloudinary';
 
 const SpecialGuest = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -158,7 +159,7 @@ const SpecialGuest = () => {
                                         <div className="absolute inset-0 bg-teal-500/5 mix-blend-color" />
 
                                         <img
-                                            src="/art.webp"
+                                            src={getOptimizedImage("/art.webp", 800)}
                                             alt="Face of Estralis"
                                             className="w-full h-full object-cover object-top transition-transform duration-[1.5s] group-hover:scale-105 will-change-transform transform-gpu"
                                         />
@@ -199,7 +200,7 @@ const SpecialGuest = () => {
                                     <div className="relative aspect-[3/4] overflow-hidden bg-[#0a0a0a] shadow-2xl">
                                         <div className="absolute inset-0 bg-teal-500/5 mix-blend-color" />
                                         <img
-                                            src="/nama.webp"
+                                            src={getOptimizedImage("/nama.webp", 800)}
                                             alt="Naman"
                                             className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
                                         />

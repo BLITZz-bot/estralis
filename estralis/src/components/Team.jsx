@@ -1,5 +1,6 @@
 import { motion } from "framer-motion"
 import SectionBackground from "./SectionBackground"
+import { getOptimizedImage } from '../utils/cloudinary';
 
 const TEAM_MEMBERS = [
   { name: "AKASH SHARMA", role: "ORGANIZER", image: "/akash.webp" },
@@ -128,7 +129,7 @@ function TeamMemberCard({ member, idx }) {
       <div className="astral-glass p-1 rounded-2xl md:rounded-[2.5rem] overflow-hidden transition-all duration-500 group-hover:border-teal-400/50 group-hover:shadow-[0_0_80px_rgba(45,212,191,0.3)] bg-slate-950/40">
         <div className="relative h-40 md:h-64 overflow-hidden rounded-xl md:rounded-[2.2rem] m-1" style={{ transform: "translateZ(30px)" }}>
           <img
-            src={member.image}
+            src={getOptimizedImage(member.image, 600)}
             alt={member.name}
             className="w-full h-full object-cover transition-all duration-700"
           />
