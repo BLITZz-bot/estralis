@@ -161,26 +161,19 @@ button {
 }
 
 /* 📱 MOBILE PERFORMANCE OPTIMIZATION */
+/* Previously we reduced blur on mobile, but with Cloudinary optimization, we can now afford the full effect. */
 @media (max-width: 767px) {
   .astral-glass {
-    backdrop-filter: blur(10px) saturate(160%);
-    -webkit-backdrop-filter: blur(10px) saturate(160%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
   }
 
   .astral-glass-bright {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
   }
 }
 
-/* 📱 IPHONE SPECIFIC CRASH PREVENTION */
-/* We previously disabled some effects, but now we rely on Cloudinary image optimization to provide performance headroom */
-.is-iphone .astral-glass,
-.is-iphone .astral-glass-bright {
-  /* Fully restored original glass effect (20px blur) now that images are optimized */
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-}
 
 @keyframes shimmer {
   0% {
