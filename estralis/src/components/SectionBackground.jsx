@@ -8,8 +8,8 @@ export default function SectionBackground({ src, alt = "Background", activeOpaci
   // Tracks exactly when this background is within the middle 40% of the viewport (mobile + desktop)
   const isInView = useInView(ref, { margin: "-20% 0px -20% 0px", amount: 0.1 });
 
-  // Optimize image for mobile or desktop
-  const optimizedSrc = getOptimizedImage(src, typeof window !== 'undefined' && window.innerWidth < 768 ? 1000 : 2000);
+  // Optimize image for mobile or desktop (using high resolution for desktop)
+  const optimizedSrc = getOptimizedImage(src, typeof window !== 'undefined' && window.innerWidth < 768 ? 1200 : 3000);
 
   return (
     <div

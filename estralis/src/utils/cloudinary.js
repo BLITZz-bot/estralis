@@ -22,7 +22,7 @@ export const getOptimizedImage = (imageUrl, width = 'auto') => {
     absoluteUrl = imageUrl.split('?')[0];
   }
 
-  // Use f_auto and q_auto for maximum compatibility
+  // Use f_auto and q_auto:best for high quality
   // Use encodeURIComponent to handle query parameters correctly
-  return `https://res.cloudinary.com/${cloudName}/image/fetch/f_auto,q_auto,w_${width}/${encodeURIComponent(absoluteUrl)}`;
+  return `https://res.cloudinary.com/${cloudName}/image/fetch/f_auto,q_auto:best,w_${width}/${encodeURIComponent(absoluteUrl)}`;
 };
