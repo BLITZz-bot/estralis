@@ -1018,7 +1018,7 @@ export default function RegistrationForm({ event, onClose }) {
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="space-y-1.5">
-                                            <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">UTR / Transaction ID</label>
+                                            <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">Enter UTR Number</label>
                                             <input required type="text" name="utrNumber" value={formData.utrNumber} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold placeholder:text-white/5" placeholder="12-digit UTR Number" />
                                         </div>
                                         <div className="space-y-1.5">
@@ -1028,7 +1028,7 @@ export default function RegistrationForm({ event, onClose }) {
                                     </div>
 
                                     <div className="space-y-1.5">
-                                        <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">Payment Proof (Screenshot showing UTR Number)</label>
+                                        <label className="text-[10px] font-bold text-white/30 tracking-widest uppercase font-tech ml-1">Upload the Screenshot of payment showing UTR number</label>
                                         <div className="relative">
                                             <input required type="file" name="screenshot" accept="image/*" onChange={handleChange} className="hidden" id="screenshot-upload" />
                                             <label htmlFor="screenshot-upload" className="flex items-center justify-between w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 cursor-pointer hover:bg-white/10 transition-all">
