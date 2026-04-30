@@ -17,6 +17,9 @@ export const getOptimizedImage = (imageUrl, width = 'auto') => {
   if (imageUrl.startsWith('/')) {
     const origin = typeof window !== 'undefined' ? window.location.origin : 'https://estralisfest2026.vercel.app';
     absoluteUrl = `${origin}${imageUrl}`;
+  } else if (imageUrl.includes('images.unsplash.com')) {
+    // Strip Unsplash parameters to avoid conflicts with Cloudinary transformations
+    absoluteUrl = imageUrl.split('?')[0];
   }
 
   // Use f_auto and q_auto for maximum compatibility
