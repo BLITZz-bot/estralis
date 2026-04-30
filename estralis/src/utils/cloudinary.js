@@ -3,17 +3,23 @@ export const getOptimizedImage = (imageUrl, width = 'auto') => {
 
   const cloudName = 'delpppor4';
   
-  const isLocal = typeof window !== 'undefined' && window.location.hostname === 'localhost';
-  if (isLocal) return imageUrl;
+  // Detect if we are in local development
+  const isLocal = typeof window !== 'undefined' && 
+                 (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
-  const siteUrl = 'https://estralisfest.vercel.app'; 
-  
+  // If it's a local asset (starts with /), Cloudinary can't fetch it during local development
+  if (isLocal && imageUrl.startsWith('/')) return imageUrl;
+
+  // If it's already a Cloudinary URL, don't wrap it again
+  if (imageUrl.includes('res.cloudinary.com')) return imageUrl;
+
   let absoluteUrl = imageUrl;
   if (imageUrl.startsWith('/')) {
-    absoluteUrl = `${siteUrl}${imageUrl}`;
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://estralisfest2026.vercel.app';
+    absoluteUrl = `${origin}${imageUrl}`;
   }
 
-  if (absoluteUrl.includes('res.cloudinary.com')) return absoluteUrl;
-
-  return `https://res.cloudinary.com/${cloudName}/image/fetch/f_auto,q_100/${encodeURIComponent(absoluteUrl)}`;
+  // Use f_auto and q_auto for maximum compatibility
+  // Use encodeURIComponent to handle query parameters correctly
+  return `https://res.cloudinary.com/${cloudName}/image/fetch/f_auto,q_auto,w_${width}/${encodeURIComponent(absoluteUrl)}`;
 };
