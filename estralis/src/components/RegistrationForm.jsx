@@ -854,6 +854,19 @@ export default function RegistrationForm({ event, onClose }) {
                                         )}
                                     </div>
 
+                                    {isDJNight && slotInfo && (
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 flex flex-col items-center">
+                                                <span className="text-[8px] font-black text-emerald-400/60 uppercase tracking-[0.2em] mb-1">GCEM SLOTS</span>
+                                                <span className="text-2xl font-black text-white glow-teal">{slotInfo.gcemSlotsLeft}</span>
+                                            </div>
+                                            <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 flex flex-col items-center">
+                                                <span className="text-[8px] font-black text-blue-400/60 uppercase tracking-[0.2em] mb-1">OTHER SLOTS</span>
+                                                <span className="text-2xl font-black text-white glow-blue">{slotInfo.otherSlotsLeft}</span>
+                                            </div>
+                                        </div>
+                                    )}
+
                                     {isDJNight && (
                                         <div className="flex items-center justify-between p-4 rounded-xl bg-teal-500/5 border border-teal-500/10">
                                             <span className="text-[10px] font-black uppercase tracking-widest text-teal-400/60 font-astral">YOUR INDIVIDUAL FEE</span>
