@@ -1503,20 +1503,20 @@ app.get('/api/events/slots-status', async (req, res) => {
         const otherMax = config.other_max_slots || 200;
         const totalMax = gcemMax + otherMax;
 
-        // Check if request is from admin (has password header)
-        const adminPassword = req.headers['x-admin-password'];
-        const isAdmin = adminPassword ? await verifyAdminOrSecondary(adminPassword) : false;
-
-            // Return full data even for public (necessary for squad validation)
-            res.status(200).json({
-                success: true,
-                isLimited: true,
-                isManualOpen: config.is_manual_open === true || config.is_manual_open === 1 || config.is_manual_open === null,
-                slotsLeft: Math.max(0, totalMax - totalCount),
-                gcemSlotsLeft: Math.max(0, gcemMax - gcemCount),
-                otherSlotsLeft: Math.max(0, otherMax - otherCount)
-            });
-        }
+        res.status(200).json({
+            success: true,
+            isLimited: true,
+            maxSlots: totalMax,
+            gcemMaxSlots: gcemMax,
+            otherMaxSlots: otherMax,
+            currentCount: totalCount,
+            gcemCount: gcemCount,
+            otherCount: otherCount,
+            isManualOpen: config.is_manual_open === true || config.is_manual_open === 1 || config.is_manual_open === null,
+            slotsLeft: Math.max(0, totalMax - totalCount),
+            gcemSlotsLeft: Math.max(0, gcemMax - gcemCount),
+            otherSlotsLeft: Math.max(0, otherMax - otherCount)
+        });
     } catch (error) {
         console.error("Slots fetch error:", error);
         res.status(500).json({ success: false, message: 'Server error fetching slots' });
