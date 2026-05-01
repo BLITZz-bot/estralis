@@ -185,10 +185,30 @@ export default function RegistrationForm({ event, onClose }) {
 
     const isManuallyClosed = slotInfo && slotInfo.isManualOpen === false;
     
-    // Check relevant slots based on college
-    const isGCEM = formData.college.trim().toUpperCase() === hostCollege;
-    const relevantSlotsLeft = isGCEM ? (slotInfo?.gcemSlotsLeft ?? slotInfo?.slotsLeft) : (slotInfo?.otherSlotsLeft ?? slotInfo?.slotsLeft);
-    const isSoldOut = isDJNight && slotInfo && (relevantSlotsLeft < currentSquadSize);
+    // Split headcount logic for DJ Night
+    const getSquadCounts = () => {
+        let gcem = 0;
+        let other = 0;
+        if (formData.college.trim().toUpperCase() === hostCollege) gcem++;
+        else other++;
+        
+        teamMembers.forEach(m => {
+            if ((m.college || "").trim().toUpperCase() === hostCollege) gcem++;
+            else other++;
+        });
+        return { gcem, other };
+    };
+
+    const squadCounts = getSquadCounts();
+    const isGCEMLeader = isDJNight && formData.college.trim().toUpperCase() === hostCollege;
+    
+    // Restriction: GCEM students must register individually
+    const hasGCEMRestrictionError = isDJNight && isGCEMLeader && teamMembers.length > 0;
+
+    // Accurate Slot Validation
+    const isGcemSoldOut = isDJNight && slotInfo && (squadCounts.gcem > (slotInfo.gcemSlotsLeft ?? 0));
+    const isOtherSoldOut = isDJNight && slotInfo && (squadCounts.other > (slotInfo.otherSlotsLeft ?? 0));
+    const isSoldOut = isDJNight && slotInfo && (isGcemSoldOut || isOtherSoldOut);
 
     // Fetch allowed colleges
     useEffect(() => {
@@ -827,7 +847,7 @@ export default function RegistrationForm({ event, onClose }) {
                                         <h3 className="text-[11px] font-black tracking-widest text-white uppercase font-astral">
                                             {isDJNight ? 'ADD FRIENDS (OPTIONAL)' : 'SQUAD DETAILS'}
                                         </h3>
-                                        {teamMembers.length + 1 < maxTeamSize && (
+                                        {(teamMembers.length + 1 < maxTeamSize) && !isGCEMLeader && (
                                             <button type="button" onClick={addMember} className="px-6 py-2 rounded-xl border border-teal-500/30 text-teal-400 text-[10px] font-black uppercase tracking-widest hover:bg-teal-500 hover:text-black transition-all font-astral">
                                                 + ADD {isDJNight ? 'FRIEND' : 'MEMBER'}
                                             </button>
@@ -968,16 +988,30 @@ export default function RegistrationForm({ event, onClose }) {
                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center">
                                     Any issue with registration? Contact Bharath <a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">7975871167</a>
                                 </p>
+
+                                {hasGCEMRestrictionError && (
+                                    <div className="w-full max-w-md p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold text-center animate-pulse">
+                                        ⚠️ GCEM STUDENTS MUST REGISTER INDIVIDUALLY. PLEASE REMOVE FRIENDS TO CONTINUE.
+                                    </div>
+                                )}
+
+                                {isSoldOut && (
+                                    <div className="w-full max-w-md p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold text-center">
+                                        {isGcemSoldOut && <div>❌ GCEM SLOTS ARE SOLD OUT</div>}
+                                        {isOtherSoldOut && <div>❌ OTHER COLLEGE SLOTS ARE SOLD OUT</div>}
+                                    </div>
+                                )}
+
                                 <button 
                                     type="submit" 
-                                    disabled={isManuallyClosed || isSoldOut}
+                                    disabled={isManuallyClosed || isSoldOut || hasGCEMRestrictionError}
                                     className={`w-full max-w-md py-6 transition-all font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl flex items-center justify-center gap-3 font-astral ${
-                                        isManuallyClosed || isSoldOut 
+                                        isManuallyClosed || isSoldOut || hasGCEMRestrictionError
                                         ? 'bg-red-500/20 text-red-500 cursor-not-allowed border border-red-500/30' 
                                         : 'bg-teal-500 text-black hover:bg-white hover:shadow-[0_0_50px_rgba(45,212,191,0.3)]'
                                     }`}
                                 >
-                                    {isManuallyClosed ? "REGISTRY CLOSED" : isSoldOut ? "SOLD OUT" : "CONTINUE TO PAYMENT"} <span className="text-lg">→</span>
+                                    {isManuallyClosed ? "REGISTRY CLOSED" : (isSoldOut || hasGCEMRestrictionError) ? "UNAVAILABLE" : "CONTINUE TO PAYMENT"} <span className="text-lg">→</span>
                                 </button>
                             </div>
                         </motion.form>

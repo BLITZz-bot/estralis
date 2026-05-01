@@ -1254,7 +1254,7 @@ app.post('/api/admin/send-report', async (req, res) => {
                 const totalParticipants = 1 + teamCount;
 
                 // Create a comprehensive squad string for the leader row
-                const isDJNight = eventTitle === "Artist Performance and DJ Night";
+                const isDJNight = eventTitle.trim().toUpperCase() === "ARTIST PERFORMANCE AND DJ NIGHT";
                 let squadDetails = "Solo Registration";
                 if (teamCount > 0) {
                     squadDetails = `Total: ${totalParticipants} (Lead + ${teamCount})\n\n`;
@@ -1507,29 +1507,14 @@ app.get('/api/events/slots-status', async (req, res) => {
         const adminPassword = req.headers['x-admin-password'];
         const isAdmin = adminPassword ? await verifyAdminOrSecondary(adminPassword) : false;
 
-        if (isAdmin) {
-            // Full data for admin dashboard
+            // Return full data even for public (necessary for squad validation)
             res.status(200).json({
                 success: true,
                 isLimited: true,
-                maxSlots: totalMax,
-                gcemMaxSlots: gcemMax,
-                otherMaxSlots: otherMax,
-                currentCount: totalCount,
-                gcemCount: gcemCount,
-                otherCount: otherCount,
                 isManualOpen: config.is_manual_open === true || config.is_manual_open === 1 || config.is_manual_open === null,
                 slotsLeft: Math.max(0, totalMax - totalCount),
                 gcemSlotsLeft: Math.max(0, gcemMax - gcemCount),
                 otherSlotsLeft: Math.max(0, otherMax - otherCount)
-            });
-        } else {
-            // Limited data for public (no exact counts)
-            res.status(200).json({
-                success: true,
-                isLimited: true,
-                isManualOpen: config.is_manual_open === true || config.is_manual_open === 1 || config.is_manual_open === null,
-                slotsLeft: Math.max(0, totalMax - totalCount) > 0 ? 1 : 0
             });
         }
     } catch (error) {
