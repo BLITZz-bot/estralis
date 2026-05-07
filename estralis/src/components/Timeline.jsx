@@ -125,7 +125,7 @@ function TimelineNode({ event, index }) {
       {/* Time above line */}
       <div className="mb-10 pl-4 h-[30px] flex items-center pr-2">
         <span className="font-mono text-teal-400 font-bold text-xs md:text-sm tracking-widest uppercase">
-          &gt; {event.time.replace(" – ", " ")}
+          &gt; {event.time.replace(" – ", " ")} ({activeTab})
         </span>
       </div>
 

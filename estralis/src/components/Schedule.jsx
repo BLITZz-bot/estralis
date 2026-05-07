@@ -463,7 +463,7 @@ const cardVariants = {
   show: { opacity: 1, y: 0 },
 }
 
-function EventCard({ title, fee, category, onClick, isOpen, t, time }) {
+function EventCard({ title, fee, category, onClick, isOpen, t, time, date }) {
   const theme = t || { text: "text-teal-400", hoverText: "group-hover:text-teal-400", bg: "bg-teal-500", hoverBg: "hover:bg-teal-500/10", borderL: "border-l-teal-500", bgSoft: "bg-teal-500/10" };
 
   return (
@@ -486,7 +486,7 @@ function EventCard({ title, fee, category, onClick, isOpen, t, time }) {
             </span>
           </div>
           <span className="text-[10px] font-black tracking-[0.3em] uppercase text-white/60">
-            {time.split(" - ")[0]}
+            {time.split(" - ")[0]} ({date})
           </span>
         </div>
 
