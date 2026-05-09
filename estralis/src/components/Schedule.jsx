@@ -270,7 +270,7 @@ export const eventsDay1 = [
     ],
     coordinators: ["Chandan Kumar J - 8050661979", "Shivayogi - 7760333829"],
     registerLink: "#",
-    fee: "₹200",
+    fee: "₹300",
   },
   {
     date: "May 14",
@@ -299,7 +299,7 @@ export const eventsDay1 = [
     ],
     coordinators: ["Vinay - 8431536379", "Dheeraj - 9686508926"],
     registerLink: "#",
-    fee: "₹200",
+    fee: "₹300",
   },
   {
     date: "May 14",
