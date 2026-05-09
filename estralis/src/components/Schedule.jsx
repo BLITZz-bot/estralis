@@ -80,7 +80,7 @@ export const eventsDay1 = [
     ],
     coordinators: ["Ramya Victoria - 7204210703", "Manya - 7348975951"],
     registerLink: "#",
-    fee: "₹500",
+    fee: "₹300",
   },
   {
     date: "May 14",
@@ -112,7 +112,7 @@ export const eventsDay1 = [
     ],
     coordinators: ["Rupa Shree - 9741095149", "Varun - 8095981524"],
     registerLink: "#",
-    fee: "₹500"
+    fee: "₹300"
   },
   {
     date: "May 14",
@@ -214,7 +214,7 @@ export const eventsDay1 = [
     ],
     coordinators: ["Kishore V - 9742726861", "Anas Ansari - 9008892112", "Hari Kumar - 6362965600"],
     registerLink: "#",
-    fee: "₹1000",
+    fee: "₹500",
   },
   {
     date: "May 14",
@@ -242,7 +242,7 @@ export const eventsDay1 = [
     ],
     coordinators: ["Arsha G - 9538622342", "Jyothi - 9008111237"],
     registerLink: "#",
-    fee: "₹2,500",
+    fee: "₹1000",
   },
   {
     date: "May 14",
@@ -270,7 +270,7 @@ export const eventsDay1 = [
     ],
     coordinators: ["Chandan Kumar J - 8050661979", "Shivayogi - 7760333829"],
     registerLink: "#",
-    fee: "₹500",
+    fee: "₹200",
   },
   {
     date: "May 14",
@@ -297,9 +297,9 @@ export const eventsDay1 = [
       "The participants should not misbehave during the event. If caught misbehaving, it might lead to disqualification.",
       "The participants must reach the venue 1 hour prior to the scheduled time.",
     ],
-    coordinators: ["Vinay - 9380661129", "Vinay M - 9035892119"],
+    coordinators: ["Vinay - 8431536379", "Dheeraj - 9686508926"],
     registerLink: "#",
-    fee: "₹500",
+    fee: "₹200",
   },
   {
     date: "May 14",
@@ -332,7 +332,7 @@ export const eventsDay1 = [
     ],
     coordinators: ["Siya - 9886483177", "Shruti - 6282173819"],
     registerLink: "#",
-    fee: "₹2,500"
+    fee: "₹1000"
   },
 ]
 
@@ -390,7 +390,7 @@ export const eventsDay2 = [
     ],
     coordinators: ["Manoj N - 7760396379", "Sirisha - 7019176616"],
     registerLink: "#",
-    fee: "₹300",
+    fee: "₹200",
   },
   {
     date: "May 15",
@@ -421,7 +421,7 @@ export const eventsDay2 = [
     ],
     coordinators: ["Raksha M - 8867555612", "Deepthi V - 8867839042"],
     registerLink: "#",
-    fee: "₹3,000",
+    fee: "₹1500",
   },
   {
     date: "May 15",
