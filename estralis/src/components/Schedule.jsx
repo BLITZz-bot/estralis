@@ -309,7 +309,7 @@ export const eventsDay1 = [
     description: "A dynamic group dance competition where teams perform energetic western routines. Coordination, formations, creativity, and synchronization are key as groups deliver impactful and entertaining performances.",
     category: "Dance",
     prize: "₹30,000",
-    minTeamSize: 6,
+    minTeamSize: 4,
     maxTeamSize: 15,
     rules: ["Everyone should come at 8.30 for venue and the registration will be 8.30 to 9.30",
       "Team size: 6 - 15 members.",
