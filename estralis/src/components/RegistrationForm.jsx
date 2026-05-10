@@ -218,6 +218,7 @@ export default function RegistrationForm({ event, onClose }) {
                 const res = await fetch(`${import.meta.env.VITE_API_URL}/api/colleges`);
                 const data = await res.json();
                 if (data.success) {
+                    let fetchedList = data.data.map(c => c.name.toUpperCase());
                     // Force include Host Colleges if not present in DB
                     hostColleges.forEach(hc => {
                         if (!fetchedList.includes(hc)) {
