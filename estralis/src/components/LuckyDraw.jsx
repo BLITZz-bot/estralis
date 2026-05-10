@@ -124,7 +124,7 @@ export default function LuckyDraw() {
                     </svg>
                     <div>
                         <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em]">Location</p>
-                        <p className="text-white font-bold text-sm">{LUCKY_DRAW_EVENT.location}, GCEM Campus</p>
+                        <p className="text-white font-bold text-sm">{LUCKY_DRAW_EVENT.location}</p>
                     </div>
                 </motion.div>
 
@@ -199,7 +199,7 @@ export default function LuckyDraw() {
                 >
                     <p className="text-[10px] font-black tracking-[0.3em] text-yellow-400/60 uppercase">Payment Instructions</p>
                     <p className="text-white text-sm leading-relaxed">
-                        Pay <span className="text-yellow-400 font-black">₹100</span> per ticket via UPI to the coordinator. 
+                        Pay <span className="text-yellow-400 font-black">₹100</span> per ticket via UPI. 
                         Take a screenshot of the payment, note your UTR/Transaction ID, and register below.
                     </p>
                 </motion.div>

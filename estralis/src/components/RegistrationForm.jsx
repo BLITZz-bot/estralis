@@ -172,8 +172,9 @@ export default function RegistrationForm({ event, onClose }) {
     const isTeamEvent = maxTeamSize > 1;
 
     const isDJNight = event?.title?.toUpperCase().includes("DJ NIGHT");
-    const hostCollege = "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT";
-    const getFeeForCollege = (clg) => (clg || "").trim().toUpperCase() === hostCollege ? 200 : 400;
+    const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING"];
+    const isHostCollege = (clg) => hostColleges.includes((clg || "").trim().toUpperCase());
+    const getFeeForCollege = (clg) => isHostCollege(clg) ? 200 : 400;
 
     const leaderFee = getFeeForCollege(formData.college);
     const friendsTotalFee = teamMembers.reduce((acc, m) => acc + getFeeForCollege(m.college), 0);
@@ -189,18 +190,18 @@ export default function RegistrationForm({ event, onClose }) {
     const getSquadCounts = () => {
         let gcem = 0;
         let other = 0;
-        if (formData.college.trim().toUpperCase() === hostCollege) gcem++;
+        if (isHostCollege(formData.college)) gcem++;
         else other++;
         
         teamMembers.forEach(m => {
-            if ((m.college || "").trim().toUpperCase() === hostCollege) gcem++;
+            if (isHostCollege(m.college)) gcem++;
             else other++;
         });
         return { gcem, other };
     };
 
     const squadCounts = getSquadCounts();
-    const isGCEMLeader = isDJNight && formData.college.trim().toUpperCase() === hostCollege;
+    const isGCEMLeader = isDJNight && isHostCollege(formData.college);
     
     // Restriction: GCEM students must register individually
     const hasGCEMRestrictionError = isDJNight && isGCEMLeader && teamMembers.length > 0;
@@ -217,13 +218,12 @@ export default function RegistrationForm({ event, onClose }) {
                 const res = await fetch(`${import.meta.env.VITE_API_URL}/api/colleges`);
                 const data = await res.json();
                 if (data.success) {
-                    const hostCollege = "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT";
-                    let fetchedList = data.data.map(c => c.name.toUpperCase());
-                    
-                    // Force include GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT if not present in DB
-                    if (!fetchedList.includes(hostCollege)) {
-                        fetchedList.push(hostCollege);
-                    }
+                    // Force include Host Colleges if not present in DB
+                    hostColleges.forEach(hc => {
+                        if (!fetchedList.includes(hc)) {
+                            fetchedList.push(hc);
+                        }
+                    });
                     
                     setCollegeList(fetchedList);
                 }

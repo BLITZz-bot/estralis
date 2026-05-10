@@ -2021,7 +2021,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                 {/* GOPALAN Analytics */}
                                                 <div className="astral-glass p-8 space-y-6 border-emerald-500/20">
                                                     <div className="flex justify-between items-center">
-                                                        <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400/80">GOPALAN COLLEGE Analytics</span>
+                                                        <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400/80">GOPALAN (GCEM + GSAP) Analytics</span>
                                                         <span className={`text-[10px] font-black px-3 py-1 rounded-full ${djSlots.gcemSlotsLeft > 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-500'}`}>
                                                             {djSlots.gcemSlotsLeft > 0 ? 'AVAILABLE' : 'SOLD OUT'}
                                                         </span>
@@ -2041,7 +2041,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
                                                     <div className="space-y-4">
                                                         <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-gray-400">
-                                                            <span>GCEM Allocation</span>
+                                                            <span>GOPALAN Allocation</span>
                                                             <span>{Math.round(((djSlots.gcemCount || 0) / (djSlots.gcemMaxSlots || 600)) * 100)}% Occupied</span>
                                                         </div>
                                                         <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">

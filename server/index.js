@@ -364,12 +364,13 @@ app.post('/api/register-manual', async (req, res) => {
                     [eventTitle]
                 );
 
-                const hostCollege = "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT";
+                const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING"];
+                const isHostCollege = (clg) => hostColleges.includes((clg || "").trim().toUpperCase());
                 let currentGcem = 0;
                 let currentOther = 0;
 
                 registrationsRes.rows.forEach(reg => {
-                    if (reg.college.trim().toUpperCase() === hostCollege) currentGcem++;
+                    if (isHostCollege(reg.college)) currentGcem++;
                     else currentOther++;
                     let members = [];
                     try {
@@ -380,8 +381,8 @@ app.post('/api/register-manual', async (req, res) => {
                     }
 
                     members.forEach(m => {
-                        if ((m.college || "").trim().toUpperCase() === hostCollege) currentGcem++;
-                        else currentOther++;
+                    if (isHostCollege(m.college)) currentGcem++;
+                    else currentOther++;
                     });
                 });
 
@@ -389,12 +390,12 @@ app.post('/api/register-manual', async (req, res) => {
                 let incomingGcem = 0;
                 let incomingOther = 0;
 
-                if (college.trim().toUpperCase() === hostCollege) incomingGcem++;
+                if (isHostCollege(college)) incomingGcem++;
                 else incomingOther++;
 
                 const members = Array.isArray(teamMembers) ? teamMembers : [];
                 members.forEach(m => {
-                    if ((m.college || "").trim().toUpperCase() === hostCollege) incomingGcem++;
+                    if (isHostCollege(m.college)) incomingGcem++;
                     else incomingOther++;
                 });
 
