@@ -312,7 +312,7 @@ export const eventsDay1 = [
     minTeamSize: 4,
     maxTeamSize: 15,
     rules: ["Everyone should come at 8.30 for venue and the registration will be 8.30 to 9.30",
-      "Team size: 6 - 15 members.",
+      "Team size: 4 - 15 members.",
       "Time limit: 5 - 10 minutes (including entry & exit).",
       "Only western dance styles allowed.",
       "Participants must submit their performance tracks (MP3 format) and optional background visuals (MP4 format) at least 48 hours prior to the event. No on-site modifications or submissions will be permitted.",
