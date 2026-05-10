@@ -1468,13 +1468,15 @@ app.get('/api/events/slots-status', async (req, res) => {
             [normalizedTitle]
         );
 
-        const hostCollege = "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT";
+        const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING"];
+        const isHostCollege = (clg) => hostColleges.includes((clg || "").trim().toUpperCase());
+        
         let gcemCount = 0;
         let otherCount = 0;
 
         registrationsRes.rows.forEach(reg => {
             // Count leader
-            if (reg.college.trim().toUpperCase() === hostCollege) {
+            if (isHostCollege(reg.college)) {
                 gcemCount++;
             } else {
                 otherCount++;
@@ -1490,7 +1492,7 @@ app.get('/api/events/slots-status', async (req, res) => {
             }
 
             members.forEach(m => {
-                if ((m.college || "").trim().toUpperCase() === hostCollege) {
+                if (isHostCollege(m.college)) {
                     gcemCount++;
                 } else {
                     otherCount++;
