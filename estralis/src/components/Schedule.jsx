@@ -172,8 +172,8 @@ export const eventsDay1 = [
     fee: "₹200",
   },
   {
-    date: "May 14",
-    time: "12:00 PM - 03:00 PM",
+    date: "May 14 - 15",
+    time: "09:00 AM Onwards",
     title: "BGMI",
     location: "1ST Floor Classroom",
     description: "A competitive gaming event where players battle in BGMI matches to prove their strategy and survival skills. Team coordination, quick reflexes, and tactical gameplay are essential to secure victory.",

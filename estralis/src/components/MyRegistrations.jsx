@@ -137,7 +137,7 @@ export default function MyRegistrations({ isOpen, onClose, initialEmail, autoDow
                 "FITNESS CHALLENGE - Plank": { location: "Open Amphitheatre", time: "May 14, 11:00 AM - 02:00 PM" },
                 "BEAT BOXING": { location: "GIS auditorium", time: "May 15, 11:00 AM - 12:30 PM" },
                 "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
-                "BGMI": { location: "1ST Floor Classroom", time: "12:00 PM" },
+                "BGMI": { location: "1ST Floor Classroom", time: "09:00 AM Onwards" },
                 "WESTERN GROUP": { location: "Amphitheatre", time: "03:30 PM" },
                 "BATTLE OF BANDS": { location: "Amphitheatre", time: "10:00 AM" },
                 "FASHION WALK": { location: "Amphitheatre", time: "12:00 PM" },

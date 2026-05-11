@@ -9,7 +9,7 @@ const timelineData = {
     { time: "10:30 AM (14th) – 11:00 AM (15th)", title: "REELS MAKING", type: "Fun" },
     { time: "11:00 AM – 01:00 PM", title: "TREASURE HUNT", type: "Fun" },
     { time: "11:00 AM – 01:00 PM", title: "FACE PAINTING", type: "Fun" },
-    { time: "12:00 PM – 03:00 PM", title: "BGMI", type: "Gaming" },
+    { time: "09:00 AM Onwards", title: "BGMI", type: "Gaming" },
     { time: "12:30 PM – 02:30 PM", title: "CLASSICAL GROUP", type: "Cultural" },
     { time: "11:00 AM – 02:00 PM", title: "FITNESS CHALLENGE", type: "Sports" },
     { time: "03:30 PM – 05:00 PM", title: "WESTERN GROUP", type: "Cultural" },
@@ -18,6 +18,7 @@ const timelineData = {
     { time: "10:00 AM – 12:00 PM", title: "BATTLE OF BANDS", type: "Cultural" },
     { time: "11:00 AM – 12:30 PM", title: "BEAT BOXING", type: "Cultural" },
     { time: "12:00 PM – 03:00 PM", title: "FASHION WALK", type: "Cultural" },
+    { time: "09:00 AM Onwards", title: "BGMI", type: "Gaming" },
     { time: "03:00 PM – 04:00 PM", title: "PRIZE DISTRIBUTION", type: "Ceremony" },
     { time: "06:00 PM – (onwards)", title: "ARTIST PERFORMANCE & DJ NIGHT", type: "Cultural & Fun" },
 

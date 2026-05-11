@@ -364,7 +364,7 @@ app.post('/api/register-manual', async (req, res) => {
                     [eventTitle]
                 );
 
-                const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING"];
+                const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING", "GOPALAN COLLEGE OF COMMERCE"];
                 const isHostCollege = (clg) => hostColleges.includes((clg || "").trim().toUpperCase());
                 let currentGcem = 0;
                 let currentOther = 0;
@@ -519,7 +519,7 @@ const EVENT_SCHEDULE = {
     "POSTER DESIGNING": { location: "LAB 5, Ground Floor", time: "11:00 AM" },
     "BEAT BOXING": { location: "GIS auditorium", time: "May 15, 11:00 AM - 12:30 PM" },
     "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
-    "BGMI": { location: "6th floor Seminar hall", time: "12:00 PM" },
+    "BGMI": { location: "6th floor Seminar hall", time: "May 14-15, 09:00 AM Onwards" },
     "WESTERN GROUP": { location: "Amphitheatre", time: "09:30 AM" },
     "BATTLE OF BANDS": { location: "Amphitheatre", time: "11:00 AM" },
     "FASHION SHOW": { location: "Amphitheatre", time: "01:00 PM" },
@@ -577,7 +577,7 @@ const generatePDFPass = async (reg) => {
             "POSTER DESIGNING": { location: "LAB 5, Ground Floor", time: "11:00 AM" },
             "BEAT BOXING": { location: "GIS auditorium", time: "May 15, 11:00 AM - 12:30 PM" },
             "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
-            "BGMI": { location: "6th floor Seminar hall", time: "12:00 PM" },
+            "BGMI": { location: "6th floor Seminar hall", time: "09:00 AM Onwards" },
             "WESTERN GROUP": { location: "Amphitheatre", time: "09:30 AM" },
             "BATTLE OF BANDS": { location: "Amphitheatre", time: "10:00 AM" },
             "FASHION WALK": { location: "Amphitheatre", time: "12:00 PM" },
@@ -1468,7 +1468,7 @@ app.get('/api/events/slots-status', async (req, res) => {
             [normalizedTitle]
         );
 
-        const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING"];
+        const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING", "GOPALAN COLLEGE OF COMMERCE"];
         const isHostCollege = (clg) => hostColleges.includes((clg || "").trim().toUpperCase());
         
         let gcemCount = 0;
