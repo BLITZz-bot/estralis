@@ -182,7 +182,7 @@ export const eventsDay1 = [
     minTeamSize: 4,
     maxTeamSize: 5,
     rules: ["Everyone should come at 8.30 for venue and the registration will be 8.30 to 9.30",
-      "Tournament consists of 4 matches.",
+      "Tournament consists of 6 matches.",
       "Maps will be selected randomly.",
       "All required maps must be downloaded beforehand.",
       "Teams must join the room on time (5-minute grace allowed).",
