@@ -238,14 +238,22 @@ export default function RegistrationForm({ event, onClose }) {
     // Filtered college list for DJ Night based on visibility flags
     const filteredCollegeList = useMemo(() => {
         if (!isDJNight || !slotInfo) return collegeList;
-        
-        return collegeList.filter(college => {
-            const up = (college || "").toUpperCase().trim();
-            if (up === "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT") return slotInfo.showGcem !== false;
-            if (up === "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING") return slotInfo.showGsap !== false;
-            if (up === "GOPALAN COLLEGE OF COMMERCE") return slotInfo.showGcc !== false;
-            return true;
-        });
+
+        // Host college definitions — controlled by admin toggles
+        const hostDefs = [
+            { name: "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", show: slotInfo.showGcem !== false },
+            { name: "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING",   show: slotInfo.showGsap !== false },
+            { name: "GOPALAN COLLEGE OF COMMERCE",                   show: slotInfo.showGcc  !== false },
+        ];
+        const hostNames = new Set(hostDefs.map(h => h.name));
+
+        // Non-host colleges from DB (always show, deduplicated against host names)
+        const nonHostColleges = collegeList.filter(c => !hostNames.has((c || "").trim().toUpperCase()));
+
+        // Inject visible host colleges at the top, then all non-host colleges
+        const visibleHosts = hostDefs.filter(h => h.show).map(h => h.name);
+
+        return [...visibleHosts, ...nonHostColleges];
     }, [collegeList, isDJNight, slotInfo]);
 
     // Slot tracking for DJ Night
