@@ -1,4 +1,5 @@
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion"
+// Metadata: Updated with 5+ event rule for all events
 import { useRef, useState, useEffect } from "react"
 // import StarBackground from "./StarBackground"
 import RegistrationForm from "./RegistrationForm"
