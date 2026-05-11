@@ -9,7 +9,6 @@ const timelineData = {
     { time: "10:30 AM (14th) – 11:00 AM (15th)", title: "REELS MAKING", type: "Fun" },
     { time: "11:00 AM – 01:00 PM", title: "TREASURE HUNT", type: "Fun" },
     { time: "11:00 AM – 01:00 PM", title: "FACE PAINTING", type: "Fun" },
-    { time: "09:00 AM Onwards", title: "BGMI", type: "Gaming" },
     { time: "12:30 PM – 02:30 PM", title: "CLASSICAL GROUP", type: "Cultural" },
     { time: "03:30 PM – 05:00 PM", title: "WESTERN GROUP", type: "Cultural" },
   ],

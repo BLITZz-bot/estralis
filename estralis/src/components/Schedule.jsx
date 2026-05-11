@@ -171,50 +171,6 @@ export const eventsDay1 = [
     registerLink: "#",
     fee: "₹200",
   },
-  {
-    date: "May 14 - 15",
-    time: "09:00 AM Onwards",
-    title: "BGMI",
-    location: "1ST Floor Classroom",
-    description: "A competitive gaming event where players battle in BGMI matches to prove their strategy and survival skills. Team coordination, quick reflexes, and tactical gameplay are essential to secure victory.",
-    category: "Gaming",
-    prize: "₹15,000",
-    minTeamSize: 4,
-    maxTeamSize: 5,
-    rules: ["Everyone should come at 8.30 for venue and the registration will be 8.30 to 9.30",
-      "Tournament consists of 6 matches.",
-      "Maps will be selected randomly.",
-      "All required maps must be downloaded beforehand.",
-      "Teams must join the room on time (5-minute grace allowed).",
-      "No rematches for late entry or absence.",
-      "Cheating, hacking, teaming, or use of third-party tools = disqualification.",
-      "Account sharing is strictly prohibited.",
-      "Participants are responsible for their own devices.",
-      "No refunds for schedule clashes.",
-      "Organizers' decision will be final and binding.",
-      "Points System:",
-      `Placement Points:
-      1st - 10 pts
-      2nd - 6 pts
-      3rd - 5 pts
-      4th - 4 pts
-      5th - 3 pts
-      6th - 2 pts
-      7th-8th - 1 pt
-      9th-16th - 0 pts
-      Each kill = +1 point`,
-      "Points will be calculated across all matches Network Rules:",
-      "WiFi may be provided; players are advised to keep mobile data backup.",
-      "No rematches for lag, disconnection, or network issues.",
-      "For team-based events, all registered members must be present at the venue simultaneously for registration and verification.",
-      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
-      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
-      "The participants should not misbehave during the event. If caught misbehaving, it might lead to disqualification.",
-      "The participants must reach the venue 1 hour prior to the scheduled time.",
-    ],
-    coordinators: ["Kishore V - 9742726861", "Anas Ansari - 9008892112", "Hari Kumar - 6362965600"],
-    registerLink: "#",
-    fee: "₹500",
   },
   {
     date: "May 14",
@@ -442,7 +398,51 @@ export const eventsDay2 = [
     registerLink: "#",
     fee: "FREE",
   },
-
+  {
+    date: "May 15",
+    time: "09:00 AM Onwards",
+    title: "BGMI",
+    location: "1ST Floor Classroom",
+    description: "A competitive gaming event where players battle in BGMI matches to prove their strategy and survival skills. Team coordination, quick reflexes, and tactical gameplay are essential to secure victory.",
+    category: "Gaming",
+    prize: "₹15,000",
+    minTeamSize: 4,
+    maxTeamSize: 5,
+    rules: ["Everyone should come at 8.30 for venue and the registration will be 8.30 to 9.30",
+      "Tournament consists of 6 matches.",
+      "Maps will be selected randomly.",
+      "All required maps must be downloaded beforehand.",
+      "Teams must join the room on time (5-minute grace allowed).",
+      "No rematches for late entry or absence.",
+      "Cheating, hacking, teaming, or use of third-party tools = disqualification.",
+      "Account sharing is strictly prohibited.",
+      "Participants are responsible for their own devices.",
+      "No refunds for schedule clashes.",
+      "Organizers' decision will be final and binding.",
+      "Points System:",
+      `Placement Points:
+      1st - 10 pts
+      2nd - 6 pts
+      3rd - 5 pts
+      4th - 4 pts
+      5th - 3 pts
+      6th - 2 pts
+      7th-8th - 1 pt
+      9th-16th - 0 pts
+      Each kill = +1 point`,
+      "Points will be calculated across all matches Network Rules:",
+      "WiFi may be provided; players are advised to keep mobile data backup.",
+      "No rematches for lag, disconnection, or network issues.",
+      "For team-based events, all registered members must be present at the venue simultaneously for registration and verification.",
+      "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
+      "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
+      "The participants should not misbehave during the event. If caught misbehaving, it might lead to disqualification.",
+      "The participants must reach the venue 1 hour prior to the scheduled time.",
+    ],
+    coordinators: ["Kishore V - 9742726861", "Anas Ansari - 9008892112", "Hari Kumar - 6362965600"],
+    registerLink: "#",
+    fee: "₹500",
+  },
 ]
 
 function getCategoryStyles(category) {
