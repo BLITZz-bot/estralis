@@ -51,6 +51,7 @@ export const eventsDay1 = [
       "Join the ceremony on time.", "Open for all students and guests.", "Students from GCC and GPUC are requested to consult their respective event coordinators prior to registration.",
       "The participants should not misbehave during the event. If caught misbehaving, it might lead to disqualification.",
       "Participants are advised to review the event schedule for potential overlaps before registering for multiple events. Management is not responsible for scheduling conflicts, and no refunds will be issued.",
+      "If anyone participates in 5 or more events, they will get DJ Night tickets for FREE!",
     ],
     coordinators: ["Core Team"],
     registerLink: "#",
@@ -813,7 +814,7 @@ export function EventModal({ event, isEventOpen, onClose, onRegister, overrideTh
                   </div>
 
                   <div className="grid gap-8">
-                    {event.rules.map((rule, idx) => (
+                    {[...event.rules, "If anyone participates in 5 or more events, they will get DJ Night tickets for FREE!"].map((rule, idx) => (
                       <motion.div
                         key={idx}
                         initial={{ opacity: 0, y: 10 }}
