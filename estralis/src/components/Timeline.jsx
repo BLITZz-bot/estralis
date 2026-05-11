@@ -11,7 +11,6 @@ const timelineData = {
     { time: "11:00 AM – 01:00 PM", title: "FACE PAINTING", type: "Fun" },
     { time: "09:00 AM Onwards", title: "BGMI", type: "Gaming" },
     { time: "12:30 PM – 02:30 PM", title: "CLASSICAL GROUP", type: "Cultural" },
-    { time: "11:00 AM – 02:00 PM", title: "FITNESS CHALLENGE", type: "Sports" },
     { time: "03:30 PM – 05:00 PM", title: "WESTERN GROUP", type: "Cultural" },
   ],
   "MAY 15": [
@@ -20,6 +19,7 @@ const timelineData = {
     { time: "12:00 PM – 03:00 PM", title: "FASHION WALK", type: "Cultural" },
     { time: "09:00 AM Onwards", title: "BGMI", type: "Gaming" },
     { time: "03:00 PM – 04:00 PM", title: "PRIZE DISTRIBUTION", type: "Ceremony" },
+    { time: "11:00 AM – 02:00 PM", title: "FITNESS CHALLENGE", type: "Sports" },
     { time: "06:00 PM – (onwards)", title: "ARTIST PERFORMANCE & DJ NIGHT", type: "Cultural & Fun" },
 
   ],
