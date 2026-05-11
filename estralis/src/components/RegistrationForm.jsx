@@ -239,7 +239,7 @@ export default function RegistrationForm({ event, onClose }) {
     const filteredCollegeList = useMemo(() => {
         if (!isDJNight || !slotInfo) return collegeList;
 
-        // Host college definitions — controlled by admin toggles
+        // Host college definitions — controlled by admin toggles (Verified for GCC)
         const hostDefs = [
             { name: "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", show: slotInfo.showGcem !== false },
             { name: "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING",   show: slotInfo.showGsap !== false },
