@@ -369,7 +369,7 @@ export const eventsDay2 = [
     date: "May 15",
     time: "11:00 AM - 12:30 PM",
     title: "BEAT BOXING",
-    location: "GIS auditorium",
+    location: "Amphitheatre",
     description: "A high-energy vocal percussion battle where participants create beats, rhythms, and musical effects using only their voice. This event challenges creativity, breath control, and rhythm sense as performers showcase unique sound patterns and freestyle skills. Stage presence and crowd engagement play a key role in standing out.",
     category: "Fun",
     prize: "₹8,000",

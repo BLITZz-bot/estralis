@@ -492,7 +492,7 @@ export default function RegistrationForm({ event, onClose }) {
                 "FACE PAINTING": { location: "Amphitheatre", time: "11:00 AM" },
                 "FITNESS CHALLENGE - Push-ups": { location: "Open Amphitheatre", time: "May 14, 11:00 AM - 02:00 PM" },
                 "FITNESS CHALLENGE - Plank": { location: "Open Amphitheatre", time: "May 14, 11:00 AM - 02:00 PM" },
-                "BEAT BOXING": { location: "GIS auditorium", time: "May 15, 11:00 AM - 12:30 PM" },
+                "BEAT BOXING": { location: "Amphitheatre", time: "May 15, 11:00 AM - 12:30 PM" },
                 "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
                 "BGMI": { location: "1ST Floor Classroom", time: "09:00 AM Onwards" },
                 "WESTERN GROUP": { location: "Amphitheatre", time: "03:30 PM" },
