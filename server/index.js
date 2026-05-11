@@ -520,7 +520,7 @@ const EVENT_SCHEDULE = {
     "POSTER DESIGNING": { location: "LAB 5, Ground Floor", time: "11:00 AM" },
     "BEAT BOXING": { location: "Amphitheatre", time: "May 15, 11:00 AM - 12:30 PM" },
     "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
-    "BGMI": { location: "6th floor Seminar hall", time: "May 15, 09:00 AM Onwards" },
+    "BGMI": { location: "2nd floor, GCEM campus", time: "May 15, 09:00 AM Onwards" },
     "WESTERN GROUP": { location: "Amphitheatre", time: "09:30 AM" },
     "BATTLE OF BANDS": { location: "Amphitheatre", time: "11:00 AM" },
     "FASHION SHOW": { location: "Amphitheatre", time: "01:00 PM" },
@@ -578,7 +578,7 @@ const generatePDFPass = async (reg) => {
             "POSTER DESIGNING": { location: "LAB 5, Ground Floor", time: "11:00 AM" },
             "BEAT BOXING": { location: "Amphitheatre", time: "May 15, 11:00 AM - 12:30 PM" },
             "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
-            "BGMI": { location: "6th floor Seminar hall", time: "May 15, 09:00 AM Onwards" },
+            "BGMI": { location: "2nd floor, GCEM campus", time: "May 15, 09:00 AM Onwards" },
             "WESTERN GROUP": { location: "Amphitheatre", time: "09:30 AM" },
             "BATTLE OF BANDS": { location: "Amphitheatre", time: "10:00 AM" },
             "FASHION WALK": { location: "Amphitheatre", time: "12:00 PM" },
@@ -824,9 +824,12 @@ app.get('/api/registrations/:email', async (req, res) => {
         const result = await db.query(
             `SELECT * FROM registrations 
              WHERE LOWER(email) = LOWER($1) 
-             OR EXISTS (
-                 SELECT 1 FROM jsonb_array_elements(team_members) AS member 
-                 WHERE LOWER(member->>'email') = LOWER($1)
+             OR (
+                 jsonb_typeof(team_members) = 'array' AND 
+                 EXISTS (
+                     SELECT 1 FROM jsonb_array_elements(team_members) AS member 
+                     WHERE LOWER(member->>'email') = LOWER($1)
+                 )
              )
              ORDER BY timestamp DESC`,
             [email]
@@ -1380,7 +1383,7 @@ app.post('/api/theme/verify', async (req, res) => {
 
         const ALLOWED_EVENTS = ['HIGHLIGHT REEL', 'SHOT CUT'];
         const result = await db.query(
-            "SELECT * FROM registrations WHERE LOWER(email) = LOWER($1) AND event_title ANY($2)",
+            "SELECT * FROM registrations WHERE LOWER(email) = LOWER($1) AND event_title = ANY($2)",
             [email.trim(), ALLOWED_EVENTS]
         );
         const data = result.rows[0];

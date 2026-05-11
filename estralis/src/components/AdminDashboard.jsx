@@ -21,6 +21,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         semester: "",
         branch: "",
         linkedin_url: "",
+        utr_number: "",
         team_members: []
     });
     const [isUpdating, setIsUpdating] = useState(false);
@@ -786,6 +787,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
             semester: reg.semester || "",
             branch: reg.branch || "",
             linkedin_url: reg.linkedin_url || "",
+            utr_number: reg.utr_number || "",
             team_members: (() => {
                 try {
                     const raw = reg.team_members || reg.teamMembers;
@@ -2439,13 +2441,23 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-teal-500 transition"
                                     />
                                 </div>
-                                <div className="md:col-span-2">
+                                <div>
                                     <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">LinkedIn URL (Optional)</label>
                                     <input
                                         type="url"
                                         value={editForm.linkedin_url}
                                         onChange={(e) => setEditForm({ ...editForm, linkedin_url: e.target.value })}
                                         placeholder="https://linkedin.com/in/..."
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-teal-500 transition"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Transaction ID (UTR)</label>
+                                    <input
+                                        type="text"
+                                        value={editForm.utr_number}
+                                        onChange={(e) => setEditForm({ ...editForm, utr_number: e.target.value })}
+                                        placeholder="UTR / Ref Number"
                                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-teal-500 transition"
                                     />
                                 </div>
@@ -2540,7 +2552,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                             />
                                                         </div>
                                                         <div className="sm:col-span-2">
-                                                            <label className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">LinkedIn URL</label>
+                                                            <label className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">LinkedIn URL (Optional)</label>
                                                             <input
                                                                 type="url"
                                                                 value={member.linkedinUrl || ""}

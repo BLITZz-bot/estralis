@@ -345,7 +345,7 @@ export const eventsDay2 = [
     rules: [
       "Everyone should come at 8.30 for venue and the registration will be 8.30 to 9.30",
       "Maximum number of proper form push-ups in 2 minutes.",
-      "Arms must be fully extended at the top and chest close to the ground at the bottom.",
+      // "Arms must be fully extended at the top and chest close to the ground at the bottom.",
       "Proper form must be maintained throughout the attempt.",
       "Knees touching the ground will end the attempt.",
       "Any misconduct or unfair means will lead to disqualification.",
@@ -415,7 +415,7 @@ export const eventsDay2 = [
     date: "May 15",
     time: "09:00 AM Onwards",
     title: "BGMI",
-    location: "1ST Floor Classroom",
+    location: "2nd floor, GCEM campus",
     description: "A competitive gaming event where players battle in BGMI matches to prove their strategy and survival skills. Team coordination, quick reflexes, and tactical gameplay are essential to secure victory.",
     category: "Gaming",
     prize: "₹15,000",
@@ -432,6 +432,7 @@ export const eventsDay2 = [
       "Participants are responsible for their own devices.",
       "No refunds for schedule clashes.",
       "Organizers' decision will be final and binding.",
+      "Breaks will be provided in between matches.",
       "Points System:",
       `Placement Points:
       1st - 10 pts
