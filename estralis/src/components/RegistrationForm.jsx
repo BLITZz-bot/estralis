@@ -241,9 +241,9 @@ export default function RegistrationForm({ event, onClose }) {
 
         // Host college definitions — controlled by admin toggles (Verified for GCC)
         const hostDefs = [
-            { name: "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", show: slotInfo.showGcem !== false },
-            { name: "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING",   show: slotInfo.showGsap !== false },
-            { name: "GOPALAN COLLEGE OF COMMERCE",                   show: slotInfo.showGcc  !== false },
+            { name: "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", show: slotInfo.showGcem === true || slotInfo.showGcem === undefined || slotInfo.showGcem === null },
+            { name: "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING",   show: slotInfo.showGsap === true || slotInfo.showGsap === undefined || slotInfo.showGsap === null },
+            { name: "GOPALAN COLLEGE OF COMMERCE",                   show: slotInfo.showGcc === true || slotInfo.showGcc === undefined || slotInfo.showGcc === null },
         ];
         const hostNames = new Set(hostDefs.map(h => h.name));
 
