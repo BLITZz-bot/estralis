@@ -364,7 +364,7 @@ app.post('/api/register-manual', async (req, res) => {
                     [eventTitle]
                 );
 
-                const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING", "GOPALAN COLLEGE OF COMMERCE"];
+                const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING"];
                 const isHostCollege = (clg) => hostColleges.includes((clg || "").trim().toUpperCase());
                 let currentGcem = 0;
                 let currentOther = 0;
@@ -375,7 +375,8 @@ app.post('/api/register-manual', async (req, res) => {
                     let members = [];
                     try {
                         const rawMembers = reg.team_members;
-                        members = (typeof rawMembers === 'string') ? JSON.parse(rawMembers) : (rawMembers || []);
+                        const parsed = (typeof rawMembers === 'string') ? JSON.parse(rawMembers) : rawMembers;
+                        members = Array.isArray(parsed) ? parsed : [];
                     } catch (e) {
                         members = [];
                     }
@@ -707,8 +708,15 @@ const generatePDFPass = async (reg) => {
         doc.fillColor(colors.dim).fontSize(5).font('Helvetica').text("SCAN TO VERIFY", 138 * mmToPt, 246 * mmToPt, { align: 'center', width: 25 * mmToPt });
 
         // TEAM MEMBERS (Page 2)
-        const members = reg.team_members ? (typeof reg.team_members === 'string' ? JSON.parse(reg.team_members) : reg.team_members) : [];
-        if (members && members.length > 0) {
+        let members = [];
+        try {
+            const rawMembers = reg.team_members;
+            const parsed = (typeof rawMembers === 'string') ? JSON.parse(rawMembers) : rawMembers;
+            members = Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+            members = [];
+        }
+        if (members.length > 0) {
             doc.addPage({ size: [width, height], margins: { top: 0, left: 0, bottom: 0, right: 0 } });
             drawTicketBase(doc);
             let teamY = 80 * mmToPt;
@@ -1245,7 +1253,8 @@ app.post('/api/admin/send-report', async (req, res) => {
                 let members = [];
                 try {
                     const rawMembers = reg.team_members || reg.teamMembers;
-                    members = (typeof rawMembers === 'string') ? JSON.parse(rawMembers) : (rawMembers || []);
+                    const parsed = (typeof rawMembers === 'string') ? JSON.parse(rawMembers) : rawMembers;
+                    members = Array.isArray(parsed) ? parsed : [];
                 } catch (e) {
                     console.error("Error parsing team members:", e);
                     members = [];
@@ -1456,11 +1465,7 @@ app.get('/api/events/slots-status', async (req, res) => {
 
         // Get Config
         const configRes = await db.query('SELECT * FROM event_slots WHERE UPPER(TRIM(event_title)) = $1', [normalizedTitle]);
-        const config = configRes.rows[0];
-
-        if (!config) {
-            return res.status(200).json({ success: true, isLimited: false });
-        }
+        const config = configRes.rows[0] || { gcem_max_slots: 600, other_max_slots: 200, is_manual_open: true };
 
         // Get Current Headcount (Split by College)
         const registrationsRes = await db.query(
@@ -1468,7 +1473,7 @@ app.get('/api/events/slots-status', async (req, res) => {
             [normalizedTitle]
         );
 
-        const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING", "GOPALAN COLLEGE OF COMMERCE"];
+        const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING"];
         const isHostCollege = (clg) => hostColleges.includes((clg || "").trim().toUpperCase());
         
         let gcemCount = 0;
@@ -1486,7 +1491,8 @@ app.get('/api/events/slots-status', async (req, res) => {
             let members = [];
             try {
                 const rawMembers = reg.team_members;
-                members = (typeof rawMembers === 'string') ? JSON.parse(rawMembers) : (rawMembers || []);
+                const parsed = (typeof rawMembers === 'string') ? JSON.parse(rawMembers) : rawMembers;
+                members = Array.isArray(parsed) ? parsed : [];
             } catch (e) {
                 members = [];
             }

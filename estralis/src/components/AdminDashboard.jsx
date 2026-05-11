@@ -331,7 +331,12 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 headers: { 'x-admin-password': password }
             });
             const data = await res.json();
-            if (data.success) setDjSlots(data);
+            if (data.success) {
+                setDjSlots(data);
+            } else {
+                console.error("Slot fetch returned success:false", data);
+                // Even on success:false, we might want to set a default or show error
+            }
         } catch (err) {
             console.error("Failed to fetch DJ slots", err);
         }
@@ -930,6 +935,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                 setCountdown((prev) => {
                     if (prev <= 1) {
                         fetchRegistrations();
+                        if (activeTab === "slots" && isSlotsAuth) fetchDjSlots();
                         return 30; // Refresh every 30s
                     }
                     return prev - 1;
@@ -2123,6 +2129,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                             <div className="flex bg-black/40 border border-white/10 rounded-xl overflow-hidden focus-within:border-emerald-500 transition-all shadow-inner">
                                                                 <input 
                                                                     type="number"
+                                                                    key={`gcem-${djSlots.gcemMaxSlots}`}
                                                                     defaultValue={djSlots.gcemMaxSlots || 600}
                                                                     id="gcem-slots-input"
                                                                     className="flex-1 bg-transparent px-4 py-3 text-white text-sm font-black focus:outline-none min-w-0"
@@ -2146,6 +2153,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                             <div className="flex bg-black/40 border border-white/10 rounded-xl overflow-hidden focus-within:border-blue-500 transition-all shadow-inner">
                                                                 <input 
                                                                     type="number"
+                                                                    key={`other-${djSlots.otherMaxSlots}`}
                                                                     defaultValue={djSlots.otherMaxSlots || 200}
                                                                     id="other-slots-input"
                                                                     className="flex-1 bg-transparent px-4 py-3 text-white text-sm font-black focus:outline-none min-w-0"

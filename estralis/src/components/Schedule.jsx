@@ -171,7 +171,6 @@ export const eventsDay1 = [
     registerLink: "#",
     fee: "₹200",
   },
-  },
   {
     date: "May 14",
     time: "12:30 PM - 02:30 PM",
@@ -199,7 +198,6 @@ export const eventsDay1 = [
     coordinators: ["Arsha G - 9538622342", "Jyothi - 9008111237"],
     registerLink: "#",
     fee: "₹1000",
-  },
   },
   {
     date: "May 14",

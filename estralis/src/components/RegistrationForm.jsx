@@ -172,7 +172,7 @@ export default function RegistrationForm({ event, onClose }) {
     const isTeamEvent = maxTeamSize > 1;
 
     const isDJNight = event?.title?.toUpperCase().includes("DJ NIGHT");
-    const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING", "GOPALAN COLLEGE OF COMMERCE"];
+    const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING"];
     const isHostCollege = (clg) => hostColleges.includes((clg || "").trim().toUpperCase());
     const getFeeForCollege = (clg) => isHostCollege(clg) ? 200 : 400;
 
