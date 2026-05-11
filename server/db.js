@@ -97,6 +97,9 @@ const initDB = async () => {
         // Event Slots Split Migration
         await pool.query(`ALTER TABLE event_slots ADD COLUMN IF NOT EXISTS gcem_max_slots INTEGER DEFAULT 600;`);
         await pool.query(`ALTER TABLE event_slots ADD COLUMN IF NOT EXISTS other_max_slots INTEGER DEFAULT 200;`);
+        await pool.query(`ALTER TABLE event_slots ADD COLUMN IF NOT EXISTS show_gcem BOOLEAN DEFAULT TRUE;`);
+        await pool.query(`ALTER TABLE event_slots ADD COLUMN IF NOT EXISTS show_gsap BOOLEAN DEFAULT TRUE;`);
+        await pool.query(`ALTER TABLE event_slots ADD COLUMN IF NOT EXISTS show_gcc BOOLEAN DEFAULT TRUE;`);
 
         console.log('✅ Database Schema Verified/Initialized');
     } catch (err) {

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { jsPDF } from "jspdf"
 import JsBarcode from "jsbarcode"
@@ -172,7 +172,7 @@ export default function RegistrationForm({ event, onClose }) {
     const isTeamEvent = maxTeamSize > 1;
 
     const isDJNight = event?.title?.toUpperCase().includes("DJ NIGHT");
-    const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING"];
+    const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING", "GOPALAN COLLEGE OF COMMERCE"];
     const isHostCollege = (clg) => hostColleges.includes((clg || "").trim().toUpperCase());
     const getFeeForCollege = (clg) => isHostCollege(clg) ? 200 : 400;
 
@@ -234,6 +234,19 @@ export default function RegistrationForm({ event, onClose }) {
         };
         fetchColleges();
     }, []);
+
+    // Filtered college list for DJ Night based on visibility flags
+    const filteredCollegeList = useMemo(() => {
+        if (!isDJNight || !slotInfo) return collegeList;
+        
+        return collegeList.filter(college => {
+            const up = (college || "").toUpperCase().trim();
+            if (up === "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT") return slotInfo.showGcem !== false;
+            if (up === "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING") return slotInfo.showGsap !== false;
+            if (up === "GOPALAN COLLEGE OF COMMERCE") return slotInfo.showGcc !== false;
+            return true;
+        });
+    }, [collegeList, isDJNight, slotInfo]);
 
     // Slot tracking for DJ Night
     useEffect(() => {
@@ -809,7 +822,7 @@ export default function RegistrationForm({ event, onClose }) {
                                             <CollegeSelect
                                                 value={formData.college}
                                                 onChange={(val) => setFormData(prev => ({ ...prev, college: val }))}
-                                                colleges={collegeList}
+                                                colleges={filteredCollegeList}
                                                 placeholder="Search College..."
                                                 inputClassName="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10"
                                             />
@@ -927,9 +940,9 @@ export default function RegistrationForm({ event, onClose }) {
                                                                         newMembers[index].college = val;
                                                                         setTeamMembers(newMembers);
                                                                     }}
-                                                                    colleges={collegeList}
+                                                                    colleges={filteredCollegeList}
                                                                     placeholder="Search College..."
-                                                                    inputClassName="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 text-sm font-bold"
+                                                                    inputClassName="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 text-sm font-bold"
                                                                 />
                                                             ) : (
                                                                 <input 

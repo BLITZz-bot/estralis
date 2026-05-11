@@ -364,7 +364,7 @@ app.post('/api/register-manual', async (req, res) => {
                     [eventTitle]
                 );
 
-                const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING"];
+                const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING", "GOPALAN COLLEGE OF COMMERCE"];
                 const isHostCollege = (clg) => hostColleges.includes((clg || "").trim().toUpperCase());
                 let currentGcem = 0;
                 let currentOther = 0;
@@ -1465,65 +1465,65 @@ app.get('/api/events/slots-status', async (req, res) => {
 
         // Get Config
         const configRes = await db.query('SELECT * FROM event_slots WHERE UPPER(TRIM(event_title)) = $1', [normalizedTitle]);
-        const config = configRes.rows[0] || { gcem_max_slots: 600, other_max_slots: 200, is_manual_open: true };
+        const config = configRes.rows[0] || { 
+            gcem_max_slots: 600, 
+            other_max_slots: 200, 
+            is_manual_open: true,
+            show_gcem: true,
+            show_gsap: true,
+            show_gcc: true
+        };
 
-        // Get Current Headcount (Split by College)
+        // Get Current Headcount — individual per-college counts
         const registrationsRes = await db.query(
             `SELECT college, team_members FROM registrations WHERE UPPER(TRIM(event_title)) = $1`,
             [normalizedTitle]
         );
 
-        const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING"];
-        const isHostCollege = (clg) => hostColleges.includes((clg || "").trim().toUpperCase());
-        
         let gcemCount = 0;
+        let gsapCount = 0;
+        let gccCount = 0;
         let otherCount = 0;
 
-        registrationsRes.rows.forEach(reg => {
-            // Count leader
-            if (isHostCollege(reg.college)) {
-                gcemCount++;
-            } else {
-                otherCount++;
-            }
+        const countCollege = (college) => {
+            const up = (college || "").trim().toUpperCase();
+            if (up === "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT") gcemCount++;
+            else if (up === "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING") gsapCount++;
+            else if (up === "GOPALAN COLLEGE OF COMMERCE") gccCount++;
+            else otherCount++;
+        };
 
-            // Count members
+        registrationsRes.rows.forEach(reg => {
+            countCollege(reg.college);
             let members = [];
             try {
                 const rawMembers = reg.team_members;
                 const parsed = (typeof rawMembers === 'string') ? JSON.parse(rawMembers) : rawMembers;
                 members = Array.isArray(parsed) ? parsed : [];
-            } catch (e) {
-                members = [];
-            }
-
-            members.forEach(m => {
-                if (isHostCollege(m.college)) {
-                    gcemCount++;
-                } else {
-                    otherCount++;
-                }
-            });
+            } catch (e) { members = []; }
+            members.forEach(m => countCollege(m.college));
         });
 
-        const totalCount = gcemCount + otherCount;
-
+        const hostTotal = gcemCount + gsapCount + gccCount; // shared 600-slot pool
         const gcemMax = config.gcem_max_slots || 600;
         const otherMax = config.other_max_slots || 200;
-        const totalMax = gcemMax + otherMax;
 
         res.status(200).json({
             success: true,
             isLimited: true,
-            maxSlots: totalMax,
-            gcemMaxSlots: gcemMax,
+            gcemMaxSlots: gcemMax,      // shared 600 for GCEM+GSAP+GCC
             otherMaxSlots: otherMax,
-            currentCount: totalCount,
-            gcemCount: gcemCount,
+            gcemCount: gcemCount,       // individual GCEM headcount
+            gsapCount: gsapCount,       // individual GSAP headcount
+            gccCount: gccCount,         // individual GCC headcount
+            hostCount: hostTotal,       // combined host total
             otherCount: otherCount,
             isManualOpen: config.is_manual_open === true || config.is_manual_open === 1 || config.is_manual_open === null,
-            slotsLeft: Math.max(0, totalMax - totalCount),
-            gcemSlotsLeft: Math.max(0, gcemMax - gcemCount),
+            showGcem: config.show_gcem !== false,
+            showGsap: config.show_gsap !== false,
+            showGcc: config.show_gcc !== false,
+            slotsLeft: Math.max(0, gcemMax - hostTotal),
+            gcemSlotsLeft: Math.max(0, gcemMax - hostTotal),
             otherSlotsLeft: Math.max(0, otherMax - otherCount)
         });
     } catch (error) {
@@ -1538,21 +1538,24 @@ app.post('/api/admin/events/slots-update', async (req, res) => {
         const password = req.headers['x-admin-password'];
         if (!(await verifyAdminOrSecondary(password))) return res.status(401).json({ success: false, message: 'Unauthorized' });
 
-        const { eventTitle, maxSlots, gcemMaxSlots, otherMaxSlots, isManualOpen } = req.body;
+        const { eventTitle, maxSlots, gcemMaxSlots, otherMaxSlots, isManualOpen, showGcem, showGsap, showGcc } = req.body;
         if (!eventTitle) return res.status(400).json({ success: false, message: 'eventTitle required' });
 
         const normalizedTitle = eventTitle.trim().toUpperCase();
 
         const result = await db.query(
-            `INSERT INTO event_slots (event_title, max_slots, gcem_max_slots, other_max_slots, is_manual_open) 
-             VALUES ($1, $2, $3, $4, $5) 
+            `INSERT INTO event_slots (event_title, max_slots, gcem_max_slots, other_max_slots, is_manual_open, show_gcem, show_gsap, show_gcc) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
              ON CONFLICT (event_title) DO UPDATE 
              SET max_slots = COALESCE($2, event_slots.max_slots),
                  gcem_max_slots = COALESCE($3, event_slots.gcem_max_slots),
                  other_max_slots = COALESCE($4, event_slots.other_max_slots),
-                 is_manual_open = COALESCE($5, event_slots.is_manual_open)
+                 is_manual_open = COALESCE($5, event_slots.is_manual_open),
+                 show_gcem = COALESCE($6, event_slots.show_gcem),
+                 show_gsap = COALESCE($7, event_slots.show_gsap),
+                 show_gcc = COALESCE($8, event_slots.show_gcc)
              RETURNING *`,
-            [normalizedTitle, maxSlots, gcemMaxSlots, otherMaxSlots, isManualOpen]
+            [normalizedTitle, maxSlots, gcemMaxSlots, otherMaxSlots, isManualOpen, showGcem, showGsap, showGcc]
         );
 
         res.status(200).json({ success: true, data: result.rows[0], message: 'Slot configuration updated' });
