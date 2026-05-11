@@ -2155,27 +2155,52 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                 </div>
 
                                                 {/* Shared Capacity Adjuster */}
-                                                <div className="p-5 bg-white/5 border border-white/5 rounded-2xl space-y-3">
-                                                    <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Adjust Shared Capacity (GCEM + GSAP + GCC)</p>
-                                                    <div className="flex bg-black/40 border border-white/10 rounded-xl overflow-hidden focus-within:border-emerald-500 transition-all shadow-inner">
-                                                        <input
-                                                            type="number"
-                                                            key={`gcem-${djSlots.gcemMaxSlots}`}
-                                                            defaultValue={djSlots.gcemMaxSlots || 600}
-                                                            id="gcem-slots-input"
-                                                            className="flex-1 bg-transparent px-4 py-3 text-white text-sm font-black focus:outline-none min-w-0"
-                                                            placeholder="Shared Capacity"
-                                                        />
-                                                        <button
-                                                            disabled={isUpdatingSlots}
-                                                            onClick={() => {
-                                                                const val = parseInt(document.getElementById('gcem-slots-input').value);
-                                                                if (val > 0) updateDjSlots({ gcemMaxSlots: val });
-                                                            }}
-                                                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 font-black text-[10px] uppercase tracking-widest transition-all disabled:opacity-50 shrink-0 border-l border-white/10"
-                                                        >
-                                                            {isUpdatingSlots ? '...' : 'SET'}
-                                                        </button>
+                                                <div className="p-5 bg-white/5 border border-white/5 rounded-2xl space-y-5">
+                                                    <div className="space-y-3">
+                                                        <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Adjust Shared Capacity (GCEM + GSAP + GCC)</p>
+                                                        <div className="flex bg-black/40 border border-white/10 rounded-xl overflow-hidden focus-within:border-emerald-500 transition-all shadow-inner">
+                                                            <input
+                                                                type="number"
+                                                                key={`gcem-${djSlots.gcemMaxSlots}`}
+                                                                defaultValue={djSlots.gcemMaxSlots || 600}
+                                                                id="gcem-slots-input"
+                                                                className="flex-1 bg-transparent px-4 py-3 text-white text-sm font-black focus:outline-none min-w-0"
+                                                                placeholder="Shared Capacity"
+                                                            />
+                                                            <button
+                                                                disabled={isUpdatingSlots}
+                                                                onClick={() => {
+                                                                    const val = parseInt(document.getElementById('gcem-slots-input').value);
+                                                                    if (val > 0) updateDjSlots({ gcemMaxSlots: val });
+                                                                }}
+                                                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 font-black text-[10px] uppercase tracking-widest transition-all disabled:opacity-50 shrink-0 border-l border-white/10"
+                                                            >
+                                                                {isUpdatingSlots ? '...' : 'SET'}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div className="space-y-3">
+                                                        <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Adjust Others Capacity (Non-Gopalan)</p>
+                                                        <div className="flex bg-black/40 border border-white/10 rounded-xl overflow-hidden focus-within:border-blue-500 transition-all shadow-inner">
+                                                            <input
+                                                                type="number"
+                                                                key={`other-${djSlots.otherMaxSlots}`}
+                                                                defaultValue={djSlots.otherMaxSlots || 200}
+                                                                id="other-slots-input"
+                                                                className="flex-1 bg-transparent px-4 py-3 text-white text-sm font-black focus:outline-none min-w-0"
+                                                                placeholder="Others Capacity"
+                                                            />
+                                                            <button
+                                                                disabled={isUpdatingSlots}
+                                                                onClick={() => {
+                                                                    const val = parseInt(document.getElementById('other-slots-input').value);
+                                                                    if (val > 0) updateDjSlots({ otherMaxSlots: val });
+                                                                }}
+                                                                className="bg-blue-600 hover:bg-blue-700 text-white px-5 font-black text-[10px] uppercase tracking-widest transition-all disabled:opacity-50 shrink-0 border-l border-white/10"
+                                                            >
+                                                                {isUpdatingSlots ? '...' : 'SET'}
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                     <p className="text-[9px] text-gray-500">Changes apply immediately and affect registration live.</p>
                                                 </div>
