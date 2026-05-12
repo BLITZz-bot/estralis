@@ -907,6 +907,19 @@ app.post('/api/scanner/checkin', async (req, res) => {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
+        // Security Check: Verify status before check-in
+        const checkRes = await db.query('SELECT status FROM registrations WHERE id = $1', [id]);
+        if (checkRes.rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'Registration not found' });
+        }
+
+        if (checkRes.rows[0].status === 'bot') {
+            return res.status(403).json({ 
+                success: false, 
+                message: 'SECURITY ALERT: This registration is flagged as a BOT and cannot be checked in.' 
+            });
+        }
+
         await db.query(
             "UPDATE registrations SET status = 'visited' WHERE id = $1",
             [id]

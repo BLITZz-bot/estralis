@@ -273,6 +273,15 @@ export default function StaffScanner() {
                                 <div className="py-5 bg-amber-500/20 border border-amber-500/30 rounded-2xl text-amber-500 font-black text-sm tracking-widest uppercase">
                                     Already Checked In
                                 </div>
+                            ) : scannedReg.status === 'bot' ? (
+                                <div className="space-y-4">
+                                    <div className="py-5 bg-red-500/20 border border-red-500/30 rounded-2xl text-red-500 font-black text-sm tracking-widest uppercase animate-pulse">
+                                        ⚠️ SECURITY ALERT: BOT DETECTED
+                                    </div>
+                                    <p className="text-[10px] text-red-400 font-bold uppercase tracking-widest">
+                                        This registration has been flagged as spam or automated. Entry is strictly prohibited.
+                                    </p>
+                                </div>
                             ) : (
                                 <button 
                                     onClick={handleGrantEntry}
