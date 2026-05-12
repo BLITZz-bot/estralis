@@ -249,10 +249,9 @@ app.post('/api/staff/login', async (req, res) => {
 app.post('/api/admin/secondary-login', async (req, res) => {
     const { password } = req.body;
     const isSecondaryMatch = await bcrypt.compare(password, SECONDARY_PASSWORD);
-    const isAdminMatch = await bcrypt.compare(password, ADMIN_PASSWORD);
 
-    // Allow both the specific secondary password AND the main admin password
-    if (isSecondaryMatch || isAdminMatch) {
+    // ONLY allow the specific secondary password
+    if (isSecondaryMatch) {
         res.json({ success: true });
     } else {
         res.status(401).json({ success: false, message: 'Invalid Password' });
