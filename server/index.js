@@ -380,7 +380,7 @@ app.post('/api/register-manual', async (req, res) => {
 
                 // Calculate current split headcount
                 const registrationsRes = await db.query(
-                    `SELECT college, team_members FROM registrations WHERE UPPER(TRIM(event_title)) = UPPER(TRIM($1))`,
+                    `SELECT college, team_members FROM registrations WHERE UPPER(TRIM(event_title)) = UPPER(TRIM($1)) AND status != 'bot'`,
                     [eventTitle]
                 );
 
@@ -1509,7 +1509,7 @@ app.get('/api/events/slots-status', async (req, res) => {
 
         // Get Current Headcount — individual per-college counts
         const registrationsRes = await db.query(
-            `SELECT college, team_members FROM registrations WHERE UPPER(TRIM(event_title)) = $1`,
+            `SELECT college, team_members FROM registrations WHERE UPPER(TRIM(event_title)) = $1 AND status != 'bot'`,
             [normalizedTitle]
         );
 
