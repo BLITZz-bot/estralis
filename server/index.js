@@ -360,12 +360,21 @@ app.post('/api/register-manual', async (req, res) => {
         const isBot = !!confirmEmail;
 
         // --- DOMAIN BLACKLIST ---
-        const SPAM_DOMAINS = ['yoho.com', 'outdoor.com', 'mailto.plus', 'gamil.com', 'outlook.con', 'yopmail.com'];
-        const emailDomain = email.split('@')[1].toLowerCase();
-        if (SPAM_DOMAINS.includes(emailDomain) && !isBot) {
+        // Only block dedicated disposable/spam-only domains — NOT legitimate providers
+        const SPAM_DOMAINS = [
+            'yoho.com', 'outdoor.com', 'mailto.plus', 'yopmail.com',
+            'guerrillamail.com', 'tempmail.com', 'throwam.com', 'sharklasers.com',
+            'guerrillamailblock.com', 'grr.la', 'guerrillamail.info', 'spam4.me',
+            'trashmail.com', 'mailnull.com', 'dispostable.com', 'mailnesia.com'
+        ];
+        const emailDomain = email.split('@')[1]?.toLowerCase();
+        if (!emailDomain) {
+            return res.status(400).json({ success: false, message: 'Invalid email address.' });
+        }
+        if (SPAM_DOMAINS.includes(emailDomain)) {
             return res.status(400).json({ 
                 success: false, 
-                message: 'SECURITY ALERT: This email domain is blacklisted due to high spam activity. Please use a valid email.' 
+                message: 'SECURITY ALERT: This email domain is not accepted. Please use your personal or college email.' 
             });
         }
 

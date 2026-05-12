@@ -317,16 +317,27 @@ export default function RegistrationForm({ event, onClose }) {
 
     const validateEmail = (email) => {
         const emailStr = String(email).toLowerCase();
-        const SPAM_DOMAINS = ['yoho.com', 'outdoor.com', 'mailto.plus', 'gamil.com', 'outlook.con', 'yopmail.com'];
+        // Only block dedicated disposable/spam-only services — NOT legitimate providers like icloud, aol, yahoo
+        const SPAM_DOMAINS = [
+            'yoho.com', 'outdoor.com', 'mailto.plus', 'yopmail.com',
+            'guerrillamail.com', 'tempmail.com', 'throwam.com', 'sharklasers.com',
+            'guerrillamailblock.com', 'grr.la', 'guerrillamail.info', 'spam4.me',
+            'trashmail.com', 'mailnull.com', 'dispostable.com', 'mailnesia.com'
+        ];
         const domain = emailStr.split('@')[1];
 
+        if (!domain) {
+            alert('Please enter a valid email address.');
+            return false;
+        }
+
         if (SPAM_DOMAINS.includes(domain)) {
-            alert(`SECURITY ALERT: The domain @${domain} is blacklisted due to high spam activity. Please use a valid email.`);
+            alert(`This email service (@${domain}) is not accepted. Please use your personal or college email (Gmail, Outlook, Yahoo, iCloud, etc.).`);
             return false;
         }
 
         return emailStr.match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            /^(([^<>()[\]\\.,;:\s@"]+(\.([^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         );
     };
 
