@@ -1241,6 +1241,10 @@ app.post('/api/admin/send-report', async (req, res) => {
                 { header: 'Email', key: 'email', width: 30 },
                 { header: 'Phone', key: 'phone', width: 15 },
                 { header: 'College', key: 'college', width: 30 },
+                { header: 'Semester', key: 'semester', width: 15 },
+                { header: 'Branch', key: 'branch', width: 20 },
+                { header: 'LinkedIn', key: 'linkedinUrl', width: 40 },
+                { header: 'Amount Paid', key: 'regFee', width: 15 },
                 { header: 'UTR Number', key: 'utrNumber', width: 25 },
                 { header: 'Transaction Date', key: 'transactionDate', width: 20 },
                 { header: 'Screenshot Link', key: 'screenshotUrl', width: 50 },
@@ -1273,7 +1277,7 @@ app.post('/api/admin/send-report', async (req, res) => {
                     squadDetails = `Total: ${totalParticipants} (Lead + ${teamCount})\n\n`;
                     members.forEach((m, idx) => {
                         const label = isDJNight ? "FRIEND" : "MEMBER";
-                        squadDetails += `[${label} 0${idx + 2}]: ${m.fullName || 'N/A'}\nEmail: ${m.email || 'N/A'}\nPhone: ${m.phone || 'N/A'}\nCollege: ${m.college || reg.college}\n\n`;
+                        squadDetails += `[${label} 0${idx + 2}]: ${m.fullName || 'N/A'}\nEmail: ${m.email || 'N/A'}\nPhone: ${m.phone || 'N/A'}\nCollege: ${m.college || reg.college}\nSem: ${m.semester || 'N/A'}\nBranch: ${m.branch || 'N/A'}\nLinkedIn: ${m.linkedinUrl || 'N/A'}\n\n`;
                     });
                 }
 
@@ -1285,6 +1289,10 @@ app.post('/api/admin/send-report', async (req, res) => {
                     email: reg.email,
                     phone: reg.phone,
                     college: reg.college,
+                    semester: reg.semester || "N/A",
+                    branch: reg.branch || "N/A",
+                    linkedinUrl: reg.linkedin_url || "N/A",
+                    regFee: reg.amount_paid ? `₹${reg.amount_paid}` : "FREE",
                     utrNumber: reg.utr_number || "N/A",
                     transactionDate: reg.transaction_date || "N/A",
                     screenshotUrl: { text: reg.screenshot_url ? "View Proof" : "N/A", hyperlink: reg.screenshot_url || "" },
