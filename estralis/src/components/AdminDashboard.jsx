@@ -763,6 +763,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
             const data = await res.json();
             if (data.success) {
                 addToast(`✅ Status updated to ${newStatus}`, "success");
+                // Update local state to reflect the change immediately
+                setRegistrations(prev => prev.map(r => r.id === id ? { ...r, status: newStatus } : r));
             } else {
                 addToast(data.message || "Failed to update status", "error");
             }
@@ -1400,6 +1402,25 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                                 >
                                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                                                 </button>
+
+                                                                {/* BOT/VERIFY TOGGLE */}
+                                                                {reg.status === 'bot' ? (
+                                                                    <button
+                                                                        onClick={() => updateRegistrationStatus(reg.id, 'verified')}
+                                                                        className="p-2 text-emerald-500/40 hover:text-emerald-500 hover:bg-emerald-500/10 rounded-lg transition-all"
+                                                                        title="Mark as Verified (Move to Registrations)"
+                                                                    >
+                                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A3.323 3.323 0 0010.605 7.085a10.11 10.11 0 01-5.705-5.914.75.75 0 00-1.35 0A10.11 10.11 0 011.05 7.085a3.323 3.323 0 00.686 4.301c.491.49 1.134.73 1.766.757a3.13 3.13 0 002.316-.921 1.748 1.748 0 012.358 0c.66.621 1.492.937 2.333.921a3.33 3.33 0 001.766-.757 3.323 3.323 0 00.686-4.301z" /></svg>
+                                                                    </button>
+                                                                ) : (
+                                                                    <button
+                                                                        onClick={() => updateRegistrationStatus(reg.id, 'bot')}
+                                                                        className="p-2 text-red-500/40 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                                                                        title="Mark as Bot (Move to Bot Traffic)"
+                                                                    >
+                                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h6l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                                                    </button>
+                                                                )}
                                                             </div>
                                                         </td>
                                                     </tr>

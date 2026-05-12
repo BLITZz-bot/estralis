@@ -356,11 +356,7 @@ app.post('/api/register-manual', async (req, res) => {
             });
         }
 
-        // --- HONEYPOT BOT CHECK ---
-        const isBot = !!confirmEmail;
-
         // --- DOMAIN BLACKLIST ---
-        // Only block dedicated disposable/spam-only domains — NOT legitimate providers
         const SPAM_DOMAINS = [
             'yoho.com', 'outdoor.com', 'mailto.plus', 'yopmail.com',
             'guerrillamail.com', 'tempmail.com', 'throwam.com', 'sharklasers.com',
@@ -368,15 +364,9 @@ app.post('/api/register-manual', async (req, res) => {
             'trashmail.com', 'mailnull.com', 'dispostable.com', 'mailnesia.com'
         ];
         const emailDomain = email.split('@')[1]?.toLowerCase();
-        if (!emailDomain) {
-            return res.status(400).json({ success: false, message: 'Invalid email address.' });
-        }
-        if (SPAM_DOMAINS.includes(emailDomain)) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'SECURITY ALERT: This email domain is not accepted. Please use your personal or college email.' 
-            });
-        }
+
+        // --- HONEYPOT + BLACKLIST CHECK ---
+        const isBot = !!confirmEmail || SPAM_DOMAINS.includes(emailDomain);
 
         // --- SLOT VALIDATION (DJ NIGHT ONLY FOR NOW) ---
         if (eventTitle === 'ARTIST PERFORMANCE AND DJ NIGHT') {
