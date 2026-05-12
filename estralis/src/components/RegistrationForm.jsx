@@ -1042,10 +1042,8 @@ export default function RegistrationForm({ event, onClose }) {
                                         <p className="text-[9px] text-white/30 font-medium mt-1">I understand that any misconduct will lead to immediate disqualification.</p>
                                     </div>
                                 </div>
-
-                                </div>
                             </div>
-
+                            
                             <div className="flex flex-col items-center gap-6 py-6">
                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center">
                                     Any issue with registration? Contact Bharath <a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">7975871167</a>
