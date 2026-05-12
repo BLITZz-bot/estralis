@@ -338,15 +338,15 @@ app.post('/api/verify-payment', async (req, res) => {
 // 3. Manual Registration with Screenshot Upload
 app.post('/api/register-manual', async (req, res) => {
     try {
-        const { registrationData } = req.body;
-
         const {
             fullName, email, phone, college, teamName, teamMembers,
             eventTitle, category, amountPaid, passType,
             utrNumber, transactionDate, screenshotUrl,
             semester, branch, linkedinUrl,
-            agreedToTerms, isHuman, paymentConfirmed
-        } = registrationData;
+            agreedToTerms, confirmEmail
+        } = req.body.registrationData;
+
+        const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
         // --- BOT PROTECTION & VALIDATION ---
         if (!agreedToTerms) {
@@ -355,16 +355,17 @@ app.post('/api/register-manual', async (req, res) => {
                 message: 'VERIFICATION FAILED: You must agree to the terms.' 
             });
         }
-        if (!isHuman) {
+
+        // --- HONEYPOT BOT CHECK ---
+        const isBot = !!confirmEmail;
+
+        // --- DOMAIN BLACKLIST ---
+        const SPAM_DOMAINS = ['yoho.com', 'outdoor.com', 'mailto.plus', 'gamil.com', 'outlook.con', 'yopmail.com'];
+        const emailDomain = email.split('@')[1].toLowerCase();
+        if (SPAM_DOMAINS.includes(emailDomain) && !isBot) {
             return res.status(400).json({ 
                 success: false, 
-                message: 'VERIFICATION FAILED: Human verification required.' 
-            });
-        }
-        if (!paymentConfirmed) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'VERIFICATION FAILED: Payment confirmation required.' 
+                message: 'SECURITY ALERT: This email domain is blacklisted due to high spam activity. Please use a valid email.' 
             });
         }
 
@@ -456,15 +457,17 @@ app.post('/api/register-manual', async (req, res) => {
                 semester, branch, linkedin_url,
                 team_name, team_members, 
                 event_title, category, amount_paid, pass_type, 
-                utr_number, transaction_date, screenshot_url, status
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
+                utr_number, transaction_date, screenshot_url, status,
+                ip_address
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
             RETURNING *`,
             [
                 fullName, email.trim().toLowerCase(), phone, college,
                 semester || 'N/A', branch || 'N/A', linkedinUrl || 'N/A',
                 teamName || null, JSON.stringify(teamMembers || []),
                 eventTitle, category || 'Tech',
-                amountPaid, passType, utrNumber, transactionDate, screenshotUrl, 'verified'
+                amountPaid, passType, utrNumber, transactionDate, screenshotUrl, (isBot ? 'bot' : 'verified'),
+                ipAddress
             ]
         );
 

@@ -61,7 +61,8 @@ const initDB = async () => {
                 utr_number TEXT DEFAULT 'PENDING',
                 transaction_date TEXT,
                 screenshot_url TEXT,
-                status TEXT DEFAULT 'verified',
+                status TEXT DEFAULT 'pending',
+                ip_address TEXT,
                 timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
             );
         `);
@@ -93,6 +94,7 @@ const initDB = async () => {
         await pool.query(`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS semester TEXT;`);
         await pool.query(`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS branch TEXT;`);
         await pool.query(`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS linkedin_url TEXT;`);
+        await pool.query(`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS ip_address TEXT;`);
         
         // Event Slots Split Migration
         await pool.query(`ALTER TABLE event_slots ADD COLUMN IF NOT EXISTS gcem_max_slots INTEGER DEFAULT 600;`);

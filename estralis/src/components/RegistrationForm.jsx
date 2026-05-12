@@ -161,8 +161,7 @@ export default function RegistrationForm({ event, onClose }) {
         screenshot: null,
         screenshotUrl: "",
         agreedToTerms: false,
-        isHuman: false,
-        paymentConfirmed: false
+        confirmEmail: "" // Honeypot field
     })
 
     const cat = event?.category || "Tech"
@@ -317,11 +316,18 @@ export default function RegistrationForm({ event, onClose }) {
     };
 
     const validateEmail = (email) => {
-        return String(email)
-            .toLowerCase()
-            .match(
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            );
+        const emailStr = String(email).toLowerCase();
+        const SPAM_DOMAINS = ['yoho.com', 'outdoor.com', 'mailto.plus', 'gamil.com', 'outlook.con', 'yopmail.com'];
+        const domain = emailStr.split('@')[1];
+
+        if (SPAM_DOMAINS.includes(domain)) {
+            alert(`SECURITY ALERT: The domain @${domain} is blacklisted due to high spam activity. Please use a valid email.`);
+            return false;
+        }
+
+        return emailStr.match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
     };
 
     const handleChange = (e) => {
@@ -377,14 +383,6 @@ export default function RegistrationForm({ event, onClose }) {
         // Checkboxes validation
         if (!formData.agreedToTerms) {
             alert("REQUIRED: Please agree to the event rules and terms.");
-            return;
-        }
-        if (!formData.isHuman) {
-            alert("REQUIRED: Please verify that you are human.");
-            return;
-        }
-        if (!formData.paymentConfirmed) {
-            alert("REQUIRED: Please confirm that you have made the payment.");
             return;
         }
 
@@ -829,6 +827,16 @@ export default function RegistrationForm({ event, onClose }) {
                             {/* Basic Info */}
                             <div className="astral-glass p-8 md:p-12 space-y-10">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                                    <div className="hidden" style={{ display: 'none', visibility: 'hidden', height: 0, width: 0, overflow: 'hidden' }}>
+                                        <input
+                                            type="email"
+                                            name="confirmEmail"
+                                            value={formData.confirmEmail}
+                                            onChange={handleChange}
+                                            tabIndex="-1"
+                                            autoComplete="off"
+                                        />
+                                    </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-teal-400/80 font-astral ml-1">FULL NAME</label>
                                         <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-teal-500 focus:bg-white/10 transition-all font-bold placeholder:text-white/10" placeholder="Your Name" />
@@ -1035,24 +1043,6 @@ export default function RegistrationForm({ event, onClose }) {
                                     </div>
                                 </div>
 
-                                <div className="flex items-start gap-4 cursor-pointer group" onClick={() => setFormData(prev => ({ ...prev, isHuman: !prev.isHuman }))}>
-                                    <div className={`mt-1 w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${formData.isHuman ? 'bg-teal-500 border-teal-500 shadow-[0_0_15px_rgba(45,212,191,0.4)]' : 'border-white/20 group-hover:border-teal-500/50'}`}>
-                                        {formData.isHuman && <span className="text-black text-xs font-black">✓</span>}
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-[11px] font-bold text-white/80 tracking-wide uppercase font-astral">I am a human registering for this event.</p>
-                                        <p className="text-[9px] text-white/30 font-medium mt-1">Verification protocols enabled to prevent automated bot entries.</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 cursor-pointer group" onClick={() => setFormData(prev => ({ ...prev, paymentConfirmed: !prev.paymentConfirmed }))}>
-                                    <div className={`mt-1 w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${formData.paymentConfirmed ? 'bg-teal-500 border-teal-500 shadow-[0_0_15px_rgba(45,212,191,0.4)]' : 'border-white/20 group-hover:border-teal-500/50'}`}>
-                                        {formData.paymentConfirmed && <span className="text-black text-xs font-black">✓</span>}
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-[11px] font-bold text-white/80 tracking-wide uppercase font-astral">I possess the payment screenshot with a valid UTR.</p>
-                                        <p className="text-[9px] text-white/30 font-medium mt-1">False or duplicate UTR submissions will result in permanent blacklisting.</p>
-                                    </div>
                                 </div>
                             </div>
 

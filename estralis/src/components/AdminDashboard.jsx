@@ -951,9 +951,13 @@ export default function AdminDashboard({ isOpen, onClose }) {
 
     // Handle filtering
     useEffect(() => {
-        // Show only 'verified' (successful) and 'visited' (checked-in) participants
-        // This ensures they don't 'move' out of the list after scanning.
-        let filtered = registrations.filter(r => r.status === 'verified' || r.status === 'visited');
+        // Decide which status to look for based on active tab
+        const isBotTab = activeTab === "bots";
+        
+        let filtered = registrations.filter(r => {
+            if (isBotTab) return r.status === 'bot';
+            return r.status === 'verified' || r.status === 'visited';
+        });
 
         // Filter by Event
         if (filterEvent !== "All") {
@@ -973,7 +977,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
         }
 
         setFilteredData(filtered);
-    }, [filterEvent, searchQuery, registrations]);
+    }, [filterEvent, searchQuery, registrations, activeTab]);
 
     const downloadExcel = async () => {
         // Export the currently filtered data so the user gets what they see on screen
@@ -1180,6 +1184,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                             <div className="flex border-b border-teal-500/10 gap-8 overflow-x-auto whitespace-nowrap hide-scrollbar pr-10">
                                 {[
                                     { id: "registrations", label: "Registrations", color: "text-teal-400", border: "border-teal-500" },
+                                    { id: "bots", label: "Bot Traffic", color: "text-red-400", border: "border-red-500" },
                                     { id: "controls", label: "Event Controls", color: "text-cyan-400", border: "border-cyan-500" },
                                     { id: "manage", label: "Database", color: "text-rose-400", border: "border-rose-500" },
                                     { id: "emails", label: "Automated Reports", color: "text-amber-400", border: "border-amber-500" },
@@ -1201,11 +1206,12 @@ export default function AdminDashboard({ isOpen, onClose }) {
                             <div className="absolute right-0 top-0 bottom-1 w-10 bg-gradient-to-l from-[#020617] to-transparent pointer-events-none md:hidden" />
                         </div>
 
-                        {activeTab === "registrations" ? (
+                        {(activeTab === "registrations" || activeTab === "bots") ? (
                             <>
                                 {/* COMPACT SUMMARY METRICS */}
                                 {(() => {
-                                    const successfulRegs = registrations.filter(r => r.status === 'verified' || r.status === 'visited');
+                                    const isBotTab = activeTab === "bots";
+                                    const successfulRegs = registrations.filter(r => isBotTab ? r.status === 'bot' : (r.status === 'verified' || r.status === 'visited'));
                                     const filteredSuccess = filterEvent === "All"
                                         ? successfulRegs
                                         : successfulRegs.filter(r => r.event_title === filterEvent);
@@ -1213,16 +1219,16 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     return (
                                         <div className="grid grid-cols-3 gap-2 mb-4 relative z-10 px-1">
                                             <div className="astral-glass p-2 border-teal-500/10 flex flex-col items-center justify-center text-center">
-                                                <p className="text-teal-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">Total Reg</p>
+                                                <p className="text-teal-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">{isBotTab ? "Total Bots" : "Total Reg"}</p>
                                                 <h4 className="text-sm sm:text-lg font-black text-white font-mono">{successfulRegs.length}</h4>
                                             </div>
-                                            <div className="astral-glass p-2 border-cyan-500/10 flex flex-col items-center justify-center text-center">
-                                                <p className="text-cyan-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">Revenue</p>
-                                                <h4 className="text-sm sm:text-lg font-black text-white font-mono">₹{filteredSuccess.reduce((acc, reg) => acc + (parseFloat(reg.amount_paid?.toString().replace(/[^\d.]/g, '') || 0)), 0).toLocaleString('en-IN')}</h4>
+                                            <div className={`astral-glass p-2 ${isBotTab ? 'border-red-500/10' : 'border-cyan-500/10'} flex flex-col items-center justify-center text-center`}>
+                                                <p className={`${isBotTab ? 'text-red-400/40' : 'text-cyan-400/40'} text-[7px] font-black uppercase tracking-[0.1em] mb-1`}>{isBotTab ? "Threats" : "Revenue"}</p>
+                                                <h4 className="text-sm sm:text-lg font-black text-white font-mono">{isBotTab ? successfulRegs.length : `₹${filteredSuccess.reduce((acc, reg) => acc + (parseFloat(reg.amount_paid?.toString().replace(/[^\d.]/g, '') || 0)), 0).toLocaleString('en-IN')}`}</h4>
                                             </div>
                                             <div className="astral-glass p-2 border-blue-500/10 flex flex-col items-center justify-center text-center">
                                                 <p className="text-blue-400/40 text-[7px] font-black uppercase tracking-[0.1em] mb-1">
-                                                    {filterEvent === "All" ? "Total Success" : "Event Success"}
+                                                    {filterEvent === "All" ? (isBotTab ? "Bot Count" : "Total Success") : "Event Count"}
                                                 </p>
                                                 <h4 className="text-sm sm:text-lg font-black text-white font-mono">{filteredSuccess.length}</h4>
                                             </div>
@@ -1316,7 +1322,7 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                         <td className="px-8 py-8 border-r border-teal-500/10 text-center">
                                                             {reg.linkedin_url && reg.linkedin_url !== 'N/A' ? (
                                                                 <a href={reg.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 transition-colors inline-block">
-                                                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
                                                                 </a>
                                                             ) : <span className="text-white/10 text-[9px] font-black uppercase">N/A</span>}
                                                         </td>
@@ -1368,14 +1374,17 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                         <td className="px-8 py-8 text-center border-r border-teal-500/10">
                                                             <div className="flex flex-col items-center justify-center gap-1.5">
                                                                 <div className={`w-2 h-2 rounded-full ${reg.status === 'visited' ? 'bg-blue-400' :
-                                                                        reg.status === 'verified' ? 'bg-emerald-400' :
+                                                                    reg.status === 'verified' ? 'bg-emerald-400' :
+                                                                        reg.status === 'bot' ? 'bg-red-500' :
                                                                             'bg-amber-400'
                                                                     } animate-pulse outline outline-2 ${reg.status === 'visited' ? 'outline-blue-400/20' :
                                                                         reg.status === 'verified' ? 'outline-emerald-400/20' :
-                                                                            'outline-amber-400/20'
+                                                                            reg.status === 'bot' ? 'outline-red-500/20' :
+                                                                                'outline-amber-400/20'
                                                                     }`}></div>
                                                                 <span className={`text-[8px] font-black uppercase tracking-[0.2em] ${reg.status === 'visited' ? 'text-blue-400' :
-                                                                        reg.status === 'verified' ? 'text-emerald-400' :
+                                                                    reg.status === 'verified' ? 'text-emerald-400' :
+                                                                        reg.status === 'bot' ? 'text-red-500' :
                                                                             'text-amber-400'
                                                                     }`}>
                                                                     {reg.status || 'PENDING'}
@@ -1576,8 +1585,8 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                                                     <div className="flex flex-col gap-0.5 mt-0.5 sm:mt-1">
                                                                         <div className="flex items-center gap-2 mb-1">
                                                                             <span className={`text-[7px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest ${reg.status === 'visited' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
-                                                                                    reg.status === 'verified' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                                                                                        'bg-amber-500/10 text-amber-500 border border-amber-500/20'
+                                                                                reg.status === 'verified' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                                                                    'bg-amber-500/10 text-amber-500 border border-amber-500/20'
                                                                                 }`}>
                                                                                 {reg.status || 'PENDING'}
                                                                             </span>
@@ -1996,231 +2005,231 @@ export default function AdminDashboard({ isOpen, onClose }) {
                                     </div>
                                 ) : (
                                     <div className="max-w-4xl mx-auto w-full space-y-10">
-                                    {/* Slot Management Header */}
-                                    <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-teal-500/5 border border-teal-500/10 p-6 rounded-3xl">
-                                        <div className="text-center md:text-left">
-                                            <div className="flex items-center gap-3 justify-center md:justify-start mb-1">
-                                                <div className="w-8 h-8 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400">
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        {/* Slot Management Header */}
+                                        <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-teal-500/5 border border-teal-500/10 p-6 rounded-3xl">
+                                            <div className="text-center md:text-left">
+                                                <div className="flex items-center gap-3 justify-center md:justify-start mb-1">
+                                                    <div className="w-8 h-8 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400">
+                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                    </div>
+                                                    <h3 className="text-xl font-bold text-white uppercase tracking-wider">Slot Configuration</h3>
                                                 </div>
-                                                <h3 className="text-xl font-bold text-white uppercase tracking-wider">Slot Configuration</h3>
+                                                <p className="text-gray-400 text-sm">Real-time capacity management for DJ Night.</p>
                                             </div>
-                                            <p className="text-gray-400 text-sm">Real-time capacity management for DJ Night.</p>
-                                        </div>
-                                        <div className="flex items-center gap-4">
-                                            <div className="flex flex-col items-end">
-                                                <span className="text-[8px] font-black text-teal-500/60 uppercase tracking-widest">Auto-Refresh</span>
-                                                <span className="text-xs font-black text-white font-mono">{countdown}s</span>
-                                            </div>
-                                            <button 
-                                                onClick={() => {
-                                                    fetchDjSlots();
-                                                    setCountdown(30);
-                                                }}
-                                                className="p-3 bg-white/5 border border-white/10 rounded-xl text-teal-400 hover:bg-white/10 transition-all"
-                                            >
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {djSlots ? (
-                                        <div className="space-y-8">
-
-                                            {/* Shared Slot Pool Banner */}
-                                            <div className="flex items-center justify-between p-5 bg-teal-500/5 border border-teal-500/15 rounded-2xl">
-                                                <div>
-                                                    <p className="text-[10px] font-black text-teal-400 uppercase tracking-widest">Shared Host Pool (GCEM + GSAP + GCC)</p>
-                                                    <p className="text-xs text-gray-400 mt-0.5">All three colleges share a combined 600-slot limit at ₹200 per person</p>
+                                            <div className="flex items-center gap-4">
+                                                <div className="flex flex-col items-end">
+                                                    <span className="text-[8px] font-black text-teal-500/60 uppercase tracking-widest">Auto-Refresh</span>
+                                                    <span className="text-xs font-black text-white font-mono">{countdown}s</span>
                                                 </div>
-                                                <div className="text-right">
-                                                    <div className="text-3xl font-black text-white">{djSlots.hostCount || 0} <span className="text-teal-400/50 text-lg">/ {djSlots.gcemMaxSlots || 600}</span></div>
-                                                    <div className={`text-[10px] font-black uppercase tracking-widest mt-1 ${djSlots.gcemSlotsLeft > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                                                        {djSlots.gcemSlotsLeft > 0 ? `${djSlots.gcemSlotsLeft} SLOTS LEFT` : 'SOLD OUT'}
+                                                <button
+                                                    onClick={() => {
+                                                        fetchDjSlots();
+                                                        setCountdown(30);
+                                                    }}
+                                                    className="p-3 bg-white/5 border border-white/10 rounded-xl text-teal-400 hover:bg-white/10 transition-all"
+                                                >
+                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {djSlots ? (
+                                            <div className="space-y-8">
+
+                                                {/* Shared Slot Pool Banner */}
+                                                <div className="flex items-center justify-between p-5 bg-teal-500/5 border border-teal-500/15 rounded-2xl">
+                                                    <div>
+                                                        <p className="text-[10px] font-black text-teal-400 uppercase tracking-widest">Shared Host Pool (GCEM + GSAP + GCC)</p>
+                                                        <p className="text-xs text-gray-400 mt-0.5">All three colleges share a combined 600-slot limit at ₹200 per person</p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <div className="text-3xl font-black text-white">{djSlots.hostCount || 0} <span className="text-teal-400/50 text-lg">/ {djSlots.gcemMaxSlots || 600}</span></div>
+                                                        <div className={`text-[10px] font-black uppercase tracking-widest mt-1 ${djSlots.gcemSlotsLeft > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                                                            {djSlots.gcemSlotsLeft > 0 ? `${djSlots.gcemSlotsLeft} SLOTS LEFT` : 'SOLD OUT'}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            {/* Shared Progress Bar */}
-                                            <div className="w-full h-3 bg-white/5 rounded-full overflow-hidden">
-                                                <motion.div
-                                                    initial={{ width: 0 }}
-                                                    animate={{ width: `${Math.min(100, ((djSlots.hostCount || 0) / (djSlots.gcemMaxSlots || 600)) * 100)}%` }}
-                                                    className="h-full bg-gradient-to-r from-teal-500 via-emerald-500 to-cyan-500 shadow-[0_0_15px_rgba(45,212,191,0.4)]"
-                                                />
-                                            </div>
+                                                {/* Shared Progress Bar */}
+                                                <div className="w-full h-3 bg-white/5 rounded-full overflow-hidden">
+                                                    <motion.div
+                                                        initial={{ width: 0 }}
+                                                        animate={{ width: `${Math.min(100, ((djSlots.hostCount || 0) / (djSlots.gcemMaxSlots || 600)) * 100)}%` }}
+                                                        className="h-full bg-gradient-to-r from-teal-500 via-emerald-500 to-cyan-500 shadow-[0_0_15px_rgba(45,212,191,0.4)]"
+                                                    />
+                                                </div>
 
-                                            {/* Individual College Cards */}
-                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                {[
-                                                    { id: 'showGcem', label: 'GCEM', fullName: 'Gopalan College of Engineering and Management', count: djSlots.gcemCount || 0, show: djSlots.showGcem, color: 'emerald' },
-                                                    { id: 'showGsap', label: 'GSAP', fullName: 'Gopalan School of Architecture and Planning',   count: djSlots.gsapCount || 0, show: djSlots.showGsap, color: 'teal' },
-                                                    { id: 'showGcc',  label: 'GCC',  fullName: 'Gopalan College of Commerce',                    count: djSlots.gccCount  || 0, show: djSlots.showGcc,  color: 'cyan' },
-                                                ].map(college => (
-                                                    <div key={college.id} className={`astral-glass p-6 space-y-4 border-${college.color}-500/20 relative overflow-hidden`}>
-                                                        <div className="flex items-start justify-between">
-                                                            <div>
-                                                                <p className={`text-[10px] font-black uppercase tracking-widest text-${college.color}-400/80`}>{college.label}</p>
-                                                                <p className="text-[9px] text-gray-500 mt-0.5 leading-tight">{college.fullName}</p>
+                                                {/* Individual College Cards */}
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                    {[
+                                                        { id: 'showGcem', label: 'GCEM', fullName: 'Gopalan College of Engineering and Management', count: djSlots.gcemCount || 0, show: djSlots.showGcem, color: 'emerald' },
+                                                        { id: 'showGsap', label: 'GSAP', fullName: 'Gopalan School of Architecture and Planning', count: djSlots.gsapCount || 0, show: djSlots.showGsap, color: 'teal' },
+                                                        { id: 'showGcc', label: 'GCC', fullName: 'Gopalan College of Commerce', count: djSlots.gccCount || 0, show: djSlots.showGcc, color: 'cyan' },
+                                                    ].map(college => (
+                                                        <div key={college.id} className={`astral-glass p-6 space-y-4 border-${college.color}-500/20 relative overflow-hidden`}>
+                                                            <div className="flex items-start justify-between">
+                                                                <div>
+                                                                    <p className={`text-[10px] font-black uppercase tracking-widest text-${college.color}-400/80`}>{college.label}</p>
+                                                                    <p className="text-[9px] text-gray-500 mt-0.5 leading-tight">{college.fullName}</p>
+                                                                </div>
+                                                                <span className={`text-[9px] font-black px-2 py-0.5 rounded-full ${college.show ? `bg-${college.color}-500/20 text-${college.color}-400` : 'bg-gray-500/20 text-gray-500'}`}>
+                                                                    {college.show ? 'VISIBLE' : 'HIDDEN'}
+                                                                </span>
                                                             </div>
-                                                            <span className={`text-[9px] font-black px-2 py-0.5 rounded-full ${college.show ? `bg-${college.color}-500/20 text-${college.color}-400` : 'bg-gray-500/20 text-gray-500'}`}>
-                                                                {college.show ? 'VISIBLE' : 'HIDDEN'}
-                                                            </span>
-                                                        </div>
 
-                                                        <div className="text-center py-2">
-                                                            <div className={`text-4xl font-black text-white mb-1`}>{college.count}</div>
+                                                            <div className="text-center py-2">
+                                                                <div className={`text-4xl font-black text-white mb-1`}>{college.count}</div>
+                                                                <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Registered</div>
+                                                            </div>
+
+                                                            {/* Dropdown Show/Hide Toggle */}
+                                                            <div className="flex items-center justify-between pt-3 border-t border-white/5">
+                                                                <span className="text-[9px] font-black text-gray-400 uppercase tracking-wider">Registration Dropdown</span>
+                                                                <button
+                                                                    disabled={isUpdatingSlots}
+                                                                    onClick={() => updateDjSlots({ [college.id]: !college.show })}
+                                                                    className={`w-12 h-6 rounded-full relative transition-all duration-300 border ${college.show ? `bg-${college.color}-500/20 border-${college.color}-500/50` : 'bg-gray-500/20 border-gray-500/50'}`}
+                                                                >
+                                                                    <motion.div
+                                                                        animate={{ x: college.show ? 18 : 2 }}
+                                                                        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                                                                        className={`absolute top-[3px] w-[18px] h-[18px] rounded-full shadow-lg ${college.show ? `bg-${college.color}-400` : 'bg-gray-500'}`}
+                                                                    />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                {/* Other Colleges Card */}
+                                                <div className="astral-glass p-6 border-blue-500/20">
+                                                    <div className="flex items-center justify-between">
+                                                        <div>
+                                                            <p className="text-[10px] font-black uppercase tracking-widest text-blue-400/80">OTHER COLLEGES</p>
+                                                            <p className="text-[9px] text-gray-500 mt-0.5">All non-Gopalan colleges · ₹400 fee per person</p>
+                                                        </div>
+                                                        <span className={`text-[9px] font-black px-3 py-1 rounded-full ${djSlots.otherSlotsLeft > 0 ? 'bg-blue-500/20 text-blue-400' : 'bg-red-500/20 text-red-400'}`}>
+                                                            {djSlots.otherSlotsLeft > 0 ? 'AVAILABLE' : 'SOLD OUT'}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center justify-around py-4 mt-4 border-y border-white/5">
+                                                        <div className="text-center">
+                                                            <div className="text-4xl font-black text-white mb-1">{djSlots.otherCount || 0}</div>
                                                             <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Registered</div>
                                                         </div>
+                                                        <div className="h-10 w-px bg-white/10" />
+                                                        <div className="text-center">
+                                                            <div className="text-4xl font-black text-blue-400 mb-1">{djSlots.otherSlotsLeft || 0}</div>
+                                                            <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Remaining</div>
+                                                        </div>
+                                                        <div className="h-10 w-px bg-white/10" />
+                                                        <div className="text-center">
+                                                            <div className="text-2xl font-black text-blue-300 mb-1">{djSlots.otherMaxSlots || 200}</div>
+                                                            <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Capacity</div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="mt-4 space-y-2">
+                                                        <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+                                                            <motion.div
+                                                                initial={{ width: 0 }}
+                                                                animate={{ width: `${Math.min(100, ((djSlots.otherCount || 0) / (djSlots.otherMaxSlots || 200)) * 100)}%` }}
+                                                                className="h-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                                                            />
+                                                        </div>
+                                                        <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-gray-500">
+                                                            <span>Others Allocation</span>
+                                                            <span>{Math.round(((djSlots.otherCount || 0) / (djSlots.otherMaxSlots || 200)) * 100)}% Occupied</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                                        {/* Dropdown Show/Hide Toggle */}
-                                                        <div className="flex items-center justify-between pt-3 border-t border-white/5">
-                                                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-wider">Registration Dropdown</span>
-                                                            <button
-                                                                disabled={isUpdatingSlots}
-                                                                onClick={() => updateDjSlots({ [college.id]: !college.show })}
-                                                                className={`w-12 h-6 rounded-full relative transition-all duration-300 border ${college.show ? `bg-${college.color}-500/20 border-${college.color}-500/50` : 'bg-gray-500/20 border-gray-500/50'}`}
-                                                            >
-                                                                <motion.div
-                                                                    animate={{ x: college.show ? 18 : 2 }}
-                                                                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                                                                    className={`absolute top-[3px] w-[18px] h-[18px] rounded-full shadow-lg ${college.show ? `bg-${college.color}-400` : 'bg-gray-500'}`}
+                                                {/* Command Override Card */}
+                                                <div className="astral-glass p-8 space-y-6">
+                                                    <span className="text-[10px] font-black uppercase tracking-widest text-orange-400/80">Command Override</span>
+
+                                                    {/* Manual Open/Close */}
+                                                    <div className="flex items-center justify-between p-5 bg-white/5 border border-white/5 rounded-2xl">
+                                                        <div>
+                                                            <p className="text-sm font-bold text-white">Manual Status</p>
+                                                            <p className="text-[10px] text-gray-500 uppercase font-black mt-1">
+                                                                {djSlots.isManualOpen ? 'ONLINE // OPEN' : 'OFFLINE // CLOSED'}
+                                                            </p>
+                                                        </div>
+                                                        <button
+                                                            disabled={isUpdatingSlots}
+                                                            onClick={() => updateDjSlots({ isManualOpen: !djSlots.isManualOpen })}
+                                                            className={`w-14 h-8 rounded-full relative transition-all duration-300 border ${djSlots.isManualOpen ? 'bg-teal-500/20 border-teal-500/50' : 'bg-red-500/20 border-red-500/50'}`}
+                                                        >
+                                                            <motion.div
+                                                                animate={{ x: djSlots.isManualOpen ? 24 : 4 }}
+                                                                className={`absolute top-1 w-6 h-6 rounded-full shadow-lg ${djSlots.isManualOpen ? 'bg-teal-400' : 'bg-red-500'}`}
+                                                            />
+                                                        </button>
+                                                    </div>
+
+                                                    {/* Shared Capacity Adjuster */}
+                                                    <div className="p-5 bg-white/5 border border-white/5 rounded-2xl space-y-5">
+                                                        <div className="space-y-3">
+                                                            <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Adjust Shared Capacity (GCEM + GSAP + GCC)</p>
+                                                            <div className="flex bg-black/40 border border-white/10 rounded-xl overflow-hidden focus-within:border-emerald-500 transition-all shadow-inner">
+                                                                <input
+                                                                    type="number"
+                                                                    key={`gcem-${djSlots.gcemMaxSlots}`}
+                                                                    defaultValue={djSlots.gcemMaxSlots || 600}
+                                                                    id="gcem-slots-input"
+                                                                    className="flex-1 bg-transparent px-4 py-3 text-white text-sm font-black focus:outline-none min-w-0"
+                                                                    placeholder="Shared Capacity"
                                                                 />
-                                                            </button>
+                                                                <button
+                                                                    disabled={isUpdatingSlots}
+                                                                    onClick={() => {
+                                                                        const val = parseInt(document.getElementById('gcem-slots-input').value);
+                                                                        if (val > 0) updateDjSlots({ gcemMaxSlots: val });
+                                                                    }}
+                                                                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 font-black text-[10px] uppercase tracking-widest transition-all disabled:opacity-50 shrink-0 border-l border-white/10"
+                                                                >
+                                                                    {isUpdatingSlots ? '...' : 'SET'}
+                                                                </button>
+                                                            </div>
                                                         </div>
+                                                        <div className="space-y-3">
+                                                            <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Adjust Others Capacity (Non-Gopalan)</p>
+                                                            <div className="flex bg-black/40 border border-white/10 rounded-xl overflow-hidden focus-within:border-blue-500 transition-all shadow-inner">
+                                                                <input
+                                                                    type="number"
+                                                                    key={`other-${djSlots.otherMaxSlots}`}
+                                                                    defaultValue={djSlots.otherMaxSlots || 200}
+                                                                    id="other-slots-input"
+                                                                    className="flex-1 bg-transparent px-4 py-3 text-white text-sm font-black focus:outline-none min-w-0"
+                                                                    placeholder="Others Capacity"
+                                                                />
+                                                                <button
+                                                                    disabled={isUpdatingSlots}
+                                                                    onClick={() => {
+                                                                        const val = parseInt(document.getElementById('other-slots-input').value);
+                                                                        if (val > 0) updateDjSlots({ otherMaxSlots: val });
+                                                                    }}
+                                                                    className="bg-blue-600 hover:bg-blue-700 text-white px-5 font-black text-[10px] uppercase tracking-widest transition-all disabled:opacity-50 shrink-0 border-l border-white/10"
+                                                                >
+                                                                    {isUpdatingSlots ? '...' : 'SET'}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <p className="text-[9px] text-gray-500">Changes apply immediately and affect registration live.</p>
                                                     </div>
-                                                ))}
-                                            </div>
 
-                                            {/* Other Colleges Card */}
-                                            <div className="astral-glass p-6 border-blue-500/20">
-                                                <div className="flex items-center justify-between">
-                                                    <div>
-                                                        <p className="text-[10px] font-black uppercase tracking-widest text-blue-400/80">OTHER COLLEGES</p>
-                                                        <p className="text-[9px] text-gray-500 mt-0.5">All non-Gopalan colleges · ₹400 fee per person</p>
-                                                    </div>
-                                                    <span className={`text-[9px] font-black px-3 py-1 rounded-full ${djSlots.otherSlotsLeft > 0 ? 'bg-blue-500/20 text-blue-400' : 'bg-red-500/20 text-red-400'}`}>
-                                                        {djSlots.otherSlotsLeft > 0 ? 'AVAILABLE' : 'SOLD OUT'}
-                                                    </span>
-                                                </div>
-                                                <div className="flex items-center justify-around py-4 mt-4 border-y border-white/5">
-                                                    <div className="text-center">
-                                                        <div className="text-4xl font-black text-white mb-1">{djSlots.otherCount || 0}</div>
-                                                        <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Registered</div>
-                                                    </div>
-                                                    <div className="h-10 w-px bg-white/10" />
-                                                    <div className="text-center">
-                                                        <div className="text-4xl font-black text-blue-400 mb-1">{djSlots.otherSlotsLeft || 0}</div>
-                                                        <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Remaining</div>
-                                                    </div>
-                                                    <div className="h-10 w-px bg-white/10" />
-                                                    <div className="text-center">
-                                                        <div className="text-2xl font-black text-blue-300 mb-1">{djSlots.otherMaxSlots || 200}</div>
-                                                        <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Capacity</div>
-                                                    </div>
-                                                </div>
-                                                <div className="mt-4 space-y-2">
-                                                    <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-                                                        <motion.div
-                                                            initial={{ width: 0 }}
-                                                            animate={{ width: `${Math.min(100, ((djSlots.otherCount || 0) / (djSlots.otherMaxSlots || 200)) * 100)}%` }}
-                                                            className="h-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]"
-                                                        />
-                                                    </div>
-                                                    <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-gray-500">
-                                                        <span>Others Allocation</span>
-                                                        <span>{Math.round(((djSlots.otherCount || 0) / (djSlots.otherMaxSlots || 200)) * 100)}% Occupied</span>
+                                                    <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-2xl">
+                                                        <p className="text-[10px] font-black text-red-400 uppercase tracking-widest mb-1">DANGER ZONE</p>
+                                                        <p className="text-[11px] text-red-400/60 leading-relaxed font-bold">Registration will show <span className="text-red-400">SOLD OUT</span> when the combined headcount of all three colleges reaches the capacity limit.</p>
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            {/* Command Override Card */}
-                                            <div className="astral-glass p-8 space-y-6">
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-orange-400/80">Command Override</span>
-
-                                                {/* Manual Open/Close */}
-                                                <div className="flex items-center justify-between p-5 bg-white/5 border border-white/5 rounded-2xl">
-                                                    <div>
-                                                        <p className="text-sm font-bold text-white">Manual Status</p>
-                                                        <p className="text-[10px] text-gray-500 uppercase font-black mt-1">
-                                                            {djSlots.isManualOpen ? 'ONLINE // OPEN' : 'OFFLINE // CLOSED'}
-                                                        </p>
-                                                    </div>
-                                                    <button
-                                                        disabled={isUpdatingSlots}
-                                                        onClick={() => updateDjSlots({ isManualOpen: !djSlots.isManualOpen })}
-                                                        className={`w-14 h-8 rounded-full relative transition-all duration-300 border ${djSlots.isManualOpen ? 'bg-teal-500/20 border-teal-500/50' : 'bg-red-500/20 border-red-500/50'}`}
-                                                    >
-                                                        <motion.div
-                                                            animate={{ x: djSlots.isManualOpen ? 24 : 4 }}
-                                                            className={`absolute top-1 w-6 h-6 rounded-full shadow-lg ${djSlots.isManualOpen ? 'bg-teal-400' : 'bg-red-500'}`}
-                                                        />
-                                                    </button>
-                                                </div>
-
-                                                {/* Shared Capacity Adjuster */}
-                                                <div className="p-5 bg-white/5 border border-white/5 rounded-2xl space-y-5">
-                                                    <div className="space-y-3">
-                                                        <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Adjust Shared Capacity (GCEM + GSAP + GCC)</p>
-                                                        <div className="flex bg-black/40 border border-white/10 rounded-xl overflow-hidden focus-within:border-emerald-500 transition-all shadow-inner">
-                                                            <input
-                                                                type="number"
-                                                                key={`gcem-${djSlots.gcemMaxSlots}`}
-                                                                defaultValue={djSlots.gcemMaxSlots || 600}
-                                                                id="gcem-slots-input"
-                                                                className="flex-1 bg-transparent px-4 py-3 text-white text-sm font-black focus:outline-none min-w-0"
-                                                                placeholder="Shared Capacity"
-                                                            />
-                                                            <button
-                                                                disabled={isUpdatingSlots}
-                                                                onClick={() => {
-                                                                    const val = parseInt(document.getElementById('gcem-slots-input').value);
-                                                                    if (val > 0) updateDjSlots({ gcemMaxSlots: val });
-                                                                }}
-                                                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 font-black text-[10px] uppercase tracking-widest transition-all disabled:opacity-50 shrink-0 border-l border-white/10"
-                                                            >
-                                                                {isUpdatingSlots ? '...' : 'SET'}
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="space-y-3">
-                                                        <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Adjust Others Capacity (Non-Gopalan)</p>
-                                                        <div className="flex bg-black/40 border border-white/10 rounded-xl overflow-hidden focus-within:border-blue-500 transition-all shadow-inner">
-                                                            <input
-                                                                type="number"
-                                                                key={`other-${djSlots.otherMaxSlots}`}
-                                                                defaultValue={djSlots.otherMaxSlots || 200}
-                                                                id="other-slots-input"
-                                                                className="flex-1 bg-transparent px-4 py-3 text-white text-sm font-black focus:outline-none min-w-0"
-                                                                placeholder="Others Capacity"
-                                                            />
-                                                            <button
-                                                                disabled={isUpdatingSlots}
-                                                                onClick={() => {
-                                                                    const val = parseInt(document.getElementById('other-slots-input').value);
-                                                                    if (val > 0) updateDjSlots({ otherMaxSlots: val });
-                                                                }}
-                                                                className="bg-blue-600 hover:bg-blue-700 text-white px-5 font-black text-[10px] uppercase tracking-widest transition-all disabled:opacity-50 shrink-0 border-l border-white/10"
-                                                            >
-                                                                {isUpdatingSlots ? '...' : 'SET'}
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <p className="text-[9px] text-gray-500">Changes apply immediately and affect registration live.</p>
-                                                </div>
-
-                                                <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-2xl">
-                                                    <p className="text-[10px] font-black text-red-400 uppercase tracking-widest mb-1">DANGER ZONE</p>
-                                                    <p className="text-[11px] text-red-400/60 leading-relaxed font-bold">Registration will show <span className="text-red-400">SOLD OUT</span> when the combined headcount of all three colleges reaches the capacity limit.</p>
-                                                </div>
+                                        ) : (
+                                            <div className="flex-1 flex items-center justify-center">
+                                                <div className="animate-spin w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full" />
                                             </div>
-                                        </div>
-                                    ) : (
-                                        <div className="flex-1 flex items-center justify-center">
-                                            <div className="animate-spin w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full" />
-                                        </div>
-                                    )}
-                                </div>
+                                        )}
+                                    </div>
                                 )}
                             </div>
                         ) : activeTab === "scanner" ? (
