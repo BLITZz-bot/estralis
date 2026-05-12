@@ -63,32 +63,35 @@ const GMAIL_CLIENT_ID = (process.env.GMAIL_CLIENT_ID || "").trim();
 const GMAIL_CLIENT_SECRET = (process.env.GMAIL_CLIENT_SECRET || "").trim();
 const GMAIL_REFRESH_TOKEN = (process.env.GMAIL_REFRESH_TOKEN || "").trim();
 
-// Security Configuration (Hardcoded plaintext as requested)
-const ADMIN_PASSWORD = "india@123";
+// Security Configuration
+const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || "admin@2026").trim();
 const STAFF_PASSWORD = (process.env.STAFF_PASSWORD || "scan@2026").trim();
-const SECONDARY_PASSWORD = "bharatha01";
+const SECONDARY_PASSWORD = (process.env.SECONDARY_PASSWORD || "bharatha2111").trim();
 
-// Password verification helpers
+// Bcrypt password verification helpers
 const verifyAdminPassword = async (password) => {
     if (!password) return false;
-    return password === ADMIN_PASSWORD;
+    return await bcrypt.compare(password, ADMIN_PASSWORD);
 };
 const verifyStaffPassword = async (password) => {
     if (!password) return false;
-    return await bcrypt.compare(password, STAFF_PASSWORD); // Keeping bcrypt for staff if still hashed in env
+    return await bcrypt.compare(password, STAFF_PASSWORD);
 };
 const verifySecondaryPassword = async (password) => {
     if (!password) return false;
-    return password === SECONDARY_PASSWORD;
+    return await bcrypt.compare(password, SECONDARY_PASSWORD);
 };
 const verifyAdminOrSecondary = async (password) => {
     if (!password) return false;
-    return password === ADMIN_PASSWORD || password === SECONDARY_PASSWORD;
+    const isAdmin = await bcrypt.compare(password, ADMIN_PASSWORD);
+    if (isAdmin) return true;
+    return await bcrypt.compare(password, SECONDARY_PASSWORD);
 };
 const verifyStaffOrAdmin = async (password) => {
     if (!password) return false;
     const isStaff = await bcrypt.compare(password, STAFF_PASSWORD);
-    return isStaff || password === ADMIN_PASSWORD;
+    if (isStaff) return true;
+    return await bcrypt.compare(password, ADMIN_PASSWORD);
 };
 
 // --- GMAIL API (HTTPS) CONFIGURATION (Port 443 - Definitive Fix for Render Timeouts) ---
@@ -223,7 +226,7 @@ app.get('/api/ping', (req, res) => res.json({ status: 'online', time: new Date()
 // Secure Login Routes
 app.post('/api/admin/login', async (req, res) => {
     const { password } = req.body;
-    const isMatch = password === ADMIN_PASSWORD;
+    const isMatch = await bcrypt.compare(password, ADMIN_PASSWORD);
     if (isMatch) {
         res.json({ success: true });
     } else {
@@ -234,7 +237,7 @@ app.post('/api/admin/login', async (req, res) => {
 app.post('/api/staff/login', async (req, res) => {
     const { password } = req.body;
     const isStaffMatch = await bcrypt.compare(password, STAFF_PASSWORD);
-    const isAdminMatch = password === ADMIN_PASSWORD;
+    const isAdminMatch = await bcrypt.compare(password, ADMIN_PASSWORD);
 
     if (isStaffMatch || isAdminMatch) {
         res.json({ success: true });
@@ -245,8 +248,8 @@ app.post('/api/staff/login', async (req, res) => {
 
 app.post('/api/admin/secondary-login', async (req, res) => {
     const { password } = req.body;
-    const isSecondaryMatch = password === SECONDARY_PASSWORD;
-    const isAdminMatch = password === ADMIN_PASSWORD;
+    const isSecondaryMatch = await bcrypt.compare(password, SECONDARY_PASSWORD);
+    const isAdminMatch = await bcrypt.compare(password, ADMIN_PASSWORD);
 
     // Allow both the specific secondary password AND the main admin password
     if (isSecondaryMatch || isAdminMatch) {
