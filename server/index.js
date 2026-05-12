@@ -344,8 +344,29 @@ app.post('/api/register-manual', async (req, res) => {
             fullName, email, phone, college, teamName, teamMembers,
             eventTitle, category, amountPaid, passType,
             utrNumber, transactionDate, screenshotUrl,
-            semester, branch, linkedinUrl
+            semester, branch, linkedinUrl,
+            agreedToTerms, isHuman, paymentConfirmed
         } = registrationData;
+
+        // --- BOT PROTECTION & VALIDATION ---
+        if (!agreedToTerms) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'VERIFICATION FAILED: You must agree to the terms.' 
+            });
+        }
+        if (!isHuman) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'VERIFICATION FAILED: Human verification required.' 
+            });
+        }
+        if (!paymentConfirmed) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'VERIFICATION FAILED: Payment confirmation required.' 
+            });
+        }
 
         // --- SLOT VALIDATION (DJ NIGHT ONLY FOR NOW) ---
         if (eventTitle === 'ARTIST PERFORMANCE AND DJ NIGHT') {

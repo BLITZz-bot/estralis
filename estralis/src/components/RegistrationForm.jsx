@@ -159,7 +159,10 @@ export default function RegistrationForm({ event, onClose }) {
         utrNumber: "",
         transactionDate: new Date().toISOString().split('T')[0],
         screenshot: null,
-        screenshotUrl: ""
+        screenshotUrl: "",
+        agreedToTerms: false,
+        isHuman: false,
+        paymentConfirmed: false
     })
 
     const cat = event?.category || "Tech"
@@ -371,6 +374,20 @@ export default function RegistrationForm({ event, onClose }) {
             return;
         }
 
+        // Checkboxes validation
+        if (!formData.agreedToTerms) {
+            alert("REQUIRED: Please agree to the event rules and terms.");
+            return;
+        }
+        if (!formData.isHuman) {
+            alert("REQUIRED: Please verify that you are human.");
+            return;
+        }
+        if (!formData.paymentConfirmed) {
+            alert("REQUIRED: Please confirm that you have made the payment.");
+            return;
+        }
+
         // Teammate validation
         for (let i = 0; i < teamMembers.length; i++) {
             const m = teamMembers[i];
@@ -515,7 +532,7 @@ export default function RegistrationForm({ event, onClose }) {
                 "FITNESS CHALLENGE - Plank": { location: "Open Amphitheatre", time: "May 15, 11:00 AM - 02:00 PM" },
                 "BEAT BOXING": { location: "Amphitheatre", time: "May 15, 11:00 AM - 12:30 PM" },
                 "WESTERN SOLO": { location: "Amphitheatre", time: "10:30 AM" },
-                "BGMI": { location: "1ST Floor Classroom", time: "May 15, 09:00 AM Onwards" },
+                "BGMI": { location: "2nd floor, GCEM campus", time: "May 15, 09:00 AM Onwards" },
                 "WESTERN GROUP": { location: "Amphitheatre", time: "03:30 PM" },
                 "BATTLE OF BANDS": { location: "Amphitheatre", time: "10:00 AM" },
                 "FASHION WALK": { location: "Amphitheatre", time: "12:00 PM" },
@@ -1006,6 +1023,39 @@ export default function RegistrationForm({ event, onClose }) {
                                 </div>
                             )}
 
+                            {/* Verification Checkboxes */}
+                            <div className="astral-glass p-8 md:p-10 space-y-6">
+                                <div className="flex items-start gap-4 cursor-pointer group" onClick={() => setFormData(prev => ({ ...prev, agreedToTerms: !prev.agreedToTerms }))}>
+                                    <div className={`mt-1 w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${formData.agreedToTerms ? 'bg-teal-500 border-teal-500 shadow-[0_0_15px_rgba(45,212,191,0.4)]' : 'border-white/20 group-hover:border-teal-500/50'}`}>
+                                        {formData.agreedToTerms && <span className="text-black text-xs font-black">✓</span>}
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-[11px] font-bold text-white/80 tracking-wide uppercase font-astral">I agree to the ESTRALIS 2026 event rules and regulations.</p>
+                                        <p className="text-[9px] text-white/30 font-medium mt-1">I understand that any misconduct will lead to immediate disqualification.</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-4 cursor-pointer group" onClick={() => setFormData(prev => ({ ...prev, isHuman: !prev.isHuman }))}>
+                                    <div className={`mt-1 w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${formData.isHuman ? 'bg-teal-500 border-teal-500 shadow-[0_0_15px_rgba(45,212,191,0.4)]' : 'border-white/20 group-hover:border-teal-500/50'}`}>
+                                        {formData.isHuman && <span className="text-black text-xs font-black">✓</span>}
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-[11px] font-bold text-white/80 tracking-wide uppercase font-astral">I am a human registering for this event.</p>
+                                        <p className="text-[9px] text-white/30 font-medium mt-1">Verification protocols enabled to prevent automated bot entries.</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-4 cursor-pointer group" onClick={() => setFormData(prev => ({ ...prev, paymentConfirmed: !prev.paymentConfirmed }))}>
+                                    <div className={`mt-1 w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${formData.paymentConfirmed ? 'bg-teal-500 border-teal-500 shadow-[0_0_15px_rgba(45,212,191,0.4)]' : 'border-white/20 group-hover:border-teal-500/50'}`}>
+                                        {formData.paymentConfirmed && <span className="text-black text-xs font-black">✓</span>}
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-[11px] font-bold text-white/80 tracking-wide uppercase font-astral">I possess the payment screenshot with a valid UTR.</p>
+                                        <p className="text-[9px] text-white/30 font-medium mt-1">False or duplicate UTR submissions will result in permanent blacklisting.</p>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className="flex flex-col items-center gap-6 py-6">
                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 font-astral text-center">
                                     Any issue with registration? Contact Bharath <a href="tel:7975871167" className="text-teal-400 hover:text-white transition-colors cursor-pointer">7975871167</a>
@@ -1100,6 +1150,7 @@ export default function RegistrationForm({ event, onClose }) {
                                         <span className="text-[12px] font-black text-white uppercase tracking-widest font-astral">TOTAL FEE</span>
                                         <span className="text-4xl md:text-5xl font-black text-teal-400 italic glow-teal">{displayFee}</span>
                                     </div>
+
                                 </div>
 
                                 <div className="space-y-6">
