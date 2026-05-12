@@ -188,7 +188,7 @@ export const eventsDay1 = [
     minTeamSize: 3,
     maxTeamSize: 15,
     rules: ["Everyone should come at 8.30 for venue and the registration will be 8.30 to 9.30",
-      "Each team will be allotted a performance time of 8+2 minutes. Exceeding the time limit may result in penalties.",
+      "Each team will be allotted a performance time of 8 to 12 minutes. Exceeding the time limit may result in penalties.",
       "Only Indian classical dance forms such as Bharatanatyam, Kathak, Kuchipudi, Mohiniyattam, Odissi, etc., are permitted. Fusion with non-classical styles is not allowed.",
       "Performances must be appropriate and respectful. Any vulgar or offensive content will lead to disqualification.",
       "Participants must submit their performance tracks (MP3 format) and optional background visuals (MP4 format) at least 48 hours prior to the event. No on-site modifications or submissions will be permitted.",
