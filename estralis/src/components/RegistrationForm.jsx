@@ -173,7 +173,7 @@ export default function RegistrationForm({ event, onClose }) {
     const maxTeamSize = event?.maxTeamSize || 1;
     const isTeamEvent = maxTeamSize > 1;
 
-    const isDJNight = event?.title?.toUpperCase().includes("DJ NIGHT");
+    const isDJNight = event?.title?.toUpperCase()?.includes("DJ NIGHT");
     const hostColleges = ["GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT", "GOPALAN SCHOOL OF ARCHITECTURE AND PLANNING", "GOPALAN COLLEGE OF COMMERCE"];
     const isHostCollege = (clg) => hostColleges.includes((clg || "").trim().toUpperCase());
     const getFeeForCollege = (clg) => isHostCollege(clg) ? 200 : 400;
@@ -336,9 +336,9 @@ export default function RegistrationForm({ event, onClose }) {
             return false;
         }
 
-        return emailStr.match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.([^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        );
+        // Standard email regex
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+        return emailRegex.test(emailStr);
     };
 
     const handleChange = (e) => {
@@ -365,20 +365,24 @@ export default function RegistrationForm({ event, onClose }) {
     const nextStep = (e) => {
         e.preventDefault();
 
-        // Slot Validation
+        // Accurate Slot Validation Check during nextStep
+        if (isDJNight && slotInfo) {
+            const relevantSlotsLeft = isHostCollege(formData.college) ? (slotInfo.gcemSlotsLeft ?? 0) : (slotInfo.otherSlotsLeft ?? 0);
+            const categoryName = isHostCollege(formData.college) ? "GCEM" : "Other Colleges";
+            
+            if (currentSquadSize > relevantSlotsLeft) {
+                alert(`SOLD OUT: Only ${relevantSlotsLeft} seats left for ${categoryName} category, but you are trying to register ${currentSquadSize} people.`);
+                return;
+            }
+        }
+
         if (isManuallyClosed) {
             alert("REGISTRATION CLOSED: This event is currently not accepting registrations.");
-            return;
-        }
-        if (isSoldOut) {
-            const categoryName = isGCEM ? "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT" : "OTHER COLLEGE";
-            alert(`SOLD OUT: Only ${relevantSlotsLeft} seats left for ${categoryName} category, but you are trying to register ${currentSquadSize} people.`);
             return;
         }
 
         // Validation Suite
         if (!validateEmail(formData.email)) {
-            alert("INVALID EMAIL: Please enter a proper email address.");
             return;
         }
         if (formData.phone.length !== 10) {
@@ -489,7 +493,7 @@ export default function RegistrationForm({ event, onClose }) {
                     setStep(3);
                 }
             } else {
-                alert("Registration failed: " + result.message);
+                alert("Registration failed: " + (result.message || "Unknown error"));
             }
 
         } catch (error) {
