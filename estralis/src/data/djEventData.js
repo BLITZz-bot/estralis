@@ -6,7 +6,9 @@ export const DJ_EVENT_DATA = {
     category: "Fun",
     minTeamSize: 1,
     maxTeamSize: 20,
-    rules: ["ID card is mandatory",
+    rules: [
+        "Eligibility is limited to students currently pursuing their undergraduate degree. Alumni and graduated students will not be accepted.",
+        "ID card is mandatory",
         "The Ticket should be booked online.",
         "Physical tickets will be issued at the venue on the day of the event.",
         "GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT students contact the co-ordinator before booking the ticket and should not purchace the ticket for other college students.",
