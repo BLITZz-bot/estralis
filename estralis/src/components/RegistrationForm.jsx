@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { jsPDF } from "jspdf"
 import JsBarcode from "jsbarcode"
 import QRCode from 'qrcode'
+import ReCAPTCHA from "react-google-recaptcha"
 
 // Searchable College Dropdown Component
 function CollegeSelect({ value, onChange, colleges, placeholder, inputClassName }) {
@@ -142,6 +143,7 @@ export default function RegistrationForm({ event, onClose }) {
     const [isDownloading, setIsDownloading] = useState(false)
     const [registrationId, setRegistrationId] = useState("")
     const [luckyDrawNumber, setLuckyDrawNumber] = useState(null)
+    const [captchaToken, setCaptchaToken] = useState(null)
     const [utrError, setUtrError] = useState("")
     const [teamMembers, setTeamMembers] = useState([])
     const [passType, setPassType] = useState('standard') // 'standard' or 'combo'
@@ -401,6 +403,12 @@ export default function RegistrationForm({ event, onClose }) {
             return;
         }
 
+        // CAPTCHA validation
+        if (!captchaToken) {
+            alert("VERIFICATION REQUIRED: Please complete the CAPTCHA to prove you are not a bot.");
+            return;
+        }
+
         // Teammate validation
         for (let i = 0; i < teamMembers.length; i++) {
             const m = teamMembers[i];
@@ -471,7 +479,8 @@ export default function RegistrationForm({ event, onClose }) {
                         category: event.category || "Tech",
                         teamMembers,
                         passType: passType === 'combo' ? "Combo Pass" : "Standard Pass",
-                        amountPaid: amount
+                        amountPaid: amount,
+                        captchaToken // Include token for backend verification
                     }
                 })
             });
@@ -1055,6 +1064,17 @@ export default function RegistrationForm({ event, onClose }) {
                                     <div className="flex-1">
                                         <p className="text-[11px] font-bold text-white/80 tracking-wide uppercase font-astral">I agree to the ESTRALIS 2026 event rules and regulations.</p>
                                         <p className="text-[9px] text-white/30 font-medium mt-1">I understand that any misconduct will lead to immediate disqualification.</p>
+                                    </div>
+                                </div>
+
+                                {/* Google reCAPTCHA Verification */}
+                                <div className="flex justify-center pt-2">
+                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10 shadow-2xl">
+                                        <ReCAPTCHA
+                                            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"}
+                                            onChange={(token) => setCaptchaToken(token)}
+                                            theme="dark"
+                                        />
                                     </div>
                                 </div>
                             </div>

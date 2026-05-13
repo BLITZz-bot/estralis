@@ -217,6 +217,22 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// --- GOOGLE reCAPTCHA HELPER ---
+const verifyRecaptcha = async (token, ip) => {
+    const secret = process.env.RECAPTCHA_SECRET_KEY || "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe";
+    if (!token) return { success: false, message: 'CAPTCHA token missing.' };
+    
+    try {
+        const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}&remoteip=${ip}`;
+        const response = await fetch(verifyUrl, { method: 'POST' });
+        const data = await response.json();
+        return data;
+    } catch (err) {
+        console.error("reCAPTCHA Error:", err);
+        return { success: false, message: 'Verification service error' };
+    }
+};
+
 // Persistent Storage Confirmation
 console.log(`📁 Persistent screenshot storage initialized at: ${path.join(__dirname, 'uploads')}`);
 
@@ -342,7 +358,7 @@ app.post('/api/register-manual', async (req, res) => {
             eventTitle, category, amountPaid, passType,
             utrNumber, transactionDate, screenshotUrl,
             semester, branch, linkedinUrl,
-            agreedToTerms, confirmEmail
+            agreedToTerms, confirmEmail, captchaToken
         } = req.body.registrationData;
 
         const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -353,6 +369,13 @@ app.post('/api/register-manual', async (req, res) => {
                 success: false, 
                 message: 'VERIFICATION FAILED: You must agree to the terms.' 
             });
+        }
+
+        // --- GOOGLE reCAPTCHA VERIFICATION ---
+        const recaptchaData = await verifyRecaptcha(captchaToken, ipAddress);
+        if (!recaptchaData.success) {
+            console.warn(`[BOT_ATTEMPT] CAPTCHA failed for ${email} from IP ${ipAddress}`);
+            return res.status(400).json({ success: false, message: 'VERIFICATION FAILED: Invalid CAPTCHA.' });
         }
 
         // --- DOMAIN BLACKLIST ---
@@ -505,14 +528,13 @@ app.post('/api/register-manual', async (req, res) => {
 });
 
 // 4. Screenshot Upload Endpoint
-app.post('/api/upload-screenshot', (req, res) => {
-    upload.single('screenshot')(req, res, (err) => {
+// Note: CAPTCHA is verified in Step 1 (nextStep). Token is single-use,
+// so we do NOT re-verify it here to avoid consuming it before registration.
+app.post('/api/upload-screenshot', async (req, res) => {
+    upload.single('screenshot')(req, res, async (err) => {
         if (err) {
             console.error("Multer/Cloudinary Upload Error:", err);
-            return res.status(500).json({
-                success: false,
-                message: 'Upload failed: ' + err.message
-            });
+            return res.status(500).json({ success: false, message: 'Upload failed: ' + err.message });
         }
         try {
             if (!req.file) {
