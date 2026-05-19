@@ -113,8 +113,8 @@ To enable automated emails with PDF attachments, the system uses the Gmail REST 
 ---
 
 ## 🔐 Administrative Access
-- **Primary Dashboard**: Accessible via the admin path with password `admin@2026`.
-- **High-Security Controls**: Sensitive actions (Slot Control, Colleges, Bulk Emailer) require the secondary authorization code `bharatha2111`.
+- **Primary Dashboard**: Accessible via the admin path with password `Your PassWord`.
+- **High-Security Controls**: Sensitive actions (Slot Control, Colleges, Bulk Emailer) require the secondary authorization code `Your PassWord`.
 
 ---
 
