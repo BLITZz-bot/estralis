@@ -6,7 +6,7 @@ export default function Venue() {
     <section id="venue" className="relative min-h-screen px-6 py-20 overflow-hidden group">
       
       <SectionBackground 
-        src="/3.webp" 
+        src="/bg-venue.jpg" 
         alt="Venue Architecture" 
       />
 

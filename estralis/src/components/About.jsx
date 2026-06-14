@@ -13,7 +13,7 @@ export default function About({ onOpenProtocol }) {
     >
 
       <SectionBackground
-        src="/go.webp"
+        src="/bg-about.jpg"
         alt="Tech Hub"
       />
 

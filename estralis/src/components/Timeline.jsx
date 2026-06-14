@@ -32,7 +32,7 @@ export default function Timeline() {
     <section id="timeline" className="relative py-24 md:py-32 overflow-hidden group">
 
       <SectionBackground
-        src="/go.webp"
+        src="/bg-timeline.jpg"
         alt="Temporal Clock"
       />
 

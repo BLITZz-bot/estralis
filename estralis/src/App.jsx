@@ -188,7 +188,7 @@ export default function App() {
           <section className="relative min-h-screen flex flex-col items-center justify-center py-20 px-6 overflow-hidden group">
 
             <SectionBackground
-              src="/enry.webp"
+              src="/bg-countdown.jpg"
               alt="Tech Earth Background"
               activeOpacity="opacity-70 md:opacity-50"
             />

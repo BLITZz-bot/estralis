@@ -1063,7 +1063,7 @@ export default function Schedule({ onModalToggle }) {
           events={[...eventsDay1, ...eventsDay2].filter(e => ["Cultural", "Dance", "Fashion"].includes(e.category))}
           onEventClick={setSelectedEvent}
           eventStatuses={eventStatuses}
-          bgImage="/art.webp"
+          bgImage="/bg-schedule-zone1.jpg"
           themeObj={{ text: "text-cyan-400", hoverText: "group-hover:text-cyan-400", borderB: "border-b-cyan-500/10", bg: "bg-cyan-500", hoverBg: "hover:bg-cyan-500/10", borderL: "border-l-cyan-500", bgSoft: "bg-cyan-500/10" }}
         />
 
@@ -1074,7 +1074,7 @@ export default function Schedule({ onModalToggle }) {
           events={[...eventsDay1, ...eventsDay2].filter(e => e.category === "Fun")}
           onEventClick={setSelectedEvent}
           eventStatuses={eventStatuses}
-          bgImage="/nama.webp"
+          bgImage="/bg-schedule-zone2.jpg"
           themeObj={{ text: "text-fuchsia-400", hoverText: "group-hover:text-fuchsia-400", borderB: "border-b-fuchsia-500/10", bg: "bg-fuchsia-500", hoverBg: "hover:bg-fuchsia-500/10", borderL: "border-l-fuchsia-500", bgSoft: "bg-fuchsia-500/10" }}
         />
 
@@ -1085,7 +1085,7 @@ export default function Schedule({ onModalToggle }) {
           events={[...eventsDay1, ...eventsDay2].filter(e => ["Gaming", "Tech", "Sports"].includes(e.category))}
           onEventClick={setSelectedEvent}
           eventStatuses={eventStatuses}
-          bgImage="/naman.webp"
+          bgImage="/bg-schedule-zone3.jpg"
           themeObj={{ text: "text-blue-400", hoverText: "group-hover:text-blue-400", borderB: "border-b-blue-500/10", bg: "bg-blue-500", hoverBg: "hover:bg-blue-500/10", borderL: "border-l-blue-500", bgSoft: "bg-blue-500/10" }}
         />
 

@@ -37,7 +37,7 @@ export default function Team() {
       className="relative py-24 md:py-40 px-6 overflow-hidden"
     >
       <SectionBackground
-        src="/enry.webp"
+        src="/bg-countdown.jpg"
         alt="Team Background"
         activeOpacity="opacity-20"
       />
