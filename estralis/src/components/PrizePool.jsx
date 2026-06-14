@@ -31,7 +31,7 @@ export default function PrizePool() {
     <section className="relative py-20 md:py-32 px-6 bg-transparent overflow-hidden group [will-change:transform]">
 
       <SectionBackground
-        src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80"
+        src="/2.webp"
         alt="Cryptic Bounty Fluid"
         activeOpacity="opacity-70 md:opacity-50"
       />

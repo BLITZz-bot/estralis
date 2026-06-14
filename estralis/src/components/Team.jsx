@@ -37,7 +37,7 @@ export default function Team() {
       className="relative py-24 md:py-40 px-6 overflow-hidden"
     >
       <SectionBackground
-        src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80"
+        src="/enry.webp"
         alt="Team Background"
         activeOpacity="opacity-20"
       />

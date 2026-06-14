@@ -13,7 +13,7 @@ export default function About({ onOpenProtocol }) {
     >
 
       <SectionBackground
-        src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80"
+        src="/go.webp"
         alt="Tech Hub"
       />
 
